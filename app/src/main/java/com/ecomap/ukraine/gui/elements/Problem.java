@@ -46,4 +46,18 @@ public class Problem {
     public Details getDetails() {
         return details;
     }
+
+    public void setDetails(Details details) {
+        this.details = details;
+    }
+
+    public Problem(int problemId, int statusId, int problemTypesId,
+                   String title, String date, double latitude, double longtitude) {
+        this.problemId = problemId;
+        this.statusId = statusId;
+        this.problemTypesId = problemTypesId;
+        this.title = title;
+        this.date = date;
+        this.position = new LatLng(latitude, longtitude);
+    }
 }

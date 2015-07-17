@@ -30,4 +30,12 @@ public class Comment {
     public String getDate() {
         return date;
     }
+
+    public Comment(int commentId, int activityTypesId, int userId, String content, String date) {
+        this.commentId = commentId;
+        this.activityTypesId = activityTypesId;
+        this.userId = userId;
+        this.content = content;
+        this.date = date;
+    }
 }

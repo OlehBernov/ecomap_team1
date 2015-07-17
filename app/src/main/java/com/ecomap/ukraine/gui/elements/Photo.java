@@ -32,4 +32,12 @@ public class Photo {
         return description;
     }
 
+    public Photo(int photoId, int userId, int status, String link, String description) {
+        this.photoId = photoId;
+        this.userId = userId;
+        this.status = status;
+        this.link = link;
+        this.description = description;
+    }
+
 }

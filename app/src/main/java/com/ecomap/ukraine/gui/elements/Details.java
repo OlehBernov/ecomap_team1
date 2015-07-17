@@ -48,4 +48,15 @@ public class Details {
     public void setVotes(int votes) {
         this.votes = votes;
     }
+
+    public Details(int severity, int moderations, int votes, String decription, String proposal,
+                   ArrayList<Comment> comments, ArrayList<Photo> photos) {
+        this.severity = severity;
+        this.moderations = moderations;
+        this.votes = votes;
+        this.decription = decription;
+        this.proposal = proposal;
+        this.comments = comments;
+        this.photos = photos;
+    }
 }
