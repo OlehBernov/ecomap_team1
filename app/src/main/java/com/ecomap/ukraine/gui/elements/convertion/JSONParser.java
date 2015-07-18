@@ -18,7 +18,8 @@ public class JSONParser {
         return new ArrayList<Comment>();
     }
 
-    public ArrayList<Details> parseDetails(final String fullProblemJson) {
+    public ArrayList<Details> parseDetails(final String fullProblemJson,
+                                           final String userNameJson) {
         return new ArrayList<Details>();
     }
 
