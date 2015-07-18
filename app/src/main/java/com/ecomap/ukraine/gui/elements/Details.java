@@ -1,11 +1,13 @@
 package com.ecomap.ukraine.gui.elements;
 
-import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Andriy on 17.07.2015.
  */
 public class Details {
+
+    public static final int CREATOR_ACTIVITY = 0;
 
     int severity;
     int moderations;
@@ -14,8 +16,8 @@ public class Details {
     String decription;
     String proposal;
 
-    ArrayList <Comment> comments;
-    ArrayList <Photo> photos;
+    List<Comment> comments;
+    List <Photo> photos;
 
     public int getSeverity() {
         return severity;
@@ -37,11 +39,15 @@ public class Details {
         return proposal;
     }
 
-    public ArrayList<Comment> getComments() {
+    public String getFirstName() {
+        return comments.get(CREATOR_ACTIVITY).getFirstName();
+    }
+
+    public List<Comment> getComments() {
         return comments;
     }
 
-    public ArrayList<Photo> getPhotos() {
+    public List<Photo> getPhotos() {
         return photos;
     }
 
@@ -49,8 +55,8 @@ public class Details {
         this.votes = votes;
     }
 
-    public Details(int severity, int moderations, int votes, String decription, String proposal,
-                   ArrayList<Comment> comments, ArrayList<Photo> photos) {
+    public Details(int severity, int moderations, int votes, String decription,
+                   String proposal, List<Comment> comments, List<Photo> photos) {
         this.severity = severity;
         this.moderations = moderations;
         this.votes = votes;

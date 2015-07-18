@@ -10,6 +10,7 @@ public class Comment {
 
     String content;
     String date;
+    String firstName;
 
     public int getCommentId() {
         return commentId;
@@ -31,11 +32,17 @@ public class Comment {
         return date;
     }
 
-    public Comment(int commentId, int activityTypesId, int userId, String content, String date) {
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public Comment(int commentId, int activityTypesId, int userId, String content,
+                   String date, String firstName) {
         this.commentId = commentId;
         this.activityTypesId = activityTypesId;
         this.userId = userId;
         this.content = content;
         this.date = date;
+        this.firstName = firstName;
     }
 }
