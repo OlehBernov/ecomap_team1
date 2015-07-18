@@ -13,7 +13,9 @@ public class Details {
 
     String decription;
     String proposal;
-
+    String firstName;
+    String lastName;
+    
     ArrayList <Comment> comments;
     ArrayList <Photo> photos;
 
@@ -36,6 +38,14 @@ public class Details {
     public String getProposal() {
         return proposal;
     }
+	
+	public String getFirstName() {
+        return firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
 
     public ArrayList<Comment> getComments() {
         return comments;
@@ -49,13 +59,16 @@ public class Details {
         this.votes = votes;
     }
 
-    public Details(int severity, int moderations, int votes, String decription, String proposal,
+    public Details(int severity, int moderations, int votes, String decription,
+                   String proposal, String firstName, String lastName,
                    ArrayList<Comment> comments, ArrayList<Photo> photos) {
         this.severity = severity;
         this.moderations = moderations;
         this.votes = votes;
         this.decription = decription;
         this.proposal = proposal;
+		this.firstName = firstName;
+        this.lastName = lastName;
         this.comments = comments;
         this.photos = photos;
     }
