@@ -1,6 +1,6 @@
 package com.ecomap.ukraine.gui.elements;
 
-import java.util.List;
+import java.util.ArrayList;
 
 /**
  * Created by Andriy on 17.07.2015.
@@ -39,15 +39,11 @@ public class Details {
         return proposal;
     }
 
-    public String getFirstName() {
-        return comments.get(CREATOR_ACTIVITY).getFirstName();
-    }
-
-    public List<Comment> getComments() {
+    public ArrayList<Comment> getComments() {
         return comments;
     }
 
-    public List<Photo> getPhotos() {
+    public ArrayList<Photo> getPhotos() {
         return photos;
     }
 
@@ -55,8 +51,8 @@ public class Details {
         this.votes = votes;
     }
 
-    public Details(int severity, int moderations, int votes, String decription,
-                   String proposal, List<Comment> comments, List<Photo> photos) {
+    public Details(int severity, int moderations, int votes, String decription, String proposal,
+                   ArrayList<Comment> comments, ArrayList<Photo> photos) {
         this.severity = severity;
         this.moderations = moderations;
         this.votes = votes;
