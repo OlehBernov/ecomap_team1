@@ -26,7 +26,7 @@ public class JSONParser {
 
         if (briefProblemsJson == null) {
             throw new JSONException(NULL_ARGUMENT);
-        }
+        };;
 
         List<Problem> briefProblems = new ArrayList<Problem>();
 
