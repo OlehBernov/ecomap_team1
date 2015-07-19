@@ -1,5 +1,6 @@
 package com.ecomap.ukraine.gui.elements;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -39,10 +40,6 @@ public class Details {
         return proposal;
     }
 
-    public String getFirstName() {
-        return comments.get(CREATOR_ACTIVITY).getFirstName();
-    }
-
     public List<Comment> getComments() {
         return comments;
     }
@@ -55,8 +52,8 @@ public class Details {
         this.votes = votes;
     }
 
-    public Details(int severity, int moderations, int votes, String decription,
-                   String proposal, List<Comment> comments, List<Photo> photos) {
+    public Details(int severity, int moderations, int votes, String decription, String proposal,
+                   List<Comment> comments, List<Photo> photos) {
         this.severity = severity;
         this.moderations = moderations;
         this.votes = votes;

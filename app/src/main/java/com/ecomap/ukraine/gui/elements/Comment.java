@@ -11,7 +11,7 @@ public class Comment {
     String content;
     String date;
     String firstName;
-
+    
     public int getCommentId() {
         return commentId;
     }
@@ -31,7 +31,7 @@ public class Comment {
     public String getDate() {
         return date;
     }
-
+    
     public String getFirstName() {
         return firstName;
     }
