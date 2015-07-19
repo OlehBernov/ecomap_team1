@@ -47,7 +47,7 @@ public class DataManager extends ResultReceiver {
 
     public void notifyListeners(int requestType) {
         for (RestListener listener : listeners) {
-            listener.notify(requestType, requestResult);
+            listener.update(requestType, requestResult);
         }
     }
 

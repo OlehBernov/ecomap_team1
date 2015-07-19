@@ -25,8 +25,9 @@ public class MainActivity extends ActionBarActivity implements RestListener{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         manager.registerListener(this);
-        manager.getAllProblems(this);
-        (Toast.makeText(this, "???????", Toast.LENGTH_LONG)).show();
+        ((TextView)findViewById(R.id.textView))
+                .setText(getIntent()
+                .getStringExtra("randomProblem"));
     }
 
     @Override
@@ -48,7 +49,7 @@ public class MainActivity extends ActionBarActivity implements RestListener{
     }
 
     @Override
-    public void notify(int requestType, Object requestResult) {
+    public void update(int requestType, Object requestResult) {
         switch (requestType) {
             case RequestTypes.ALL_PROBLEMS:
                 showRandomProblem(requestResult);
