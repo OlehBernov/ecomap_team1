@@ -19,7 +19,7 @@ public class DataManager extends ResultReceiver {
 
     private Object requestResult;
 
-    public DataManager() {
+    private DataManager() {
         super(new Handler());
     }
 
