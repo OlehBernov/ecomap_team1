@@ -48,7 +48,7 @@ public class MainActivity extends ActionBarActivity implements RestListener{
     }
 
     @Override
-    public void send(int requestType, Object requestResult) {
+    public void notify(int requestType, Object requestResult) {
         switch (requestType) {
             case RequestTypes.ALL_PROBLEMS:
                 showRandomProblem(requestResult);
@@ -56,11 +56,10 @@ public class MainActivity extends ActionBarActivity implements RestListener{
     }
 
     private void showRandomProblem(Object requestResult) {
-        Random rand = new Random(47);
-
-        List<Problem> problems = (List)requestResult;
-        Problem problem = problems.get(rand.nextInt(problems.size()));
         if (requestResult != null) {
+            Random rand = new Random();
+            List<Problem> problems = (List)requestResult;
+            Problem problem = problems.get(rand.nextInt(problems.size()));
             ((TextView)findViewById(R.id.textView)).setText("" + problem.getTitle());
         } else {
             ((TextView)findViewById(R.id.textView)).setText("Connection error");

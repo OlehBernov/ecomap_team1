@@ -2,6 +2,8 @@ package com.ecomap.ukraine.restclient;
 
 import android.app.IntentService;
 import android.content.Intent;
+import android.os.Bundle;
+import android.os.ResultReceiver;
 
 import com.ecomap.ukraine.convertion.JSONParser;
 
@@ -25,26 +27,37 @@ public class RestConnector extends IntentService {
 
     @Override
     protected void onHandleIntent(Intent intent) {
-        String respond;
+        ResultReceiver receiver = null;
+        int requestType = 0;
         try {
-            switch (intent.getIntExtra("RequestType", 0)) {
+            String temp;
+            receiver = intent.getParcelableExtra("Receiver");
+            requestType = intent.getIntExtra("RequestType", 0);
+
+            switch (requestType) {
                 case RequestTypes.ALL_PROBLEMS:
-                    respond = getServerResponse(PROBLEMS_REQUEST_URL);
+                    temp = getServerResponse(PROBLEMS_REQUEST_URL);
                     output = new JSONParser()
-                            .parseBriefProblems(respond);
+                            .parseBriefProblems(temp);
                     break;
 
                 case RequestTypes.PROBLEM_DETAIL:
+                    temp = getServerResponse(PROBLEMS_REQUEST_URL
+                            + intent.getStringExtra("Parameters"));
                     output = new JSONParser()
-                            .parseDetailedProblem(getServerResponse(PROBLEMS_REQUEST_URL)
-                                    + intent.getStringExtra("Parameters"));
+                            .parseDetailedProblem(getServerResponse(temp));
                     break;
             }
         } catch (Exception e) {
             output = null;
         } finally {
-            DataManager.getInstance()
-                    .notifyListeners(intent.getIntExtra("RequestType", 0), output);
+            DataManager.getInstance().setRequestResult(output);
+            try {
+                receiver.send(requestType, new Bundle());
+
+            } catch (Exception e) {
+                String s = e.toString();
+            }
         }
 
     }
