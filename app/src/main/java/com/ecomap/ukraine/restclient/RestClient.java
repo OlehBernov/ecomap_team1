@@ -2,26 +2,25 @@ package com.ecomap.ukraine.restclient;
 
 
 import android.content.Context;
-import android.os.Bundle;
-import android.os.ResultReceiver;
 
 import com.android.volley.Request;
-import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
-import com.android.volley.toolbox.Volley;
 import com.ecomap.ukraine.convertion.JSONParser;
 
 import org.json.JSONException;
 
 public class RestClient {
 
+    private static final String URL = "http://ecomap.org/api/problems/";
     private Object output;
-    private String url = "http://ecomap.org/api/problems/";
+    private Context context;
 
     public void getAllProblems(Context context) {
-        StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
+        this.context = context;
+
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, URL,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
@@ -29,28 +28,25 @@ public class RestClient {
                             output = new JSONParser().parseBriefProblems(response);
                         } catch (JSONException e) {
                             output = null;
-                        }
-
-                        DataManager.getInstance().setRequestResult(output);
-                        try {
-                            DataManager.getInstance().notifyListeners(RequestTypes.ALL_PROBLEMS);
-                        } catch (Exception e) {
-                            e.printStackTrace();
+                        } finally {
+                            DataManager.getInstance().notifyListeners(RequestTypes.ALL_PROBLEMS,
+                                    output);
                         }
                     }
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
                 output = null;
+                DataManager.getInstance().notifyListeners(RequestTypes.ALL_PROBLEMS,
+                        output);
             }
         });
 
-        RequestQueueSingeltion.getInstance(context).addToRequestQueue(stringRequest);
+        RequestQueueSingleton.getInstance(context).addToRequestQueue(stringRequest);
     }
 
-    public void getProblemDetail(Context context) {
-
+    public void getProblemDetail(int problemId, Context context) {
+        this.context = context;
     }
-
 
 }

@@ -45,11 +45,8 @@ public class Splashscreen extends Activity implements RestListener{
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        requestWindowFeature(Window.FEATURE_NO_TITLE);
 
         manager.registerListener(this);
-        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
-                WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
         startLoading = System.currentTimeMillis();
         setContentView(R.layout.splashscreen);
@@ -60,7 +57,6 @@ public class Splashscreen extends Activity implements RestListener{
         animationDrawable = (AnimationDrawable) fourSquare.getDrawable();
 
         animationDrawable.start();
-
 
         manager.getAllProblems(this);
     }
@@ -108,7 +104,7 @@ public class Splashscreen extends Activity implements RestListener{
             Problem problem = problems.get(rand.nextInt(problems.size()));
             intent.putExtra("randomProblem", problem.getTitle());
             if (!state) {
-                state = true;;
+                state = true;
                 endLoading = System.currentTimeMillis();
                 new Handler().postDelayed(new Runnable() {
                     @Override
