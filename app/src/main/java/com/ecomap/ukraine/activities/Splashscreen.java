@@ -9,9 +9,6 @@ import android.content.Intent;
 import android.graphics.drawable.AnimationDrawable;
 import android.os.Bundle;
 import android.os.Handler;
-import android.util.Log;
-import android.view.Window;
-import android.view.WindowManager;
 import android.widget.ImageView;
 
 import com.ecomap.ukraine.R;
@@ -25,44 +22,38 @@ import java.util.Random;
 
 public class Splashscreen extends Activity implements RestListener{
 
-    static final  String FAILURE_OF_LOADING = "Failed to load. Please ensure you`re connected " +
+    private static final  String FAILURE_OF_LOADING = "Failed to load. Please ensure you`re connected " +
             "to the Internet and try again.";
-    final static String RETRY = "Retry";
-    final static String CANCEL = "Cancel";
-    final static int MINIMAL_DELAY = 2000;
+    private static final String RETRY = "Retry";
+    private static final String CANCEL = "Cancel";
+    private static final int MINIMAL_DELAY = 2000;
 
-    final Context context = this;
-    final DataManager manager = DataManager.getInstance();
+    private final Context context = this;
+    private final DataManager dataManager = DataManager.getInstance();
 
     private Intent intent;
     private AnimationDrawable animationDrawable;
     private ImageView fourSquare;
     private boolean state = false;
 
-    private long startLoading;
-    private long endLoading;
+    private long startLoadingTime;
+    private long endLoadingTime;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        requestWindowFeature(Window.FEATURE_NO_TITLE);
 
-        manager.registerListener(this);
-        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
-                WindowManager.LayoutParams.FLAG_FULLSCREEN);
-
-        startLoading = System.currentTimeMillis();
+        dataManager.registerListener(this);
+        startLoadingTime = System.currentTimeMillis();
         setContentView(R.layout.splashscreen);
 
         intent = new Intent(this, MainActivity.class);
 
         fourSquare = (ImageView) findViewById(R.id.fourSquare);
         animationDrawable = (AnimationDrawable) fourSquare.getDrawable();
-
         animationDrawable.start();
 
-
-        manager.getAllProblems(this);
+        dataManager.getAllProblems(this);
     }
 
     public  void setFailureLoadingDialog() {
@@ -76,7 +67,7 @@ public class Splashscreen extends Activity implements RestListener{
                     public void onClick(final DialogInterface dialog,
                                         final int id) {
 
-                        manager.getAllProblems(context);
+                        dataManager.getAllProblems(context);
                     }
                 });
         builder.setNegativeButton(com.ecomap.ukraine.activities.Splashscreen.CANCEL,
@@ -108,14 +99,14 @@ public class Splashscreen extends Activity implements RestListener{
             Problem problem = problems.get(rand.nextInt(problems.size()));
             intent.putExtra("randomProblem", problem.getTitle());
             if (!state) {
-                state = true;;
-                endLoading = System.currentTimeMillis();
+                state = true;
+                endLoadingTime = System.currentTimeMillis();
                 new Handler().postDelayed(new Runnable() {
                     @Override
                     public void run() {
                         startActivity(intent);
                     }
-                }, Math.max(MINIMAL_DELAY - (endLoading - startLoading), 0));
+                }, Math.max(MINIMAL_DELAY - (endLoadingTime - startLoadingTime), 0));
             }
         } else {
             setFailureLoadingDialog();
