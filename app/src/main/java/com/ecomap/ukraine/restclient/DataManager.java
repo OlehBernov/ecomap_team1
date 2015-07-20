@@ -17,16 +17,18 @@ public class DataManager extends ResultReceiver {
 
     public HashSet<RestListener> listeners = new HashSet<>();
 
+    private RestClient restClient;
+
     private Object requestResult;
 
     private DataManager() {
         super(new Handler());
+        restClient = new RestClient();
     }
 
     @Override
     protected void onReceiveResult(int resultCode, Bundle resultData) {
         notifyListeners(resultCode);
-
     }
 
     public static DataManager getInstance() {
@@ -52,18 +54,10 @@ public class DataManager extends ResultReceiver {
     }
 
     public void getAllProblems(Context context) {
-        Intent intent = new Intent(Intent.ACTION_SYNC, null, context, RestConnector.class);
-        intent.putExtra("RequestType", RequestTypes.ALL_PROBLEMS);
-        intent.putExtra("Receiver", DataManager.getInstance());
-        context.startService(intent);
+        restClient.getAllProblems(context);
     }
 
     public void getProblemDetail(int problemId, Context context) {
-        Intent intent = new Intent(Intent.ACTION_SYNC, null,
-                context, RestConnector.class);
-        intent.putExtra("Receiver", this);
-        intent.putExtra("RequestType", RequestTypes.PROBLEM_DETAIL);
-        intent.putExtra("Parameters", "" + problemId);
-        context.startService(intent);
+      // restClient.getAllProblemDetail();
     }
 }

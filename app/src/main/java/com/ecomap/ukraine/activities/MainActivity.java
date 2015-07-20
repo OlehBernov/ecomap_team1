@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.ecomap.ukraine.R;
 import com.ecomap.ukraine.gui.elements.Problem;
@@ -28,6 +27,7 @@ public class MainActivity extends ActionBarActivity implements RestListener{
         ((TextView)findViewById(R.id.textView))
                 .setText(getIntent()
                 .getStringExtra("randomProblem"));
+
     }
 
     @Override

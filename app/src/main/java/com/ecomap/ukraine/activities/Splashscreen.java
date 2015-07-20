@@ -9,6 +9,7 @@ import android.content.Intent;
 import android.graphics.drawable.AnimationDrawable;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ImageView;
@@ -24,20 +25,22 @@ import java.util.Random;
 
 public class Splashscreen extends Activity implements RestListener{
 
-
-
     static final  String FAILURE_OF_LOADING = "Failed to load. Please ensure you`re connected " +
             "to the Internet and try again.";
-    final static   String RETRY = "Retry";
-    final static   String CANCEL = "Cancel";
+    final static String RETRY = "Retry";
+    final static String CANCEL = "Cancel";
+    final static int MINIMAL_DELAY = 2000;
 
     final Context context = this;
     final DataManager manager = DataManager.getInstance();
 
-    private  Intent intent;
+    private Intent intent;
     private AnimationDrawable animationDrawable;
     private ImageView fourSquare;
     private boolean state = false;
+
+    private long startLoading;
+    private long endLoading;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,8 +51,8 @@ public class Splashscreen extends Activity implements RestListener{
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
+        startLoading = System.currentTimeMillis();
         setContentView(R.layout.splashscreen);
-
 
         intent = new Intent(this, MainActivity.class);
 
@@ -58,11 +61,9 @@ public class Splashscreen extends Activity implements RestListener{
 
         animationDrawable.start();
 
+
         manager.getAllProblems(this);
     }
-
-
-
 
     public  void setFailureLoadingDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this,android.R.style.Theme_Holo_Light_Panel);
@@ -83,18 +84,14 @@ public class Splashscreen extends Activity implements RestListener{
                     @Override
                     public void onClick(final DialogInterface dialog,
                                         final int id) {
-
                         System.exit(0);
                         dialog.cancel();
-
-
                     }
                 });
         AlertDialog alert = builder.create();
         alert.show();
 
     }
-
 
     @Override
     public void update(int requestType, Object requestResult) {
@@ -111,8 +108,14 @@ public class Splashscreen extends Activity implements RestListener{
             Problem problem = problems.get(rand.nextInt(problems.size()));
             intent.putExtra("randomProblem", problem.getTitle());
             if (!state) {
-                state = true;
-                startActivity(intent);
+                state = true;;
+                endLoading = System.currentTimeMillis();
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        startActivity(intent);
+                    }
+                }, Math.max(MINIMAL_DELAY - (endLoading - startLoading), 0));
             }
         } else {
             setFailureLoadingDialog();
