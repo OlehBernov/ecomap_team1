@@ -1,28 +1,22 @@
 package com.ecomap.ukraine.restclient;
 
 import android.content.Context;
-import android.os.Bundle;
-import android.os.Handler;
-import android.os.ResultReceiver;
 
 import java.util.HashSet;
-import java.util.Objects;
+import java.util.Set;
 
 /**
  * Created by Oleh on 7/19/2015.
  */
 public class DataManager {
 
-    static DataManager instance = new DataManager();
+    private static DataManager instance = new DataManager();
 
-    public HashSet<RestListener> listeners = new HashSet<>();
-
-    private RestClient restClient;
-
-    private Object requestResult;
+    public Set<RestListener> listeners = new HashSet<>();
+    private LoadingClient loadingClient;
 
     private DataManager() {
-        restClient = new RestClient();
+        loadingClient = new LoadingClient();
     }
 
     public static DataManager getInstance() {
@@ -37,17 +31,11 @@ public class DataManager {
         listeners.remove(listener);
     }
 
-    public void notifyListeners(int requestType, Object requestResult) {
-        for (RestListener listener : listeners) {
-            listener.update(requestType, requestResult);
-        }
-    }
-
     public void getAllProblems(Context context) {
-        restClient.getAllProblems(context);
+        loadingClient.getAllProblems(context, listeners);
     }
 
     public void getProblemDetail(int problemId, Context context) {
-        restClient.getProblemDetail(problemId, context);
+        loadingClient.getProblemDetail(problemId, context, listeners);
     }
 }

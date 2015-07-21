@@ -17,7 +17,7 @@ import java.util.Random;
 
 
 public class MainActivity extends ActionBarActivity implements RestListener{
-    DataManager manager = DataManager.getInstance();
+    private DataManager manager = DataManager.getInstance();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,7 +39,6 @@ public class MainActivity extends ActionBarActivity implements RestListener{
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
-
 
         if (id == R.id.action_settings) {
             return true;

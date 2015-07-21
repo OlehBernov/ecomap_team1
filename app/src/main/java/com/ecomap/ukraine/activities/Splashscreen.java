@@ -25,15 +25,15 @@ import java.util.Random;
 
 public class Splashscreen extends Activity implements RestListener{
 
-    static final  String FAILURE_OF_LOADING = "Failed to load. Please ensure you`re connected " +
+    private static final  String FAILURE_OF_LOADING = "Failed to load. Please ensure you`re connected " +
             "to the Internet and try again.";
-    final static String RETRY = "Retry";
-    final static String CANCEL = "Cancel";
-    final static int MINIMAL_DELAY = 2000;
+    private final static String RETRY = "Retry";
+    private final static String CANCEL = "Cancel";
+    private final static int MINIMAL_DELAY = 2000;
 
-    final Context context = this;
-    final DataManager manager = DataManager.getInstance();
+    private final DataManager manager = DataManager.getInstance();
 
+    private Context context;
     private Intent intent;
     private AnimationDrawable animationDrawable;
     private ImageView fourSquare;
@@ -46,19 +46,19 @@ public class Splashscreen extends Activity implements RestListener{
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        manager.registerListener(this);
-
-        startLoading = System.currentTimeMillis();
         setContentView(R.layout.splashscreen);
+        startLoading = System.currentTimeMillis();
 
+        context = getApplicationContext();
         intent = new Intent(this, MainActivity.class);
+
+        manager.registerListener(this);
 
         fourSquare = (ImageView) findViewById(R.id.fourSquare);
         animationDrawable = (AnimationDrawable) fourSquare.getDrawable();
-
         animationDrawable.start();
 
-        manager.getAllProblems(this);
+        manager.getAllProblems(context);
     }
 
     public  void setFailureLoadingDialog() {
@@ -71,7 +71,6 @@ public class Splashscreen extends Activity implements RestListener{
                     @Override
                     public void onClick(final DialogInterface dialog,
                                         final int id) {
-
                         manager.getAllProblems(context);
                     }
                 });
