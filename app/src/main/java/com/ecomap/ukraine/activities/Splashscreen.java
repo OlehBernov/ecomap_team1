@@ -15,12 +15,12 @@ import com.ecomap.ukraine.R;
 import com.ecomap.ukraine.models.Problem;
 import com.ecomap.ukraine.restclient.DataManager;
 import com.ecomap.ukraine.restclient.RequestTypes;
-import com.ecomap.ukraine.restclient.RestListener;
+import com.ecomap.ukraine.restclient.DataListener;
 
 import java.util.List;
 import java.util.Random;
 
-public class Splashscreen extends Activity implements RestListener{
+public class Splashscreen extends Activity implements DataListener{
 
     private static final  String FAILURE_OF_LOADING = "Failed to load. Please ensure you`re connected " +
             "to the Internet and try again.";

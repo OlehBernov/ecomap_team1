@@ -12,7 +12,7 @@ public class DataManager {
 
     private static DataManager instance = new DataManager();
 
-    public Set<RestListener> listeners = new HashSet<>();
+    public Set<DataListener> listeners = new HashSet<>();
     private LoadingClient loadingClient;
 
     private DataManager() {
@@ -23,11 +23,11 @@ public class DataManager {
         return instance;
     }
 
-    public void registerListener(RestListener listener) {
+    public void registerListener(DataListener listener) {
         listeners.add(listener);
     }
 
-    public void removeListener(RestListener listener) {
+    public void removeListener(DataListener listener) {
         listeners.remove(listener);
     }
 

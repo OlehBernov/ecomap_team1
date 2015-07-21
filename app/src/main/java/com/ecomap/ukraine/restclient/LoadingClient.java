@@ -36,7 +36,7 @@ public class LoadingClient {
      * @param listeners objects, which get response from
      *                  server converted to the objects of entities.
      */
-    public void getAllProblems(final Context context, final Set<RestListener> listeners) {
+    public void getAllProblems(final Context context, final Set<DataListener> listeners) {
         StringRequest stringRequest = new StringRequest(Request.Method.GET, URL,
                 new Response.Listener<String>() {
                     @Override
@@ -70,7 +70,7 @@ public class LoadingClient {
      *                  server converted to the objects of entities.
      */
     public void getProblemDetail(final int problemId, final Context context,
-                                 final Set<RestListener> listeners) {
+                                 final Set<DataListener> listeners) {
 
     }
 
@@ -84,8 +84,8 @@ public class LoadingClient {
      *                  server converted to the objects of entities.
      */
     private void notifyListeners(final int requestType, Object requestResult,
-                                 final Set<RestListener> listeners) {
-        for (RestListener listener : listeners) {
+                                 final Set<DataListener> listeners) {
+        for (DataListener listener : listeners) {
             listener.update(requestType, requestResult);
         }
     }
