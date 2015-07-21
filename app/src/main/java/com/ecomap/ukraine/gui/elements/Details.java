@@ -8,17 +8,16 @@ import java.util.List;
  */
 public class Details {
 
-    public static final int CREATOR_ACTIVITY = 0;
 
-    int severity;
-    int moderations;
-    int votes;
+    private int severity;
+    private int moderations;
+    private int votes;
 
-    String decription;
-    String proposal;
+    private String decription;
+    private String proposal;
 
-    List<Comment> comments;
-    List <Photo> photos;
+    private List<ProblemActivity> problemActivities;
+    private List <Photo> photos;
 
     public int getSeverity() {
         return severity;
@@ -40,26 +39,24 @@ public class Details {
         return proposal;
     }
 
-    public List<Comment> getComments() {
-        return comments;
+    public List<ProblemActivity> getProblemActivities() {
+        return problemActivities;
     }
 
     public List<Photo> getPhotos() {
         return photos;
     }
 
-    public void setVotes(int votes) {
-        this.votes = votes;
-    }
+
 
     public Details(int severity, int moderations, int votes, String decription, String proposal,
-                   List<Comment> comments, List<Photo> photos) {
+                   List<ProblemActivity> problemActivities, List<Photo> photos) {
         this.severity = severity;
         this.moderations = moderations;
         this.votes = votes;
         this.decription = decription;
         this.proposal = proposal;
-        this.comments = comments;
+        this.problemActivities = problemActivities;
         this.photos = photos;
     }
 }

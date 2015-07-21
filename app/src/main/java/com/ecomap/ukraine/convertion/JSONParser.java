@@ -1,7 +1,7 @@
 package com.ecomap.ukraine.convertion;
 
 
-import com.ecomap.ukraine.gui.elements.Comment;
+import com.ecomap.ukraine.gui.elements.ProblemActivity;
 import com.ecomap.ukraine.gui.elements.Details;
 import com.ecomap.ukraine.gui.elements.Photo;
 import com.ecomap.ukraine.gui.elements.Problem;
@@ -21,12 +21,12 @@ public class JSONParser {
 
     public static final int DEFAULT_VALUE = -1;
 
-    public List<Problem>
-    parseBriefProblems(final String briefProblemsJson) throws JSONException {
+    public List<Problem> parseBriefProblems(final String briefProblemsJson)
+            throws JSONException {
 
         if (briefProblemsJson == null) {
             throw new JSONException(NULL_ARGUMENT);
-        };;
+        }
 
         List<Problem> briefProblems = new ArrayList<Problem>();
 
@@ -81,9 +81,9 @@ public class JSONParser {
                                                        .PROBLEM_CONTENT),
                               problemDetails.getString(JSONFields
                                                        .PROPOSAL),
-                              getComments(detailedProblemArray
-                                         .getJSONArray(JSONFields
-                                                       .COMMENTS_POSITION)),
+                              getProblemActivities(detailedProblemArray
+                                      .getJSONArray(JSONFields
+                                              .COMMENTS_POSITION)),
                               getPhotos(detailedProblemArray
                                         .getJSONArray(JSONFields
                                                       .PHOTOS_POSITION)));
@@ -91,10 +91,10 @@ public class JSONParser {
         return details;
     }
 
-    private List<Comment>
-    getComments(final JSONArray commentsArray) throws JSONException {
-        List<Comment> comments = new ArrayList<Comment>();
-        Comment currentComment;
+    private List<ProblemActivity>
+    getProblemActivities(final JSONArray commentsArray) throws JSONException {
+        List<ProblemActivity> problemActivities = new ArrayList<ProblemActivity>();
+        ProblemActivity currentComment;
         for (int i = 0; i < commentsArray.length(); i++) {
             JSONObject commentObject = commentsArray.getJSONObject(i);
             JSONObject contentObject;
@@ -102,7 +102,7 @@ public class JSONParser {
                                            .getString(JSONFields
                                                       .COMMENT_CONTENT));
 
-            currentComment = new Comment(commentObject
+            currentComment = new ProblemActivity(commentObject
                                          .optInt(JSONFields.ID, DEFAULT_VALUE),
                                          commentObject
                                          .optInt(JSONFields.ACTIVITY_TYPES_ID,
@@ -117,10 +117,10 @@ public class JSONParser {
                                          contentObject
                                          .getString(JSONFields.USER_NAME));
 
-            comments.add(currentComment);
+            problemActivities.add(currentComment);
         }
 
-        return comments;
+        return problemActivities;
     }
 
     private List<Photo>

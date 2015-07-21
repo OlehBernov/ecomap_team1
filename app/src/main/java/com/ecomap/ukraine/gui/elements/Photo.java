@@ -5,12 +5,12 @@ package com.ecomap.ukraine.gui.elements;
  */
 public class Photo {
 
-    int photoId;
-    int userId;
-    int status;
+    private int photoId;
+    private int userId;
+    private int status;
 
-    String link;
-    String description;
+    private String link;
+    private String description;
 
     public int getPhotoId() {
         return photoId;

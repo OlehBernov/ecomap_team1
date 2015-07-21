@@ -8,15 +8,14 @@ import com.google.android.gms.maps.model.LatLng;
  */
 public class Problem {
 
-    int problemId;
-    int statusId;
-    int problemTypesId;
+    private int problemId;
+    private int statusId;
+    private int problemTypesId;
 
-    String title;
-    String date;
+    private String title;
+    private String date;
 
-    LatLng position;
-    Details details;
+    private LatLng position;
 
 
     public int getProblemId() {
@@ -43,13 +42,8 @@ public class Problem {
         return position;
     }
 
-    public Details getDetails() {
-        return details;
-    }
 
-    public void setDetails(Details details) {
-        this.details = details;
-    }
+
 
     public Problem(int problemId, int statusId, int problemTypesId,
                    String title, String date, double latitude, double longtitude) {
