@@ -1,10 +1,10 @@
 package com.ecomap.ukraine.convertion;
 
 
-import com.ecomap.ukraine.gui.elements.ProblemActivity;
-import com.ecomap.ukraine.gui.elements.Details;
-import com.ecomap.ukraine.gui.elements.Photo;
-import com.ecomap.ukraine.gui.elements.Problem;
+import com.ecomap.ukraine.models.ProblemActivity;
+import com.ecomap.ukraine.models.Details;
+import com.ecomap.ukraine.models.Photo;
+import com.ecomap.ukraine.models.Problem;
 
 import org.json.JSONArray;
 import org.json.JSONException;

@@ -7,7 +7,7 @@ import android.view.MenuItem;
 import android.widget.TextView;
 
 import com.ecomap.ukraine.R;
-import com.ecomap.ukraine.gui.elements.Problem;
+import com.ecomap.ukraine.models.Problem;
 import com.ecomap.ukraine.restclient.DataManager;
 import com.ecomap.ukraine.restclient.RequestTypes;
 import com.ecomap.ukraine.restclient.RestListener;

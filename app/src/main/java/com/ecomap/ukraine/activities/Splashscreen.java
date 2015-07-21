@@ -9,13 +9,10 @@ import android.content.Intent;
 import android.graphics.drawable.AnimationDrawable;
 import android.os.Bundle;
 import android.os.Handler;
-import android.util.Log;
-import android.view.Window;
-import android.view.WindowManager;
 import android.widget.ImageView;
 
 import com.ecomap.ukraine.R;
-import com.ecomap.ukraine.gui.elements.Problem;
+import com.ecomap.ukraine.models.Problem;
 import com.ecomap.ukraine.restclient.DataManager;
 import com.ecomap.ukraine.restclient.RequestTypes;
 import com.ecomap.ukraine.restclient.RestListener;
