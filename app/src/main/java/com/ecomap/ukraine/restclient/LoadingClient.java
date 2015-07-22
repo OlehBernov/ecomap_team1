@@ -19,9 +19,10 @@ import java.util.Set;
 public class LoadingClient {
 
     /**
-     * Address of the server from which LoadingClient gets information.
+     * Address of the server from which LoadingClient gets brief
+     * information about all problems.
      */
-    private static final String URL = "http://ecomap.org/api/problems/";
+    private static final String ALL_PROBLEMS_URL = "http://ecomap.org/api/problems/";
 
     /**
      * Server response converted to the entity.
@@ -37,7 +38,7 @@ public class LoadingClient {
      *                  server converted to the objects of entities.
      */
     public void getAllProblems(final Context context, final Set<DataListener> listeners) {
-        StringRequest stringRequest = new StringRequest(Request.Method.GET, URL,
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, ALL_PROBLEMS_URL,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
@@ -57,7 +58,7 @@ public class LoadingClient {
             }
         });
 
-        RequestQueueSingleton.getInstance(context).addToRequestQueue(stringRequest);
+        RequestQueueWrapper.getInstance(context).addToRequestQueue(stringRequest);
     }
 
     /**
