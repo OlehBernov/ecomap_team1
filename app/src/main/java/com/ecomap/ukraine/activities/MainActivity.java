@@ -10,13 +10,13 @@ import com.ecomap.ukraine.R;
 import com.ecomap.ukraine.models.Problem;
 import com.ecomap.ukraine.restclient.DataManager;
 import com.ecomap.ukraine.restclient.RequestTypes;
-import com.ecomap.ukraine.restclient.RestListener;
+import com.ecomap.ukraine.restclient.DataListener;
 
 import java.util.List;
 import java.util.Random;
 
 
-public class MainActivity extends ActionBarActivity implements RestListener{
+public class MainActivity extends ActionBarActivity implements DataListener{
     private DataManager manager = DataManager.getInstance();
 
     @Override

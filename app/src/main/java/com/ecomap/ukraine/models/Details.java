@@ -8,7 +8,6 @@ import java.util.List;
  */
 public class Details {
 
-
     //represents the level of severity of the problem (from 1 to 5)
     private int severity;
     //number of changes to this problem
@@ -17,7 +16,7 @@ public class Details {
     private int votes;
 
     //contains description of current problem
-    private String decription;
+    private String description;
     //contains proposals for solving this problem
     private String proposal;
 
@@ -41,8 +40,8 @@ public class Details {
         return votes;
     }
 
-    public String getDecription() {
-        return decription;
+    public String getDescription() {
+        return description;
     }
 
     public String getProposal() {
@@ -63,17 +62,17 @@ public class Details {
      * @param severity represents the level of severity of the problem (from 1 to 5)
      * @param moderations number of changes to this problem
      * @param votes number of people, who set like to this problem
-     * @param decription contains description of current problem
+     * @param description contains description of current problem
      * @param proposal contains proposals for solving this problem
      * @param problemActivities array of problemActivity that are related to the problem
      * @param photos array of photos that are related to the problem
      */
-    public Details(int severity, int moderations, int votes, String decription, String proposal,
+    public Details(int severity, int moderations, int votes, String description, String proposal,
                    List<ProblemActivity> problemActivities, List<Photo> photos) {
         this.severity = severity;
         this.moderations = moderations;
         this.votes = votes;
-        this.decription = decription;
+        this.description = description;
         this.proposal = proposal;
         this.problemActivities = problemActivities;
         this.photos = photos;

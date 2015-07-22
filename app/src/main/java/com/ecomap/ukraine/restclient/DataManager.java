@@ -3,7 +3,6 @@ package com.ecomap.ukraine.restclient;
 import android.content.Context;
 
 import java.util.HashSet;
-import java.util.Observer;
 import java.util.Set;
 
 /**
@@ -16,10 +15,11 @@ public class DataManager {
      */
     private static DataManager instance = new DataManager();
 
+    
     /**
      * Set of listeners.
      */
-    public Set<RestListener> listeners = new HashSet<>();
+    public Set<DataListener> listeners = new HashSet<>();
 
     /**
      * Holds the reference to LoadingClient used by DataManager.
@@ -47,7 +47,7 @@ public class DataManager {
      *
      * @param listener the DataListener to add.
      */
-    public void registerListener(RestListener listener) {
+    public void registerListener(DataListener listener) {
         listeners.add(listener);
     }
 
@@ -56,7 +56,7 @@ public class DataManager {
      *
      * @param listener the DataListener to remove.
      */
-    public void removeListener(RestListener listener) {
+    public void removeListener(DataListener listener) {
         listeners.remove(listener);
     }
 

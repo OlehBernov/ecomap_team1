@@ -19,9 +19,10 @@ import java.util.Set;
 public class LoadingClient {
 
     /**
-     * Address of the server from which LoadingClient gets information.
+     * Address of the server from which LoadingClient gets brief
+     * information about all problems.
      */
-    private static final String URL = "http://ecomap.org/api/problems/";
+    private static final String ALL_PROBLEMS_URL = "http://ecomap.org/api/problems/";
 
     /**
      * Server response converted to the entity.
@@ -36,8 +37,8 @@ public class LoadingClient {
      * @param listeners objects, which get response from
      *                  server converted to the objects of entities.
      */
-    public void getAllProblems(final Context context, final Set<RestListener> listeners) {
-        StringRequest stringRequest = new StringRequest(Request.Method.GET, URL,
+    public void getAllProblems(final Context context, final Set<DataListener> listeners) {
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, ALL_PROBLEMS_URL,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
@@ -57,7 +58,7 @@ public class LoadingClient {
             }
         });
 
-        RequestQueueSingleton.getInstance(context).addToRequestQueue(stringRequest);
+        RequestQueueWrapper.getInstance(context).addToRequestQueue(stringRequest);
     }
 
     /**
@@ -70,7 +71,7 @@ public class LoadingClient {
      *                  server converted to the objects of entities.
      */
     public void getProblemDetail(final int problemId, final Context context,
-                                 final Set<RestListener> listeners) {
+                                 final Set<DataListener> listeners) {
 
     }
 
@@ -84,8 +85,8 @@ public class LoadingClient {
      *                  server converted to the objects of entities.
      */
     private void notifyListeners(final int requestType, Object requestResult,
-                                 final Set<RestListener> listeners) {
-        for (RestListener listener : listeners) {
+                                 final Set<DataListener> listeners) {
+        for (DataListener listener : listeners) {
             listener.update(requestType, requestResult);
         }
     }
