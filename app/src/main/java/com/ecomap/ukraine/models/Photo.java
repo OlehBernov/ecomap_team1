@@ -6,37 +6,59 @@ package com.ecomap.ukraine.models;
  */
 public class Photo {
 
-    //id of current problem
+    /**
+     * id of current problem
+     */
     private int photoId;
-    //id of user who added this photo
-    private int userId;
-    //status of this photo
-    private int status;
-
-    //link to this photo
-    private String link;
-    //description of this photo
-    private String description;
 
     /**
-     * provide access to all fields of class
+     * id of user who added this photo
+     */
+    private int userId;
+
+    /**
+     * status of this photo
+     */
+    private int status;
+
+    /**
+     * link to this photo
+     */
+    private String link;
+
+    /**
+     * description of this photo
+     */
+    private String description;
+
+
+    /**
+     * provides access to photoId
      */
     public int getPhotoId() {
         return photoId;
     }
-
+    /**
+     * provides access to photoId
+     */
     public int getUserId() {
-        return userId;
+        return photoId;
     }
-
+    /**
+     * provides access to status
+     */
     public int getStatus() {
         return status;
     }
-
+    /**
+     * provides access to link
+     */
     public String getLink() {
         return link;
     }
-
+    /**
+     * provides access to description
+     */
     public String getDescription() {
         return description;
     }

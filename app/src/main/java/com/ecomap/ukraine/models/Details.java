@@ -8,50 +8,82 @@ import java.util.List;
  */
 public class Details {
 
-    //represents the level of severity of the problem (from 1 to 5)
+    /**
+     * represents the level of severity of the problem (from 1 to 5)
+     */
     private int severity;
-    //number of changes to this problem
+    /**
+     * number of changes to this problem
+     */
     private int moderations;
-    //number of people, who set like to this problem
+    /**
+     * number of people, who set like to this problem
+     */
     private int votes;
 
-    //contains description of current problem
+    /**
+     * contains description of current problem
+     */
     private String description;
-    //contains proposals for solving this problem
+    /**
+     * contains proposals for solving this problem
+     */
     private String proposal;
 
-    //array of problemActivity that are related to the problem
+    /**
+     * array of problemActivity that are related to the problem
+     */
     private List<ProblemActivity> problemActivities;
-    //array of photos that are related to the problem
+    /**
+     *  array of photos that are related to the problem
+     */
     private List <Photo> photos;
 
     /**
-     * provide access to all fields of class
+     * provides access to severity
      */
     public int getSeverity() {
         return severity;
     }
 
+    /**
+     * provides access to moderations
+     */
     public int getModerations() {
         return moderations;
     }
 
+    /**
+     * provides access to votes
+     */
     public int getVotes() {
         return votes;
     }
 
+    /**
+     * provides access to description
+     */
     public String getDescription() {
         return description;
     }
 
+    /**
+     * provides access to proposal
+     */
     public String getProposal() {
         return proposal;
     }
 
+    /**
+     * provides access to problemActivities
+     */
     public List<ProblemActivity> getProblemActivities() {
         return problemActivities;
     }
 
+    /**
+     * provides access to photos
+     */
     public List<Photo> getPhotos() {
         return photos;
     }

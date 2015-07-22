@@ -24,29 +24,43 @@ public class Problem {
 
 
     /**
-     * provide access to all fields of class
+     * provides access to problemId
      */
-
     public int getProblemId() {
         return problemId;
     }
 
+    /**
+     * provides access to statusId
+     */
     public int getStatusId() {
         return statusId;
     }
 
+    /**
+     * provides access to problemTypesId
+     */
     public int getProblemTypesId() {
         return problemTypesId;
     }
 
+    /**
+     * provides access to title
+     */
     public String getTitle() {
         return title;
     }
 
+    /**
+     * provides access to date
+     */
     public String getDate() {
         return date;
     }
 
+    /**
+     * provides access to position
+     */
     public LatLng getPosition() {
         return position;
     }

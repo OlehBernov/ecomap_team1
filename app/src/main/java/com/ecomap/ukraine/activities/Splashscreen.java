@@ -21,32 +21,73 @@ import com.ecomap.ukraine.restclient.DataListener;
 import java.util.List;
 import java.util.Random;
 
+/**
+ * Activity which represent loading data from server
+ */
 public class Splashscreen extends Activity implements DataListener{
 
+    /**
+     * Failure loading message
+     */
     private static final  String FAILURE_OF_LOADING = "Failed to load. Please ensure you`re connected " +
             "to the Internet and try again.";
+    /**
+     * Retry button title
+     */
     private final static String RETRY = "Retry";
+    /**
+     * Cancel button title
+     */
     private final static String CANCEL = "Cancel";
+    /**
+     * Minimal time interval of loading
+     */
     private final static int MINIMAL_DELAY = 2000;
 
+    /**
+     * Data manager instanse
+     */
     private final DataManager manager = DataManager.getInstance();
 
+    /**
+     * Context of activity
+     */
     private Context context;
+    /**
+     * MainActivity intent
+     */
     private Intent intent;
+    /**
+     * State of loading
+     */
     private boolean state = false;
 
+    /**
+     * Time of start loading
+     */
     private long startLoading;
+    /**
+     * Time of end loading
+     */
     private long endLoading;
 
+    /**
+     * Initialize activity
+     * @param savedInstanceState Contains the data it most recently
+     *                           supplied in onSaveInstanceState(Bundle)
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.splashscreen);
 
-        ProgressBar progressbar = (ProgressBar) findViewById(R.id.progressBar1);
-        
+        /**
+         * Set color of progres bar
+         */
+        ProgressBar progressbar = (ProgressBar) findViewById(R.id.progressBar);
         progressbar.getIndeterminateDrawable().setColorFilter(Color.BLACK, PorterDuff.Mode.SRC_IN);
+
         startLoading = System.currentTimeMillis();
 
         context = getApplicationContext();
@@ -56,6 +97,9 @@ public class Splashscreen extends Activity implements DataListener{
         manager.getAllProblems(context);
     }
 
+    /**
+     * Initialize dialog interrupt downloads
+     */
     public  void setFailureLoadingDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this,android.R.style.Theme_Holo_Light_Panel);
 
@@ -83,6 +127,11 @@ public class Splashscreen extends Activity implements DataListener{
 
     }
 
+    /**
+     * Update data from server
+     * @param requestType the type of request handled.
+     * @param requestResult the result of request.
+     */
     @Override
     public void update(int requestType, Object requestResult) {
         switch (requestType) {
@@ -91,6 +140,10 @@ public class Splashscreen extends Activity implements DataListener{
         }
     }
 
+    /**
+     * Put information about problem to MainActivity
+     * @param requestResult the result of request.
+     */
     private void initialMainText(Object requestResult) {
         if (requestResult != null) {
             Random rand = new Random();

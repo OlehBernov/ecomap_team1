@@ -22,28 +22,44 @@ public class ProblemActivity {
     private String userName;
 
     /**
-     * provide access to all fields of class
+     * provides access to position
      */
     public int getCommentId() {
         return problemActivityId;
     }
 
+    /**
+     * provides access to position
+     */
     public int getActivityTypesId() {
         return activityTypesId;
     }
 
+
+    /**
+     * provides access to userId
+     */
     public int getUserId() {
         return userId;
     }
 
+    /**
+     * provides access to content
+     */
     public String getContent() {
         return content;
     }
 
+    /**
+     * provides access to date
+     */
     public String getDate() {
         return date;
     }
 
+    /**
+     * provides access to userName
+     */
     public String getFirstName() {
         return userName;
     }
