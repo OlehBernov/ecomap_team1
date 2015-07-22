@@ -9,17 +9,33 @@ import com.google.android.gms.maps.model.LatLng;
  */
 public class Problem {
 
-    //id of current problem
+    /**
+     * id of current problem
+     */
     private int problemId;
-    //represend status of current problem resolved (1) or not resolved (0)
+
+    /**
+     * represend status of current problem resolved (1) or not resolved (0)
+     */
     private int statusId;
-    //represend type of current problem
+
+    /**
+     * represend type of current problem
+     */
     private int problemTypesId;
-    //contains title of current problem
+
+    /**
+     * contains title of current problem
+     */
     private String title;
-    //contains adding date of current problem
+    /**
+     * contains adding date of current problem
+     */
     private String date;
-    //contains coordinate of current problem
+
+    /**
+     * contains coordinate of current problem
+     */
     private LatLng position;
 
 

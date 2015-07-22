@@ -7,18 +7,34 @@ package com.ecomap.ukraine.models;
  */
 public class ProblemActivity {
 
-    //id of current problemActivity
+    /**
+     * id of current problemActivity
+     */
     private int problemActivityId;
-    //represend type of current problemActivity
+
+    /**
+     * represend type of current problemActivity
+     */
     private int activityTypesId;
-    //id of user who added this problemActivity
+
+    /**
+     * id of user who added this problemActivity
+     */
     private int userId;
 
-    //contains text of current problemActivity
+    /**
+     * contains text of current problemActivity
+     */
     private String content;
-    //contains adding date of current problemActivity
+
+    /**
+     * contains adding date of current problemActivity
+     */
     private String date;
-    //name of user who added this problemActivity
+
+    /**
+     * name of user who added this problemActivity
+     */
     private String userName;
 
     /**
