@@ -10,6 +10,7 @@ import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.os.Handler;
+import android.view.View;
 import android.widget.ProgressBar;
 
 import com.ecomap.ukraine.R;
@@ -24,7 +25,7 @@ import java.util.Random;
 /**
  * Activity which represent loading data from server
  */
-public class Splashscreen extends Activity implements DataListener{
+public class SplashScreen extends Activity implements DataListener{
 
     /**
      * Failure loading message
@@ -72,6 +73,11 @@ public class Splashscreen extends Activity implements DataListener{
     private long endLoading;
 
     /**
+     * Progress bar
+     */
+    private ProgressBar progressBar;
+
+    /**
      * Initialize activity
      * @param savedInstanceState Contains the data it most recently
      *                           supplied in onSaveInstanceState(Bundle)
@@ -81,12 +87,8 @@ public class Splashscreen extends Activity implements DataListener{
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.splashscreen);
-
-        /**
-         * Set color of progres bar
-         */
-        ProgressBar progressbar = (ProgressBar) findViewById(R.id.progressBar);
-        progressbar.getIndeterminateDrawable().setColorFilter(Color.BLACK, PorterDuff.Mode.SRC_IN);
+        progressBar = (ProgressBar) findViewById(R.id.progressBar);
+        progressBar.getIndeterminateDrawable().setColorFilter(Color.BLACK, PorterDuff.Mode.SRC_IN);
 
         startLoading = System.currentTimeMillis();
 
@@ -101,19 +103,22 @@ public class Splashscreen extends Activity implements DataListener{
      * Initialize dialog interrupt downloads
      */
     public  void setFailureLoadingDialog() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this,android.R.style.Theme_Holo_Light_Panel);
 
+        progressBar.setVisibility(View.INVISIBLE);
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this, android.R.style.Theme_Holo_Light_Panel);
         builder.setCancelable(false);
-        builder.setMessage(com.ecomap.ukraine.activities.Splashscreen.FAILURE_OF_LOADING);
-        builder.setPositiveButton(com.ecomap.ukraine.activities.Splashscreen.RETRY,
+        builder.setMessage(SplashScreen.FAILURE_OF_LOADING);
+        builder.setPositiveButton(SplashScreen.RETRY,
                 new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(final DialogInterface dialog,
                                         final int id) {
+                        progressBar.setVisibility(View.VISIBLE);
                         manager.getAllProblems(context);
                     }
                 });
-        builder.setNegativeButton(com.ecomap.ukraine.activities.Splashscreen.CANCEL,
+        builder.setNegativeButton(SplashScreen.CANCEL,
                 new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(final DialogInterface dialog,
