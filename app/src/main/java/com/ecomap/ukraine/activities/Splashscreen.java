@@ -50,11 +50,6 @@ public class Splashscreen extends Activity implements DataListener{
         intent = new Intent(this, MainActivity.class);
 
         manager.registerListener(this);
-
-        fourSquare = (ImageView) findViewById(R.id.fourSquare);
-        animationDrawable = (AnimationDrawable) fourSquare.getDrawable();
-        animationDrawable.start();
-
         manager.getAllProblems(context);
     }
 
