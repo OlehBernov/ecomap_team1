@@ -14,9 +14,9 @@ import android.widget.ProgressBar;
 
 import com.ecomap.ukraine.R;
 import com.ecomap.ukraine.models.Problem;
-import com.ecomap.ukraine.restclient.DataManager;
-import com.ecomap.ukraine.restclient.RequestTypes;
-import com.ecomap.ukraine.restclient.DataListener;
+import com.ecomap.ukraine.serverclient.DataManager;
+import com.ecomap.ukraine.serverclient.RequestTypes;
+import com.ecomap.ukraine.serverclient.DataListener;
 
 import java.util.List;
 import java.util.Random;
