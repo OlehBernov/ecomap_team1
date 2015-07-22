@@ -6,10 +6,11 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.drawable.AnimationDrawable;
+import android.graphics.Color;
+import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.os.Handler;
-import android.widget.ImageView;
+import android.widget.ProgressBar;
 
 import com.ecomap.ukraine.R;
 import com.ecomap.ukraine.models.Problem;
@@ -32,8 +33,6 @@ public class Splashscreen extends Activity implements DataListener{
 
     private Context context;
     private Intent intent;
-    private AnimationDrawable animationDrawable;
-    private ImageView fourSquare;
     private boolean state = false;
 
     private long startLoading;
@@ -44,6 +43,10 @@ public class Splashscreen extends Activity implements DataListener{
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.splashscreen);
+
+        ProgressBar progressbar = (ProgressBar) findViewById(R.id.progressBar1);
+        
+        progressbar.getIndeterminateDrawable().setColorFilter(Color.BLACK, PorterDuff.Mode.SRC_IN);
         startLoading = System.currentTimeMillis();
 
         context = getApplicationContext();
