@@ -1,4 +1,4 @@
-package com.ecomap.ukraine.convertion;
+package com.ecomap.ukraine.updating.convertion;
 
 /**
  * Field names in JSON, which comes from the server.

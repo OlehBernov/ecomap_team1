@@ -1,4 +1,4 @@
-package com.ecomap.ukraine.serverclient;
+package com.ecomap.ukraine.updating.serverclient;
 
 /**
  * Created by Oleh on 7/19/2015.

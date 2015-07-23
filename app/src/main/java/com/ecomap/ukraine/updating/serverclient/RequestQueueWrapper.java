@@ -1,4 +1,4 @@
-package com.ecomap.ukraine.serverclient;
+package com.ecomap.ukraine.updating.serverclient;
 
 import android.content.Context;
 

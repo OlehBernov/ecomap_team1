@@ -1,6 +1,8 @@
-package com.ecomap.ukraine.serverclient;
+package com.ecomap.ukraine.data.manager;
 
 import android.content.Context;
+
+import com.ecomap.ukraine.updating.serverclient.LoadingClient;
 
 import java.util.HashSet;
 import java.util.Set;
