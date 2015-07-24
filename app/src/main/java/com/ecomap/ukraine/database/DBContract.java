@@ -6,10 +6,28 @@ import android.provider.BaseColumns;
  * Created by Oleh on 7/24/2015.
  */
 public class DBContract {
-    public static final String CREATE_PROBLEMS_TABLE =
-            "CREATE TABLE ";
-    public static final String CREATE_DETAILS_TABLE = "";
-    public static final String CREATE_PHOTO_TABLE = "";
+    private static final String TEXT_TYPE = " TEXT";
+    private static final String INT_TYPE = " INTEGER";
+    private static final String REAL_TYPE = " REAL";
+    private static final String COMMA_SEP = ", ";
+    public static final String CREATE_PROBLEMS_TABLE
+            = "CREATE TABLE " + Problems.TABLE_NAME + " (" + Problems.ID +
+            " INTEGER PRIMARY KEY, " + Problems.PROBLEM_STATUS + INT_TYPE +
+            COMMA_SEP + Problems.PROBLEM_TYPES_ID + INT_TYPE + COMMA_SEP +
+            Problems.PROBLEM_DATE + INT_TYPE + COMMA_SEP + Problems.LATITUDE +
+            REAL_TYPE + COMMA_SEP + Problems.LONGITUDE + REAL_TYPE + ")";
+    public static final String CREATE_DETAILS_TABLE
+            = "CREATE TABLE " + Details.TABLE_NAME + " (" + Details.PROBLEM_ID
+            + INT_TYPE + COMMA_SEP + Details.PROBLEM_CONTENT + TEXT_TYPE +
+            COMMA_SEP + Details.PROPOSAL + TEXT_TYPE + COMMA_SEP +
+            Details.MODERATION + INT_TYPE + COMMA_SEP + Details.SEVERITY +
+            INT_TYPE + COMMA_SEP + Details.VOTES + INT_TYPE + ")";
+    public static final String CREATE_PHOTO_TABLE
+            = "CREATE TABLE" + Photos.TABLE_NAME + " (" + Photos.PROBLEM_ID +
+            INT_TYPE + COMMA_SEP + Photos.PHOTO_ID + INT_TYPE + COMMA_SEP +
+            Photos.PHOTO_USERS_ID + INT_TYPE + COMMA_SEP + Photos.PHOTO_STATUS
+            + INT_TYPE + COMMA_SEP + Photos.LINK + TEXT_TYPE + COMMA_SEP +
+            Photos.PHOTO_DESCRIPTION + TEXT_TYPE + COMMA_SEP + ")";
     public static final String CREATE_ACTIVITY_TABLE = "";
     public static final String DELETE_ALL_TABLES = "";
 
@@ -48,7 +66,17 @@ public class DBContract {
     public static abstract class Photos implements BaseColumns {
         public static final String TABLE_NAME = "Photos";
 
+        public static final String PROBLEM_ID = "Problem_ID";
 
+        public static final String PHOTO_ID = "Photo_ID";
+
+        public static final String PHOTO_USERS_ID = "Users_Id";
+
+        public static final String PHOTO_STATUS = "Status";
+
+        public static final String LINK = "Link";
+
+        public static final String PHOTO_DESCRIPTION = "Description";
     }
 
     public static abstract class ProblemActivity implements BaseColumns {
