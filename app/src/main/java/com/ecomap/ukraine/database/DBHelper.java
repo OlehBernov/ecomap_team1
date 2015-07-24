@@ -88,6 +88,7 @@ public class DBHelper extends SQLiteOpenHelper implements DataListener {
         switch (requestType) {
             case RequestTypes.ALL_PROBLEMS:
                 this.addAllProblems(requestResult);
+                break;
         }
     }
 
