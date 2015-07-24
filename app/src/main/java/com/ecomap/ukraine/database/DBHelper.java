@@ -9,6 +9,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 import com.ecomap.ukraine.data.manager.DataListener;
 import com.ecomap.ukraine.models.Details;
 import com.ecomap.ukraine.models.Photo;
+import com.ecomap.ukraine.models.Problem;
 import com.ecomap.ukraine.models.ProblemActivity;
 import com.ecomap.ukraine.updating.serverclient.RequestTypes;
 
@@ -64,6 +65,7 @@ public class DBHelper extends SQLiteOpenHelper implements DataListener {
             DBContract.Problems.PROBLEM_TITLE + TEXT_TYPE + COMMA_SEP + DBContract.Problems.PROBLEM_DATE +
             TEXT_TYPE + COMMA_SEP + DBContract.Problems.LATITUDE +
             REAL_TYPE + COMMA_SEP + DBContract.Problems.LONGITUDE + REAL_TYPE + ")";
+
     private static final String DELETE_FROM = "DELETE FROM ";
 
     public DBHelper(Context context) {
@@ -89,16 +91,24 @@ public class DBHelper extends SQLiteOpenHelper implements DataListener {
 
     @Override
     public void update(int requestType, Object requestResult) {
+        SQLiteDatabase db = this.getWritableDatabase();
         switch (requestType) {
             case RequestTypes.ALL_PROBLEMS:
+                db.execSQL(DBHelper.DELETE_FROM + DBContract.Problems.TABLE_NAME);
                 this.addAllProblems(requestResult);
+                break;
+            case RequestTypes.PROBLEM_DETAIL:
+                db = this.getWritableDatabase();
+                db.execSQL(DELETE_FROM + DBContract.Details.TABLE_NAME);
+                db.execSQL(DELETE_FROM + DBContract.Photos.TABLE_NAME);
+                db.execSQL(DELETE_FROM + DBContract.ProblemActivity.TABLE_NAME);
+                this.setProblemDetails((Details) requestResult);
                 break;
         }
     }
 
     public void addAllProblems(Object requestResult){
         SQLiteDatabase db = this.getWritableDatabase();
-        db.execSQL(DBHelper.DELETE_FROM + DBContract.Problems.TABLE_NAME);
         ContentValues contentValues = new ContentValues();
         List<Problem> problems = (ArrayList)requestResult;
         for (Problem problem : problems) {
@@ -130,35 +140,8 @@ public class DBHelper extends SQLiteOpenHelper implements DataListener {
         return problems;
     }
 
-
-    @Override
-    public void update(int requestType, Object requestResult) {
-        switch (requestType) {
-            case RequestTypes.ALL_PROBLEMS:
-                //  this.addAllProblems(requestResult);
-                break;
-            case RequestTypes.PROBLEM_DETAIL:
-                SQLiteDatabase db = this.getWritableDatabase();
-                String delete = DELETE_FROM + DBContract.Details.TABLE_NAME ;
-                db.execSQL(delete);
-                delete = DELETE_FROM + DBContract.Photos.TABLE_NAME;
-                db.execSQL(delete);
-                delete = DELETE_FROM + DBContract.ProblemActivity.TABLE_NAME;
-                db.execSQL(delete);
-                this.setProblemDetails((Details) requestResult);
-                break;
-        }
-    }
-
     public void setProblemDetails(Details details) {
         SQLiteDatabase db = this.getWritableDatabase();
-
-        String delete = DELETE_FROM + DBContract.Details.TABLE_NAME ;
-        db.execSQL(delete);
-        delete = DELETE_FROM + DBContract.Photos.TABLE_NAME;
-        db.execSQL(delete);
-        delete = DELETE_FROM + DBContract.ProblemActivity.TABLE_NAME;
-        db.execSQL(delete);
 
         ContentValues values = new ContentValues();
 
