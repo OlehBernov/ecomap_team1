@@ -25,7 +25,7 @@ import java.util.Random;
 /**
  * Activity which represent loading data from server
  */
-public class SplashScreen extends Activity implements DataListener{
+public class Splashscreen extends Activity implements DataListener{
 
     /**
      * Failure loading message
@@ -108,8 +108,8 @@ public class SplashScreen extends Activity implements DataListener{
 
         AlertDialog.Builder builder = new AlertDialog.Builder(this, android.R.style.Theme_Holo_Light_Panel);
         builder.setCancelable(false);
-        builder.setMessage(SplashScreen.FAILURE_OF_LOADING);
-        builder.setPositiveButton(SplashScreen.RETRY,
+        builder.setMessage(Splashscreen.FAILURE_OF_LOADING);
+        builder.setPositiveButton(Splashscreen.RETRY,
                 new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(final DialogInterface dialog,
@@ -118,7 +118,7 @@ public class SplashScreen extends Activity implements DataListener{
                         manager.getAllProblems(context);
                     }
                 });
-        builder.setNegativeButton(SplashScreen.CANCEL,
+        builder.setNegativeButton(Splashscreen.CANCEL,
                 new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(final DialogInterface dialog,
