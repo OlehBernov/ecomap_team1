@@ -10,7 +10,7 @@ import java.util.Set;
 /**
  * Created by Oleh on 7/19/2015.
  */
-public class DataManager {
+public class DataManager implements ResponseListener {
 
     /**
      * Holds the Singleton global instance of DataManager.
@@ -33,7 +33,7 @@ public class DataManager {
      * instantiated.
      */
     private DataManager() {
-        loadingClient = new LoadingClient();
+        loadingClient = new LoadingClient(this);
     }
 
     /**
@@ -80,5 +80,21 @@ public class DataManager {
      */
     public void getProblemDetail(int problemId, Context context) {
         loadingClient.getProblemDetail(problemId, context, listeners);
+    }
+
+    /**
+     * Notify all listeners about server response
+     * and send them received information.
+     *
+     * @param requestType type of request.
+     * @param requestResult server response converted to the objects of entities.
+     * @param listeners objects, which get response from
+     *                  server converted to the objects of entities.
+     */
+    public void notifyListeners(final int requestType, Object requestResult,
+                                 final Set<DataListener> listeners) {
+        for (DataListener listener : listeners) {
+            listener.update(requestType, requestResult);
+        }
     }
 }

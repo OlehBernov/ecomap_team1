@@ -7,6 +7,7 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
+import com.ecomap.ukraine.data.manager.ResponseListener;
 import com.ecomap.ukraine.updating.convertion.JSONParser;
 import com.ecomap.ukraine.data.manager.DataListener;
 
@@ -31,6 +32,21 @@ public class LoadingClient {
     private Object requestResult;
 
     /**
+     * Object, which able to notify listeners
+     * about result.
+     */
+    private ResponseListener responseListener;
+
+    /**
+     * Constructor of LoadingClient.
+     *
+     * @param responseListener able to notify listeners about result.
+     */
+    public LoadingClient(ResponseListener responseListener) {
+        this.responseListener = responseListener;
+    }
+
+    /**
      * Sends a request to download brief information
      * about all problems.
      *
@@ -48,14 +64,16 @@ public class LoadingClient {
                         } catch (JSONException e) {
                             requestResult = null;
                         } finally {
-                            notifyListeners(RequestTypes.ALL_PROBLEMS, requestResult, listeners);
+                            responseListener.notifyListeners(RequestTypes.ALL_PROBLEMS,
+                                    requestResult, listeners);
                         }
                     }
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
                 requestResult = null;
-                notifyListeners(RequestTypes.ALL_PROBLEMS, requestResult, listeners);
+                responseListener.notifyListeners(RequestTypes.ALL_PROBLEMS,
+                        requestResult, listeners);
             }
         });
 
@@ -74,22 +92,6 @@ public class LoadingClient {
     public void getProblemDetail(final int problemId, final Context context,
                                  final Set<DataListener> listeners) {
 
-    }
-
-    /**
-     * Notify all listeners about server response
-     * and send them received information.
-     *
-     * @param requestType type of request.
-     * @param requestResult server response converted to the objects of entities.
-     * @param listeners objects, which get response from
-     *                  server converted to the objects of entities.
-     */
-    private void notifyListeners(final int requestType, Object requestResult,
-                                 final Set<DataListener> listeners) {
-        for (DataListener listener : listeners) {
-            listener.update(requestType, requestResult);
-        }
     }
 
 }
