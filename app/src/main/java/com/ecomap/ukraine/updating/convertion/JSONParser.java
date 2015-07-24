@@ -80,15 +80,18 @@ public class JSONParser {
                 .getJSONObject(0);
         Details details;
         details = new Details(
+                problemDetails.optInt(JSONFields.ID, DEFAULT_VALUE),
                 problemDetails.optInt(JSONFields.SEVERITY, DEFAULT_VALUE),
                 problemDetails.optInt(JSONFields.MODERATION, DEFAULT_VALUE),
                 problemDetails.optInt(JSONFields.VOTES, DEFAULT_VALUE),
                 problemDetails.getString(JSONFields.PROBLEM_CONTENT),
                 problemDetails.getString(JSONFields.PROPOSAL),
+                problemDetails.getString(JSONFields.TITLE),
                 getProblemActivities(detailedProblemArray
                         .getJSONArray(JSONFields.PROBLEM_ACTIVITY_POSITION)),
                 getPhotos(detailedProblemArray
-                        .getJSONArray(JSONFields.PHOTOS_POSITION))
+                        .getJSONArray(JSONFields.PHOTOS_POSITION)),
+                String.valueOf(System.currentTimeMillis())
         );
 
         return details;
@@ -141,6 +144,7 @@ public class JSONParser {
                                           .getString(JSONFields.PROBLEM_ACTIVITY_CONTENT));
 
             currentProblemActivity = new ProblemActivity(
+                    commentObject.optInt(JSONFields.PROBLEMS_ID, DEFAULT_VALUE),
                     commentObject.optInt(JSONFields.ID, DEFAULT_VALUE),
                     commentObject.optInt(JSONFields.ACTIVITY_TYPES_ID, DEFAULT_VALUE),
                     commentObject.optInt(JSONFields.COMMENT_USERS_ID, DEFAULT_VALUE),
@@ -174,6 +178,7 @@ public class JSONParser {
             JSONObject photoObject = photosArray.getJSONObject(i);
 
             currentPhoto = new Photo(
+                    photoObject.optInt(JSONFields.PROBLEMS_ID, DEFAULT_VALUE),
                     photoObject.optInt(JSONFields.ID, DEFAULT_VALUE),
                     photoObject.optInt(JSONFields.PHOTO_USERS_ID, DEFAULT_VALUE),
                     photoObject.optInt(JSONFields.PHOTO_STATUS, DEFAULT_VALUE),

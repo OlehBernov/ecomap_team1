@@ -8,6 +8,11 @@ package com.ecomap.ukraine.models;
 public class ProblemActivity {
 
     /**
+     * TODO: write doc
+     */
+    private int problemId;
+
+    /**
      * id of current problemActivity
      */
     private int problemActivityId;
@@ -38,9 +43,17 @@ public class ProblemActivity {
     private String userName;
 
     /**
+     * TODO: write doc
+     * @return
+     */
+    public int getProblemId() {
+        return problemId;
+    }
+
+    /**
      * provides access to position
      */
-    public int getCommentId() {
+    public int getProblemActivityId() {
         return problemActivityId;
     }
 
@@ -89,8 +102,9 @@ public class ProblemActivity {
      * @param date contains adding date of current problemActivity
      * @param userName name of user who added this problemActivity
      */
-    public ProblemActivity(int problemActivityId, int activityTypesId, int userId, String content,
-                           String date, String userName) {
+    public ProblemActivity(int probemId, int problemActivityId, int activityTypesId, int userId,
+                           String content, String date, String userName) {
+        this.problemId = probemId;
         this.problemActivityId = problemActivityId;
         this.activityTypesId = activityTypesId;
         this.userId = userId;

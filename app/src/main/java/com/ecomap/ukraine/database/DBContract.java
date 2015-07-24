@@ -39,6 +39,8 @@ public class DBContract {
         public static final String VOTES = "Votes";
 
         public static final String LAST_UPDATE = "Date";
+
+        public static final String TITLE = "Title";
     }
 
     public static abstract class Photos implements BaseColumns {
@@ -61,8 +63,9 @@ public class DBContract {
         public static final String TABLE_NAME = "Activities";
         public static final String PROBLEM_ID = "Problem_ID";
         public static final String ACTIVITY_TYPES_ID = "ActivityTypes_Id";
-        public static final String COMMENT_USERS_ID = "Users_Id";
+        public static final String ACTIVITY_USERS_ID = "Users_Id";
         public static final String PROBLEM_ACTIVITY_DATE = "Date";
+        public static final String PROBLEM_ACTIVITY_ID = "Problem_Activity_id";
         public static final String PROBLEM_ACTIVITY_CONTENT = "Content";
         public static final String USER_NAME = "userName";
     }
