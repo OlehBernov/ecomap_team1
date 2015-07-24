@@ -1,10 +1,18 @@
 package com.ecomap.ukraine.data.manager;
 
 import android.content.Context;
+import android.util.Log;
 
+import com.ecomap.ukraine.database.DBContract;
+import com.ecomap.ukraine.database.DBHelper;
+import com.ecomap.ukraine.models.Details;
+import com.ecomap.ukraine.models.Photo;
+import com.ecomap.ukraine.models.ProblemActivity;
 import com.ecomap.ukraine.updating.serverclient.LoadingClient;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 /**

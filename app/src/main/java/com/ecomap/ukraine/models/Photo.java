@@ -7,6 +7,12 @@ package com.ecomap.ukraine.models;
 public class Photo {
 
     /**
+     * TODO: write doc
+     */
+
+    private int problemId;
+
+    /**
      * id of current problem
      */
     private int photoId;
@@ -31,6 +37,9 @@ public class Photo {
      */
     private String description;
 
+    public int getProblemId() {
+        return problemId;
+    }
 
     /**
      * provides access to photoId
@@ -71,7 +80,9 @@ public class Photo {
      * @param link link to this photo
      * @param description description of this photo
      */
-    public Photo(int photoId, int userId, int status, String link, String description) {
+    public Photo(int problemId, int photoId, int userId, int status, String link,
+                 String description) {
+        this.problemId = problemId;
         this.photoId = photoId;
         this.userId = userId;
         this.status = status;
