@@ -5,7 +5,7 @@ import java.util.Set;
 /**
  * Created by Alexander on 24.07.2015.
  */
-public interface ResponseListener {
+public interface ListenersNotifier {
 
     public void registerListener(DataListener listener);
     public void removeListener(DataListener listener);

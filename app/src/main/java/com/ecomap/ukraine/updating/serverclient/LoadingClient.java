@@ -7,7 +7,7 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
-import com.ecomap.ukraine.data.manager.ResponseListener;
+import com.ecomap.ukraine.data.manager.ListenersNotifier;
 import com.ecomap.ukraine.updating.convertion.JSONParser;
 import com.ecomap.ukraine.data.manager.DataListener;
 
@@ -35,15 +35,15 @@ public class LoadingClient {
      * Object, which able to notify listeners
      * about result.
      */
-    private ResponseListener responseListener;
+    private ListenersNotifier listenersNotifier;
 
     /**
      * Constructor of LoadingClient.
      *
-     * @param responseListener able to notify listeners about result.
+     * @param listenersNotifier able to notify listeners about result.
      */
-    public LoadingClient(ResponseListener responseListener) {
-        this.responseListener = responseListener;
+    public LoadingClient(ListenersNotifier listenersNotifier) {
+        this.listenersNotifier = listenersNotifier;
     }
 
     /**
@@ -64,7 +64,7 @@ public class LoadingClient {
                         } catch (JSONException e) {
                             requestResult = null;
                         } finally {
-                            responseListener.notifyListeners(RequestTypes.ALL_PROBLEMS,
+                            listenersNotifier.notifyListeners(RequestTypes.ALL_PROBLEMS,
                                     requestResult, listeners);
                         }
                     }
@@ -72,7 +72,7 @@ public class LoadingClient {
             @Override
             public void onErrorResponse(VolleyError error) {
                 requestResult = null;
-                responseListener.notifyListeners(RequestTypes.ALL_PROBLEMS,
+                listenersNotifier.notifyListeners(RequestTypes.ALL_PROBLEMS,
                         requestResult, listeners);
             }
         });

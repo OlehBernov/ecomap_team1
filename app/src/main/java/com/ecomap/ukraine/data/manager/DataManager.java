@@ -10,7 +10,7 @@ import java.util.Set;
 /**
  * Created by Oleh on 7/19/2015.
  */
-public class DataManager implements ResponseListener {
+public class DataManager implements ListenersNotifier {
 
     /**
      * Holds the Singleton global instance of DataManager.
