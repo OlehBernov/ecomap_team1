@@ -1,13 +1,22 @@
 package com.ecomap.ukraine.database;
 
+import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+
+import com.ecomap.ukraine.data.manager.DataListener;
+import com.ecomap.ukraine.models.Problem;
+import com.ecomap.ukraine.updating.serverclient.RequestTypes;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Oleh on 7/24/2015.
  */
-public class DBHelper extends SQLiteOpenHelper {
+public class DBHelper extends SQLiteOpenHelper implements DataListener {
     private static final String DELETE_ACTIVITIES_TABLE =
             "DROP TABLE IF EXISTS " + DBContract.ProblemActivity.TABLE_NAME;
     private static final String DELETE_PHOTOS_TABLE =
@@ -48,8 +57,10 @@ public class DBHelper extends SQLiteOpenHelper {
             = "CREATE TABLE " + DBContract.Problems.TABLE_NAME + " (" + DBContract.Problems.ID +
             " INTEGER PRIMARY KEY, " + DBContract.Problems.PROBLEM_STATUS + INT_TYPE +
             COMMA_SEP + DBContract.Problems.PROBLEM_TYPES_ID + INT_TYPE + COMMA_SEP +
-            DBContract.Problems.PROBLEM_DATE + INT_TYPE + COMMA_SEP + DBContract.Problems.LATITUDE +
+            DBContract.Problems.PROBLEM_TITLE + TEXT_TYPE + COMMA_SEP + DBContract.Problems.PROBLEM_DATE +
+            TEXT_TYPE + COMMA_SEP + DBContract.Problems.LATITUDE +
             REAL_TYPE + COMMA_SEP + DBContract.Problems.LONGITUDE + REAL_TYPE + ")";
+    private static final String TRUNCATE_FROM = "TRUNCATE FROM ";
 
     public DBHelper(Context context) {
         super(context, DB_NAME, null, DB_VERSION);
@@ -71,4 +82,48 @@ public class DBHelper extends SQLiteOpenHelper {
         db.execSQL(DELETE_PROBLEMS_TABLE);
         onCreate(db);
     }
+
+    @Override
+    public void update(int requestType, Object requestResult) {
+        switch (requestType) {
+            case RequestTypes.ALL_PROBLEMS:
+                this.addAllProblems(requestResult);
+        }
+    }
+
+    private void addAllProblems(Object requestResult){
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.rawQuery(DBHelper.TRUNCATE_FROM + DBContract.Problems.TABLE_NAME, null);
+        ContentValues contentValues = new ContentValues();
+        List<Problem> problems = (List)requestResult;
+        for (Problem problem : problems) {
+            contentValues.put(DBContract.Problems.ID, problem.getProblemId());
+            contentValues.put(DBContract.Problems.PROBLEM_STATUS, problem.getStatusId());
+            contentValues.put(DBContract.Problems.PROBLEM_TYPES_ID, problem.getProblemTypesId());
+            contentValues.put(DBContract.Problems.PROBLEM_TITLE, problem.getTitle());
+            contentValues.put(DBContract.Problems.PROBLEM_DATE, problem.getDate());
+            contentValues.put(DBContract.Problems.LATITUDE, problem.getPosition().latitude);
+            contentValues.put(DBContract.Problems.LONGITUDE, problem.getPosition().longitude);
+            db.insert(DBContract.Problems.TABLE_NAME, null, contentValues);
+            contentValues.clear();
+        }
+        db.close();
+    }
+
+    public List<Problem> getAllProblems () {
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor cursor = db.query(DBContract.Problems.TABLE_NAME, null, null, null, null, null, null);
+        List<Problem> problems = new ArrayList<Problem>();
+        if (cursor.moveToFirst()) {
+            do {
+                Problem problem = new Problem(cursor);
+                problems.add(problem);
+            } while (cursor.moveToNext());
+        }
+        db.close();
+        return problems;
+    }
+
 }
+
+

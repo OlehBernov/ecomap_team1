@@ -16,6 +16,8 @@ public class DBContract {
 
         public static final String PROBLEM_TYPES_ID = "ProblemTypes_Id";
 
+        public static final String PROBLEM_TITLE = "Title";
+
         public static final String PROBLEM_DATE = "Date";
 
         public static final String LATITUDE = "Latitude";
