@@ -6,30 +6,6 @@ import android.provider.BaseColumns;
  * Created by Oleh on 7/24/2015.
  */
 public class DBContract {
-    private static final String TEXT_TYPE = " TEXT";
-    private static final String INT_TYPE = " INTEGER";
-    private static final String REAL_TYPE = " REAL";
-    private static final String COMMA_SEP = ", ";
-    public static final String CREATE_PROBLEMS_TABLE
-            = "CREATE TABLE " + Problems.TABLE_NAME + " (" + Problems.ID +
-            " INTEGER PRIMARY KEY, " + Problems.PROBLEM_STATUS + INT_TYPE +
-            COMMA_SEP + Problems.PROBLEM_TYPES_ID + INT_TYPE + COMMA_SEP +
-            Problems.PROBLEM_DATE + INT_TYPE + COMMA_SEP + Problems.LATITUDE +
-            REAL_TYPE + COMMA_SEP + Problems.LONGITUDE + REAL_TYPE + ")";
-    public static final String CREATE_DETAILS_TABLE
-            = "CREATE TABLE " + Details.TABLE_NAME + " (" + Details.PROBLEM_ID
-            + INT_TYPE + COMMA_SEP + Details.PROBLEM_CONTENT + TEXT_TYPE +
-            COMMA_SEP + Details.PROPOSAL + TEXT_TYPE + COMMA_SEP +
-            Details.MODERATION + INT_TYPE + COMMA_SEP + Details.SEVERITY +
-            INT_TYPE + COMMA_SEP + Details.VOTES + INT_TYPE + ")";
-    public static final String CREATE_PHOTO_TABLE
-            = "CREATE TABLE" + Photos.TABLE_NAME + " (" + Photos.PROBLEM_ID +
-            INT_TYPE + COMMA_SEP + Photos.PHOTO_ID + INT_TYPE + COMMA_SEP +
-            Photos.PHOTO_USERS_ID + INT_TYPE + COMMA_SEP + Photos.PHOTO_STATUS
-            + INT_TYPE + COMMA_SEP + Photos.LINK + TEXT_TYPE + COMMA_SEP +
-            Photos.PHOTO_DESCRIPTION + TEXT_TYPE + COMMA_SEP + ")";
-    public static final String CREATE_ACTIVITY_TABLE = "";
-    public static final String DELETE_ALL_TABLES = "";
 
     public static abstract class Problems implements BaseColumns {
         public static final String TABLE_NAME = "Problems";
@@ -61,6 +37,8 @@ public class DBContract {
         public static final String SEVERITY = "Severity";
 
         public static final String VOTES = "Votes";
+
+        public static final String LAST_UPDATE = "Date";
     }
 
     public static abstract class Photos implements BaseColumns {
@@ -81,17 +59,11 @@ public class DBContract {
 
     public static abstract class ProblemActivity implements BaseColumns {
         public static final String TABLE_NAME = "Activities";
-
         public static final String PROBLEM_ID = "Problem_ID";
-
         public static final String ACTIVITY_TYPES_ID = "ActivityTypes_Id";
-
         public static final String COMMENT_USERS_ID = "Users_Id";
-
         public static final String PROBLEM_ACTIVITY_DATE = "Date";
-
         public static final String PROBLEM_ACTIVITY_CONTENT = "Content";
-
         public static final String USER_NAME = "userName";
     }
 

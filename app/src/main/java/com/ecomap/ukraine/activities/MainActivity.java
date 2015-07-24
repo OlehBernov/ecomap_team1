@@ -1,5 +1,6 @@
 package com.ecomap.ukraine.activities;
 
+import android.database.sqlite.SQLiteDatabase;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
@@ -7,6 +8,7 @@ import android.view.MenuItem;
 import android.widget.TextView;
 
 import com.ecomap.ukraine.R;
+import com.ecomap.ukraine.database.DBHelper;
 import com.ecomap.ukraine.models.Problem;
 import com.ecomap.ukraine.data.manager.DataManager;
 import com.ecomap.ukraine.updating.serverclient.RequestTypes;
@@ -34,6 +36,8 @@ public class MainActivity extends ActionBarActivity implements DataListener{
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+
         manager.registerListener(this);
         ((TextView)findViewById(R.id.textView))
                 .setText(getIntent()
