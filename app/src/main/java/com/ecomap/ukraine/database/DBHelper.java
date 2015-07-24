@@ -60,7 +60,7 @@ public class DBHelper extends SQLiteOpenHelper implements DataListener {
             DBContract.Problems.PROBLEM_TITLE + TEXT_TYPE + COMMA_SEP + DBContract.Problems.PROBLEM_DATE +
             TEXT_TYPE + COMMA_SEP + DBContract.Problems.LATITUDE +
             REAL_TYPE + COMMA_SEP + DBContract.Problems.LONGITUDE + REAL_TYPE + ")";
-    private static final String TRUNCATE_FROM = "TRUNCATE FROM ";
+    private static final String DELETE_FROM = "DELETE FROM ";
 
     public DBHelper(Context context) {
         super(context, DB_NAME, null, DB_VERSION);
@@ -92,11 +92,11 @@ public class DBHelper extends SQLiteOpenHelper implements DataListener {
         }
     }
 
-    private void addAllProblems(Object requestResult){
+    public void addAllProblems(Object requestResult){
         SQLiteDatabase db = this.getWritableDatabase();
-        db.rawQuery(DBHelper.TRUNCATE_FROM + DBContract.Problems.TABLE_NAME, null);
+        db.execSQL(DBHelper.DELETE_FROM + DBContract.Problems.TABLE_NAME);
         ContentValues contentValues = new ContentValues();
-        List<Problem> problems = (List)requestResult;
+        List<Problem> problems = (ArrayList)requestResult;
         for (Problem problem : problems) {
             contentValues.put(DBContract.Problems.ID, problem.getProblemId());
             contentValues.put(DBContract.Problems.PROBLEM_STATUS, problem.getStatusId());
@@ -108,6 +108,7 @@ public class DBHelper extends SQLiteOpenHelper implements DataListener {
             db.insert(DBContract.Problems.TABLE_NAME, null, contentValues);
             contentValues.clear();
         }
+        
         db.close();
     }
 
