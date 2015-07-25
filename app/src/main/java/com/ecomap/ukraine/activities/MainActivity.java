@@ -1,6 +1,7 @@
 package com.ecomap.ukraine.activities;
 
 import android.database.sqlite.SQLiteDatabase;
+import android.graphics.Bitmap;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
@@ -43,7 +44,7 @@ public class MainActivity extends ActionBarActivity implements DataListener{
 
         manager.registerListener(this);
 
-        manager.getProblemDetail(212, this);
+        manager.getProblemDetail(56, this);
 //        ((TextView)findViewById(R.id.textView))
 //                .setText(getIntent()
 //                .getStringExtra("randomProblem"));
@@ -92,8 +93,11 @@ public class MainActivity extends ActionBarActivity implements DataListener{
             case RequestTypes.PROBLEM_DETAIL:
                 Details details = (Details)requestResult;
                 for (Photo photo : details.getPhotos().keySet()) {
-                    ((ImageView)findViewById(R.id.imageView2)).setImageBitmap(details
-                            .getPhotos().get(photo));
+
+                    new DBHelper(this).writeToFile(details.getPhotos().get(photo),
+                            photo.getLink());
+                    Bitmap image = new DBHelper(this).getBitmapByName(photo.getLink());
+                    ((ImageView)findViewById(R.id.imageView2)).setImageBitmap(image);
                 }
 
                 break;
@@ -108,6 +112,7 @@ public class MainActivity extends ActionBarActivity implements DataListener{
     private void showRandomProblem(Object requestResult) {
         if (requestResult != null) {
             Random rand = new Random();
+            this.getFilesDir();
             List<Problem> problems = (List)requestResult;
             Problem problem = problems.get(rand.nextInt(problems.size()));
             ((TextView)findViewById(R.id.textView)).setText("" + problem.getTitle());

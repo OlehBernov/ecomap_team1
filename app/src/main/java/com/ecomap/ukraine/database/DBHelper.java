@@ -6,6 +6,8 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import com.ecomap.ukraine.R;
 
 import com.ecomap.ukraine.data.manager.DataListener;
 import com.ecomap.ukraine.models.Details;
@@ -14,6 +16,10 @@ import com.ecomap.ukraine.models.Problem;
 import com.ecomap.ukraine.models.ProblemActivity;
 import com.ecomap.ukraine.updating.serverclient.RequestTypes;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -71,8 +77,11 @@ public class DBHelper extends SQLiteOpenHelper implements DataListener {
 
     private static final String DELETE_FROM = "DELETE FROM ";
 
+    Context context;
+
     public DBHelper(Context context) {
         super(context, DB_NAME, null, DB_VERSION);
+        this.context = context;
     }
 
     @Override
@@ -190,6 +199,8 @@ public class DBHelper extends SQLiteOpenHelper implements DataListener {
 
         ContentValues values;
         for (Photo photo: photos.keySet()) {
+            writeToFile(photos.get(photo), photo.getLink());
+
             values = new ContentValues();
 
             values.put(DBContract.Photos.PROBLEM_ID, photo.getProblemId());
@@ -200,6 +211,26 @@ public class DBHelper extends SQLiteOpenHelper implements DataListener {
             values.put(DBContract.Photos.PHOTO_DESCRIPTION, photo.getDescription());
 
         db.insert(DBContract.Photos.TABLE_NAME, null, values);
+        }
+    }
+
+    public void writeToFile(Bitmap bitmap, String name) {
+        FileOutputStream outputStream = null;
+        try {
+            String path = context.getFilesDir().getPath();
+            outputStream = new FileOutputStream(
+                    new File(path + "/" + name));
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, outputStream);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        } finally {
+            try {
+                if (outputStream != null) {
+                    outputStream.close();
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
     }
 
@@ -298,13 +329,33 @@ public class DBHelper extends SQLiteOpenHelper implements DataListener {
                     cursor.getString(cursor.getColumnIndex(DBContract.Photos.LINK)),
                     cursor.getString(cursor.getColumnIndex(DBContract.Photos.PHOTO_DESCRIPTION))
                     );
-
-            photos.put(photo, null);
+            Bitmap image = getBitmapByName(photo.getLink());
+            photos.put(photo, image);
         }
 
         cursor.close();
 
         return photos;
+    }
+
+    public Bitmap getBitmapByName(String fileName) {
+        FileInputStream inputStream = null;
+        try {
+            String path = context.getFilesDir().getPath();
+            inputStream = new FileInputStream(new File(path + "/" + fileName));
+            return BitmapFactory.decodeStream(inputStream);
+        } catch (Exception e) {
+            return BitmapFactory.decodeResource(context.getResources(),
+                    R.drawable.photo_error1);
+        } finally {
+            try {
+                if (inputStream != null) {
+                    inputStream.close();
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     private List<ProblemActivity> getProblemActivities(int problemId) {
