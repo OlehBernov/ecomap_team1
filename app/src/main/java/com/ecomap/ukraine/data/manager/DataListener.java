@@ -1,7 +1,8 @@
 package com.ecomap.ukraine.data.manager;
 
 /**
- * Created by Oleh on 7/19/2015.
+ * Interface DataListener must implements classes,
+ * which want to get information about problem from Server.
  */
 public interface DataListener {
     /**

@@ -10,10 +10,13 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.ImageRequest;
 import com.android.volley.toolbox.StringRequest;
+
 import com.ecomap.ukraine.R;
-import com.ecomap.ukraine.data.manager.ListenersNotifier;
 import com.ecomap.ukraine.models.Details;
 import com.ecomap.ukraine.models.Photo;
+
+import com.ecomap.ukraine.data.manager.DataListenersNotifier;
+
 import com.ecomap.ukraine.updating.convertion.JSONParser;
 
 import org.json.JSONException;
@@ -39,28 +42,29 @@ public class LoadingClient {
     private Object requestResult;
 
     /**
-     * Object, which able to notify listeners
+     * Object, which able to notify dataListeners
      * about result.
      */
-    private ListenersNotifier listenersNotifier;
+    private DataListenersNotifier dataListenersNotifier;
+
+    private Context context;
 
     /**
      * Constructor of LoadingClient.
      *
-     * @param listenersNotifier able to notify listeners about result.
+     * @param dataListenersNotifier able to notify dataListeners about result.
      */
-    public LoadingClient(ListenersNotifier listenersNotifier) {
-        this.listenersNotifier = listenersNotifier;
+    public LoadingClient(DataListenersNotifier dataListenersNotifier, Context context) {
+        this.dataListenersNotifier = dataListenersNotifier;
+        this.context = context;
     }
 
     /**
      * Sends a request to download brief information
      * about all problems.
-     *  @param context application context.
-     *
      */
 
-    public void getAllProblems(final Context context) {
+    public void getAllProblems() {
         StringRequest stringRequest = new StringRequest(Request.Method.GET, ALL_PROBLEMS_URL,
                 new Response.Listener<String>() {
                     @Override
@@ -70,7 +74,7 @@ public class LoadingClient {
                         } catch (JSONException e) {
                             requestResult = null;
                         } finally {
-                            listenersNotifier.notifyListeners(RequestTypes.ALL_PROBLEMS,
+                            dataListenersNotifier.notifyDataListeners(RequestTypes.ALL_PROBLEMS,
                                     requestResult);
                         }
                     }
@@ -78,7 +82,7 @@ public class LoadingClient {
             @Override
             public void onErrorResponse(VolleyError error) {
                 requestResult = null;
-                listenersNotifier.notifyListeners(RequestTypes.ALL_PROBLEMS,
+                dataListenersNotifier.notifyDataListeners(RequestTypes.ALL_PROBLEMS,
                         requestResult);
             }
         });
@@ -90,9 +94,8 @@ public class LoadingClient {
      * Sends a request to download detailed information
      * about concrete problem.
      *  @param problemId id of concrete problem
-     * @param context context of application.
      */
-    public void getProblemDetail(final int problemId, final Context context) {
+    public void getProblemDetail(final int problemId) {
 
         StringRequest stringRequest = new StringRequest(Request.Method.GET, ALL_PROBLEMS_URL
                 + problemId,
@@ -101,7 +104,7 @@ public class LoadingClient {
                     public void onResponse(String response) {
                         try {
                             Details details = new JSONParser().parseDetailedProblem(response);
-                            getPhotos(context, details);
+                            getPhotos(details);
                         } catch (JSONException e) {
                             requestResult = null;
                         }
@@ -117,10 +120,9 @@ public class LoadingClient {
 
     /**
      * Adds Bitmap to corresponding photos in details object.
-     * @param context context of application.
      * @param details details that contains
      */
-    private void getPhotos(final Context context, final Details details) {
+    private void getPhotos(final Details details) {
         final Map<Photo, Bitmap> photos = details.photos;
         for (final Photo photo : photos.keySet()) {
             ImageRequest imageRequest = new ImageRequest(PHOTOS_URL + photo.getLink(),
@@ -129,7 +131,7 @@ public class LoadingClient {
                     public void onResponse(Bitmap bitmap) {
                         photos.put(photo, bitmap);
                         if (allInitialized(photos)) {
-                            listenersNotifier.notifyListeners(RequestTypes.PROBLEM_DETAIL,
+                            dataListenersNotifier.notifyDataListeners(RequestTypes.PROBLEM_DETAIL,
                                     details);
                         }
                     }
@@ -142,7 +144,7 @@ public class LoadingClient {
                         photos.put(photo, BitmapFactory.decodeResource(context.getResources(),
                                 R.drawable.photo_error1));
                         if (allInitialized(photos)) {
-                            listenersNotifier.notifyListeners(RequestTypes.PROBLEM_DETAIL,
+                            dataListenersNotifier.notifyDataListeners(RequestTypes.PROBLEM_DETAIL,
                                     details);
                         }
                     }

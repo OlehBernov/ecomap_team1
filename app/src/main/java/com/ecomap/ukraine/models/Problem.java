@@ -5,12 +5,14 @@ import android.database.Cursor;
 import com.ecomap.ukraine.database.DBContract;
 import com.google.android.gms.maps.model.LatLng;
 
+import java.io.Serializable;
+
 
 /**
  * Class Problem represent general information about problem, enough to show the problem on the map.
  * Created by Andriy on 17.07.2015.
  */
-public class Problem {
+public class Problem implements Serializable {
 
     /**
      * id of current problem
@@ -37,10 +39,9 @@ public class Problem {
     private String date;
 
     /**
-     * contains coordinate of current problem
+     * position of the problem
      */
-    private LatLng position;
-
+     private LatLng position;
 
     /**
      * provides access to problemId
@@ -83,6 +84,8 @@ public class Problem {
     public LatLng getPosition() {
         return position;
     }
+
+
 
 
     /**

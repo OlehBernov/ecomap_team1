@@ -1,6 +1,9 @@
 package com.ecomap.ukraine.models;
 
+import android.database.Cursor;
 import android.graphics.Bitmap;
+
+import com.ecomap.ukraine.database.DBContract;
 
 import java.util.List;
 import java.util.Map;
@@ -12,7 +15,7 @@ import java.util.Map;
 public class Details {
 
     /**
-     * TODO: write doc
+     * id of the problem
      */
     private int problemId;
 
@@ -39,7 +42,7 @@ public class Details {
     private String proposal;
 
     /**
-     * TODO: write doc
+     * title of the problem
      */
     private String title;
 
@@ -47,6 +50,7 @@ public class Details {
      * array of problemActivity that are related to the problem
      */
     private List<ProblemActivity> problemActivities;
+
     /**
      *  array of photos that are related to the problem
      */
@@ -54,14 +58,14 @@ public class Details {
     public Map<Photo, Bitmap> photos;
 
     /**
-     * TODO: write doc
+     * date of the last data loading from server
      */
     private String lastUpdate;
 
     /**
-     * TODO: write doc
+     * returns id of the problem
      *
-     * @return
+     * @return id of the problem
      */
     public int getProblemId() {
         return problemId;
@@ -103,8 +107,9 @@ public class Details {
     }
 
     /**
-     * TODO: write doc
-     * @return
+     * returns title of the problem
+     *
+     * @return title
      */
     public String getTitle() {
         return title;
@@ -125,9 +130,9 @@ public class Details {
     }
 
     /**
-     * TODO: write doc
+     * returns date of the last data loading from server
      *
-     * @return
+     * @return date of last update
      */
     public String getLastUpdate() {
         return lastUpdate;
@@ -156,5 +161,19 @@ public class Details {
         this.problemActivities = problemActivities;
         this.photos = photos;
         this.lastUpdate = lastUpdate;
+    }
+
+    public Details(Cursor cursor, int problemId, List<ProblemActivity> problemActivities,
+                   Map<Photo, Bitmap> photos) {
+        this.problemId = problemId;
+        this.severity = cursor.getInt(cursor.getColumnIndex(DBContract.Details.SEVERITY));
+        this.moderations = cursor.getInt(cursor.getColumnIndex(DBContract.Details.MODERATION));
+        this.votes = cursor.getInt(cursor.getColumnIndex(DBContract.Details.VOTES));
+        this.content = cursor.getString(cursor.getColumnIndex(DBContract.Details.PROBLEM_CONTENT));
+        this.proposal = cursor.getString(cursor.getColumnIndex(DBContract.Details.PROPOSAL));
+        this.title = cursor.getString(cursor.getColumnIndex(DBContract.Details.TITLE));
+        this.problemActivities = problemActivities;
+        this.photos = photos;
+        this.lastUpdate = cursor.getString(cursor.getColumnIndex(DBContract.Details.LAST_UPDATE));
     }
 }

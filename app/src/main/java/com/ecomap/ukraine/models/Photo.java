@@ -1,5 +1,9 @@
 package com.ecomap.ukraine.models;
 
+import android.database.Cursor;
+
+import com.ecomap.ukraine.database.DBContract;
+
 /**
  * Class Photo represent information about photo of problem.
  * Created by Andriy on 17.07.2015.
@@ -7,13 +11,13 @@ package com.ecomap.ukraine.models;
 public class Photo {
 
     /**
-     * TODO: write doc
+     * id of the problem
      */
 
     private int problemId;
 
     /**
-     * id of current problem
+     * id of photo
      */
     private int photoId;
 
@@ -88,6 +92,15 @@ public class Photo {
         this.status = status;
         this.link = link;
         this.description = description;
+    }
+
+    public Photo(Cursor cursor, int problemId) {
+        this.problemId = problemId;
+        this.photoId = cursor.getInt(cursor.getColumnIndex(DBContract.Photos.PHOTO_ID));
+        this.userId = cursor.getInt(cursor.getColumnIndex(DBContract.Photos.PHOTO_USERS_ID));
+        this.status = cursor.getInt(cursor.getColumnIndex(DBContract.Photos.PHOTO_STATUS));
+        this.link = cursor.getString(cursor.getColumnIndex(DBContract.Photos.LINK));
+        this.description = cursor.getString(cursor.getColumnIndex(DBContract.Photos.PHOTO_DESCRIPTION));
     }
 
 }

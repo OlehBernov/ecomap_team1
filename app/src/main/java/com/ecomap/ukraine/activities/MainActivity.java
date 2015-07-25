@@ -1,21 +1,19 @@
 package com.ecomap.ukraine.activities;
 
-import android.database.sqlite.SQLiteDatabase;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.ImageView;
+
 import android.widget.TextView;
 
 import com.ecomap.ukraine.R;
-import com.ecomap.ukraine.database.DBHelper;
-import com.ecomap.ukraine.models.Details;
-import com.ecomap.ukraine.models.Photo;
+import com.ecomap.ukraine.data.manager.ProblemListener;
+
+
 import com.ecomap.ukraine.models.Problem;
 import com.ecomap.ukraine.data.manager.DataManager;
 import com.ecomap.ukraine.updating.serverclient.RequestTypes;
-import com.ecomap.ukraine.data.manager.DataListener;
 
 import java.util.List;
 import java.util.Random;
@@ -27,7 +25,11 @@ import java.util.Random;
  *
  */
 
-public class MainActivity extends ActionBarActivity implements DataListener{
+public class MainActivity extends ActionBarActivity implements ProblemListener {
+
+    /**
+     * Data manager instance.
+     */
     private DataManager manager = DataManager.getInstance();
 
     /**
@@ -39,15 +41,8 @@ public class MainActivity extends ActionBarActivity implements DataListener{
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-
-        manager.registerListener(this);
-
-        manager.getProblemDetail(212, this);
-//        ((TextView)findViewById(R.id.textView))
-//                .setText(getIntent()
-//                .getStringExtra("randomProblem"));
-
+        manager.registerProblemListener(this);
+        manager.getAllProblems();
     }
 
     /**
@@ -81,23 +76,15 @@ public class MainActivity extends ActionBarActivity implements DataListener{
     /**
      * Update data from server
      * @param requestType the type of request handled.
-     * @param requestResult the result of request.
      */
     @Override
-    public void update(int requestType, Object requestResult) {
+    public void update(final int requestType, final Object problems) {
         switch (requestType) {
             case RequestTypes.ALL_PROBLEMS:
-                showRandomProblem(requestResult);
+                showRandomProblem(problems);
                 break;
             case RequestTypes.PROBLEM_DETAIL:
-                Details details = (Details)requestResult;
-                for (Photo photo : details.getPhotos().keySet()) {
-                    ((ImageView)findViewById(R.id.imageView2)).setImageBitmap(details
-                            .getPhotos().get(photo));
-                }
-
                 break;
-
         }
     }
 

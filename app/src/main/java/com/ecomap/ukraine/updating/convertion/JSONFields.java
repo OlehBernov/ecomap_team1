@@ -13,6 +13,11 @@ public class JSONFields {
     public static final String ID = "Id";
 
     /**
+     * Problems id.
+     */
+    public static final String PROBLEMS_ID = "Problems_Id" ;
+
+    /**
      * Status of problem.
      */
     public static final String PROBLEM_STATUS = "Status";
@@ -136,8 +141,4 @@ public class JSONFields {
      */
     public static final int PROBLEM_ACTIVITY_POSITION = 2;
 
-    /**
-     * TODO: write doc
-     */
-    public static final String PROBLEMS_ID = "Problems_Id" ;
 }

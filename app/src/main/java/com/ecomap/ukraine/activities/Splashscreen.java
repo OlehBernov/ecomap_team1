@@ -14,18 +14,16 @@ import android.view.View;
 import android.widget.ProgressBar;
 
 import com.ecomap.ukraine.R;
+import com.ecomap.ukraine.data.manager.ProblemListener;
 import com.ecomap.ukraine.models.Problem;
 import com.ecomap.ukraine.data.manager.DataManager;
-import com.ecomap.ukraine.updating.serverclient.RequestTypes;
-import com.ecomap.ukraine.data.manager.DataListener;
 
 import java.util.List;
-import java.util.Random;
 
 /**
  * Activity which represent loading data from server
  */
-public class Splashscreen extends Activity implements DataListener{
+public class Splashscreen extends Activity implements ProblemListener {
 
     /**
      * Failure loading message
@@ -46,9 +44,9 @@ public class Splashscreen extends Activity implements DataListener{
     private final static int MINIMAL_DELAY = 2000;
 
     /**
-     * Data manager instanse
+     * Data manager instance
      */
-    private final DataManager manager = DataManager.getInstance();
+    private  DataManager manager = DataManager.getInstance();;
 
     /**
      * Context of activity
@@ -67,10 +65,6 @@ public class Splashscreen extends Activity implements DataListener{
      * Time of start loading
      */
     private long startLoading;
-    /**
-     * Time of end loading
-     */
-    private long endLoading;
 
     /**
      * Progress bar
@@ -91,16 +85,16 @@ public class Splashscreen extends Activity implements DataListener{
         progressBar.getIndeterminateDrawable().setColorFilter(Color.BLACK, PorterDuff.Mode.SRC_IN);
 
         startLoading = System.currentTimeMillis();
-
-        context = getApplicationContext();
+        context = this.getApplicationContext();
         intent = new Intent(this, MainActivity.class);
 
-        manager.registerListener(this);
-        manager.getAllProblems(context);
+        manager.setContext(context);
+        manager.registerProblemListener(this);
+        manager.getAllProblems();
     }
 
     /**
-     * Initialize dialog interrupt downloads
+     * Initialize dialog interrupt downloads.
      */
     public  void setFailureLoadingDialog() {
 
@@ -115,7 +109,7 @@ public class Splashscreen extends Activity implements DataListener{
                     public void onClick(final DialogInterface dialog,
                                         final int id) {
                         progressBar.setVisibility(View.VISIBLE);
-                        manager.getAllProblems(context);
+                        manager.getAllProblems();
                     }
                 });
         builder.setNegativeButton(Splashscreen.CANCEL,
@@ -129,35 +123,20 @@ public class Splashscreen extends Activity implements DataListener{
                 });
         AlertDialog alert = builder.create();
         alert.show();
-
     }
 
     /**
-     * Update data from server
-     * @param requestType the type of request handled.
-     * @param requestResult the result of request.
+     * Opens MainActivity
+     * @param requestType
+     * @param problem
      */
     @Override
-    public void update(int requestType, Object requestResult) {
-        switch (requestType) {
-            case RequestTypes.ALL_PROBLEMS:
-                initialMainText(requestResult);
-        }
-    }
-
-    /**
-     * Put information about problem to MainActivity
-     * @param requestResult the result of request.
-     */
-    private void initialMainText(Object requestResult) {
-        if (requestResult != null) {
-            Random rand = new Random();
-            List<Problem> problems = (List)requestResult;
-            Problem problem = problems.get(rand.nextInt(problems.size()));
-            intent.putExtra("randomProblem", problem.getTitle());
+    public void update(int requestType, Object problem) {
+        if (problem != null) {
             if (!state) {
+                //TODO: can we delete state?
                 state = true;
-                endLoading = System.currentTimeMillis();
+                long endLoading = System.currentTimeMillis();
                 new Handler().postDelayed(new Runnable() {
                     @Override
                     public void run() {
