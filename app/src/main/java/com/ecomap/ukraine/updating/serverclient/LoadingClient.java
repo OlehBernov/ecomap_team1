@@ -2,18 +2,23 @@ package com.ecomap.ukraine.updating.serverclient;
 
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.android.volley.toolbox.ImageRequest;
 import com.android.volley.toolbox.StringRequest;
+import com.ecomap.ukraine.R;
 import com.ecomap.ukraine.data.manager.ListenersNotifier;
+import com.ecomap.ukraine.models.Details;
+import com.ecomap.ukraine.models.Photo;
 import com.ecomap.ukraine.updating.convertion.JSONParser;
-import com.ecomap.ukraine.data.manager.DataListener;
 
 import org.json.JSONException;
 
-import java.util.Set;
+import java.util.Map;
 
 /**
  * Performs loading data from server.
@@ -25,6 +30,8 @@ public class LoadingClient {
      * information about all problems.
      */
     private static final String ALL_PROBLEMS_URL = "http://ecomap.org/api/problems/";
+
+    private static final String PHOTOS_URL = "http://ecomap.org/photos/large/";
 
     /**
      * Server response converted to the entity.
@@ -49,12 +56,11 @@ public class LoadingClient {
     /**
      * Sends a request to download brief information
      * about all problems.
+     *  @param context application context.
      *
-     * @param context application context.
-     * @param listeners objects, which get response from
-     *                  server converted to the objects of entities.
      */
-    public void getAllProblems(final Context context, final Set<DataListener> listeners) {
+
+    public void getAllProblems(final Context context) {
         StringRequest stringRequest = new StringRequest(Request.Method.GET, ALL_PROBLEMS_URL,
                 new Response.Listener<String>() {
                     @Override
@@ -65,7 +71,7 @@ public class LoadingClient {
                             requestResult = null;
                         } finally {
                             listenersNotifier.notifyListeners(RequestTypes.ALL_PROBLEMS,
-                                    requestResult, listeners);
+                                    requestResult);
                         }
                     }
                 }, new Response.ErrorListener() {
@@ -73,7 +79,7 @@ public class LoadingClient {
             public void onErrorResponse(VolleyError error) {
                 requestResult = null;
                 listenersNotifier.notifyListeners(RequestTypes.ALL_PROBLEMS,
-                        requestResult, listeners);
+                        requestResult);
             }
         });
 
@@ -83,15 +89,75 @@ public class LoadingClient {
     /**
      * Sends a request to download detailed information
      * about concrete problem.
-     *
-     * @param problemId id of concrete problem
+     *  @param problemId id of concrete problem
      * @param context context of application.
-     * @param listeners objects, which get response from
-     *                  server converted to the objects of entities.
      */
-    public void getProblemDetail(final int problemId, final Context context,
-                                 final Set<DataListener> listeners) {
+    public void getProblemDetail(final int problemId, final Context context) {
 
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, ALL_PROBLEMS_URL
+                + problemId,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        try {
+                            Details details = new JSONParser().parseDetailedProblem(response);
+                            getPhotos(context, details);
+                        } catch (JSONException e) {
+                            requestResult = null;
+                        }
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                requestResult = null;
+            }
+        });
+        RequestQueueWrapper.getInstance(context).addToRequestQueue(stringRequest);
+    }
+
+    /**
+     * Adds Bitmap to corresponding photos in details object.
+     * @param context context of application.
+     * @param details details that contains
+     */
+    private void getPhotos(final Context context, final Details details) {
+        final Map<Photo, Bitmap> photos = details.photos;
+        for (final Photo photo : photos.keySet()) {
+            ImageRequest imageRequest = new ImageRequest(PHOTOS_URL + photo.getLink(),
+                new Response.Listener<Bitmap>() {
+                    @Override
+                    public void onResponse(Bitmap bitmap) {
+                        photos.put(photo, bitmap);
+                        if (allInitialized(photos)) {
+                            listenersNotifier.notifyListeners(RequestTypes.PROBLEM_DETAIL,
+                                    details);
+                        }
+                    }
+
+                }, 0, 0, null,
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError volleyError) {
+                        //TODO replace null with some image
+                        photos.put(photo, BitmapFactory.decodeResource(context.getResources(),
+                                R.drawable.photo_error1));
+                        if (allInitialized(photos)) {
+                            listenersNotifier.notifyListeners(RequestTypes.PROBLEM_DETAIL,
+                                    details);
+                        }
+                    }
+                });
+            RequestQueueWrapper.getInstance(context).addToRequestQueue(imageRequest);
+        }
+    }
+
+    private boolean allInitialized(Map<Photo, Bitmap> photos) {
+        for (Photo photo : photos.keySet()) {
+            if (photos.get(photo) == null) {
+                return false;
+            }
+        }
+        return true;
     }
 
 }

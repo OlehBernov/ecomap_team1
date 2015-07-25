@@ -1,6 +1,8 @@
 package com.ecomap.ukraine.updating.convertion;
 
 
+import android.graphics.Bitmap;
+
 import com.ecomap.ukraine.models.ProblemActivity;
 import com.ecomap.ukraine.models.Details;
 import com.ecomap.ukraine.models.Photo;
@@ -11,7 +13,9 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Performs converting JSON to entities.
@@ -168,10 +172,10 @@ public class JSONParser {
      * @return List of Photo objects.
      * @throws JSONException if argument do not correct.
      */
-    private List<Photo> getPhotos(final JSONArray photosArray)
+    private Map<Photo, Bitmap> getPhotos(final JSONArray photosArray)
             throws JSONException {
 
-        List<Photo> photos = new ArrayList<Photo>();
+        Map<Photo, Bitmap> photos = new HashMap<>();
 
         Photo currentPhoto;
         for (int i = 0; i < photosArray.length(); i++) {
@@ -185,7 +189,7 @@ public class JSONParser {
                     photoObject.getString(JSONFields.LINK),
                     photoObject.getString(JSONFields.PHOTO_DESCRIPTION)
             );
-            photos.add(currentPhoto);
+            photos.put(currentPhoto, null);
         }
 
         return photos;

@@ -1,18 +1,10 @@
 package com.ecomap.ukraine.data.manager;
 
 import android.content.Context;
-import android.util.Log;
 
-import com.ecomap.ukraine.database.DBContract;
-import com.ecomap.ukraine.database.DBHelper;
-import com.ecomap.ukraine.models.Details;
-import com.ecomap.ukraine.models.Photo;
-import com.ecomap.ukraine.models.ProblemActivity;
 import com.ecomap.ukraine.updating.serverclient.LoadingClient;
 
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 /**
@@ -76,7 +68,7 @@ public class DataManager implements ListenersNotifier {
      * @param context the context that is to be used for request.
      */
     public void getAllProblems(Context context) {
-        loadingClient.getAllProblems(context, listeners);
+        loadingClient.getAllProblems(context);
     }
 
     /**
@@ -87,20 +79,19 @@ public class DataManager implements ListenersNotifier {
      * @param context   the context that is to be used for request.
      */
     public void getProblemDetail(int problemId, Context context) {
-        loadingClient.getProblemDetail(problemId, context, listeners);
+        loadingClient.getProblemDetail(problemId, context);
     }
 
     /**
      * Notify all listeners about server response
      * and send them received information.
      *
-     * @param requestType type of request.
-     * @param requestResult server response converted to the objects of entities.
      * @param listeners objects, which get response from
      *                  server converted to the objects of entities.
+     * @param requestType type of request.
+     * @param requestResult server response converted to the objects of entities.
      */
-    public void notifyListeners(final int requestType, Object requestResult,
-                                 final Set<DataListener> listeners) {
+    public void notifyListeners(final int requestType, Object requestResult) {
         for (DataListener listener : listeners) {
             listener.update(requestType, requestResult);
         }

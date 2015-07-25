@@ -37,6 +37,8 @@ public class RequestQueueWrapper {
         requestQueue = getRequestQueue();
     }
 
+
+
     /**
      * Returns request queue wrapper instance.
      *

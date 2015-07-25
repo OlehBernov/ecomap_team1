@@ -5,10 +5,13 @@ import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.ecomap.ukraine.R;
 import com.ecomap.ukraine.database.DBHelper;
+import com.ecomap.ukraine.models.Details;
+import com.ecomap.ukraine.models.Photo;
 import com.ecomap.ukraine.models.Problem;
 import com.ecomap.ukraine.data.manager.DataManager;
 import com.ecomap.ukraine.updating.serverclient.RequestTypes;
@@ -39,9 +42,11 @@ public class MainActivity extends ActionBarActivity implements DataListener{
 
 
         manager.registerListener(this);
-        ((TextView)findViewById(R.id.textView))
-                .setText(getIntent()
-                .getStringExtra("randomProblem"));
+
+        manager.getProblemDetail(212, this);
+//        ((TextView)findViewById(R.id.textView))
+//                .setText(getIntent()
+//                .getStringExtra("randomProblem"));
 
     }
 
@@ -83,6 +88,16 @@ public class MainActivity extends ActionBarActivity implements DataListener{
         switch (requestType) {
             case RequestTypes.ALL_PROBLEMS:
                 showRandomProblem(requestResult);
+                break;
+            case RequestTypes.PROBLEM_DETAIL:
+                Details details = (Details)requestResult;
+                for (Photo photo : details.getPhotos().keySet()) {
+                    ((ImageView)findViewById(R.id.imageView2)).setImageBitmap(details
+                            .getPhotos().get(photo));
+                }
+
+                break;
+
         }
     }
 

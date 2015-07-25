@@ -5,6 +5,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.graphics.Bitmap;
 
 import com.ecomap.ukraine.data.manager.DataListener;
 import com.ecomap.ukraine.models.Details;
@@ -14,7 +15,9 @@ import com.ecomap.ukraine.models.ProblemActivity;
 import com.ecomap.ukraine.updating.serverclient.RequestTypes;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by Oleh on 7/24/2015.
@@ -159,7 +162,7 @@ public class DBHelper extends SQLiteOpenHelper implements DataListener {
 
         List<ProblemActivity> problemActivities = details.getProblemActivities();
         setProblemActivities(problemActivities);
-        List<Photo> photos = details.getPhotos();
+        Map<Photo, Bitmap> photos = details.getPhotos();
         setPhotos(photos);
     }
 
@@ -182,11 +185,11 @@ public class DBHelper extends SQLiteOpenHelper implements DataListener {
         }
     }
 
-    private void setPhotos(List<Photo> photos) {
+    private void setPhotos(Map<Photo, Bitmap> photos) {
         SQLiteDatabase db = this.getWritableDatabase();
 
         ContentValues values;
-        for (Photo photo: photos) {
+        for (Photo photo: photos.keySet()) {
             values = new ContentValues();
 
             values.put(DBContract.Photos.PROBLEM_ID, photo.getProblemId());
@@ -204,7 +207,7 @@ public class DBHelper extends SQLiteOpenHelper implements DataListener {
 
         SQLiteDatabase db = this.getWritableDatabase();
 
-        List<Photo> photos = getProblemPhotos(problemId);
+        Map<Photo, Bitmap> photos = getProblemPhotos(problemId);
         List<ProblemActivity> problemActivities = getProblemActivities(problemId);
 
         String[] projection = {
@@ -254,7 +257,7 @@ public class DBHelper extends SQLiteOpenHelper implements DataListener {
         return details;
     }
 
-    private List<Photo> getProblemPhotos(int problemId) {
+    private Map<Photo, Bitmap> getProblemPhotos(int problemId) {
 
         SQLiteDatabase db = this.getWritableDatabase();
 
@@ -283,7 +286,7 @@ public class DBHelper extends SQLiteOpenHelper implements DataListener {
             return null;
         }
 
-        List<Photo> photos = new ArrayList<Photo>();
+        Map<Photo, Bitmap> photos = new HashMap<>();
 
         cursor.moveToFirst();
         for (int i = 0; i < cursor.getCount(); i++) {
@@ -296,7 +299,7 @@ public class DBHelper extends SQLiteOpenHelper implements DataListener {
                     cursor.getString(cursor.getColumnIndex(DBContract.Photos.PHOTO_DESCRIPTION))
                     );
 
-            photos.add(photo);
+            photos.put(photo, null);
         }
 
         cursor.close();

@@ -1,6 +1,9 @@
 package com.ecomap.ukraine.models;
 
+import android.graphics.Bitmap;
+
 import java.util.List;
+import java.util.Map;
 
 /**
  * Class Details represent detail information about problem.
@@ -47,7 +50,8 @@ public class Details {
     /**
      *  array of photos that are related to the problem
      */
-    private List <Photo> photos;
+    //TODO exchange list with this
+    public Map<Photo, Bitmap> photos;
 
     /**
      * TODO: write doc
@@ -116,7 +120,7 @@ public class Details {
     /**
      * provides access to photos
      */
-    public List<Photo> getPhotos() {
+    public Map<Photo, Bitmap> getPhotos() {
         return photos;
     }
 
@@ -141,7 +145,7 @@ public class Details {
      */
     public Details(int problemId, int severity, int moderations, int votes, String content,
                    String proposal, String title, List<ProblemActivity> problemActivities,
-                   List<Photo> photos, String lastUpdate) {
+                   Map<Photo, Bitmap> photos, String lastUpdate) {
         this.problemId = problemId;
         this.severity = severity;
         this.moderations = moderations;
