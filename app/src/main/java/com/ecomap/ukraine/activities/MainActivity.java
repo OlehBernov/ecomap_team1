@@ -1,17 +1,22 @@
 package com.ecomap.ukraine.activities;
 
 import android.database.sqlite.SQLiteDatabase;
+import android.graphics.Bitmap;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.ecomap.ukraine.R;
 import com.ecomap.ukraine.data.manager.ProblemListener;
 
 
+import com.ecomap.ukraine.database.DBHelper;
+import com.ecomap.ukraine.models.Details;
+import com.ecomap.ukraine.models.Photo;
 import com.ecomap.ukraine.models.Problem;
 import com.ecomap.ukraine.data.manager.DataManager;
 import com.ecomap.ukraine.updating.serverclient.RequestTypes;
@@ -85,17 +90,14 @@ public class MainActivity extends ActionBarActivity implements ProblemListener {
                 showRandomProblem(problems);
                 break;
             case RequestTypes.PROBLEM_DETAIL:
-                Details details = (Details)requestResult;
+                Details details = (Details)problems;
                 for (Photo photo : details.getPhotos().keySet()) {
-
                     new DBHelper(this).writeToFile(details.getPhotos().get(photo),
                             photo.getLink());
                     Bitmap image = new DBHelper(this).getBitmapByName(photo.getLink());
-                    ((ImageView)findViewById(R.id.imageView2)).setImageBitmap(image);
+                  //  ((ImageView)findViewById(R.id.imageView2)).setImageBitmap(image);
                 }
-
                 break;
-
         }
     }
 

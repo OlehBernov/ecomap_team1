@@ -186,6 +186,26 @@ public class DBHelper extends SQLiteOpenHelper implements DataListener {
         setPhotos(photos);
     }
 
+    public void writeToFile(Bitmap bitmap, String name) {
+        FileOutputStream outputStream = null;
+        try {
+            String path = context.getFilesDir().getPath();
+            outputStream = new FileOutputStream(
+                    new File(path + "/" + name));
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, outputStream);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        } finally {
+            try {
+                if (outputStream != null) {
+                    outputStream.close();
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
     public Details getProblemDetails(int problemId) {
         if (problemId < 0) {
             return null;
@@ -258,6 +278,27 @@ public class DBHelper extends SQLiteOpenHelper implements DataListener {
 
         return buildPhotosMap(problemId, cursor);
     }
+
+    public Bitmap getBitmapByName(String fileName) {
+        FileInputStream inputStream = null;
+        try {
+            String path = context.getFilesDir().getPath();
+            inputStream = new FileInputStream(new File(path + "/" + fileName));
+            return BitmapFactory.decodeStream(inputStream);
+        } catch (Exception e) {
+            return BitmapFactory.decodeResource(context.getResources(),
+                    R.drawable.photo_error1);
+        } finally {
+            try {
+                if (inputStream != null) {
+                    inputStream.close();
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
 
     private List<ProblemActivity> getProblemActivities(int problemId) {
         if (problemId < 0) {
