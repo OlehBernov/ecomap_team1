@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import com.ecomap.ukraine.R;
 import com.ecomap.ukraine.data.manager.DataListener;
 import com.ecomap.ukraine.data.manager.DataManager;
+import com.ecomap.ukraine.data.manager.ProblemListener;
 import com.ecomap.ukraine.database.DBHelper;
 import com.ecomap.ukraine.models.Problem;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -29,12 +30,13 @@ import java.util.List;
 /**
  * Created by Andriy on 25.07.2015.
  */
-public class FragmentEcoMap extends android.support.v4.app.Fragment {
-    MapView mMapView;
+public class FragmentEcoMap extends android.support.v4.app.Fragment implements ProblemListener {
+    private MapView mMapView;
     private GoogleMap googleMap;
-    private DataManager manager;
+    private DataManager manager = DataManager.getInstance();
     private static final  LatLng INTIAL_POSITION = new LatLng(48.4 , 31.2);
 
+    private static int MOVING_TIME = 2000;
 
     public static FragmentEcoMap newInstance() {
         FragmentEcoMap fragment = new FragmentEcoMap();
@@ -47,6 +49,8 @@ public class FragmentEcoMap extends android.support.v4.app.Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        manager.registerProblemListener(this);
+
         View rootView = inflater.inflate(R.layout.fragement_map, container, false);
         mMapView = (MapView) rootView.findViewById(R.id.mapView);
         mMapView.onCreate(savedInstanceState);
@@ -60,15 +64,8 @@ public class FragmentEcoMap extends android.support.v4.app.Fragment {
         }
         this.setUpMapIfNeeded();
 
-
-
-
         return rootView;
     }
-
-
-
-
 
     private void setUpMapIfNeeded() {
         // Do a null check to confirm that we have not already instantiated the map.
@@ -85,31 +82,24 @@ public class FragmentEcoMap extends android.support.v4.app.Fragment {
         CameraPosition cameraPosition = new CameraPosition.Builder()
                 .target(new LatLng(INTIAL_POSITION.latitude, INTIAL_POSITION.longitude)).zoom(5).build();
         googleMap.animateCamera(CameraUpdateFactory
-                .newCameraPosition(cameraPosition));
-
+                .newCameraPosition(cameraPosition), MOVING_TIME, null);
 
         googleMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
         UiSettings settings = googleMap.getUiSettings();
         googleMap.setMyLocationEnabled(true);
         settings.setMyLocationButtonEnabled(true);
-        putAllProblemsOnMap();
+        manager.getAllProblems();
     }
 
-    public void putAllProblemsOnMap () {
-        DBHelper dbHelper = new DBHelper(getActivity().getApplicationContext());
-        List<Problem> list = dbHelper.getAllProblems();
-        for (Problem problem : list) {
-            // create marker
+    public void putAllProblemsOnMap(List<Problem> problems) {
+        for (Problem problem : problems) {
             MarkerOptions marker = new MarkerOptions().position(
                     new LatLng(problem.getPosition().latitude, problem.getPosition().longitude)).title(problem.getTitle());
             BitmapDescriptor image = BitmapDescriptorFactory.fromResource(this.getResourceIdForMarker(
                     problem.getProblemTypesId()));
             marker.icon(image);
-            // adding marker
             googleMap.addMarker(marker);
-
         }
-
 
     }
 
@@ -137,12 +127,12 @@ public class FragmentEcoMap extends android.support.v4.app.Fragment {
             case 7:
                 resId = R.drawable.type7;
                 break;
-
         }
         return resId;
-
     }
 
-
-
+    @Override
+    public void update(int requestType, Object problem) {
+        putAllProblemsOnMap((List<Problem>) problem);
+    }
 }

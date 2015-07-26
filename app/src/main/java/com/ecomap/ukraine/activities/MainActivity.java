@@ -33,12 +33,7 @@ import java.util.Random;
  *
  */
 
-public class MainActivity extends ActionBarActivity implements ProblemListener {
-
-    /**
-     * Data manager instance.
-     */
-    private DataManager manager = DataManager.getInstance();
+public class MainActivity extends ActionBarActivity {
 
     /**
      * Initialize activity
@@ -50,8 +45,6 @@ public class MainActivity extends ActionBarActivity implements ProblemListener {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         this.addMapFragment();
-        manager.registerProblemListener(this);
-        manager.getAllProblems();
     }
 
     /**
@@ -81,24 +74,6 @@ public class MainActivity extends ActionBarActivity implements ProblemListener {
 
         return super.onOptionsItemSelected(item);
     }
-
-    /**
-     * Update data from server
-     * @param requestType the type of request handled.
-     * @param requestResult the result of request.
-     */
-    @Override
-    public void update(final int requestType, final Object problems) {
-        switch (requestType) {
-            case RequestTypes.ALL_PROBLEMS:
-                //showRandomProblem(problems);
-                break;
-            case RequestTypes.PROBLEM_DETAIL:
-                break;
-        }
-    }
-
-
 
     private void addMapFragment() {
         FragmentManager fragmentManager = getSupportFragmentManager();

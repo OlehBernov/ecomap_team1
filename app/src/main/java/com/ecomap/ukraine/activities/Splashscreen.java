@@ -91,7 +91,7 @@ public class Splashscreen extends Activity implements ProblemListener {
 
         manager.setContext(context);
         manager.registerProblemListener(this);
-        manager.registerDataListener(new DBHelper(getApplicationContext()));
+     //   manager.registerDataListener(new DBHelper(getApplicationContext()));
         manager.getAllProblems();
     }
 
@@ -142,6 +142,7 @@ public class Splashscreen extends Activity implements ProblemListener {
                 new Handler().postDelayed(new Runnable() {
                     @Override
                     public void run() {
+                        manager.removeProblemListener(Splashscreen.this);
                         startActivity(intent);
                     }
                 }, Math.max(MINIMAL_DELAY - (endLoading - startLoading), 0));
