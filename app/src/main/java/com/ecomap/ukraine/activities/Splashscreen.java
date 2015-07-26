@@ -82,8 +82,6 @@ public class Splashscreen extends Activity implements ProblemListener {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.splashscreen);
-        progressBar = (ProgressBar) findViewById(R.id.progressBar);
-        progressBar.getIndeterminateDrawable().setColorFilter(Color.BLACK, PorterDuff.Mode.SRC_IN);
 
         startLoading = System.currentTimeMillis();
         context = this.getApplicationContext();

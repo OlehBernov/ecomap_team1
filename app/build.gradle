@@ -24,4 +24,9 @@ dependencies {
     compile 'com.android.support:appcompat-v7:22.2.0'
     compile 'com.google.android.gms:play-services:7.5.0'
     compile files('libs/volley.jar')
+	
+    // of course, do not write x.x.x but the version number
+    compile 'com.github.castorflex.smoothprogressbar:library:1.0.0'
+
+
 }
