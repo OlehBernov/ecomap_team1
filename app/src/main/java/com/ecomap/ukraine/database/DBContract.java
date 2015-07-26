@@ -24,6 +24,8 @@ public class DBContract {
         public static final String LATITUDE = "Latitude";
 
         public static final String LONGITUDE = "Longitude";
+
+        public static final String TIME = "Time";
     }
 
     public static abstract class Details implements BaseColumns {

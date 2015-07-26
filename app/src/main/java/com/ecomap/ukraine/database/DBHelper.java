@@ -2,8 +2,10 @@ package com.ecomap.ukraine.database;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteDatabaseLockedException;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -80,7 +82,7 @@ public class DBHelper extends SQLiteOpenHelper implements DataListener {
 
     private static final String DELETE_FROM = "DELETE FROM ";
 
-    Context context;
+    private Context context;
 
     public DBHelper(Context context) {
         super(context, DB_NAME, null, DB_VERSION);
@@ -106,6 +108,9 @@ public class DBHelper extends SQLiteOpenHelper implements DataListener {
 
     @Override
     public void update(int requestType, Object requestResult) {
+        if (requestResult == null) {
+            return;
+        }
         SQLiteDatabase db = this.getWritableDatabase();
         switch (requestType) {
             case RequestTypes.ALL_PROBLEMS:
@@ -120,6 +125,7 @@ public class DBHelper extends SQLiteOpenHelper implements DataListener {
                 this.setProblemDetails((Details) requestResult);
                 break;
         }
+        db.close();
     }
 
     /**
@@ -128,6 +134,9 @@ public class DBHelper extends SQLiteOpenHelper implements DataListener {
      * @param requestResult server response to all problems request.
      */
     public void addAllProblems(Object requestResult){
+        if (requestResult == null) {
+            return;
+        }
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
         List<Problem> problems = (ArrayList)requestResult;
@@ -142,8 +151,8 @@ public class DBHelper extends SQLiteOpenHelper implements DataListener {
             db.insert(DBContract.Problems.TABLE_NAME, null, contentValues);
             contentValues.clear();
         }
-        
         db.close();
+        saveTime();
     }
 
     /**
@@ -171,10 +180,11 @@ public class DBHelper extends SQLiteOpenHelper implements DataListener {
      * @param details the details to add to the database.
      */
     public void setProblemDetails(Details details) {
+        if (details == null) {
+            return;
+        }
         SQLiteDatabase db = this.getWritableDatabase();
-
         ContentValues values = new ContentValues();
-
         values.put(DBContract.Details.PROBLEM_ID, details.getProblemId());
         values.put(DBContract.Details.PROBLEM_CONTENT, details.getContent());
         values.put(DBContract.Details.PROPOSAL, details.getProposal());
@@ -186,6 +196,7 @@ public class DBHelper extends SQLiteOpenHelper implements DataListener {
         values.put(DBContract.Details.LAST_UPDATE, details.getLastUpdate());
 
         db.insert(DBContract.Details.TABLE_NAME, null, values);
+        db.close();
 
         List<ProblemActivity> problemActivities = details.getProblemActivities();
         setProblemActivities(problemActivities);
@@ -213,6 +224,9 @@ public class DBHelper extends SQLiteOpenHelper implements DataListener {
     }
 
     private void setPhotos(Map<Photo, Bitmap> photos) {
+        if (photos == null) {
+            return;
+        }
         SQLiteDatabase db = this.getWritableDatabase();
 
         ContentValues values;
@@ -230,6 +244,7 @@ public class DBHelper extends SQLiteOpenHelper implements DataListener {
 
         db.insert(DBContract.Photos.TABLE_NAME, null, values);
         }
+        db.close();
     }
 
     /**
@@ -258,110 +273,79 @@ public class DBHelper extends SQLiteOpenHelper implements DataListener {
     }
 
     public Details getProblemDetails(int problemId) {
-
+        if (problemId < 0) {
+            return null;
+        }
         SQLiteDatabase db = this.getWritableDatabase();
-
         Map<Photo, Bitmap> photos = getProblemPhotos(problemId);
         List<ProblemActivity> problemActivities = getProblemActivities(problemId);
 
         String[] projection = {
-                DBContract.Details.PROBLEM_CONTENT,
-                DBContract.Details.PROPOSAL,
-                DBContract.Details.TITLE,
-                DBContract.Details.MODERATION,
-                DBContract.Details.SEVERITY,
-                DBContract.Details.VOTES,
+                DBContract.Details.PROBLEM_CONTENT, DBContract.Details.PROPOSAL,
+                DBContract.Details.TITLE, DBContract.Details.MODERATION,
+                DBContract.Details.SEVERITY, DBContract.Details.VOTES,
                 DBContract.Details.LAST_UPDATE
         };
-
         String selection = DBContract.Details.PROBLEM_ID + " = ?";
         String[] selectionArgs = new String[] {String.valueOf(problemId)};
-
-        Cursor cursor = db.query(
-                DBContract.Details.TABLE_NAME,
-                projection,
-                selection,
-                selectionArgs,
-                null,
-                null,
-                null
-        );
-
-        cursor.moveToFirst();
+        Cursor cursor = db.query(DBContract.Details.TABLE_NAME, projection, selection,
+                selectionArgs, null, null, null);
+        db.close();
 
         if (cursor == null) {
             return null;
         }
 
-        Details details = new Details(
-                problemId,
-                cursor.getInt(cursor.getColumnIndex(DBContract.Details.SEVERITY)),
-                cursor.getInt(cursor.getColumnIndex(DBContract.Details.MODERATION)),
-                cursor.getInt(cursor.getColumnIndex(DBContract.Details.VOTES)),
-                cursor.getString(cursor.getColumnIndex(DBContract.Details.PROBLEM_CONTENT)),
-                cursor.getString(cursor.getColumnIndex(DBContract.Details.PROPOSAL)),
-                cursor.getString(cursor.getColumnIndex(DBContract.Details.TITLE)),
-                problemActivities,
-                photos,
-                cursor.getString(cursor.getColumnIndex(DBContract.Details.LAST_UPDATE))
-        );
-
-        cursor.close();
-
-        return details;
+        return buildProblemDetails(problemId, cursor, problemActivities, photos);
     }
 
-    private Map<Photo, Bitmap> getProblemPhotos(int problemId) {
+    public String getLastUpdateTime(int problemId) {
+        if (problemId < 0) {
+            return null;
+        }
 
         SQLiteDatabase db = this.getWritableDatabase();
-
-        String[] projection = {
-                DBContract.Photos.PHOTO_ID,
-                DBContract.Photos.PHOTO_USERS_ID,
-                DBContract.Photos.PHOTO_STATUS,
-                DBContract.Photos.LINK,
-                DBContract.Photos.PHOTO_DESCRIPTION,
-        };
-
+        String[] projection = {DBContract.Details.LAST_UPDATE};
         String selection = DBContract.Photos.PROBLEM_ID + " = ?";
         String[] selectionArgs = new String[] {String.valueOf(problemId)};
 
-        Cursor cursor = db.query(
-                DBContract.Photos.TABLE_NAME,
-                projection,
-                selection,
-                selectionArgs,
-                null,
-                null,
-                null
-        );
+        Cursor cursor = db.query(DBContract.ProblemActivity.TABLE_NAME, projection,
+                selection, selectionArgs, null, null, null);
+        db.close();
+
+        if (cursor == null) {
+            return null;
+        }
+        cursor.moveToFirst();
+        return cursor.getString(cursor.getColumnIndex(DBContract.Details.LAST_UPDATE));
+    }
+
+    private Map<Photo, Bitmap> getProblemPhotos(int problemId) {
+        if (problemId < 0) {
+            return null;
+        }
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        String[] projection = {
+                DBContract.Photos.PHOTO_ID, DBContract.Photos.PHOTO_USERS_ID,
+                DBContract.Photos.PHOTO_STATUS, DBContract.Photos.LINK,
+                DBContract.Photos.PHOTO_DESCRIPTION,
+        };
+        String selection = DBContract.Photos.PROBLEM_ID + " = ?";
+        String[] selectionArgs = new String[] {String.valueOf(problemId)};
+
+        Cursor cursor = db.query(DBContract.Photos.TABLE_NAME, projection, selection,
+                                 selectionArgs, null, null, null);
+        db.close();
 
         if (cursor == null) {
             return null;
         }
 
-        Map<Photo, Bitmap> photos = new HashMap<>();
-
-        cursor.moveToFirst();
-        for (int i = 0; i < cursor.getCount(); i++) {
-            Photo photo = new Photo(
-                    problemId,
-                    cursor.getInt(cursor.getColumnIndex(DBContract.Photos.PHOTO_ID)),
-                    cursor.getInt(cursor.getColumnIndex(DBContract.Photos.PHOTO_USERS_ID)),
-                    cursor.getInt(cursor.getColumnIndex(DBContract.Photos.PHOTO_STATUS)),
-                    cursor.getString(cursor.getColumnIndex(DBContract.Photos.LINK)),
-                    cursor.getString(cursor.getColumnIndex(DBContract.Photos.PHOTO_DESCRIPTION))
-                    );
-            Bitmap image = getBitmapByName(photo.getLink());
-            photos.put(photo, image);
-        }
-
-        cursor.close();
-
-        return photos;
+        return buildPhotosMap(problemId, cursor);
     }
 
-    public Bitmap getBitmapByName(String fileName) {
+    private Bitmap getBitmapByName(String fileName) {
         FileInputStream inputStream = null;
         try {
             String path = context.getFilesDir().getPath();
@@ -381,10 +365,13 @@ public class DBHelper extends SQLiteOpenHelper implements DataListener {
         }
     }
 
+
     private List<ProblemActivity> getProblemActivities(int problemId) {
+        if (problemId < 0) {
+            return null;
+        }
 
         SQLiteDatabase db = this.getWritableDatabase();
-
         String[] projection = {
                 DBContract.ProblemActivity.PROBLEM_ACTIVITY_DATE,
                 DBContract.ProblemActivity.ACTIVITY_TYPES_ID,
@@ -393,44 +380,88 @@ public class DBHelper extends SQLiteOpenHelper implements DataListener {
                 DBContract.ProblemActivity.ACTIVITY_USERS_ID,
                 DBContract.ProblemActivity.PROBLEM_ACTIVITY_CONTENT,
         };
-
         String selection = DBContract.Photos.PROBLEM_ID + " = ?";
         String[] selectionArgs = new String[] {String.valueOf(problemId)};
 
-        Cursor cursor = db.query(
-                DBContract.ProblemActivity.TABLE_NAME,
-                projection,
-                selection,
-                selectionArgs,
-                null,
-                null,
-                null
-        );
+        Cursor cursor = db.query(DBContract.ProblemActivity.TABLE_NAME, projection,
+                                 selection, selectionArgs, null, null, null);
+        db.close();
 
         if (cursor == null) {
             return null;
         }
 
-        List<ProblemActivity> problemActivities = new ArrayList<ProblemActivity>();
+        return buildProblemActivitiesList(problemId, cursor);
+    }
 
+    private void setProblemActivities(List<ProblemActivity> problemActivities) {
+        if (problemActivities == null) {
+            return;
+        }
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values;
+        for (ProblemActivity problemActivity: problemActivities) {
+            values = new ContentValues();
+            values.put(DBContract.ProblemActivity.PROBLEM_ACTIVITY_ID,
+                       problemActivity.getProblemActivityId());
+            values.put(DBContract.ProblemActivity.PROBLEM_ACTIVITY_DATE,
+                       problemActivity.getDate());
+            values.put(DBContract.ProblemActivity.PROBLEM_ID,
+                       problemActivity.getProblemId());
+            values.put(DBContract.ProblemActivity.ACTIVITY_TYPES_ID,
+                       problemActivity.getActivityTypesId());
+            values.put(DBContract.ProblemActivity.USER_NAME,
+                       problemActivity.getFirstName());
+            values.put(DBContract.ProblemActivity.ACTIVITY_USERS_ID,
+                       problemActivity.getUserId());
+            values.put(DBContract.ProblemActivity.PROBLEM_ACTIVITY_CONTENT,
+                       problemActivity.getContent());
+
+            db.insert(DBContract.ProblemActivity.TABLE_NAME, null, values);
+        }
+        db.close();
+    }
+
+    private Details buildProblemDetails(int problemId, Cursor cursor,
+                                        List<ProblemActivity> problemActivities,
+                                        Map<Photo, Bitmap> photos) {
+        cursor.moveToFirst();
+        Details details = new Details(cursor, problemId, problemActivities, photos);
+        cursor.close();
+
+        return details;
+    }
+
+    private Map<Photo, Bitmap> buildPhotosMap(int problemId, Cursor cursor) {
+        Map<Photo, Bitmap> photos = new HashMap<>();
         cursor.moveToFirst();
         for (int i = 0; i < cursor.getCount(); i++) {
-            ProblemActivity problemActivity = new ProblemActivity(
-                    problemId,
-                    cursor.getInt(cursor.getColumnIndex(DBContract.ProblemActivity.PROBLEM_ACTIVITY_ID)),
-                    cursor.getInt(cursor.getColumnIndex(DBContract.ProblemActivity.ACTIVITY_TYPES_ID)),
-                    cursor.getInt(cursor.getColumnIndex(DBContract.ProblemActivity.ACTIVITY_USERS_ID)),
-                    cursor.getString(cursor.getColumnIndex(DBContract.ProblemActivity.PROBLEM_ACTIVITY_CONTENT)),
-                    cursor.getString(cursor.getColumnIndex(DBContract.ProblemActivity.PROBLEM_ACTIVITY_DATE)),
-                    cursor.getString(cursor.getColumnIndex(DBContract.ProblemActivity.USER_NAME))
-            );
+            Photo photo = new Photo(cursor, problemId);
+            Bitmap image = getBitmapByName(photo.getLink());
+            photos.put(photo, null);
+        }
+        cursor.close();
 
+        return photos;
+    }
+    //TODO: write many docs
+    private List<ProblemActivity> buildProblemActivitiesList(int problemId,
+                                                             Cursor cursor) {
+        List<ProblemActivity> problemActivities = new ArrayList<>();
+        cursor.moveToFirst();
+        for (int i = 0; i < cursor.getCount(); i++) {
+            ProblemActivity problemActivity = new ProblemActivity(cursor, problemId);
             problemActivities.add(problemActivity);
         }
-
         cursor.close();
 
         return problemActivities;
     }
 
+    private void saveTime() {
+        SharedPreferences settings = context.getSharedPreferences(DBContract.Problems.TIME, 0);
+        SharedPreferences.Editor editor = settings.edit();
+        editor.putLong(DBContract.Problems.TIME, System.currentTimeMillis());
+        editor.commit();
+    }
 }

@@ -2,14 +2,19 @@ package com.ecomap.ukraine.activities;
 
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.ecomap.ukraine.R;
+import com.ecomap.ukraine.data.manager.ProblemListener;
+
+
 import com.ecomap.ukraine.database.DBHelper;
 import com.ecomap.ukraine.models.Details;
 import com.ecomap.ukraine.models.Photo;
@@ -28,7 +33,11 @@ import java.util.Random;
  *
  */
 
-public class MainActivity extends ActionBarActivity implements DataListener{
+public class MainActivity extends ActionBarActivity implements ProblemListener {
+
+    /**
+     * Data manager instance.
+     */
     private DataManager manager = DataManager.getInstance();
 
     /**
@@ -40,15 +49,9 @@ public class MainActivity extends ActionBarActivity implements DataListener{
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-
-        manager.registerListener(this);
-
-        manager.getProblemDetail(56, this);
-//        ((TextView)findViewById(R.id.textView))
-//                .setText(getIntent()
-//                .getStringExtra("randomProblem"));
-
+        this.addMapFragment();
+        manager.registerProblemListener(this);
+        manager.getAllProblems();
     }
 
     /**
@@ -85,29 +88,22 @@ public class MainActivity extends ActionBarActivity implements DataListener{
      * @param requestResult the result of request.
      */
     @Override
-    public void update(int requestType, Object requestResult) {
+    public void update(final int requestType, final Object problems) {
         switch (requestType) {
             case RequestTypes.ALL_PROBLEMS:
-                showRandomProblem(requestResult);
+                //showRandomProblem(problems);
                 break;
             case RequestTypes.PROBLEM_DETAIL:
                 break;
         }
     }
 
-    /**
-     * Show information about random problem
-     * @param requestResult
-     */
-    private void showRandomProblem(Object requestResult) {
-        if (requestResult != null) {
-            Random rand = new Random();
-            this.getFilesDir();
-            List<Problem> problems = (List)requestResult;
-            Problem problem = problems.get(rand.nextInt(problems.size()));
-            ((TextView)findViewById(R.id.textView)).setText("" + problem.getTitle());
-        } else {
-            ((TextView)findViewById(R.id.textView)).setText("Connection error");
-        }
+
+
+    private void addMapFragment() {
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        fragmentManager.beginTransaction()
+                .replace(R.id.container, FragmentEcoMap.newInstance())
+                .commit();
     }
 }

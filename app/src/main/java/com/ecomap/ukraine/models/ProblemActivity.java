@@ -1,5 +1,9 @@
 package com.ecomap.ukraine.models;
 
+import android.database.Cursor;
+
+import com.ecomap.ukraine.database.DBContract;
+
 /**
  * Class ProblemActivity represent information about activity that are related to the problem.
  * Activity - some action which is related to the problem (like, comment, creation).
@@ -8,7 +12,7 @@ package com.ecomap.ukraine.models;
 public class ProblemActivity {
 
     /**
-     * TODO: write doc
+     * id of the problem
      */
     private int problemId;
 
@@ -43,8 +47,8 @@ public class ProblemActivity {
     private String userName;
 
     /**
-     * TODO: write doc
-     * @return
+     * returns problem id
+     * @return problem id
      */
     public int getProblemId() {
         return problemId;
@@ -111,5 +115,22 @@ public class ProblemActivity {
         this.content = content;
         this.date = date;
         this.userName = userName;
+    }
+
+    public ProblemActivity(Cursor cursor, int problemId) {
+        this.problemId = problemId;
+        this.problemActivityId = cursor.getInt(cursor.getColumnIndex(DBContract.ProblemActivity
+                                                                    .PROBLEM_ACTIVITY_ID));
+        this.activityTypesId = cursor.getInt(cursor.getColumnIndex(DBContract.ProblemActivity
+                                                                    .ACTIVITY_TYPES_ID));
+        this.userId = cursor.getInt(cursor.getColumnIndex(DBContract.ProblemActivity
+                                                                     .ACTIVITY_USERS_ID));
+        this.content = cursor.getString(cursor.getColumnIndex(DBContract.ProblemActivity
+                                                                        .PROBLEM_ACTIVITY_CONTENT));
+        this.date = cursor.getString(cursor.getColumnIndex(DBContract.ProblemActivity
+                                                                      .PROBLEM_ACTIVITY_DATE));
+        this.userName = cursor.getString(cursor.getColumnIndex(DBContract.ProblemActivity
+                                                                          .USER_NAME));
+
     }
 }
