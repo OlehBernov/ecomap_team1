@@ -5,7 +5,7 @@
     android:background="#ffffffff">
 
     <ImageView
-        android:src="@drawable/wwflogo"
+        android:src="@drawable/wwf15"
         android:scaleType="fitXY"
         android:layout_width="260dp"
         android:layout_height="260dp"
