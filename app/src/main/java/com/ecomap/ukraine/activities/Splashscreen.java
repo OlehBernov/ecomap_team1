@@ -15,6 +15,7 @@ import android.widget.ProgressBar;
 
 import com.ecomap.ukraine.R;
 import com.ecomap.ukraine.data.manager.ProblemListener;
+import com.ecomap.ukraine.database.DBHelper;
 import com.ecomap.ukraine.models.Problem;
 import com.ecomap.ukraine.data.manager.DataManager;
 
@@ -90,6 +91,7 @@ public class Splashscreen extends Activity implements ProblemListener {
 
         manager.setContext(context);
         manager.registerProblemListener(this);
+        manager.registerDataListener(new DBHelper(getApplicationContext()));
         manager.getAllProblems();
     }
 

@@ -2,6 +2,7 @@ package com.ecomap.ukraine.activities;
 
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
@@ -47,6 +48,7 @@ public class MainActivity extends ActionBarActivity implements ProblemListener {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        this.addMapFragment();
         manager.registerProblemListener(this);
         manager.getAllProblems();
     }
@@ -87,7 +89,7 @@ public class MainActivity extends ActionBarActivity implements ProblemListener {
     public void update(final int requestType, final Object problems) {
         switch (requestType) {
             case RequestTypes.ALL_PROBLEMS:
-                showRandomProblem(problems);
+                //showRandomProblem(problems);
                 break;
             case RequestTypes.PROBLEM_DETAIL:
                 Details details = (Details)problems;
@@ -101,11 +103,8 @@ public class MainActivity extends ActionBarActivity implements ProblemListener {
         }
     }
 
-    /**
-     * Show information about random problem
-     * @param requestResult
-     */
-    private void showRandomProblem(Object requestResult) {
+
+  /*  private void showRandomProblem(Object requestResult) {
         if (requestResult != null) {
             Random rand = new Random();
             this.getFilesDir();
@@ -115,5 +114,14 @@ public class MainActivity extends ActionBarActivity implements ProblemListener {
         } else {
             ((TextView)findViewById(R.id.textView)).setText("Connection error");
         }
+    }
+    */
+
+
+    private void addMapFragment() {
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        fragmentManager.beginTransaction()
+                .replace(R.id.container, FragmentEcoMap.newInstance())
+                .commit();
     }
 }
