@@ -91,7 +91,6 @@ public class Splashscreen extends Activity implements ProblemListener {
 
         manager.setContext(context);
         manager.registerProblemListener(this);
-     //   manager.registerDataListener(new DBHelper(getApplicationContext()));
         manager.getAllProblems();
     }
 
@@ -128,9 +127,10 @@ public class Splashscreen extends Activity implements ProblemListener {
     }
 
     /**
-     * Opens MainActivity
-     * @param requestType
-     * @param problem
+     * Opens MainActivity, when information comes from data manager.
+     *
+     * @param requestType type of the request.
+     * @param problem request result.
      */
     @Override
     public void update(int requestType, Object problem) {

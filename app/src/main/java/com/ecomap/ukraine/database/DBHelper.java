@@ -82,6 +82,9 @@ public class DBHelper extends SQLiteOpenHelper implements DataListener {
 
     private static final String DELETE_FROM = "DELETE FROM ";
 
+    /**
+     * Context of the application.
+     */
     private Context context;
 
     public DBHelper(Context context) {
@@ -106,6 +109,12 @@ public class DBHelper extends SQLiteOpenHelper implements DataListener {
         onCreate(db);
     }
 
+    /**
+     * Performs updating database when server response comes.
+     *
+     * @param requestType the type of request handled.
+     * @param requestResult the result of request.
+     */
     @Override
     public void update(int requestType, Object requestResult) {
         if (requestResult == null) {
@@ -175,7 +184,7 @@ public class DBHelper extends SQLiteOpenHelper implements DataListener {
     }
 
     /**
-     * Adds argument details into the database.
+     * Adds problem details into the database.
      *
      * @param details the details to add to the database.
      */
@@ -204,6 +213,11 @@ public class DBHelper extends SQLiteOpenHelper implements DataListener {
         setPhotos(photos);
     }
 
+    /**
+     * Sets photos of a concrete problem into the database.
+     *
+     * @param photos photos of a problem.
+     */
     private void setPhotos(Map<Photo, Bitmap> photos) {
         if (photos == null) {
             return;
@@ -228,11 +242,6 @@ public class DBHelper extends SQLiteOpenHelper implements DataListener {
         db.close();
     }
 
-    /**
-     *
-     * @param bitmap
-     * @param name
-     */
     private void writeToFile(Bitmap bitmap, String name) {
         FileOutputStream outputStream = null;
         try {
@@ -253,6 +262,12 @@ public class DBHelper extends SQLiteOpenHelper implements DataListener {
         }
     }
 
+    /**
+     * Returns problem details that are currently in the database.
+     *
+     * @param problemId id of required problem.
+     * @return problem details.
+     */
     public Details getProblemDetails(int problemId) {
         if (problemId < 0) {
             return null;
@@ -280,6 +295,13 @@ public class DBHelper extends SQLiteOpenHelper implements DataListener {
         return buildProblemDetails(problemId, cursor, problemActivities, photos);
     }
 
+    /**
+     * Returns time of the last update of the information
+     * about concrete problem.
+     *
+     * @param problemId id of required problem.
+     * @return time of the last update.
+     */
     public String getLastUpdateTime(int problemId) {
         if (problemId < 0) {
             return null;
@@ -301,6 +323,13 @@ public class DBHelper extends SQLiteOpenHelper implements DataListener {
         return cursor.getString(cursor.getColumnIndex(DBContract.Details.LAST_UPDATE));
     }
 
+    /**
+     * Returns photos of concrete problem
+     * that are currently in the database.
+     *
+     * @param problemId id of the required problem.
+     * @return map of photos.
+     */
     private Map<Photo, Bitmap> getProblemPhotos(int problemId) {
         if (problemId < 0) {
             return null;
@@ -346,7 +375,13 @@ public class DBHelper extends SQLiteOpenHelper implements DataListener {
         }
     }
 
-
+    /**
+     * Returns list of all problem activities that
+     * are currently in the database.
+     *
+     * @param problemId id of the required problem.
+     * @return list of problem activities.
+     */
     private List<ProblemActivity> getProblemActivities(int problemId) {
         if (problemId < 0) {
             return null;
@@ -375,6 +410,11 @@ public class DBHelper extends SQLiteOpenHelper implements DataListener {
         return buildProblemActivitiesList(problemId, cursor);
     }
 
+    /**
+     * Sets acivitiew of concrete problem into the database.
+     *
+     * @param problemActivities activities of the problem.
+     */
     private void setProblemActivities(List<ProblemActivity> problemActivities) {
         if (problemActivities == null) {
             return;
@@ -403,6 +443,15 @@ public class DBHelper extends SQLiteOpenHelper implements DataListener {
         db.close();
     }
 
+    /**
+     * Builds problem details object.
+     *
+     * @param problemId id of the problem.
+     * @param cursor contains query result.
+     * @param problemActivities activities of the problem.
+     * @param photos photos of a problem.
+     * @return constructed Details object.
+     */
     private Details buildProblemDetails(int problemId, Cursor cursor,
                                         List<ProblemActivity> problemActivities,
                                         Map<Photo, Bitmap> photos) {
@@ -413,6 +462,13 @@ public class DBHelper extends SQLiteOpenHelper implements DataListener {
         return details;
     }
 
+    /**
+     * Builds map of photos of a problem.
+     *
+     * @param problemId id of the problem.
+     * @param cursor contains query result.
+     * @return map of photos.
+     */
     private Map<Photo, Bitmap> buildPhotosMap(int problemId, Cursor cursor) {
         Map<Photo, Bitmap> photos = new HashMap<>();
         cursor.moveToFirst();
@@ -425,7 +481,14 @@ public class DBHelper extends SQLiteOpenHelper implements DataListener {
 
         return photos;
     }
-    //TODO: write many docs
+
+    /**
+     * Builds list of problem activities.
+     *
+     * @param problemId id of a problem.
+     * @param cursor contains query result.
+     * @return list of problem activities.
+     */
     private List<ProblemActivity> buildProblemActivitiesList(int problemId,
                                                              Cursor cursor) {
         List<ProblemActivity> problemActivities = new ArrayList<>();
@@ -439,6 +502,10 @@ public class DBHelper extends SQLiteOpenHelper implements DataListener {
         return problemActivities;
     }
 
+    /**
+     * Saves time of the last database update
+     * to the SharedPreferences.
+     */
     private void saveTime() {
         SharedPreferences settings = context.getSharedPreferences(DBContract.Problems.TIME, 0);
         SharedPreferences.Editor editor = settings.edit();

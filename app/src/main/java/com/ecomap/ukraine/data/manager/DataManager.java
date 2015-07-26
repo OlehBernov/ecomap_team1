@@ -17,7 +17,8 @@ import java.util.List;
 import java.util.Set;
 
 /**
- * Created by Oleh on 7/19/2015.
+ * Coordinates the work of the database, data loading client and activities.
+ * Provides updates of the database.
  */
 public class DataManager implements DataListenersNotifier, ProblemListenersNotifier {
 
@@ -155,6 +156,8 @@ public class DataManager implements DataListenersNotifier, ProblemListenersNotif
 
     /**
      * This method is used to made request for all problems.
+     * Initiates the update of brief information of the problem in the database,
+     * if it is missing or obsolete.
      */
     public void getAllProblems() {
         SharedPreferences settings = context.getSharedPreferences(DBContract.Problems.TIME, 0);
@@ -174,6 +177,8 @@ public class DataManager implements DataListenersNotifier, ProblemListenersNotif
     /**
      * This method is used to made request for more information about
      * the problem.
+     * Initiates the update of detailed information of the problem
+     * in the database, if it is missing or obsolete.
      *
      * @param problemId the id of the problem.
      */

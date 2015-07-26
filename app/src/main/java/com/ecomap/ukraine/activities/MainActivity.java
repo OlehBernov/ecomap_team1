@@ -30,7 +30,6 @@ import java.util.Random;
  * Created by Andriy on 01.07.2015.
  *
  * Main activity, represent GUI and provides access to all functional
- *
  */
 
 public class MainActivity extends ActionBarActivity {

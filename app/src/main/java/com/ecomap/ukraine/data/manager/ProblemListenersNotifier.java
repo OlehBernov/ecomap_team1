@@ -1,7 +1,8 @@
 package com.ecomap.ukraine.data.manager;
 
 /**
- * TODO: write doc
+ * Interface of class, which performs notification listeners
+ * about readiness of information about problem.
  */
 public interface ProblemListenersNotifier {
 
