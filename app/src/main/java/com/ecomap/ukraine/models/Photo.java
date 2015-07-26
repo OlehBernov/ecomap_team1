@@ -7,7 +7,7 @@ package com.ecomap.ukraine.models;
 public class Photo {
 
     /**
-     * TODO: write doc
+     * Number of problem in the database.
      */
 
     private int problemId;

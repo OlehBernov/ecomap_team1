@@ -91,17 +91,7 @@ public class MainActivity extends ActionBarActivity implements DataListener{
                 showRandomProblem(requestResult);
                 break;
             case RequestTypes.PROBLEM_DETAIL:
-                Details details = (Details)requestResult;
-                for (Photo photo : details.getPhotos().keySet()) {
-
-                    new DBHelper(this).writeToFile(details.getPhotos().get(photo),
-                            photo.getLink());
-                    Bitmap image = new DBHelper(this).getBitmapByName(photo.getLink());
-                    ((ImageView)findViewById(R.id.imageView2)).setImageBitmap(image);
-                }
-
                 break;
-
         }
     }
 

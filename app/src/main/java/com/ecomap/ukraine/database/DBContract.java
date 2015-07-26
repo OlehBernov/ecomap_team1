@@ -3,7 +3,8 @@ package com.ecomap.ukraine.database;
 import android.provider.BaseColumns;
 
 /**
- * Created by Oleh on 7/24/2015.
+ * This class provides information about names of tables and columns in
+ * SQLite database.
  */
 public class DBContract {
 

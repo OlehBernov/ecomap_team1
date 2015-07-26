@@ -59,7 +59,6 @@ public class LoadingClient {
      *  @param context application context.
      *
      */
-
     public void getAllProblems(final Context context) {
         StringRequest stringRequest = new StringRequest(Request.Method.GET, ALL_PROBLEMS_URL,
                 new Response.Listener<String>() {
@@ -116,7 +115,7 @@ public class LoadingClient {
     }
 
     /**
-     * Adds Bitmap to corresponding photos in details object.
+     * Adds Bitmap values to corresponding photos in details object.
      * @param context context of application.
      * @param details details that contains
      */
@@ -138,7 +137,6 @@ public class LoadingClient {
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError volleyError) {
-                        //TODO replace null with some image
                         photos.put(photo, BitmapFactory.decodeResource(context.getResources(),
                                 R.drawable.photo_error1));
                         if (allInitialized(photos)) {

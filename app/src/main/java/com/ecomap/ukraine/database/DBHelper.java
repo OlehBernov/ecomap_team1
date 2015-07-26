@@ -26,7 +26,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Created by Oleh on 7/24/2015.
+ * Exposes methods to work with inner database.
  */
 public class DBHelper extends SQLiteOpenHelper implements DataListener {
     private static final String DELETE_ACTIVITIES_TABLE =
@@ -37,7 +37,7 @@ public class DBHelper extends SQLiteOpenHelper implements DataListener {
             "DROP TABLE IF EXISTS " + DBContract.Details.TABLE_NAME;
     private static final String DELETE_PROBLEMS_TABLE =
             "DROP TABLE IF EXISTS " + DBContract.Problems.TABLE_NAME;
-    //
+
     private static final String DB_NAME = "Problems.db";
     private static final int DB_VERSION = 2;
     private static final String TEXT_TYPE = " TEXT";
@@ -53,12 +53,14 @@ public class DBHelper extends SQLiteOpenHelper implements DataListener {
             .USER_NAME + TEXT_TYPE + COMMA_SEP + DBContract.ProblemActivity.ACTIVITY_USERS_ID
             + INT_TYPE + COMMA_SEP + DBContract.ProblemActivity.PROBLEM_ACTIVITY_CONTENT
             + TEXT_TYPE + ")";
+
     private static final String CREATE_PHOTOS_TABLE
             = "CREATE TABLE " + DBContract.Photos.TABLE_NAME + " (" + DBContract.Photos.PROBLEM_ID +
             INT_TYPE + COMMA_SEP + DBContract.Photos.PHOTO_ID + INT_TYPE + COMMA_SEP +
             DBContract.Photos.PHOTO_USERS_ID + INT_TYPE + COMMA_SEP + DBContract.Photos.PHOTO_STATUS
             + INT_TYPE + COMMA_SEP + DBContract.Photos.LINK + TEXT_TYPE + COMMA_SEP +
             DBContract.Photos.PHOTO_DESCRIPTION + TEXT_TYPE + ")";
+
     private static final String CREATE_DETAILS_TABLE
             = "CREATE TABLE " + DBContract.Details.TABLE_NAME + " (" + DBContract.Details.PROBLEM_ID
             + INT_TYPE + COMMA_SEP + DBContract.Details.TITLE + TEXT_TYPE + COMMA_SEP +
@@ -67,6 +69,7 @@ public class DBHelper extends SQLiteOpenHelper implements DataListener {
             DBContract.Details.MODERATION + INT_TYPE + COMMA_SEP + DBContract.Details.SEVERITY +
             INT_TYPE + COMMA_SEP + DBContract.Details.VOTES + INT_TYPE + COMMA_SEP +
             DBContract.Details.LAST_UPDATE + TEXT_TYPE + ")";
+
     private static final String CREATE_PROBLEMS_TABLE
             = "CREATE TABLE " + DBContract.Problems.TABLE_NAME + " (" + DBContract.Problems.ID +
             " INTEGER PRIMARY KEY, " + DBContract.Problems.PROBLEM_STATUS + INT_TYPE +
@@ -119,6 +122,11 @@ public class DBHelper extends SQLiteOpenHelper implements DataListener {
         }
     }
 
+    /**
+     * Sets brief information about all problems into the database.
+     *
+     * @param requestResult server response to all problems request.
+     */
     public void addAllProblems(Object requestResult){
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
@@ -138,6 +146,11 @@ public class DBHelper extends SQLiteOpenHelper implements DataListener {
         db.close();
     }
 
+    /**
+     * Returns list of all problems that are currently in the database.
+     *
+     * @return list of problems.
+     */
     public List<Problem> getAllProblems () {
         SQLiteDatabase db = this.getWritableDatabase();
         Cursor cursor = db.query(DBContract.Problems.TABLE_NAME, null, null, null, null, null, null);
@@ -152,6 +165,11 @@ public class DBHelper extends SQLiteOpenHelper implements DataListener {
         return problems;
     }
 
+    /**
+     * Adds argument details into the database.
+     *
+     * @param details the details to add to the database.
+     */
     public void setProblemDetails(Details details) {
         SQLiteDatabase db = this.getWritableDatabase();
 
@@ -214,7 +232,12 @@ public class DBHelper extends SQLiteOpenHelper implements DataListener {
         }
     }
 
-    public void writeToFile(Bitmap bitmap, String name) {
+    /**
+     *
+     * @param bitmap
+     * @param name
+     */
+    private void writeToFile(Bitmap bitmap, String name) {
         FileOutputStream outputStream = null;
         try {
             String path = context.getFilesDir().getPath();

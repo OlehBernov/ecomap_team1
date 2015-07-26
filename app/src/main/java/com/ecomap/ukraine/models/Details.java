@@ -39,7 +39,7 @@ public class Details {
     private String proposal;
 
     /**
-     * TODO: write doc
+     * the name giving to the particular problem.
      */
     private String title;
 
@@ -48,9 +48,8 @@ public class Details {
      */
     private List<ProblemActivity> problemActivities;
     /**
-     *  array of photos that are related to the problem
+     *  map of photos that are related to the problem
      */
-    //TODO exchange list with this
     public Map<Photo, Bitmap> photos;
 
     /**
