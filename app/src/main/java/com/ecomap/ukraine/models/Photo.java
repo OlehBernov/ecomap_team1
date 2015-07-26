@@ -1,5 +1,9 @@
 package com.ecomap.ukraine.models;
 
+import android.database.Cursor;
+
+import com.ecomap.ukraine.database.DBContract;
+
 /**
  * Class Photo represent information about photo of problem.
  * Created by Andriy on 17.07.2015.

@@ -204,25 +204,6 @@ public class DBHelper extends SQLiteOpenHelper implements DataListener {
         setPhotos(photos);
     }
 
-    private void setProblemActivities(List<ProblemActivity> problemActivities) {
-        SQLiteDatabase db = this.getWritableDatabase();
-
-        ContentValues values;
-        for (ProblemActivity problemActivity: problemActivities) {
-            values = new ContentValues();
-
-            values.put(DBContract.ProblemActivity.PROBLEM_ACTIVITY_ID, problemActivity.getProblemActivityId());
-            values.put(DBContract.ProblemActivity.PROBLEM_ACTIVITY_DATE, problemActivity.getDate());
-            values.put(DBContract.ProblemActivity.PROBLEM_ID, problemActivity.getProblemId());
-            values.put(DBContract.ProblemActivity.ACTIVITY_TYPES_ID, problemActivity.getActivityTypesId());
-            values.put(DBContract.ProblemActivity.USER_NAME, problemActivity.getFirstName());
-            values.put(DBContract.ProblemActivity.ACTIVITY_USERS_ID, problemActivity.getUserId());
-            values.put(DBContract.ProblemActivity.PROBLEM_ACTIVITY_CONTENT, problemActivity.getContent());
-
-            db.insert(DBContract.ProblemActivity.TABLE_NAME, null, values);
-        }
-    }
-
     private void setPhotos(Map<Photo, Bitmap> photos) {
         if (photos == null) {
             return;

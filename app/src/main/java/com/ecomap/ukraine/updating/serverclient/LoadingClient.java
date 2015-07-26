@@ -12,7 +12,6 @@ import com.android.volley.toolbox.ImageRequest;
 import com.android.volley.toolbox.StringRequest;
 
 import com.ecomap.ukraine.R;
-import com.ecomap.ukraine.data.manager.ListenersNotifier;
 import com.ecomap.ukraine.models.Details;
 import com.ecomap.ukraine.models.Photo;
 
