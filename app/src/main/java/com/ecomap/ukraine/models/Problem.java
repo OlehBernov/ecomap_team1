@@ -4,6 +4,7 @@ import android.database.Cursor;
 
 import com.ecomap.ukraine.database.DBContract;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.maps.android.clustering.ClusterItem;
 
 import java.io.Serializable;
 
@@ -12,7 +13,7 @@ import java.io.Serializable;
  * Class Problem represent general information about problem, enough to show the problem on the map.
  * Created by Andriy on 17.07.2015.
  */
-public class Problem implements Serializable {
+public class Problem implements ClusterItem {
 
     /**
      * id of current problem
@@ -81,6 +82,7 @@ public class Problem implements Serializable {
     /**
      * provides access to position
      */
+    @Override
     public LatLng getPosition() {
         return position;
     }
