@@ -2,21 +2,17 @@ package com.ecomap.ukraine.database;
 
 import android.content.ContentValues;
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.database.sqlite.SQLiteDatabaseLockedException;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import com.ecomap.ukraine.R;
 
-import com.ecomap.ukraine.data.manager.DataListener;
 import com.ecomap.ukraine.models.Details;
 import com.ecomap.ukraine.models.Photo;
 import com.ecomap.ukraine.models.Problem;
 import com.ecomap.ukraine.models.ProblemActivity;
-import com.ecomap.ukraine.updating.serverclient.RequestTypes;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -30,7 +26,7 @@ import java.util.Map;
 /**
  * Exposes methods to work with inner database.
  */
-public class DBHelper extends SQLiteOpenHelper implements DataListener {
+public class DBHelper extends SQLiteOpenHelper {
     private static final String DELETE_ACTIVITIES_TABLE =
             "DROP TABLE IF EXISTS " + DBContract.ProblemActivity.TABLE_NAME;
     private static final String DELETE_PHOTOS_TABLE =
@@ -50,35 +46,42 @@ public class DBHelper extends SQLiteOpenHelper implements DataListener {
             = "CREATE TABLE " + DBContract.ProblemActivity.TABLE_NAME + " (" +
             DBContract.ProblemActivity.PROBLEM_ACTIVITY_ID + INT_TYPE + COMMA_SEP +
             DBContract.ProblemActivity.PROBLEM_ACTIVITY_DATE + INT_TYPE + COMMA_SEP +
-            DBContract.ProblemActivity.PROBLEM_ID + INT_TYPE + COMMA_SEP + DBContract.ProblemActivity
-            .ACTIVITY_TYPES_ID + INT_TYPE + COMMA_SEP + DBContract.ProblemActivity
-            .USER_NAME + TEXT_TYPE + COMMA_SEP + DBContract.ProblemActivity.ACTIVITY_USERS_ID
-            + INT_TYPE + COMMA_SEP + DBContract.ProblemActivity.PROBLEM_ACTIVITY_CONTENT
+            DBContract.ProblemActivity.PROBLEM_ID + INT_TYPE + COMMA_SEP +
+            DBContract.ProblemActivity.ACTIVITY_TYPES_ID + INT_TYPE + COMMA_SEP +
+            DBContract.ProblemActivity.USER_NAME + TEXT_TYPE + COMMA_SEP +
+            DBContract.ProblemActivity.ACTIVITY_USERS_ID + INT_TYPE + COMMA_SEP +
+            DBContract.ProblemActivity.PROBLEM_ACTIVITY_CONTENT
             + TEXT_TYPE + ")";
 
     private static final String CREATE_PHOTOS_TABLE
-            = "CREATE TABLE " + DBContract.Photos.TABLE_NAME + " (" + DBContract.Photos.PROBLEM_ID +
-            INT_TYPE + COMMA_SEP + DBContract.Photos.PHOTO_ID + INT_TYPE + COMMA_SEP +
-            DBContract.Photos.PHOTO_USERS_ID + INT_TYPE + COMMA_SEP + DBContract.Photos.PHOTO_STATUS
-            + INT_TYPE + COMMA_SEP + DBContract.Photos.LINK + TEXT_TYPE + COMMA_SEP +
+            = "CREATE TABLE " + DBContract.Photos.TABLE_NAME + " (" +
+            DBContract.Photos.PROBLEM_ID + INT_TYPE + COMMA_SEP +
+            DBContract.Photos.PHOTO_ID + INT_TYPE + COMMA_SEP +
+            DBContract.Photos.PHOTO_USERS_ID + INT_TYPE + COMMA_SEP +
+            DBContract.Photos.PHOTO_STATUS + INT_TYPE + COMMA_SEP +
+            DBContract.Photos.LINK + TEXT_TYPE + COMMA_SEP +
             DBContract.Photos.PHOTO_DESCRIPTION + TEXT_TYPE + ")";
 
     private static final String CREATE_DETAILS_TABLE
-            = "CREATE TABLE " + DBContract.Details.TABLE_NAME + " (" + DBContract.Details.PROBLEM_ID
-            + INT_TYPE + COMMA_SEP + DBContract.Details.TITLE + TEXT_TYPE + COMMA_SEP +
-            DBContract.Details.PROBLEM_CONTENT + TEXT_TYPE +
-            COMMA_SEP + DBContract.Details.PROPOSAL + TEXT_TYPE + COMMA_SEP +
-            DBContract.Details.MODERATION + INT_TYPE + COMMA_SEP + DBContract.Details.SEVERITY +
-            INT_TYPE + COMMA_SEP + DBContract.Details.VOTES + INT_TYPE + COMMA_SEP +
+            = "CREATE TABLE " + DBContract.Details.TABLE_NAME + " (" +
+            DBContract.Details.PROBLEM_ID + INT_TYPE + COMMA_SEP +
+            DBContract.Details.TITLE + TEXT_TYPE + COMMA_SEP +
+            DBContract.Details.PROBLEM_CONTENT + TEXT_TYPE + COMMA_SEP +
+            DBContract.Details.PROPOSAL + TEXT_TYPE + COMMA_SEP +
+            DBContract.Details.MODERATION + INT_TYPE + COMMA_SEP +
+            DBContract.Details.SEVERITY + INT_TYPE + COMMA_SEP +
+            DBContract.Details.VOTES + INT_TYPE + COMMA_SEP +
             DBContract.Details.LAST_UPDATE + TEXT_TYPE + ")";
 
     private static final String CREATE_PROBLEMS_TABLE
-            = "CREATE TABLE " + DBContract.Problems.TABLE_NAME + " (" + DBContract.Problems.ID +
-            " INTEGER PRIMARY KEY, " + DBContract.Problems.PROBLEM_STATUS + INT_TYPE +
-            COMMA_SEP + DBContract.Problems.PROBLEM_TYPES_ID + INT_TYPE + COMMA_SEP +
-            DBContract.Problems.PROBLEM_TITLE + TEXT_TYPE + COMMA_SEP + DBContract.Problems.PROBLEM_DATE +
-            TEXT_TYPE + COMMA_SEP + DBContract.Problems.LATITUDE +
-            REAL_TYPE + COMMA_SEP + DBContract.Problems.LONGITUDE + REAL_TYPE + ")";
+            = "CREATE TABLE " + DBContract.Problems.TABLE_NAME + " (" +
+            DBContract.Problems.ID + " INTEGER PRIMARY KEY, " +
+            DBContract.Problems.PROBLEM_STATUS + INT_TYPE + COMMA_SEP +
+            DBContract.Problems.PROBLEM_TYPES_ID + INT_TYPE + COMMA_SEP +
+            DBContract.Problems.PROBLEM_TITLE + TEXT_TYPE + COMMA_SEP +
+            DBContract.Problems.PROBLEM_DATE + TEXT_TYPE + COMMA_SEP +
+            DBContract.Problems.LATITUDE + REAL_TYPE + COMMA_SEP +
+            DBContract.Problems.LONGITUDE + REAL_TYPE + ")";
 
     private static final String DELETE_FROM = "DELETE FROM ";
 
@@ -109,32 +112,40 @@ public class DBHelper extends SQLiteOpenHelper implements DataListener {
         onCreate(db);
     }
 
-    /**
-     * Performs updating database when server response comes.
-     *
-     * @param requestType the type of request handled.
-     * @param requestResult the result of request.
-     */
-    @Override
-    public void update(int requestType, Object requestResult) {
-        if (requestResult == null) {
+    public void updateAllProblems(List<Problem> problems) {
+        if (problems == null) {
             return;
         }
         SQLiteDatabase db = this.getWritableDatabase();
-        switch (requestType) {
-            case RequestTypes.ALL_PROBLEMS:
-                db.execSQL(DBHelper.DELETE_FROM + DBContract.Problems.TABLE_NAME);
-                this.addAllProblems(requestResult);
-                break;
-            case RequestTypes.PROBLEM_DETAIL:
-                db = this.getWritableDatabase();
-                db.execSQL(DELETE_FROM + DBContract.Details.TABLE_NAME);
-                db.execSQL(DELETE_FROM + DBContract.Photos.TABLE_NAME);
-                db.execSQL(DELETE_FROM + DBContract.ProblemActivity.TABLE_NAME);
-                this.setProblemDetails((Details) requestResult);
-                break;
-        }
+        db.execSQL(DBHelper.DELETE_FROM + DBContract.Problems.TABLE_NAME);
+        setAllProblems(problems);
         db.close();
+    }
+
+    public void updateProblemDetails(Details details) {
+        if (details == null) {
+            return;
+        }
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.execSQL(DELETE_FROM + DBContract.Details.TABLE_NAME);
+        db.execSQL(DELETE_FROM + DBContract.Photos.TABLE_NAME);
+        db.execSQL(DELETE_FROM + DBContract.ProblemActivity.TABLE_NAME);
+        setProblemDetails(details);
+        db.close();
+    }
+
+    /**
+     * Returns list of all problems that are currently in the database.
+     *
+     * @return list of problems.
+     */
+    public List<Problem> getAllProblems () {
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor cursor = db.query(DBContract.Problems.TABLE_NAME, null, null, null, null, null, null);
+        List<Problem> problems;
+        problems = buildAllProblemList(cursor);
+        db.close();
+        return problems;
     }
 
     /**
@@ -142,7 +153,7 @@ public class DBHelper extends SQLiteOpenHelper implements DataListener {
      *
      * @param requestResult server response to all problems request.
      */
-    public void addAllProblems(Object requestResult){
+    public void setAllProblems(Object requestResult){
         if (requestResult == null) {
             return;
         }
@@ -161,26 +172,39 @@ public class DBHelper extends SQLiteOpenHelper implements DataListener {
             contentValues.clear();
         }
         db.close();
-        saveTime();
     }
 
     /**
-     * Returns list of all problems that are currently in the database.
+     * Returns problem details that are currently in the database.
      *
-     * @return list of problems.
+     * @param problemId id of required problem.
+     * @return problem details.
      */
-    public List<Problem> getAllProblems () {
-        SQLiteDatabase db = this.getWritableDatabase();
-        Cursor cursor = db.query(DBContract.Problems.TABLE_NAME, null, null, null, null, null, null);
-        List<Problem> problems = new ArrayList<Problem>();
-        if (cursor.moveToFirst()) {
-            do {
-                Problem problem = new Problem(cursor);
-                problems.add(problem);
-            } while (cursor.moveToNext());
+    public Details getProblemDetails(int problemId) {
+        if (problemId < 0) {
+            return null;
         }
+        SQLiteDatabase db = this.getWritableDatabase();
+        Map<Photo, Bitmap> photos = getProblemPhotos(problemId);
+        List<ProblemActivity> problemActivities = getProblemActivities(problemId);
+
+        String[] projection = {
+                DBContract.Details.PROBLEM_CONTENT, DBContract.Details.PROPOSAL,
+                DBContract.Details.TITLE, DBContract.Details.MODERATION,
+                DBContract.Details.SEVERITY, DBContract.Details.VOTES,
+                DBContract.Details.LAST_UPDATE
+        };
+        String selection = DBContract.Details.PROBLEM_ID + " = ?";
+        String[] selectionArgs = new String[]{String.valueOf(problemId)};
+        Cursor cursor = db.query(DBContract.Details.TABLE_NAME, projection, selection,
+                selectionArgs, null, null, null);
         db.close();
-        return problems;
+
+        if (cursor == null) {
+            return null;
+        }
+
+        return buildProblemDetails(problemId, cursor, problemActivities, photos);
     }
 
     /**
@@ -229,7 +253,6 @@ public class DBHelper extends SQLiteOpenHelper implements DataListener {
             writeToFile(photos.get(photo), photo.getLink());
 
             values = new ContentValues();
-
             values.put(DBContract.Photos.PROBLEM_ID, photo.getProblemId());
             values.put(DBContract.Photos.PHOTO_ID, photo.getPhotoId());
             values.put(DBContract.Photos.PHOTO_USERS_ID, photo.getUserId());
@@ -237,7 +260,8 @@ public class DBHelper extends SQLiteOpenHelper implements DataListener {
             values.put(DBContract.Photos.LINK, photo.getLink());
             values.put(DBContract.Photos.PHOTO_DESCRIPTION, photo.getDescription());
 
-        db.insert(DBContract.Photos.TABLE_NAME, null, values);
+            db.insert(DBContract.Photos.TABLE_NAME, null, values);
+            values.clear();
         }
         db.close();
     }
@@ -263,44 +287,11 @@ public class DBHelper extends SQLiteOpenHelper implements DataListener {
     }
 
     /**
-     * Returns problem details that are currently in the database.
-     *
-     * @param problemId id of required problem.
-     * @return problem details.
-     */
-    public Details getProblemDetails(int problemId) {
-        if (problemId < 0) {
-            return null;
-        }
-        SQLiteDatabase db = this.getWritableDatabase();
-        Map<Photo, Bitmap> photos = getProblemPhotos(problemId);
-        List<ProblemActivity> problemActivities = getProblemActivities(problemId);
-
-        String[] projection = {
-                DBContract.Details.PROBLEM_CONTENT, DBContract.Details.PROPOSAL,
-                DBContract.Details.TITLE, DBContract.Details.MODERATION,
-                DBContract.Details.SEVERITY, DBContract.Details.VOTES,
-                DBContract.Details.LAST_UPDATE
-        };
-        String selection = DBContract.Details.PROBLEM_ID + " = ?";
-        String[] selectionArgs = new String[] {String.valueOf(problemId)};
-        Cursor cursor = db.query(DBContract.Details.TABLE_NAME, projection, selection,
-                selectionArgs, null, null, null);
-        db.close();
-
-        if (cursor == null) {
-            return null;
-        }
-
-        return buildProblemDetails(problemId, cursor, problemActivities, photos);
-    }
-
-    /**
-     * Returns time of the last update of the information
+     * Returns time of the last updateAllProblems of the information
      * about concrete problem.
      *
      * @param problemId id of required problem.
-     * @return time of the last update.
+     * @return time of the last updateAllProblems.
      */
     public String getLastUpdateTime(int problemId) {
         if (problemId < 0) {
@@ -439,8 +430,35 @@ public class DBHelper extends SQLiteOpenHelper implements DataListener {
                        problemActivity.getContent());
 
             db.insert(DBContract.ProblemActivity.TABLE_NAME, null, values);
+            values.clear();
         }
         db.close();
+    }
+
+    /**
+     * Builds list of all problems.
+     *
+     * @param cursor contains query result.
+     * @return list of all problems.
+     */
+    private List<Problem> buildAllProblemList(Cursor cursor) {
+        List<Problem> problems = new ArrayList<>();
+        cursor.moveToFirst();
+        for (int i = 0; i < cursor.getCount(); i++) {
+            Problem problem = new Problem(
+                cursor.getInt(cursor.getColumnIndex(DBContract.Problems.ID)),
+                cursor.getInt(cursor.getColumnIndex(DBContract.Problems.PROBLEM_STATUS)),
+                cursor.getInt(cursor.getColumnIndex(DBContract.Problems.PROBLEM_TYPES_ID)),
+                cursor.getString(cursor.getColumnIndex(DBContract.Problems.PROBLEM_TITLE)),
+                cursor.getString(cursor.getColumnIndex(DBContract.Problems.PROBLEM_DATE)),
+                cursor.getDouble(cursor.getColumnIndex(DBContract.Problems.LATITUDE)),
+                cursor.getDouble(cursor.getColumnIndex(DBContract.Problems.LONGITUDE))
+            );
+            problems.add(problem);
+            cursor.moveToNext();
+        }
+
+        return problems;
     }
 
     /**
@@ -456,7 +474,18 @@ public class DBHelper extends SQLiteOpenHelper implements DataListener {
                                         List<ProblemActivity> problemActivities,
                                         Map<Photo, Bitmap> photos) {
         cursor.moveToFirst();
-        Details details = new Details(cursor, problemId, problemActivities, photos);
+        Details details = new Details(
+                problemId,
+                cursor.getInt(cursor.getColumnIndex(DBContract.Details.SEVERITY)),
+                cursor.getInt(cursor.getColumnIndex(DBContract.Details.MODERATION)),
+                cursor.getInt(cursor.getColumnIndex(DBContract.Details.VOTES)),
+                cursor.getString(cursor.getColumnIndex(DBContract.Details.PROBLEM_CONTENT)),
+                cursor.getString(cursor.getColumnIndex(DBContract.Details.PROPOSAL)),
+                cursor.getString(cursor.getColumnIndex(DBContract.Details.TITLE)),
+                problemActivities,
+                photos,
+                cursor.getString(cursor.getColumnIndex(DBContract.Details.LAST_UPDATE))
+        );
         cursor.close();
 
         return details;
@@ -473,9 +502,17 @@ public class DBHelper extends SQLiteOpenHelper implements DataListener {
         Map<Photo, Bitmap> photos = new HashMap<>();
         cursor.moveToFirst();
         for (int i = 0; i < cursor.getCount(); i++) {
-            Photo photo = new Photo(cursor, problemId);
+            Photo photo = new Photo(
+                    problemId,
+                    cursor.getInt(cursor.getColumnIndex(DBContract.Photos.PHOTO_ID)),
+                    cursor.getInt(cursor.getColumnIndex(DBContract.Photos.PHOTO_USERS_ID)),
+                    cursor.getInt(cursor.getColumnIndex(DBContract.Photos.PHOTO_STATUS)),
+                    cursor.getString(cursor.getColumnIndex(DBContract.Photos.LINK)),
+                    cursor.getString(cursor.getColumnIndex(DBContract.Photos.PHOTO_DESCRIPTION))
+            );
             Bitmap image = getBitmapByName(photo.getLink());
-            photos.put(photo, null);
+            photos.put(photo, image);
+            cursor.moveToNext();
         }
         cursor.close();
 
@@ -494,22 +531,21 @@ public class DBHelper extends SQLiteOpenHelper implements DataListener {
         List<ProblemActivity> problemActivities = new ArrayList<>();
         cursor.moveToFirst();
         for (int i = 0; i < cursor.getCount(); i++) {
-            ProblemActivity problemActivity = new ProblemActivity(cursor, problemId);
+            ProblemActivity problemActivity = new ProblemActivity(
+                    problemId,
+                    cursor.getInt(cursor.getColumnIndex(DBContract.ProblemActivity.PROBLEM_ACTIVITY_ID)),
+                    cursor.getInt(cursor.getColumnIndex(DBContract.ProblemActivity.ACTIVITY_TYPES_ID)),
+                    cursor.getInt(cursor.getColumnIndex(DBContract.ProblemActivity.ACTIVITY_USERS_ID)),
+                    cursor.getString(cursor.getColumnIndex(DBContract.ProblemActivity.PROBLEM_ACTIVITY_CONTENT)),
+                    cursor.getString(cursor.getColumnIndex(DBContract.ProblemActivity.PROBLEM_ACTIVITY_DATE)),
+                    cursor.getString(cursor.getColumnIndex(DBContract.ProblemActivity.USER_NAME))
+            );
             problemActivities.add(problemActivity);
+            cursor.moveToNext();
         }
         cursor.close();
 
         return problemActivities;
     }
 
-    /**
-     * Saves time of the last database update
-     * to the SharedPreferences.
-     */
-    private void saveTime() {
-        SharedPreferences settings = context.getSharedPreferences(DBContract.Problems.TIME, 0);
-        SharedPreferences.Editor editor = settings.edit();
-        editor.putLong(DBContract.Problems.TIME, System.currentTimeMillis());
-        editor.commit();
-    }
 }

@@ -6,20 +6,19 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Color;
-import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.View;
-import android.widget.ProgressBar;
 
 import com.ecomap.ukraine.R;
 import com.ecomap.ukraine.data.manager.ProblemListener;
-import com.ecomap.ukraine.database.DBHelper;
+import com.ecomap.ukraine.models.Details;
 import com.ecomap.ukraine.models.Problem;
 import com.ecomap.ukraine.data.manager.DataManager;
 
 import java.util.List;
+
+import fr.castorflex.android.smoothprogressbar.SmoothProgressBar;
 
 /**
  * Activity which represent loading data from server
@@ -70,7 +69,7 @@ public class Splashscreen extends Activity implements ProblemListener {
     /**
      * Progress bar
      */
-    private ProgressBar progressBar;
+    private SmoothProgressBar smoothProgressBar;
 
     /**
      * Initialize activity
@@ -80,9 +79,9 @@ public class Splashscreen extends Activity implements ProblemListener {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         setContentView(R.layout.splashscreen);
 
+        smoothProgressBar = (SmoothProgressBar) findViewById(R.id.progress_bar);
 
         startLoading = System.currentTimeMillis();
         context = this.getApplicationContext();
@@ -93,12 +92,35 @@ public class Splashscreen extends Activity implements ProblemListener {
         manager.getAllProblems();
     }
 
+    @Override
+    public void updateAllProblems(List<Problem> problems) {
+        if (problems != null) {
+            if (!state) {
+                state = true;
+                long endLoading = System.currentTimeMillis();
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        manager.removeProblemListener(Splashscreen.this);
+                        startActivity(intent);
+                    }
+                }, Math.max(MINIMAL_DELAY - (endLoading - startLoading), 0));
+            }
+        } else {
+            setFailureLoadingDialog();
+        }
+    }
+
+    @Override
+    public void updateProblemDetails(Details details) {
+
+    }
+
     /**
      * Initialize dialog interrupt downloads.
      */
-    public  void setFailureLoadingDialog() {
-
-        progressBar.setVisibility(View.INVISIBLE);
+    private void setFailureLoadingDialog() {
+        smoothProgressBar.setVisibility(View.INVISIBLE);
 
         AlertDialog.Builder builder = new AlertDialog.Builder(this, android.R.style.Theme_Holo_Light_Panel);
         builder.setCancelable(false);
@@ -108,7 +130,7 @@ public class Splashscreen extends Activity implements ProblemListener {
                     @Override
                     public void onClick(final DialogInterface dialog,
                                         final int id) {
-                        progressBar.setVisibility(View.VISIBLE);
+                        smoothProgressBar.setVisibility(View.VISIBLE);
                         manager.getAllProblems();
                     }
                 });
@@ -125,29 +147,4 @@ public class Splashscreen extends Activity implements ProblemListener {
         alert.show();
     }
 
-    /**
-     * Opens MainActivity, when information comes from data manager.
-     *
-     * @param requestType type of the request.
-     * @param problem request result.
-     */
-    @Override
-    public void update(int requestType, Object problem) {
-        if (problem != null) {
-            if (!state) {
-                //TODO: can we delete state?
-                state = true;
-                long endLoading = System.currentTimeMillis();
-                new Handler().postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        manager.removeProblemListener(Splashscreen.this);
-                        startActivity(intent);
-                    }
-                }, Math.max(MINIMAL_DELAY - (endLoading - startLoading), 0));
-            }
-        } else {
-            setFailureLoadingDialog();
-        }
-    }
 }

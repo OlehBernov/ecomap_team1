@@ -6,7 +6,7 @@ import android.provider.BaseColumns;
  * This class provides information about names of tables and columns in
  * SQLite database.
  */
-public class DBContract {
+class DBContract {
 
     public static abstract class Problems implements BaseColumns {
         public static final String TABLE_NAME = "Problems";
@@ -25,7 +25,6 @@ public class DBContract {
 
         public static final String LONGITUDE = "Longitude";
 
-        public static final String TIME = "Time";
     }
 
     public static abstract class Details implements BaseColumns {

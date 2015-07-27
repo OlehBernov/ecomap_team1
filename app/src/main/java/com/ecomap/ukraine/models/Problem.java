@@ -1,12 +1,8 @@
 package com.ecomap.ukraine.models;
 
-import android.database.Cursor;
 
-import com.ecomap.ukraine.database.DBContract;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.maps.android.clustering.ClusterItem;
-
-import java.io.Serializable;
 
 
 /**
@@ -109,16 +105,6 @@ public class Problem implements ClusterItem {
         this.title = title;
         this.date = date;
         this.position = new LatLng(latitude, longtitude);
-    }
-
-    public Problem (Cursor cursor) {
-        this.problemId = cursor.getInt(cursor.getColumnIndex(DBContract.Problems.ID));
-        this.statusId = cursor.getInt(cursor.getColumnIndex(DBContract.Problems.PROBLEM_STATUS));
-        this.problemTypesId = cursor.getInt(cursor.getColumnIndex(DBContract.Problems.PROBLEM_TYPES_ID));
-        this.title = cursor.getString(cursor.getColumnIndex(DBContract.Problems.PROBLEM_TITLE));
-        this.date = cursor.getString(cursor.getColumnIndex(DBContract.Problems.PROBLEM_DATE));
-        this.position = new LatLng(cursor.getDouble(cursor.getColumnIndex(DBContract.Problems.LATITUDE)),
-                cursor.getDouble(cursor.getColumnIndex(DBContract.Problems.LONGITUDE)));
     }
 
 }

@@ -1,9 +1,6 @@
 package com.ecomap.ukraine.models;
 
-import android.database.Cursor;
 import android.graphics.Bitmap;
-
-import com.ecomap.ukraine.database.DBContract;
 
 import java.util.List;
 import java.util.Map;
@@ -131,7 +128,7 @@ public class Details {
     /**
      * returns date of the last data loading from server
      *
-     * @return date of last update
+     * @return date of last updateAllProblems
      */
     public String getLastUpdate() {
         return lastUpdate;
@@ -162,17 +159,4 @@ public class Details {
         this.lastUpdate = lastUpdate;
     }
 
-    public Details(Cursor cursor, int problemId, List<ProblemActivity> problemActivities,
-                   Map<Photo, Bitmap> photos) {
-        this.problemId = problemId;
-        this.severity = cursor.getInt(cursor.getColumnIndex(DBContract.Details.SEVERITY));
-        this.moderations = cursor.getInt(cursor.getColumnIndex(DBContract.Details.MODERATION));
-        this.votes = cursor.getInt(cursor.getColumnIndex(DBContract.Details.VOTES));
-        this.content = cursor.getString(cursor.getColumnIndex(DBContract.Details.PROBLEM_CONTENT));
-        this.proposal = cursor.getString(cursor.getColumnIndex(DBContract.Details.PROPOSAL));
-        this.title = cursor.getString(cursor.getColumnIndex(DBContract.Details.TITLE));
-        this.problemActivities = problemActivities;
-        this.photos = photos;
-        this.lastUpdate = cursor.getString(cursor.getColumnIndex(DBContract.Details.LAST_UPDATE));
-    }
 }

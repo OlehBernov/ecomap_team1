@@ -1,30 +1,12 @@
 package com.ecomap.ukraine.activities;
 
-import android.database.sqlite.SQLiteDatabase;
-import android.graphics.Bitmap;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import android.widget.ImageView;
-import android.widget.TextView;
-
 import com.ecomap.ukraine.R;
-import com.ecomap.ukraine.data.manager.ProblemListener;
-
-
-import com.ecomap.ukraine.database.DBHelper;
-import com.ecomap.ukraine.models.Details;
-import com.ecomap.ukraine.models.Photo;
-import com.ecomap.ukraine.models.Problem;
-import com.ecomap.ukraine.data.manager.DataManager;
-import com.ecomap.ukraine.updating.serverclient.RequestTypes;
-import com.ecomap.ukraine.data.manager.DataListener;
-
-import java.util.List;
-import java.util.Random;
 
 /**
  * Created by Andriy on 01.07.2015.

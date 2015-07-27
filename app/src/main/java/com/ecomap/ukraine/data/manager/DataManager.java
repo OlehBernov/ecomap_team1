@@ -4,13 +4,11 @@ import android.content.Context;
 
 import android.content.SharedPreferences;
 
-import com.ecomap.ukraine.database.DBContract;
 import com.ecomap.ukraine.database.DBHelper;
 import com.ecomap.ukraine.models.Details;
 import com.ecomap.ukraine.models.Problem;
 
 import com.ecomap.ukraine.updating.serverclient.LoadingClient;
-import com.ecomap.ukraine.updating.serverclient.RequestTypes;
 
 import java.util.HashSet;
 import java.util.List;
@@ -20,7 +18,12 @@ import java.util.Set;
  * Coordinates the work of the database, data loading client and activities.
  * Provides updates of the database.
  */
-public class DataManager implements DataListenersNotifier, ProblemListenersNotifier {
+public class DataManager implements ProblemListenersNotifier, RequestReceiver {
+
+    /**
+     *
+     */
+    private static final String TIME = "Time";
 
     /**
      * Update frequency (one week in milliseconds).
@@ -31,11 +34,6 @@ public class DataManager implements DataListenersNotifier, ProblemListenersNotif
      * Holds the Singleton global instance of DataManager.
      */
     private static DataManager instance = new DataManager();
-
-    /**
-     * Set of server response listeners.
-     */
-    public Set<DataListener> dataListeners = new HashSet<>();
 
     /**
      * Set of problem listeners.
@@ -70,7 +68,6 @@ public class DataManager implements DataListenersNotifier, ProblemListenersNotif
     public void setContext(Context context) {
         this.context = context;
         dbHelper = new DBHelper(context);
-        registerDataListener(dbHelper);
         loadingClient = new LoadingClient(this, context);
     }
 
@@ -79,47 +76,6 @@ public class DataManager implements DataListenersNotifier, ProblemListenersNotif
      */
     public static DataManager getInstance() {
         return instance;
-    }
-
-    /**
-     * Adds the specified listener to the set of dataListeners. If it is already
-     * registered, it is not added a second time.
-     *
-     * @param listener the DataListener to add.
-     */
-    public void registerDataListener(DataListener listener) {
-        dataListeners.add(listener);
-    }
-
-    /**
-     * Removes the specified listener from the set of dataListeners.
-     *
-     * @param listener the DataListener to remove.
-     */
-    public void removeDataListener(DataListener listener) {
-        dataListeners.remove(listener);
-    }
-
-    /**
-     * Notify all dataListeners about server response
-     * and send them received information.
-     *
-     * @param requestType type of request.
-     * @param requestResult server response converted to the objects of entities.
-     */
-    public void notifyDataListeners(final int requestType, Object requestResult) {
-        for (DataListener listener : dataListeners) {
-            listener.update(requestType, requestResult);
-        }
-
-        switch (requestType) {
-            case RequestTypes.ALL_PROBLEMS:
-                getAllProblems();
-                break;
-            case RequestTypes.PROBLEM_DETAIL:
-                getProblemDetail(((Details) requestResult).getProblemId());
-                break;
-        }
     }
 
     /**
@@ -142,34 +98,72 @@ public class DataManager implements DataListenersNotifier, ProblemListenersNotif
     }
 
     /**
-     * Notify all ProblemListeners about data manger response
-     * and send them received information.
+     * Receives server response to the request of all problems,
+     * and put it into database.
      *
-     * @param requestType request type.
-     * @param problem result problem.
+     * @param problems list of all problems.
      */
-    public void notifyProblemListeners(final int requestType, Object problem) {
+    @Override
+    public void setAllProblemsRequestResult(List<Problem> problems) {
+        if (problems != null) {
+            dbHelper.updateAllProblems(problems);
+        }
+        saveUpdateTime();
+
+        getAllProblems();
+    }
+
+    /**
+     * Receives server response to the request of details of
+     * concrete problem, and put it into database.
+     *
+     * @param details details of concrete problem.
+     */
+    @Override
+    public void setProblemDetailsRequestResult(Details details) {
+        if (details != null) {
+            dbHelper.updateProblemDetails(details);
+        }
+
+        getProblemDetail(details.getProblemId());
+    }
+
+    /**
+     * Send to listeners list of all problems.
+     */
+    @Override
+    public void sendAllProblems(List<Problem> problems) {
         for (ProblemListener listener: problemListeners) {
-            listener.update(requestType, problem);
+            listener.updateAllProblems(problems);
+        }
+    }
+
+    /**
+     * Send to listeners details of concrete problem.
+     */
+    @Override
+    public void sendProblemDetails(Details details) {
+        for (ProblemListener listener: problemListeners) {
+            listener.updateProblemDetails(details);
         }
     }
 
     /**
      * This method is used to made request for all problems.
-     * Initiates the update of brief information of the problem in the database,
+     * Initiates the updateAllProblems of brief information of the problem in the database,
      * if it is missing or obsolete.
      */
     public void getAllProblems() {
-        SharedPreferences settings = context.getSharedPreferences(DBContract.Problems.TIME, 0);
-        long lastUpdateTime = settings.getLong(DBContract.Problems.TIME, 0);
-        if (System.currentTimeMillis() - lastUpdateTime >= ONE_WEEK) {
+        SharedPreferences settings = context.getSharedPreferences(TIME, 0);
+        long lastUpdateTime = settings.getLong(TIME, 0);
+        if (isUpdateTime(lastUpdateTime)) {
             loadingClient.getAllProblems();
         } else {
             List<Problem> problems = dbHelper.getAllProblems();
             if (problems == null) {
                 loadingClient.getAllProblems();
             } else {
-                notifyProblemListeners(RequestTypes.ALL_PROBLEMS, problems);
+                sendAllProblems(problems);
             }
         }
     }
@@ -177,23 +171,43 @@ public class DataManager implements DataListenersNotifier, ProblemListenersNotif
     /**
      * This method is used to made request for more information about
      * the problem.
-     * Initiates the update of detailed information of the problem
+     * Initiates the updateAllProblems of detailed information of the problem
      * in the database, if it is missing or obsolete.
      *
      * @param problemId the id of the problem.
      */
     public void getProblemDetail(int problemId) {
         long lastUpdateTime = Long.valueOf(dbHelper.getLastUpdateTime(problemId));
-        if (System.currentTimeMillis() - lastUpdateTime >= ONE_WEEK) {
+        if (isUpdateTime(lastUpdateTime)) {
             loadingClient.getProblemDetail(problemId);
         } else {
             Details details = dbHelper.getProblemDetails(problemId);
             if (details == null) {
                 loadingClient.getProblemDetail(problemId);
             } else {
-                notifyProblemListeners(RequestTypes.PROBLEM_DETAIL, details);
+                sendProblemDetails(details);
             }
         }
+    }
+
+    /**
+     * Saves time of the last database update
+     * to the SharedPreferences.
+     */
+    private void saveUpdateTime() {
+        SharedPreferences settings = context.getSharedPreferences(TIME, 0);
+        SharedPreferences.Editor editor = settings.edit();
+        editor.putLong(TIME, System.currentTimeMillis());
+        editor.commit();
+    }
+
+    /**
+     *
+     * @param lastUpdateTime time of the last database update.
+     * @return
+     */
+    private boolean isUpdateTime(long lastUpdateTime) {
+        return (System.currentTimeMillis() - lastUpdateTime) >= ONE_WEEK;
     }
 
 }

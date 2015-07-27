@@ -1,10 +1,15 @@
 package com.ecomap.ukraine.data.manager;
 
+import com.ecomap.ukraine.models.Details;
+import com.ecomap.ukraine.models.Problem;
+
+import java.util.List;
+
 /**
  * Interface of class, which performs notification listeners
  * about readiness of information about problem.
  */
-public interface ProblemListenersNotifier {
+interface ProblemListenersNotifier {
 
     /**
      * Adds the specified listener to the set of problemListeners. If it is already
@@ -22,11 +27,12 @@ public interface ProblemListenersNotifier {
     void removeProblemListener(ProblemListener listener);
 
     /**
-     * Notify all ProblemListeners about data manger response
-     * and send them received information.
-     *
-     * @param requestType request type.
-     * @param problem result problem.
+     * Send to listeners list of all problems.
+    */
+    void sendAllProblems(List<Problem> problems);
+
+    /**
+     * Send to listeners details of concrete problem.
      */
-    void notifyProblemListeners(int requestType, Object problem);
+    void sendProblemDetails(Details details);
 }

@@ -1,5 +1,6 @@
 package com.ecomap.ukraine.data.manager;
 
+import com.ecomap.ukraine.models.Details;
 import com.ecomap.ukraine.models.Problem;
 
 import java.util.List;
@@ -11,11 +12,16 @@ import java.util.List;
 public interface ProblemListener {
 
     /**
-     * This method is called if the specified DataManager object's
-     * notifyObservers method is called.
+     * Send to listeners list of all problems.
      *
-     * @param requestType the type of request handled.
-     * @param problem the result of request.
+     * @param problems list of all problems.
      */
-    void update(int requestType, Object problem);
+    void updateAllProblems(List<Problem> problems);
+
+    /**
+     * Send to listeners list of problem details.
+     *
+     * @param details details of concrete problem.
+     */
+    void updateProblemDetails(Details details);
 }
