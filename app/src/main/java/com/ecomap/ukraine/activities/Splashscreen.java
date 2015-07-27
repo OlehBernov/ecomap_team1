@@ -9,6 +9,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.View;
+import android.widget.TextView;
 
 import com.ecomap.ukraine.R;
 import com.ecomap.ukraine.data.manager.ProblemListener;
@@ -28,8 +29,11 @@ public class Splashscreen extends Activity implements ProblemListener {
     /**
      * Failure loading message
      */
-    private static final  String FAILURE_OF_LOADING = "Failed to load. Please ensure you`re connected " +
+    private static final String FAILURE_OF_LOADING = "Failed to load. Please ensure you`re connected " +
             "to the Internet and try again.";
+
+    private static final String COMPLETED = "Completed";
+
     /**
      * Retry button title
      */
@@ -71,6 +75,8 @@ public class Splashscreen extends Activity implements ProblemListener {
      */
     private SmoothProgressBar smoothProgressBar;
 
+    TextView loadingProcess;
+
     /**
      * Initialize activity
      * @param savedInstanceState Contains the data it most recently
@@ -82,6 +88,7 @@ public class Splashscreen extends Activity implements ProblemListener {
         setContentView(R.layout.splashscreen);
 
         smoothProgressBar = (SmoothProgressBar) findViewById(R.id.progress_bar);
+        loadingProcess = (TextView) findViewById(R.id.loadingProcess);
 
         startLoading = System.currentTimeMillis();
         context = this.getApplicationContext();
@@ -107,6 +114,8 @@ public class Splashscreen extends Activity implements ProblemListener {
                     @Override
                     public void run() {
                         manager.removeProblemListener(Splashscreen.this);
+                        smoothProgressBar.setVisibility(View.INVISIBLE);
+                        loadingProcess.setText(COMPLETED);
                         startActivity(intent);
                     }
                 }, Math.max(MINIMAL_DELAY - (endLoading - startLoading), 0));

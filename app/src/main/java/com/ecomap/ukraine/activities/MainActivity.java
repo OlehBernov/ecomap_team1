@@ -29,7 +29,6 @@ public class MainActivity extends ActionBarActivity {
         this.addMapFragment();
     }
 
-
     /**
      * Inflate the menu, this adds items to the action bar if it is present.
      * @param menu activity menu

@@ -44,9 +44,8 @@ public class FragmentEcoMap extends android.support.v4.app.Fragment implements P
     private static final String LONGTITUDE = "longtitude";
     private static final String ZOOM = "zoom";
 
-
     public static FragmentEcoMap newInstance() {
-        return new FragmentEcoMap();
+       return new FragmentEcoMap();
     }
 
     /**
@@ -75,7 +74,6 @@ public class FragmentEcoMap extends android.support.v4.app.Fragment implements P
         mMapView.onResume();
             MapsInitializer.initialize(getActivity().getApplicationContext());
             this.setUpMapIfNeeded();
-
 
         return rootView;
     }
