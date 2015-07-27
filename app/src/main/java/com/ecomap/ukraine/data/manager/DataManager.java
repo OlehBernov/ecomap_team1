@@ -177,12 +177,12 @@ public class DataManager implements ProblemListenersNotifier, RequestReceiver {
      * @param problemId the id of the problem.
      */
     public void getProblemDetail(int problemId) {
-        long lastUpdateTime = Long.valueOf(dbHelper.getLastUpdateTime(problemId));
-        if (isUpdateTime(lastUpdateTime)) {
+        Details details = dbHelper.getProblemDetails(problemId);
+        if (details == null) {
             loadingClient.getProblemDetail(problemId);
         } else {
-            Details details = dbHelper.getProblemDetails(problemId);
-            if (details == null) {
+            long lastUpdateTime = Long.valueOf(dbHelper.getLastUpdateTime(problemId));
+            if (isUpdateTime(lastUpdateTime)) {
                 loadingClient.getProblemDetail(problemId);
             } else {
                 sendProblemDetails(details);
