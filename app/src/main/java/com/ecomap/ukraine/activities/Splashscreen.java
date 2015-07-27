@@ -92,6 +92,11 @@ public class Splashscreen extends Activity implements ProblemListener {
         manager.getAllProblems();
     }
 
+    /**
+     * Opens Main Activity.
+     *
+     * @param problems list of all problems.
+     */
     @Override
     public void updateAllProblems(List<Problem> problems) {
         if (problems != null) {

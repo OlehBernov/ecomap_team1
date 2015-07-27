@@ -7,7 +7,7 @@ import java.util.List;
 
 /**
  * Interface of class, which performs notification listeners
- * about readiness of information about problem.
+ * about readiness of information about problems.
  */
 interface ProblemListenersNotifier {
 

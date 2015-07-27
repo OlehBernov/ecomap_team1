@@ -6,8 +6,8 @@ import com.ecomap.ukraine.models.Problem;
 import java.util.List;
 
 /**
- * Interface ProblemListener must implements classes,
- * which want to get information about problem from database.
+ * Interface of classes, which want to get
+ * information about problem from database.
  */
 public interface ProblemListener {
 

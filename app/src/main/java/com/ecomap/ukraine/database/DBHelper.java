@@ -112,6 +112,12 @@ public class DBHelper extends SQLiteOpenHelper {
         onCreate(db);
     }
 
+    /**
+     * Performs updating database table, which contains brief
+     * information about all problems.
+     *
+     * @param problems new list of all problems.
+     */
     public void updateAllProblems(List<Problem> problems) {
         if (problems == null) {
             return;
@@ -122,14 +128,27 @@ public class DBHelper extends SQLiteOpenHelper {
         db.close();
     }
 
+    /**
+     * Performs updating database row, which contains
+     * information about details of concrete problem.
+     *
+     * @param details new details of concrete problem.
+     */
     public void updateProblemDetails(Details details) {
         if (details == null) {
             return;
         }
         SQLiteDatabase db = this.getWritableDatabase();
-        db.execSQL(DELETE_FROM + DBContract.Details.TABLE_NAME);
-        db.execSQL(DELETE_FROM + DBContract.Photos.TABLE_NAME);
-        db.execSQL(DELETE_FROM + DBContract.ProblemActivity.TABLE_NAME);
+        int problemId = details.getProblemId();
+        db.delete(DBContract.Details.TABLE_NAME,
+                  DBContract.Details.PROBLEM_ID + " = ?",
+                  new String[] { "" + problemId });
+        db.delete(DBContract.Photos.TABLE_NAME,
+                  DBContract.Photos.PROBLEM_ID + " = ?",
+                  new String[]{"" + problemId});
+        db.delete(DBContract.ProblemActivity.TABLE_NAME,
+                  DBContract.ProblemActivity.PROBLEM_ID + " = ?",
+                  new String[]{"" + problemId});
         setProblemDetails(details);
         db.close();
     }

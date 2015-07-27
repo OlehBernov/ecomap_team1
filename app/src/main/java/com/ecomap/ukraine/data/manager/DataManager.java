@@ -21,14 +21,14 @@ import java.util.Set;
 public class DataManager implements ProblemListenersNotifier, RequestReceiver {
 
     /**
-     *
+     * The name of the preference to retrieve.
      */
     private static final String TIME = "Time";
 
     /**
      * Update frequency (one week in milliseconds).
      */
-    private static final long ONE_WEEK = 604800000;
+    private static final long UPDATE_PERIOD = 604800000;
 
     /**
      * Holds the Singleton global instance of DataManager.
@@ -202,12 +202,13 @@ public class DataManager implements ProblemListenersNotifier, RequestReceiver {
     }
 
     /**
+     * Checks the need to update.
      *
      * @param lastUpdateTime time of the last database update.
-     * @return
+     * @return the need to update.
      */
     private boolean isUpdateTime(long lastUpdateTime) {
-        return (System.currentTimeMillis() - lastUpdateTime) >= ONE_WEEK;
+        return (System.currentTimeMillis() - lastUpdateTime) >= UPDATE_PERIOD;
     }
 
 }

@@ -12,7 +12,7 @@ import java.util.Map;
 public class Details {
 
     /**
-     * TODO: write doc
+     * Id of the problem.
      */
     private int problemId;
 

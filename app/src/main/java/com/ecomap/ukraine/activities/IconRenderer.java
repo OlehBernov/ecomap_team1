@@ -22,7 +22,6 @@ public class IconRenderer extends DefaultClusterRenderer<Problem> {
         super(context, map, clusterManager);
     }
 
-
     /**
      * Called before the marker for a ClusterItem is added to the map.
      */
