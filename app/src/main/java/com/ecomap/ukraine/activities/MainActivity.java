@@ -62,4 +62,5 @@ public class MainActivity extends ActionBarActivity {
                 .replace(R.id.container, FragmentEcoMap.newInstance())
                 .commit();
     }
+
 }

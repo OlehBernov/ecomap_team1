@@ -1,6 +1,7 @@
 package com.ecomap.ukraine.activities;
 
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -61,13 +62,19 @@ public class FragmentEcoMap extends android.support.v4.app.Fragment implements P
     }
 
     @Override
+    public void onDestroy() {
+        super.onDestroy();
+        manager.removeProblemListener(this);
+    }
+
+    @Override
     public void updateAllProblems(List<Problem> problems) {
         putAllProblemsOnMap(problems);
     }
 
     @Override
     public void updateProblemDetails(Details details) {
-
+        //TODO implement
     }
 
     private void setUpMapIfNeeded()  {
@@ -86,21 +93,23 @@ public class FragmentEcoMap extends android.support.v4.app.Fragment implements P
         settings.setMyLocationButtonEnabled(true);
         manager.getAllProblems();
 
-        CameraPosition cameraPosition = new CameraPosition.Builder()
-                .target(new LatLng(INITIAL_POSITION.latitude, INITIAL_POSITION.longitude)).zoom(5).build();
+        CameraPosition cameraPosition = new CameraPosition
+                .Builder()
+                .target(new LatLng(INITIAL_POSITION.latitude, INITIAL_POSITION.longitude))
+                .zoom(5)
+                .build();
         CameraUpdate cameraUpdate = CameraUpdateFactory.newCameraPosition(cameraPosition);
         googleMap.moveCamera(cameraUpdate);
     }
 
     public void putAllProblemsOnMap(List<Problem> problems) {
-        mClusterManager = new ClusterManager<Problem>(getActivity().getApplicationContext(), googleMap);
+        mClusterManager = new ClusterManager<>(getActivity().getApplicationContext(), googleMap);
         googleMap.setOnCameraChangeListener(mClusterManager);
         googleMap.setOnMarkerClickListener(mClusterManager);
         for (Problem problem : problems) {
             mClusterManager.setRenderer(new IconRenderer(getActivity().getApplicationContext(), googleMap, mClusterManager));
             mClusterManager.addItem(problem);
         }
-
     }
 
 }
