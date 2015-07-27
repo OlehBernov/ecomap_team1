@@ -17,6 +17,13 @@ import com.google.maps.android.clustering.view.DefaultClusterRenderer;
  */
 public class IconRenderer extends DefaultClusterRenderer<Problem> {
 
+
+    /**
+     * Constructor
+     * @param context Appliccation context
+     * @param map google map
+     * @param clusterManager cluster manager
+     */
     public IconRenderer(Context context, GoogleMap map,
                            ClusterManager<Problem> clusterManager) {
         super(context, map, clusterManager);
@@ -29,7 +36,9 @@ public class IconRenderer extends DefaultClusterRenderer<Problem> {
     protected void onBeforeClusterItemRendered(Problem problem, MarkerOptions markerOptions) {
         BitmapDescriptor icon = BitmapDescriptorFactory.fromResource(this.getResourceIdForMarker(
                 problem.getProblemTypesId()));
-        markerOptions.icon(icon);
+        markerOptions.icon(icon)
+                .title(problem.getTitle())
+                .anchor(0.5f,1f);
         super.onBeforeClusterItemRendered(problem, markerOptions);
     }
 

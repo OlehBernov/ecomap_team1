@@ -7,6 +7,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.ecomap.ukraine.R;
+import com.google.android.gms.maps.GoogleMap;
 
 /**
  * Created by Andriy on 01.07.2015.
@@ -27,6 +28,7 @@ public class MainActivity extends ActionBarActivity {
         setContentView(R.layout.activity_main);
         this.addMapFragment();
     }
+
 
     /**
      * Inflate the menu, this adds items to the action bar if it is present.
