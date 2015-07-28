@@ -99,6 +99,9 @@ public class MainActivity extends ActionBarActivity {
         return true;
     }
 
+    /**
+     * Add google map
+     */
     private void addMapFragment() {
         FragmentManager fragmentManager = getSupportFragmentManager();
         fragmentManager.beginTransaction()
