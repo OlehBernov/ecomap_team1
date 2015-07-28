@@ -38,7 +38,6 @@ public class MainActivity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-
         setupNavigationView();
         setupToolbar();
         setupDrawer();
@@ -49,31 +48,10 @@ public class MainActivity extends ActionBarActivity {
     private void setupDrawer() {
         drawerToggle = new ActionBarDrawerToggle(this, drawerLayout,
                 R.string.drawer_open,
-                R.string.drawer_close) {
-            /**
-             * Is performed when the menu opens.
-             * @param drawerView
-             *                  sets on toggle button.
-             */
-            public void onDrawerOpened(final View drawerView) {
-                super.onDrawerOpened(drawerView);
-                getSupportActionBar().setTitle("Menu");
-                invalidateOptionsMenu();
-            }
+                R.string.drawer_close);
 
-            /**
-             * Is performed when the menu closes.
-             * @param view
-             *            sets on toggle button.
-             */
-            public void onDrawerClosed(final View view) {
-                super.onDrawerClosed(view);
-                getSupportActionBar().setTitle("Ecomap Ukraine");
-                invalidateOptionsMenu();
-            }
-        };
-        drawerToggle.setDrawerIndicatorEnabled(true);
-        drawerLayout.setDrawerListener(drawerToggle);
+    //    drawerToggle.setDrawerIndicatorEnabled(true);
+    //    drawerLayout.setDrawerListener(drawerToggle);
     }
 
     @Override
