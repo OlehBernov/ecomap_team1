@@ -37,18 +37,43 @@ public class MainActivity extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        this.addMapFragment();
+
 
         setupNavigationView();
         setupToolbar();
+        setupDrawer();
 
-        drawerToggle = new ActionBarDrawerToggle(
-                this,                  /* host Activity */
-                drawerLayout,         /* DrawerLayout object */
-                null,  /* nav drawer icon to replace 'Up' caret */
-                0,  /* "open drawer" description */
-                0  /* "close drawer" description */
-        ) ;
+        this.addMapFragment();
+    }
+
+    private void setupDrawer() {
+        drawerToggle = new ActionBarDrawerToggle(this, drawerLayout,
+                R.string.drawer_open,
+                R.string.drawer_close) {
+            /**
+             * Is performed when the menu opens.
+             * @param drawerView
+             *                  sets on toggle button.
+             */
+            public void onDrawerOpened(final View drawerView) {
+                super.onDrawerOpened(drawerView);
+                getSupportActionBar().setTitle("Menu");
+                invalidateOptionsMenu();
+            }
+
+            /**
+             * Is performed when the menu closes.
+             * @param view
+             *            sets on toggle button.
+             */
+            public void onDrawerClosed(final View view) {
+                super.onDrawerClosed(view);
+                getSupportActionBar().setTitle("Ecomap Ukraine");
+                invalidateOptionsMenu();
+            }
+        };
+        drawerToggle.setDrawerIndicatorEnabled(true);
+        drawerLayout.setDrawerListener(drawerToggle);
     }
 
     @Override
@@ -81,7 +106,7 @@ public class MainActivity extends ActionBarActivity {
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         final ActionBar ab = getSupportActionBar();
-        ab.setHomeAsUpIndicator(R.drawable.navigation);
+   //     ab.setHomeAsUpIndicator(R.drawable.navigation);
         ab.setDisplayHomeAsUpEnabled(true);
     }
 
