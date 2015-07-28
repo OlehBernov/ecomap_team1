@@ -160,7 +160,7 @@ public class FragmentEcoMap extends android.support.v4.app.Fragment implements P
         googleMap.setOnCameraChangeListener(mClusterManager);
         googleMap.setOnMarkerClickListener(mClusterManager);
         for (Problem problem : problems) {
-            mClusterManager.setRenderer(new IconRenderer(getActivity().getApplicationContext(), googleMap, mClusterManager));
+            mClusterManager.setRenderer(new IconRenderer(getActivity(), googleMap, mClusterManager));
             mClusterManager.addItem(problem);
         }
     }
