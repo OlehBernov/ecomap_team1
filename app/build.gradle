@@ -26,4 +26,5 @@ dependencies {
     compile 'com.google.maps.android:android-maps-utils:0.3+'
     compile 'com.github.castorflex.smoothprogressbar:library:1.0.0'
     compile files('libs/volley.jar')
+	compile 'com.android.support:design:22.2.0'
 }

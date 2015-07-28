@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="window_background">#CC000000</color>
+
+    <color name="my">#dd2b21ff</color>
+    <color name="my_divider">#B6B6B6</color>
+</resources>
