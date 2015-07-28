@@ -3,8 +3,6 @@ package com.ecomap.ukraine.activities;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -37,12 +35,13 @@ public class FragmentEcoMap extends android.support.v4.app.Fragment implements P
     private static final  LatLng INITIAL_POSITION = new LatLng(48.4 , 31.2);
     private static final  float INITIAL_ZOOM = 5;
     private ClusterManager<Problem> mClusterManager;
+
     /**
      * The name of the preference to retrieve.
      */
     private static final String POSITION = "POSITION";
     private static final String LATITUDE = "latitude";
-    private static final String LONGTITUDE = "longtitude";
+    private static final String LONGITUDE = "longitude";
     private static final String ZOOM = "zoom";
 
     public static FragmentEcoMap newInstance() {
@@ -73,15 +72,12 @@ public class FragmentEcoMap extends android.support.v4.app.Fragment implements P
         mMapView = (MapView) rootView.findViewById(R.id.mapView);
         mMapView.onCreate(savedInstanceState);
         mMapView.onResume();
-            MapsInitializer.initialize(getActivity().getApplicationContext());
-            this.setUpMapIfNeeded();
 
-
+        MapsInitializer.initialize(getActivity().getApplicationContext());
+        this.setUpMapIfNeeded();
 
         return rootView;
     }
-
-
 
     /**
      * Called when the fragment is no longer in use.
@@ -92,7 +88,7 @@ public class FragmentEcoMap extends android.support.v4.app.Fragment implements P
         manager.removeProblemListener(this);
         SharedPreferences.Editor editor = getActivity().getSharedPreferences(FragmentEcoMap.POSITION, Context.MODE_PRIVATE).edit();
         editor.putFloat(LATITUDE, (float)googleMap.getCameraPosition().target.latitude);
-        editor.putFloat(LONGTITUDE, (float)googleMap.getCameraPosition().target.longitude);
+        editor.putFloat(LONGITUDE, (float)googleMap.getCameraPosition().target.longitude);
         editor.putFloat(ZOOM, (float)googleMap.getCameraPosition().zoom);
         editor.apply();
 
@@ -115,6 +111,7 @@ public class FragmentEcoMap extends android.support.v4.app.Fragment implements P
     public void updateProblemDetails(Details details) {
         //TODO implement
     }
+
     /**
      * Sets up the map if it is possible to do so (i.e., the Google Play services APK is correctly
      * installed) and the map has not already been instantiated.
@@ -144,7 +141,7 @@ public class FragmentEcoMap extends android.support.v4.app.Fragment implements P
                 .target(new LatLng(getActivity().getSharedPreferences(POSITION,
                         Context.MODE_PRIVATE).getFloat(LATITUDE,(float)INITIAL_POSITION.latitude),
                         getActivity().getSharedPreferences(POSITION,
-                                Context.MODE_PRIVATE).getFloat(LONGTITUDE, (float)INITIAL_POSITION.longitude)))
+                                Context.MODE_PRIVATE).getFloat(LONGITUDE, (float)INITIAL_POSITION.longitude)))
                 .zoom(getActivity().getSharedPreferences(POSITION, Context.MODE_PRIVATE).getFloat(ZOOM, INITIAL_ZOOM))
                 .build();
         CameraUpdate cameraUpdate = CameraUpdateFactory.newCameraPosition(cameraPosition);

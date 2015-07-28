@@ -107,8 +107,8 @@ public class DataManager implements ProblemListenersNotifier, RequestReceiver {
     public void setAllProblemsRequestResult(List<Problem> problems) {
         if (problems != null) {
             dbHelper.updateAllProblems(problems);
+            saveUpdateTime();
         }
-        saveUpdateTime();
 
         getAllProblems();
     }

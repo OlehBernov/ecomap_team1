@@ -147,8 +147,8 @@ public class DBHelper extends SQLiteOpenHelper {
                   DBContract.Photos.PROBLEM_ID + " = ?",
                   new String[]{"" + problemId});
         db.delete(DBContract.ProblemActivity.TABLE_NAME,
-                  DBContract.ProblemActivity.PROBLEM_ID + " = ?",
-                  new String[]{"" + problemId});
+                DBContract.ProblemActivity.PROBLEM_ID + " = ?",
+                new String[]{"" + problemId});
         setProblemDetails(details);
         db.close();
     }
@@ -161,8 +161,10 @@ public class DBHelper extends SQLiteOpenHelper {
     public List<Problem> getAllProblems () {
         SQLiteDatabase db = this.getWritableDatabase();
         Cursor cursor = db.query(DBContract.Problems.TABLE_NAME, null, null, null, null, null, null);
-        List<Problem> problems;
-        problems = buildAllProblemList(cursor);
+        List<Problem> problems = null;
+        if (cursor.moveToFirst()) {
+            problems = buildAllProblemList(cursor);
+        }
         db.close();
         return problems;
     }
@@ -170,15 +172,14 @@ public class DBHelper extends SQLiteOpenHelper {
     /**
      * Sets brief information about all problems into the database.
      *
-     * @param requestResult server response to all problems request.
+     * @param problems server response to all problems request.
      */
-    public void setAllProblems(Object requestResult){
-        if (requestResult == null) {
+    public void setAllProblems(List<Problem> problems){
+        if (problems == null) {
             return;
         }
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
-        List<Problem> problems = (ArrayList)requestResult;
         for (Problem problem : problems) {
             contentValues.put(DBContract.Problems.ID, problem.getProblemId());
             contentValues.put(DBContract.Problems.PROBLEM_STATUS, problem.getStatusId());
@@ -217,13 +218,14 @@ public class DBHelper extends SQLiteOpenHelper {
         String[] selectionArgs = new String[]{String.valueOf(problemId)};
         Cursor cursor = db.query(DBContract.Details.TABLE_NAME, projection, selection,
                 selectionArgs, null, null, null);
+
+        Details details = null;
+        if (cursor.moveToFirst()) {
+            details = buildProblemDetails(problemId, cursor, problemActivities, photos);
+        }
         db.close();
 
-        if (cursor == null) {
-            return null;
-        }
-
-        return buildProblemDetails(problemId, cursor, problemActivities, photos);
+        return details;
     }
 
     /**
@@ -248,12 +250,13 @@ public class DBHelper extends SQLiteOpenHelper {
         values.put(DBContract.Details.LAST_UPDATE, details.getLastUpdate());
 
         db.insert(DBContract.Details.TABLE_NAME, null, values);
-        db.close();
 
         List<ProblemActivity> problemActivities = details.getProblemActivities();
         setProblemActivities(problemActivities);
         Map<Photo, Bitmap> photos = details.getPhotos();
         setPhotos(photos);
+
+        db.close();
     }
 
     /**
@@ -326,11 +329,11 @@ public class DBHelper extends SQLiteOpenHelper {
                 selection, selectionArgs, null, null, null);
         db.close();
 
-        if (cursor == null) {
+        if (cursor.moveToFirst()) {
+            return cursor.getString(cursor.getColumnIndex(DBContract.Details.LAST_UPDATE));
+        } else {
             return null;
         }
-        cursor.moveToFirst();
-        return cursor.getString(cursor.getColumnIndex(DBContract.Details.LAST_UPDATE));
     }
 
     /**
@@ -356,13 +359,14 @@ public class DBHelper extends SQLiteOpenHelper {
 
         Cursor cursor = db.query(DBContract.Photos.TABLE_NAME, projection, selection,
                                  selectionArgs, null, null, null);
+
+        Map<Photo, Bitmap> map = null;
+        if (cursor.moveToFirst()) {
+            map = buildPhotosMap(problemId, cursor);
+        }
         db.close();
 
-        if (cursor == null) {
-            return null;
-        }
-
-        return buildPhotosMap(problemId, cursor);
+        return map;
     }
 
     private Bitmap getBitmapByName(String fileName) {
@@ -411,13 +415,14 @@ public class DBHelper extends SQLiteOpenHelper {
 
         Cursor cursor = db.query(DBContract.ProblemActivity.TABLE_NAME, projection,
                                  selection, selectionArgs, null, null, null);
+
+        List<ProblemActivity> problemActivities = null;
+        if (cursor.moveToFirst()) {
+            problemActivities = buildProblemActivitiesList(problemId, cursor);
+        }
         db.close();
 
-        if (cursor == null) {
-            return null;
-        }
-
-        return buildProblemActivitiesList(problemId, cursor);
+        return problemActivities;
     }
 
     /**
@@ -462,7 +467,6 @@ public class DBHelper extends SQLiteOpenHelper {
      */
     private List<Problem> buildAllProblemList(Cursor cursor) {
         List<Problem> problems = new ArrayList<>();
-        cursor.moveToFirst();
         for (int i = 0; i < cursor.getCount(); i++) {
             Problem problem = new Problem(
                 cursor.getInt(cursor.getColumnIndex(DBContract.Problems.ID)),
@@ -492,7 +496,6 @@ public class DBHelper extends SQLiteOpenHelper {
     private Details buildProblemDetails(int problemId, Cursor cursor,
                                         List<ProblemActivity> problemActivities,
                                         Map<Photo, Bitmap> photos) {
-        cursor.moveToFirst();
         Details details = new Details(
                 problemId,
                 cursor.getInt(cursor.getColumnIndex(DBContract.Details.SEVERITY)),
@@ -519,7 +522,6 @@ public class DBHelper extends SQLiteOpenHelper {
      */
     private Map<Photo, Bitmap> buildPhotosMap(int problemId, Cursor cursor) {
         Map<Photo, Bitmap> photos = new HashMap<>();
-        cursor.moveToFirst();
         for (int i = 0; i < cursor.getCount(); i++) {
             Photo photo = new Photo(
                     problemId,
@@ -548,7 +550,6 @@ public class DBHelper extends SQLiteOpenHelper {
     private List<ProblemActivity> buildProblemActivitiesList(int problemId,
                                                              Cursor cursor) {
         List<ProblemActivity> problemActivities = new ArrayList<>();
-        cursor.moveToFirst();
         for (int i = 0; i < cursor.getCount(); i++) {
             ProblemActivity problemActivity = new ProblemActivity(
                     problemId,
