@@ -12,8 +12,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.view.Window;
+
 
 import com.ecomap.ukraine.R;
 
@@ -28,7 +27,7 @@ public class MainActivity extends AppCompatActivity {
      * Drawer toggle.
      */
     private ActionBarDrawerToggle drawerToggle;
-
+    DrawerLayout drawerLayout2;
     /**
      * Initialize activity
      * @param savedInstanceState Contains the data it most recently
@@ -45,6 +44,8 @@ public class MainActivity extends AppCompatActivity {
                                                  R.string.drawer_open,
                                                  R.string.drawer_close);
 
+        drawerLayout2 = (DrawerLayout) findViewById(R.id.drawer2);
+        drawerLayout2.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
         this.addMapFragment();
     }
 
@@ -114,4 +115,16 @@ public class MainActivity extends AppCompatActivity {
                 .commit();
     }
 
+    boolean i = false;
+
+    public void showFilter(MenuItem item) {
+        drawerLayout2 = (DrawerLayout) findViewById(R.id.drawer2);
+        if (!i) {
+            drawerLayout2.openDrawer(GravityCompat.END);
+            i = true;
+        } else {
+            drawerLayout2.closeDrawer(GravityCompat.END);
+            i = false;
+        }
+    }
 }

@@ -4,8 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <RelativeLayout
-        xmlns:tools="http://schemas.android.com/tools"
+    <RelativeLayout xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:context="com.hmkcode.app.MainActivity">
@@ -23,12 +22,31 @@
                 android:background="#226666"
                 android:title="@string/app_name" />
 
-            <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                android:id="@+id/container"
+            <android.support.v4.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:app="http://schemas.android.com/apk/res-auto"
+                android:id="@+id/drawer2"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
 
-            </FrameLayout>
+                <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                    android:id="@+id/container"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                </FrameLayout>
+
+                <android.support.design.widget.NavigationView
+                    android:id="@+id/navigation2"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="end"
+                    android:layout_marginLeft="-64dp"
+                    android:background="#D9D9D9"
+                    app:itemIconTint="#333"
+                    app:itemTextColor="#333"
+                    app:menu="@menu/navigation_drawer_items" />
+
+            </android.support.v4.widget.DrawerLayout>
 
         </LinearLayout>
 
@@ -45,17 +63,5 @@
         app:itemTextColor="#333"
         app:menu="@menu/navigation_drawer_items" />
 
-    <android.support.design.widget.NavigationView
-        android:id="@+id/navigation2"
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:layout_gravity="right"
-        android:background="#D9D9D9"
-        app:headerLayout="@layout/header"
-        app:itemIconTint="#333"
-        app:itemTextColor="#333"
-        app:menu="@menu/navigation_drawer_items" />
-
 </android.support.v4.widget.DrawerLayout>
-
 
