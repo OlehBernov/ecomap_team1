@@ -4,6 +4,7 @@ package com.ecomap.ukraine.updating.serverclient;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.util.Log;
 
 import com.android.volley.Request;
 import com.android.volley.Response;
@@ -70,6 +71,7 @@ public class LoadingClient {
                             requestReceiver.setAllProblemsRequestResult(
                                     new JSONParser().parseBriefProblems(response));
                         } catch (JSONException e) {
+                            Log.e("exception", "JSONException in LoadingClient");
                             requestReceiver.setAllProblemsRequestResult(null);
                         }
                     }
@@ -98,6 +100,7 @@ public class LoadingClient {
                             Details details = new JSONParser().parseDetailedProblem(response);
                             getPhotos(details);
                         } catch (JSONException e) {
+                            Log.e("exception", "JSONException in LoadingClient");
                             requestReceiver.setProblemDetailsRequestResult(null);
                         }
                     }

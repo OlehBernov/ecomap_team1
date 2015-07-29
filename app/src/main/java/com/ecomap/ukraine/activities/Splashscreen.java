@@ -31,8 +31,8 @@ public class Splashscreen extends Activity implements ProblemListener {
     /**
      * Failure loading message
      */
-    private static final String FAILURE_OF_LOADING = "Failed to load. Please ensure you`re connected " +
-            "to the Internet and try again.";
+    private static final String FAILURE_OF_LOADING = "Failed to load. Please " +
+            " ensure you`re connected to the Internet and try again.";
 
     private static final String COMPLETED = "Completed";
 
@@ -77,6 +77,9 @@ public class Splashscreen extends Activity implements ProblemListener {
      */
     private SmoothProgressBar smoothProgressBar;
 
+    /**
+     * Describes loading progress.
+     */
     private TextView loadingProcess;
 
     /**
@@ -162,7 +165,5 @@ public class Splashscreen extends Activity implements ProblemListener {
         AlertDialog alert = builder.create();
         alert.show();
     }
-
-
 
 }

@@ -50,7 +50,7 @@ public class JSONParser {
             throw new JSONException(NULL_ARGUMENT);
         }
 
-        List<Problem> briefProblems = new ArrayList<Problem>();
+        List<Problem> briefProblems = new ArrayList<>();
         JSONArray problemsArray = new JSONArray(briefProblemsJson);
         for (int i = 0; i < problemsArray.length(); i++) {
             JSONObject jsonProblem = problemsArray.getJSONObject(i);
