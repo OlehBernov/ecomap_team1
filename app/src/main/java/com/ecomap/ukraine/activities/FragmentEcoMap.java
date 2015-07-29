@@ -29,12 +29,12 @@ import java.util.List;
  */
 public class FragmentEcoMap extends android.support.v4.app.Fragment implements ProblemListener {
 
-    private MapView mMapView;
+    private MapView mapView;
     private GoogleMap googleMap;
-    private DataManager manager = DataManager.getInstance();
-    private static final  LatLng INITIAL_POSITION = new LatLng(48.4 , 31.2);
-    private static final  float INITIAL_ZOOM = 5;
-    private ClusterManager<Problem> mClusterManager;
+    private DataManager manager;
+    private static final LatLng INITIAL_POSITION = new LatLng(48.4 , 31.2);
+    private static final float INITIAL_ZOOM = 5;
+    private ClusterManager<Problem> clusterManager;
 
     /**
      * The name of the preference to retrieve.
@@ -66,12 +66,13 @@ public class FragmentEcoMap extends android.support.v4.app.Fragment implements P
     @Override
     public View onCreateView  (LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        manager = DataManager.getInstance(getActivity().getApplicationContext());
         manager.registerProblemListener(this);
 
         View rootView = inflater.inflate(R.layout.fragement_map, container, false);
-        mMapView = (MapView) rootView.findViewById(R.id.mapView);
-        mMapView.onCreate(savedInstanceState);
-        mMapView.onResume();
+        mapView = (MapView) rootView.findViewById(R.id.mapView);
+        mapView.onCreate(savedInstanceState);
+        mapView.onResume();
 
         MapsInitializer.initialize(getActivity().getApplicationContext());
         this.setUpMapIfNeeded();
@@ -87,9 +88,9 @@ public class FragmentEcoMap extends android.support.v4.app.Fragment implements P
         super.onDestroy();
         manager.removeProblemListener(this);
         SharedPreferences.Editor editor = getActivity().getSharedPreferences(FragmentEcoMap.POSITION, Context.MODE_PRIVATE).edit();
-        editor.putFloat(LATITUDE, (float)googleMap.getCameraPosition().target.latitude);
-        editor.putFloat(LONGITUDE, (float)googleMap.getCameraPosition().target.longitude);
-        editor.putFloat(ZOOM, (float)googleMap.getCameraPosition().zoom);
+        editor.putFloat(LATITUDE, (float) googleMap.getCameraPosition().target.latitude);
+        editor.putFloat(LONGITUDE, (float) googleMap.getCameraPosition().target.longitude);
+        editor.putFloat(ZOOM, (float) googleMap.getCameraPosition().zoom);
         editor.apply();
 
     }
@@ -113,12 +114,26 @@ public class FragmentEcoMap extends android.support.v4.app.Fragment implements P
     }
 
     /**
+     * Puts all problems on map
+     * @param problems list of problems
+     */
+    public void putAllProblemsOnMap(List<Problem> problems) {
+        clusterManager = new ClusterManager<>(getActivity().getApplicationContext(), googleMap);
+        googleMap.setOnCameraChangeListener(clusterManager);
+        googleMap.setOnMarkerClickListener(clusterManager);
+        for (Problem problem : problems) {
+            clusterManager.setRenderer(new IconRenderer(getActivity(), googleMap, clusterManager));
+            clusterManager.addItem(problem);
+        }
+    }
+
+    /**
      * Sets up the map if it is possible to do so (i.e., the Google Play services APK is correctly
      * installed) and the map has not already been instantiated.
      */
     private void setUpMapIfNeeded()  {
         if (googleMap == null) {
-            googleMap = mMapView.getMap();
+            googleMap = mapView.getMap();
             if (googleMap != null) {
                 setUpMap();
             }
@@ -146,20 +161,6 @@ public class FragmentEcoMap extends android.support.v4.app.Fragment implements P
                 .build();
         CameraUpdate cameraUpdate = CameraUpdateFactory.newCameraPosition(cameraPosition);
         googleMap.moveCamera(cameraUpdate);
-    }
-
-    /**
-     * Puts all problems on map
-     * @param problems list of problems
-     */
-    public void putAllProblemsOnMap(List<Problem> problems) {
-        mClusterManager = new ClusterManager<>(getActivity().getApplicationContext(), googleMap);
-        googleMap.setOnCameraChangeListener(mClusterManager);
-        googleMap.setOnMarkerClickListener(mClusterManager);
-        for (Problem problem : problems) {
-            mClusterManager.setRenderer(new IconRenderer(getActivity(), googleMap, mClusterManager));
-            mClusterManager.addItem(problem);
-        }
     }
 
 }

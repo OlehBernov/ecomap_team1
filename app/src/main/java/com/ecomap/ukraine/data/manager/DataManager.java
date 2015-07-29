@@ -33,7 +33,7 @@ public class DataManager implements ProblemListenersNotifier, RequestReceiver {
     /**
      * Holds the Singleton global instance of DataManager.
      */
-    private static DataManager instance = new DataManager();
+    private static DataManager instance;
 
     /**
      * Set of problem listeners.
@@ -58,14 +58,7 @@ public class DataManager implements ProblemListenersNotifier, RequestReceiver {
     /**
      * Data manager constructor.
      */
-    private DataManager() {}
-
-    /**
-     * Initialize loading client and database helper
-     * and prevents this classes from being instantiated.
-     * @param context context of the application.
-     */
-    public void setContext(Context context) {
+    private DataManager(Context context) {
         this.context = context;
         dbHelper = new DBHelper(context);
         loadingClient = new LoadingClient(this, context);
@@ -74,7 +67,10 @@ public class DataManager implements ProblemListenersNotifier, RequestReceiver {
     /**
      * Returns Singleton instance of DataManger
      */
-    public static DataManager getInstance() {
+    public static DataManager getInstance(Context context) {
+        if (instance == null) {
+            instance = new DataManager(context);
+        }
         return instance;
     }
 
