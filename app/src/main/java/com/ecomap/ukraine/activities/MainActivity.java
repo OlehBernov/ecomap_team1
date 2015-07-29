@@ -5,7 +5,6 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
@@ -24,12 +23,30 @@ import com.ecomap.ukraine.R;
 public class MainActivity extends AppCompatActivity {
 
     /**
+     * Name of the filter window.
+     */
+    private static final String FILTER = "Filter";
+
+    /**
+     * Name of map window.
+     */
+    private static final String ECOMAP = "Ecomap Ukraine";
+
+    /**
      * Drawer toggle.
      */
     private ActionBarDrawerToggle drawerToggle;
-    DrawerLayout drawerLayout2;
 
-    Toolbar toolbar;
+    /**
+     * Filter layout.
+     */
+    private DrawerLayout filterLayout;
+
+    /**
+     * Application toolbar.
+     */
+    private Toolbar toolbar;
+
     /**
      * Initialize activity
      * @param savedInstanceState Contains the data it most recently
@@ -46,8 +63,8 @@ public class MainActivity extends AppCompatActivity {
                                                  R.string.drawer_open,
                                                  R.string.drawer_close);
 
-        drawerLayout2 = (DrawerLayout) findViewById(R.id.drawer2);
-        drawerLayout2.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
+        filterLayout = (DrawerLayout) findViewById(R.id.drawer2);
+        filterLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
         this.addMapFragment();
     }
 
@@ -87,6 +104,17 @@ public class MainActivity extends AppCompatActivity {
     }
 
     /**
+     * Inflate the menu, this adds items to the action bar if it is present.
+     * @param menu activity menu
+     * @return result of action
+     */
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_main, menu);
+        return true;
+    }
+
+    /**
      * Sets application toolbar.
      */
     private void setupToolbar(){
@@ -97,14 +125,19 @@ public class MainActivity extends AppCompatActivity {
     }
 
     /**
-     * Inflate the menu, this adds items to the action bar if it is present.
-     * @param menu activity menu
-     * @return result of action
+     * Controls the position of the filter window on the screen.
+     *
+     * @param item menu item.
      */
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_main, menu);
-        return true;
+    public void showFilter(MenuItem item) {
+        filterLayout = (DrawerLayout) findViewById(R.id.drawer2);
+        if (!filterLayout.isDrawerOpen(GravityCompat.END)) {
+            filterLayout.openDrawer(GravityCompat.END);
+            toolbar.setTitle(FILTER);
+        } else {
+            filterLayout.closeDrawer(GravityCompat.END);
+            toolbar.setTitle(ECOMAP);
+        }
     }
 
     /**
@@ -117,18 +150,4 @@ public class MainActivity extends AppCompatActivity {
                 .commit();
     }
 
-    boolean i = false;
-
-    public void showFilter(MenuItem item) {
-        drawerLayout2 = (DrawerLayout) findViewById(R.id.drawer2);
-        if (!i) {
-            drawerLayout2.openDrawer(GravityCompat.END);
-            toolbar.setTitle("Filter");
-            i = true;
-        } else {
-            drawerLayout2.closeDrawer(GravityCompat.END);
-            toolbar.setTitle("Ecomap Ukraine");
-            i = false;
-        }
-    }
 }

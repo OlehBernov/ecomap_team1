@@ -121,7 +121,7 @@ public class JSONParser {
                 problemJsonObject.getString(JSONFields.TITLE),
                 problemJsonObject.getString(JSONFields.PROBLEM_DATE),
                 problemJsonObject.getDouble(JSONFields.LATITUDE),
-                problemJsonObject.getDouble(JSONFields.LONGTITUDE)
+                problemJsonObject.getDouble(JSONFields.LONGITUDE)
         );
 
         return problem;

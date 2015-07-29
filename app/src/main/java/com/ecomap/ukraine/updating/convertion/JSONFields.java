@@ -5,7 +5,7 @@ package com.ecomap.ukraine.updating.convertion;
  *
  * @author Kyrychenko Oleksandr
  */
-public class JSONFields {
+class JSONFields {
 
     /**
      * Problem id.
@@ -45,8 +45,7 @@ public class JSONFields {
     /**
      * Longtitude of problem localization.
      */
-    public static final String LONGTITUDE = "Longtitude";
-
+    public static final String LONGITUDE = "Longtitude";
 
     /**
      * Description of the problem.
@@ -104,7 +103,6 @@ public class JSONFields {
      */
     public static final String USER_NAME = "userName";
 
-
     /**
      * Id of user, which added a photo.
      */
@@ -124,7 +122,6 @@ public class JSONFields {
      * Photo description.
      */
     public static final String PHOTO_DESCRIPTION = "Description";
-
 
     /**
      * Position of problem details in JSON array.
