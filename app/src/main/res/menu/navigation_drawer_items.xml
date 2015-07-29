@@ -5,17 +5,17 @@
     <group android:checkableBehavior="all">
         <item
             android:id="@+id/navigation_item_1"
-            android:icon="@drawable/type1"
-            android:title="Test"/>
+            android:icon="@drawable/item_type"
+            android:title="Sign up"/>
         <item
             android:id="@+id/navigation_item_2"
-            android:icon="@drawable/type1"
-            android:title="Test"/>
+            android:icon="@drawable/item_type"
+            android:title="Log in"/>
 
         <item
             android:id="@+id/navigation_item_3"
-            android:icon="@drawable/type1"
-            android:title="Test"/>
+            android:icon="@drawable/item_type"
+            android:title="Log out"/>
     </group>
 
 </menu>

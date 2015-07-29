@@ -43,8 +43,87 @@
                     android:layout_marginLeft="-64dp"
                     android:background="#D9D9D9"
                     app:itemIconTint="#333"
-                    app:itemTextColor="#333"
-                    app:menu="@menu/navigation_drawer_items" />
+                    app:itemTextColor="#333">
+
+                    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                        android:orientation="vertical" android:layout_width="match_parent"
+                        android:layout_height="match_parent">
+
+                        <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent">
+
+                            <CheckBox
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Problem type"
+                                android:textSize="18dp"
+                                android:id="@+id/checkBox"
+                                android:textColor="#AA8339"
+                                android:layout_marginLeft="80dp"
+                                android:layout_marginStart="80dp"
+                                android:layout_marginTop="40dp"
+                                android:layout_alignParentTop="true"
+                                android:layout_alignParentLeft="true"
+                                android:layout_alignParentStart="true" />
+
+                            <CheckBox
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:textSize="18dp"
+                                android:textColor="#AA8339"
+                                android:text="Problem type"
+                                android:id="@+id/checkBox2"
+                                android:layout_below="@+id/checkBox3"
+                                android:layout_alignLeft="@+id/checkBox3"
+                                android:layout_alignStart="@+id/checkBox3" />
+
+                            <CheckBox
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:textSize="18dp"
+                                android:text="Problem type"
+                                android:textColor="#AA8339"
+                                android:id="@+id/checkBox3"
+                                android:layout_below="@+id/checkBox"
+                                android:layout_alignLeft="@+id/checkBox"
+                                android:layout_alignStart="@+id/checkBox" />
+
+                            <ImageView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:id="@+id/imageView6"
+                                android:src="@drawable/type3"
+                                android:layout_alignTop="@+id/checkBox"
+                                android:layout_alignLeft="@+id/imageView8"
+                                android:layout_alignStart="@+id/imageView8"
+                                android:layout_above="@+id/imageView8"
+                                android:layout_toLeftOf="@+id/checkBox3"
+                                android:layout_toStartOf="@+id/checkBox3" />
+
+                            <ImageView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:id="@+id/imageView7"
+                                android:src="@drawable/type2"
+                                android:layout_alignBottom="@+id/checkBox2"
+                                android:layout_toLeftOf="@+id/checkBox2"
+                                android:layout_alignTop="@+id/checkBox2" />
+
+                            <ImageView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:id="@+id/imageView8"
+                                android:src="@drawable/type1"
+                                android:layout_above="@+id/checkBox2"
+                                android:layout_below="@+id/checkBox"
+                                android:layout_alignLeft="@+id/imageView7"
+                                android:layout_alignStart="@+id/imageView7" />
+
+                        </RelativeLayout>
+                    </LinearLayout>
+
+                </android.support.design.widget.NavigationView>
 
             </android.support.v4.widget.DrawerLayout>
 

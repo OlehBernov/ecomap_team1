@@ -28,6 +28,8 @@ public class MainActivity extends AppCompatActivity {
      */
     private ActionBarDrawerToggle drawerToggle;
     DrawerLayout drawerLayout2;
+
+    Toolbar toolbar;
     /**
      * Initialize activity
      * @param savedInstanceState Contains the data it most recently
@@ -88,7 +90,7 @@ public class MainActivity extends AppCompatActivity {
      * Sets application toolbar.
      */
     private void setupToolbar(){
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         final ActionBar ab = getSupportActionBar();
         ab.setDisplayHomeAsUpEnabled(true);
@@ -121,9 +123,11 @@ public class MainActivity extends AppCompatActivity {
         drawerLayout2 = (DrawerLayout) findViewById(R.id.drawer2);
         if (!i) {
             drawerLayout2.openDrawer(GravityCompat.END);
+            toolbar.setTitle("Filter");
             i = true;
         } else {
             drawerLayout2.closeDrawer(GravityCompat.END);
+            toolbar.setTitle("Ecomap Ukraine");
             i = false;
         }
     }

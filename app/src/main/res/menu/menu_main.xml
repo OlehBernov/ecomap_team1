@@ -8,7 +8,7 @@
         android:orderInCategory="101"
         android:title="@string/filter"
         android:onClick="showFilter"
-        android:icon="@drawable/filter2"
+        android:icon="@drawable/filter5"
         app:showAsAction="ifRoom"/>
 
 </menu>
