@@ -26,6 +26,7 @@ interface ProblemListenersNotifier {
      */
     void removeProblemListener(ProblemListener listener);
 
+
     /**
      * Send to listeners list of all problems.
     */
