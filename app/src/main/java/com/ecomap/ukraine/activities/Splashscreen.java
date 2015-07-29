@@ -6,6 +6,7 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.View;
@@ -51,7 +52,7 @@ public class Splashscreen extends Activity implements ProblemListener {
     /**
      * Data manager instance
      */
-    private  DataManager manager = DataManager.getInstance();;
+    private DataManager manager;
 
     /**
      * Context of activity
@@ -76,7 +77,7 @@ public class Splashscreen extends Activity implements ProblemListener {
      */
     private SmoothProgressBar smoothProgressBar;
 
-    TextView loadingProcess;
+    private TextView loadingProcess;
 
     /**
      * Initialize activity
@@ -95,7 +96,7 @@ public class Splashscreen extends Activity implements ProblemListener {
         context = this.getApplicationContext();
         intent = new Intent(this, MainActivity.class);
 
-        manager.setContext(context);
+        manager = DataManager.getInstance(context);
         manager.registerProblemListener(this);
         manager.getAllProblems();
     }
@@ -161,5 +162,7 @@ public class Splashscreen extends Activity implements ProblemListener {
         AlertDialog alert = builder.create();
         alert.show();
     }
+
+
 
 }

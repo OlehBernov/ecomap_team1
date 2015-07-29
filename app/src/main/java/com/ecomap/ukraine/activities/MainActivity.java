@@ -8,6 +8,7 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -21,12 +22,12 @@ import com.ecomap.ukraine.R;
  *
  * Main activity, represent GUI and provides access to all functional
  */
+public class MainActivity extends AppCompatActivity {
 
-public class MainActivity extends ActionBarActivity {
-
-    DrawerLayout drawerLayout;
-    Toolbar toolbar;
-    ActionBarDrawerToggle drawerToggle;
+    /**
+     * Drawer toggle.
+     */
+    private ActionBarDrawerToggle drawerToggle;
 
     /**
      * Initialize activity
@@ -38,35 +39,41 @@ public class MainActivity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        setupNavigationView();
+        DrawerLayout drawerLayout = (DrawerLayout) findViewById(R.id.drawer);
         setupToolbar();
-        setupDrawer();
+        drawerToggle = new ActionBarDrawerToggle(this, drawerLayout,
+                                                 R.string.drawer_open,
+                                                 R.string.drawer_close);
 
         this.addMapFragment();
     }
 
-    private void setupDrawer() {
-        drawerToggle = new ActionBarDrawerToggle(this, drawerLayout,
-                R.string.drawer_open,
-                R.string.drawer_close);
-
-    //    drawerToggle.setDrawerIndicatorEnabled(true);
-    //    drawerLayout.setDrawerListener(drawerToggle);
-    }
-
+    /**
+     *  Sync the toggle state after onRestoreInstanceState has occurred.
+     *
+     *  @param savedInstanceState saved application state.
+     */
     @Override
     protected void onPostCreate(Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
-        // Sync the toggle state after onRestoreInstanceState has occurred.
         drawerToggle.syncState();
     }
 
+    /**
+     * Sync the toggle state after change application configuration.
+     *
+     * @param newConfig new application configuration.
+     */
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
         drawerToggle.onConfigurationChanged(newConfig);
     }
 
+    /**
+     * Handle action bar items.
+     * @param item menu item.
+     */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (drawerToggle.onOptionsItemSelected(item)) {
@@ -76,15 +83,13 @@ public class MainActivity extends ActionBarActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    private void setupNavigationView(){
-        drawerLayout = (DrawerLayout) findViewById(R.id.drawer);
-    }
-
+    /**
+     * Sets application toolbar.
+     */
     private void setupToolbar(){
-        toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         final ActionBar ab = getSupportActionBar();
-   //     ab.setHomeAsUpIndicator(R.drawable.navigation);
         ab.setDisplayHomeAsUpEnabled(true);
     }
 
@@ -99,6 +104,9 @@ public class MainActivity extends ActionBarActivity {
         return true;
     }
 
+    /**
+     * Adds google map
+     */
     private void addMapFragment() {
         FragmentManager fragmentManager = getSupportFragmentManager();
         fragmentManager.beginTransaction()
