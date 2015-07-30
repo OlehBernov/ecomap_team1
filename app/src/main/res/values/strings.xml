@@ -8,10 +8,24 @@
     <string name="drawer_close">Close navigation drawer</string>
     <string name="action_find_location">action</string>
     <string name="filter">Filter</string>
+
     <string name="ECOMAP">ECOMAP</string>
     <string name="Ukraine">Ukraine</string>
     <string name="Login">Login</string>
     <string name="Sign_up"><u>Sign up</u></string>
     <string name="Sign_in"><u>Sign in</u></string>
     <string name="Skip"><u>Skip</u></string>
+
+    <string name="unsolved">Unsolved</string>
+    <string name="resolved">Resolved</string>
+    <string name="status">Status</string>
+    <string name="other">Other</string>
+    <string name="poaching">Poaching</string>
+    <string name="biodiversity">Threat to biodiversity</string>
+    <string name="water_pollution">Water pollution</string>
+    <string name="illegal_building">Illegal building</string>
+    <string name="rubish_dump">Rubbish dump</string>
+    <string name="deforestation">Deforestation</string>
+    <string name="type">Type</string>
+    <string name="date">Date</string>
 </resources>
