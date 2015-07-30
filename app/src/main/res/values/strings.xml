@@ -8,4 +8,10 @@
     <string name="drawer_close">Close navigation drawer</string>
     <string name="action_find_location">action</string>
     <string name="filter">Filter</string>
+    <string name="ECOMAP">ECOMAP</string>
+    <string name="Ukraine">Ukraine</string>
+    <string name="Login">Login</string>
+    <string name="Sign_up"><u>Sign up</u></string>
+    <string name="Sign_in"><u>Sign in</u></string>
+    <string name="Skip"><u>Skip</u></string>
 </resources>
