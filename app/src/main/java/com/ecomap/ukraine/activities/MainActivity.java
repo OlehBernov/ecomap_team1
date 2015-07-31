@@ -12,7 +12,6 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
-
 import com.ecomap.ukraine.R;
 
 /**
@@ -125,9 +124,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     /**
-     * Controls the position of the filter window on the screen.
+     * Controls the position of the filter7 window on the screen.
      *
-     * @param item menu item.
      */
     public void showFilter(MenuItem item) {
         filterLayout = (DrawerLayout) findViewById(R.id.drawer2);

@@ -5,16 +5,16 @@
     <group android:checkableBehavior="all">
         <item
             android:id="@+id/navigation_item_1"
-            android:icon="@drawable/item_type"
+            android:icon="@drawable/resolved"
             android:title="Sign up"/>
         <item
             android:id="@+id/navigation_item_2"
-            android:icon="@drawable/item_type"
+            android:icon="@drawable/resolved"
             android:title="Log in"/>
 
         <item
             android:id="@+id/navigation_item_3"
-            android:icon="@drawable/item_type"
+            android:icon="@drawable/resolved"
             android:title="Log out"/>
     </group>
 

@@ -3,12 +3,12 @@
     android:icon="@drawable/type2"
     xmlns:tools="http://schemas.android.com/tools" tools:context=".MainActivity">
 
-    <item
+      <item
         android:id="@+id/action_find_location"
         android:orderInCategory="101"
-        android:title="@string/filter"
+        android:title=""
         android:onClick="showFilter"
-        android:icon="@drawable/filter5"
+        android:icon="@drawable/filter8"
         app:showAsAction="ifRoom"/>
 
 </menu>
