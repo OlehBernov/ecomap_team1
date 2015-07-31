@@ -36,7 +36,7 @@ public class LoginScreen extends Activity {
                                            startActivity(intent);
                                        }
                                        });
-                
+
             }
             }
         );
