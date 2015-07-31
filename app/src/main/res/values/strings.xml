@@ -14,4 +14,5 @@
     <string name="Sign_up"><u>Sign up</u></string>
     <string name="Sign_in"><u>Sign in</u></string>
     <string name="Skip"><u>Skip</u></string>
+    <string name="Password">Password</string>
 </resources>

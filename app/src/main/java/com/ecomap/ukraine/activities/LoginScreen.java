@@ -24,14 +24,19 @@ public class LoginScreen extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.login_activity);
-        intent = new Intent(this, Splashscreen.class);
+        intent = new Intent(this, MainActivity.class);
         View skip = findViewById(R.id.skip);
         skip.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                        startActivity(intent);
-
-
+                new Handler().post(new Runnable() {
+                                       @Override
+                                       public void run() {
+                                           onDestroy();
+                                           startActivity(intent);
+                                       }
+                                       });
+                
             }
             }
         );
