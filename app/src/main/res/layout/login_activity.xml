@@ -98,7 +98,7 @@
         android:layout_above="@+id/facebookb"
         android:layout_below="@+id/button"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="5dp"
+        android:layout_marginTop="14dp"
         android:layout_marginBottom="23dp" />
 
     <TextView
