@@ -21,7 +21,6 @@ import android.widget.TextView;
 import com.codetroopers.betterpickers.calendardatepicker.CalendarDatePickerDialog;
 import com.ecomap.ukraine.R;
 import com.ecomap.ukraine.data.manager.DataManager;
-import com.ecomap.ukraine.data.manager.LogOutListener;
 import com.ecomap.ukraine.filter.FilterState;
 import com.ecomap.ukraine.models.User;
 
@@ -33,7 +32,7 @@ import java.util.Date;
  * <p/>
  * Main activity, represent GUI and provides access to all functional
  */
-public class MainActivity extends AppCompatActivity implements LogOutListener {
+public class MainActivity extends AppCompatActivity {
 
     /**
      * Name of the filter window.
@@ -77,6 +76,11 @@ public class MainActivity extends AppCompatActivity implements LogOutListener {
     private DataManager dataManager;
 
     /**
+     * Filter manager instance
+     */
+    private FilterManager fmanager;
+
+    /**
      * Initialize activity
      *
      * @param savedInstanceState Contains the data it most recently
@@ -86,9 +90,7 @@ public class MainActivity extends AppCompatActivity implements LogOutListener {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        dataManager = DataManager.getInstance(getApplicationContext());
-        dataManager.registerLogOutListener(this);
-
+        fmanager = FilterManager.getInstance();
         DrawerLayout drawerLayout = (DrawerLayout) findViewById(R.id.drawer);
         setupToolbar();
         drawerToggle = new ActionBarDrawerToggle(this, drawerLayout,
@@ -106,6 +108,7 @@ public class MainActivity extends AppCompatActivity implements LogOutListener {
         createDateToPickerDialog();
         setStartDateOnScreen();
     }
+
 
     /**
      * Sync the toggle state after change application configuration.
@@ -153,7 +156,7 @@ public class MainActivity extends AppCompatActivity implements LogOutListener {
             filterLayout.openDrawer(GravityCompat.END);
             toolbar.setTitle(FILTER);
         } else {
-            buildFiltersState();
+            fmanager.getFilterState(buildFiltersState());
             filterLayout.closeDrawer(GravityCompat.END);
             toolbar.setTitle(ECOMAP);
         }
@@ -192,6 +195,11 @@ public class MainActivity extends AppCompatActivity implements LogOutListener {
             email.setText("secret@mail.com");
         }
     }
+
+
+
+
+
 
     private void setStartDateOnScreen() {
         //TODO from pref
@@ -334,7 +342,7 @@ public class MainActivity extends AppCompatActivity implements LogOutListener {
                 .commit();
     }
 
-    @Override
+
     public void setLogOutResult(boolean success) {
         Log.e("logout", "here2" + success);
         if (success) {
