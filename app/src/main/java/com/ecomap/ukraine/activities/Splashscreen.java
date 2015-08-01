@@ -97,7 +97,7 @@ public class Splashscreen extends Activity implements ProblemListener {
 
         startLoading = System.currentTimeMillis();
         context = this.getApplicationContext();
-        intent = new Intent(this, MainActivity.class);
+        intent = new Intent(this, LoginScreen.class);
 
         manager = DataManager.getInstance(context);
         manager.registerProblemListener(this);
