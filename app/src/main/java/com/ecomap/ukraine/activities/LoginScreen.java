@@ -43,5 +43,22 @@ public class LoginScreen extends Activity {
             }
             }
         );
+
+        final Intent signUpIntent = new Intent(this, SignupActivity.class);
+        View signUp = findViewById(R.id.sign_up);
+        signUp.setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View v) {
+                                        new Handler().post(new Runnable() {
+                                            @Override
+                                            public void run() {
+                                                onDestroy();
+                                                startActivity(signUpIntent);
+                                            }
+                                        });
+
+                                    }
+                                }
+        );
     }
 }
