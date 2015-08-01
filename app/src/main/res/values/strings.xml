@@ -27,5 +27,6 @@
     <string name="deforestation">Deforestation</string>
     <string name="type">Type</string>
     <string name="date">Date</string>
+    <string name="facebook_app_id">1501305643493375</string>
     <string name="Password">Password</string>
 </resources>

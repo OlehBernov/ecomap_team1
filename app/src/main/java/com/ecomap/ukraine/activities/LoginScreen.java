@@ -8,6 +8,8 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.ecomap.ukraine.R;
+import com.facebook.FacebookActivity;
+import com.facebook.FacebookSdk;
 
 /**
  * Created by Andriy on 31.07.2015.
@@ -23,6 +25,7 @@ public class LoginScreen extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        FacebookSdk.sdkInitialize(this);
         setContentView(R.layout.login_activity);
         intent = new Intent(this, MainActivity.class);
         View skip = findViewById(R.id.skip);
