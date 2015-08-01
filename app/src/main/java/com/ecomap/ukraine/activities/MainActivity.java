@@ -170,14 +170,14 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void setStartDateOnScreen() {
-        //TODO з преференсесів на екран
+        //TODO from pref
     }
 
     private void setDateOnScreen(Date date) {
-        //TODO дата на вхід, цифри на екран
+        //TODO
     }
 
-    //TODO в джейсон і в преференсеси
+    //TODO JSON
     //
    /*   @Override
     protected void onDestroy() {
