@@ -6,6 +6,8 @@
     <color name="filter_off">#BDBDBD</color>
     <color name="filter_on">#E0E0E0</color>
     <color name="navigation">#D9D9D9</color>
+    <color name="navigation_header_text">#ffbcbcbc</color>
+    <color name="navigation_text">#ffbcbcbc</color>
     <color name="filter_background">#728CA6</color>
     <color name="filter_title">#01312D</color>
     <color name="filter_button_text">#004D40</color>

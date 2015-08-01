@@ -6,16 +6,17 @@
         <item
             android:id="@+id/navigation_item_1"
             android:icon="@drawable/resolved"
-            android:title="Sign up"/>
+            android:title="@string/sing_up"/>
         <item
             android:id="@+id/navigation_item_2"
             android:icon="@drawable/resolved"
-            android:title="Log in"/>
+            android:title="@string/log_in"/>
 
         <item
             android:id="@+id/navigation_item_3"
             android:icon="@drawable/resolved"
-            android:title="Log out"/>
+            android:onClick="logOut"
+            android:title="@string/log_out"/>
     </group>
 
 </menu>

@@ -2,6 +2,7 @@ package com.ecomap.ukraine.data.manager;
 
 import com.ecomap.ukraine.models.Details;
 import com.ecomap.ukraine.models.Problem;
+import com.ecomap.ukraine.models.User;
 
 import java.util.List;
 
@@ -25,4 +26,18 @@ public interface RequestReceiver {
      * @param details details of concrete problem.
      */
     void setProblemDetailsRequestResult(Details details);
+
+    /**
+     * TODO docs
+     *
+     * @param user
+     */
+    void setLogInRequestResult(User user);
+
+    /**
+     * TODO
+     *
+     * @param success
+     */
+    void setLogOutRequestResult(boolean success);
 }

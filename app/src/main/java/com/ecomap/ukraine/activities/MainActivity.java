@@ -11,14 +11,19 @@ import android.os.Bundle;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 
 import com.codetroopers.betterpickers.calendardatepicker.CalendarDatePickerDialog;
 import com.ecomap.ukraine.R;
+import com.ecomap.ukraine.data.manager.DataManager;
+import com.ecomap.ukraine.data.manager.LogOutListener;
 import com.ecomap.ukraine.filter.FilterState;
+import com.ecomap.ukraine.models.User;
 
 import java.util.Calendar;
 import java.util.Date;
@@ -28,7 +33,7 @@ import java.util.Date;
  * <p/>
  * Main activity, represent GUI and provides access to all functional
  */
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements LogOutListener {
 
     /**
      * Name of the filter window.
@@ -68,6 +73,39 @@ public class MainActivity extends AppCompatActivity {
     private Date calendarDateFrom;
 
     private Date calendarDateTo;
+
+    private DataManager dataManager;
+
+    /**
+     * Initialize activity
+     *
+     * @param savedInstanceState Contains the data it most recently
+     *                           supplied in onSaveInstanceState(Bundle)
+     */
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+        dataManager = DataManager.getInstance(getApplicationContext());
+        dataManager.registerLogOutListener(this);
+
+        DrawerLayout drawerLayout = (DrawerLayout) findViewById(R.id.drawer);
+        setupToolbar();
+        drawerToggle = new ActionBarDrawerToggle(this, drawerLayout,
+                R.string.drawer_open,
+                R.string.drawer_close);
+
+        User user = (User) getIntent().getSerializableExtra("User");
+        setUserInformation(user);
+
+        filterLayout = (DrawerLayout) findViewById(R.id.drawer2);
+        filterLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
+        this.addMapFragment();
+
+        createDateFromPickerDialog();
+        createDateToPickerDialog();
+        setStartDateOnScreen();
+    }
 
     /**
      * Sync the toggle state after change application configuration.
@@ -142,30 +180,17 @@ public class MainActivity extends AppCompatActivity {
         dialogDateTo.show(getSupportFragmentManager(), DATE_TO_TAG);
     }
 
-    /**
-     * Initialize activity
-     *
-     * @param savedInstanceState Contains the data it most recently
-     *                           supplied in onSaveInstanceState(Bundle)
-     */
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-
-        DrawerLayout drawerLayout = (DrawerLayout) findViewById(R.id.drawer);
-        setupToolbar();
-        drawerToggle = new ActionBarDrawerToggle(this, drawerLayout,
-                R.string.drawer_open,
-                R.string.drawer_close);
-
-        filterLayout = (DrawerLayout) findViewById(R.id.drawer2);
-        filterLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
-        this.addMapFragment();
-
-        createDateFromPickerDialog();
-        createDateToPickerDialog();
-        setStartDateOnScreen();
+    private void setUserInformation(User user) {
+        TextView userName = (TextView) findViewById(R.id.navigation_user_name);
+        TextView email = (TextView) findViewById(R.id.navigation_email);
+        if (user != null) {
+            userName.setText(user.getName() + " " + user.getSurname());
+            email.setText(user.getEmail());
+        } else {
+            Log.e("logout", "here");
+            userName.setText("Anonym");
+            email.setText("secret@mail.com");
+        }
     }
 
     private void setStartDateOnScreen() {
@@ -307,5 +332,18 @@ public class MainActivity extends AppCompatActivity {
         fragmentManager.beginTransaction()
                 .replace(R.id.container, FragmentEcoMap.newInstance())
                 .commit();
+    }
+
+    @Override
+    public void setLogOutResult(boolean success) {
+        Log.e("logout", "here2" + success);
+        if (success) {
+            setUserInformation(null);
+        }
+    }
+
+    public void logOut(MenuItem item) {
+        Log.e("logout", "here");
+        dataManager.logOutUser();
     }
 }

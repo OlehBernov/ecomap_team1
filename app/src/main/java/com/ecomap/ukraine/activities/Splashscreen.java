@@ -34,8 +34,6 @@ public class Splashscreen extends Activity implements ProblemListener {
     private static final String FAILURE_OF_LOADING = "Failed to load. Please " +
             " ensure you`re connected to the Internet and try again.";
 
-    private static final String COMPLETED = "Completed";
-
     /**
      * Retry button title
      */
@@ -119,8 +117,6 @@ public class Splashscreen extends Activity implements ProblemListener {
                     @Override
                     public void run() {
                         manager.removeProblemListener(Splashscreen.this);
-                        smoothProgressBar.setVisibility(View.INVISIBLE);
-                        loadingProcess.setText(COMPLETED);
                         startActivity(intent);
                     }
                 }, Math.max(MINIMAL_DELAY - (endLoading - startLoading), 0));
