@@ -1,10 +1,12 @@
 package com.ecomap.ukraine.activities;
 
+import android.graphics.BitmapFactory;
+import android.support.annotation.DrawableRes;
+import android.support.v4.content.res.ResourcesCompat;
 import android.support.v7.app.AppCompatActivity;
 
 import android.app.ProgressDialog;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -21,10 +23,12 @@ public class SignupActivity extends AppCompatActivity {
     private static final String TAG = "SignupActivity";
 
     @InjectView(R.id.input_name) EditText _nameText;
+    @InjectView(R.id.input_surname) EditText _surnameText;
     @InjectView(R.id.input_email) EditText _emailText;
     @InjectView(R.id.input_password) EditText _passwordText;
+    @InjectView(R.id.input_password_confirmation) EditText _passwordConfirmText;
     @InjectView(R.id.btn_signup) Button _signupButton;
-    @InjectView(R.id.link_login) TextView _loginLink;
+    @InjectView(R.id.link_login_p2) TextView _loginLink;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -59,14 +63,16 @@ public class SignupActivity extends AppCompatActivity {
         _signupButton.setEnabled(false);
 
         final ProgressDialog progressDialog = new ProgressDialog(SignupActivity.this,
-                R.style.Theme_AppCompat_Light_Dialog);
+                R.style.Base_V11_Theme_AppCompat_Dialog);
         progressDialog.setIndeterminate(true);
         progressDialog.setMessage("Creating Account...");
         progressDialog.show();
 
         String name = _nameText.getText().toString();
+        String surname = _surnameText.getText().toString();
         String email = _emailText.getText().toString();
         String password = _passwordText.getText().toString();
+
 
         // TODO: Implement your own signup logic here.
 
@@ -99,14 +105,23 @@ public class SignupActivity extends AppCompatActivity {
         boolean valid = true;
 
         String name = _nameText.getText().toString();
+        String surname = _surnameText.getText().toString();
         String email = _emailText.getText().toString();
         String password = _passwordText.getText().toString();
+        String passwordConfirm = _passwordConfirmText.getText().toString();
 
-        if (name.isEmpty() || name.length() < 3) {
+        if (name.isEmpty() || name.length() < 4) {
             _nameText.setError("at least 3 characters");
             valid = false;
         } else {
             _nameText.setError(null);
+        }
+
+        if (surname.isEmpty() || name.length() < 4) {
+            _surnameText.setError("at least 3 characters");
+            valid = false;
+        } else {
+            _surnameText.setError(null);
         }
 
         if (email.isEmpty() || !android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
@@ -121,6 +136,13 @@ public class SignupActivity extends AppCompatActivity {
             valid = false;
         } else {
             _passwordText.setError(null);
+        }
+
+        if (!passwordConfirm.contentEquals(password)) {
+            _passwordConfirmText.setError("passwords do not match");
+            valid = false;
+        } else {
+            _passwordConfirmText.setError(null);
         }
 
         return valid;
