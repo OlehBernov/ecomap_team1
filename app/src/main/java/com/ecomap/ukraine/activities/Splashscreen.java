@@ -76,11 +76,6 @@ public class Splashscreen extends Activity implements ProblemListener {
     private SmoothProgressBar smoothProgressBar;
 
     /**
-     * Describes loading progress.
-     */
-    private TextView loadingProcess;
-
-    /**
      * Initialize activity
      * @param savedInstanceState Contains the data it most recently
      *                           supplied in onSaveInstanceState(Bundle)
@@ -91,7 +86,6 @@ public class Splashscreen extends Activity implements ProblemListener {
         setContentView(R.layout.splashscreen);
 
         smoothProgressBar = (SmoothProgressBar) findViewById(R.id.progress_bar);
-        loadingProcess = (TextView) findViewById(R.id.loadingProcess);
 
         startLoading = System.currentTimeMillis();
         context = this.getApplicationContext();
@@ -119,7 +113,7 @@ public class Splashscreen extends Activity implements ProblemListener {
                         manager.removeProblemListener(Splashscreen.this);
                         startActivity(intent);
                     }
-                }, Math.max(MINIMAL_DELAY - (endLoading - startLoading), 0));
+                }, Math.max(loadingTime(endLoading), 0));
             }
         } else {
             setFailureLoadingDialog();
@@ -129,6 +123,10 @@ public class Splashscreen extends Activity implements ProblemListener {
     @Override
     public void updateProblemDetails(Details details) {
 
+    }
+
+    private long loadingTime(long endLoading) {
+        return MINIMAL_DELAY - (endLoading - startLoading);
     }
 
     /**

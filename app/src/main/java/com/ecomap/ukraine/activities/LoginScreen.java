@@ -84,8 +84,7 @@ public class LoginScreen extends Activity implements LogInListener {
         if (user != null) {
             intent.putExtra("User", user);
             openMainActvity();
-        } else {
-            Log.e("log in", "null");
         }
     }
+
 }

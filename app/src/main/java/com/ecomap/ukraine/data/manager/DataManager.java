@@ -207,7 +207,7 @@ public class DataManager implements LogInListenerNotifier,
      * if it is missing or obsolete.
      */
     public void getAllProblems() {
-        SharedPreferences settings = context.getSharedPreferences(TIME, 0);
+        SharedPreferences settings = context.getSharedPreferences(TIME, Context.MODE_PRIVATE);
         long lastUpdateTime = settings.getLong(TIME, 0);
         if (isUpdateTime(lastUpdateTime)) {
             loadingClient.getAllProblems();

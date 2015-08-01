@@ -7,9 +7,11 @@ import android.graphics.BitmapFactory;
 import android.util.Log;
 
 import com.android.volley.AuthFailureError;
+import com.android.volley.NetworkResponse;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.android.volley.toolbox.HttpStack;
 import com.android.volley.toolbox.ImageRequest;
 import com.android.volley.toolbox.StringRequest;
 
@@ -22,6 +24,7 @@ import com.ecomap.ukraine.models.User;
 import com.ecomap.ukraine.updating.convertion.JSONFields;
 import com.ecomap.ukraine.updating.convertion.JSONParser;
 
+import org.apache.http.HttpStatus;
 import org.json.JSONException;
 
 import java.util.HashMap;
@@ -144,7 +147,6 @@ public class LoadingClient {
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError volleyError) {
-                Log.e("error response", "onErrorResponse");
                 requestReceiver.setLogInRequestResult(null);
             }
         }) {
@@ -179,7 +181,6 @@ public class LoadingClient {
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError volleyError) {
-                Log.e("error response", "onErrorResponse log out");
                 requestReceiver.setLogOutRequestResult(false);
             }
         });
