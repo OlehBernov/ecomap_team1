@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import com.ecomap.ukraine.R;
 import com.ecomap.ukraine.data.manager.DataManager;
 import com.ecomap.ukraine.data.manager.ProblemListener;
+import com.ecomap.ukraine.filter.FilterState;
 import com.ecomap.ukraine.models.Details;
 import com.ecomap.ukraine.models.Problem;
 import com.google.android.gms.maps.CameraUpdate;
@@ -22,12 +23,14 @@ import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.maps.android.clustering.ClusterManager;
 
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 /**
  * Created by Andriy on 25.07.2015.
  */
-public class FragmentEcoMap extends android.support.v4.app.Fragment implements ProblemListener {
+public class FragmentEcoMap extends android.support.v4.app.Fragment implements ProblemListener, FilterListener {
 
     private MapView mapView;
     private GoogleMap googleMap;
@@ -35,6 +38,14 @@ public class FragmentEcoMap extends android.support.v4.app.Fragment implements P
     private static final LatLng INITIAL_POSITION = new LatLng(48.4 , 31.2);
     private static final float INITIAL_ZOOM = 5;
     private ClusterManager<Problem> clusterManager;
+    private FilterState filterState;
+    private static List<Problem> problems;
+
+    /**
+     * Filter manager instance
+     */
+    private FilterManager fmanager;
+
 
     /**
      * The name of the preference to retrieve.
@@ -67,12 +78,16 @@ public class FragmentEcoMap extends android.support.v4.app.Fragment implements P
     public View onCreateView  (LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         manager = DataManager.getInstance(getActivity().getApplicationContext());
+        fmanager = FilterManager.getInstance();
         manager.registerProblemListener(this);
 
         View rootView = inflater.inflate(R.layout.fragement_map, container, false);
         mapView = (MapView) rootView.findViewById(R.id.mapView);
         mapView.onCreate(savedInstanceState);
         mapView.onResume();
+
+
+        fmanager.registerFilterListener(this);
 
         MapsInitializer.initialize(getActivity().getApplicationContext());
         this.setUpMapIfNeeded();
@@ -101,7 +116,17 @@ public class FragmentEcoMap extends android.support.v4.app.Fragment implements P
      */
     @Override
     public void updateAllProblems(List<Problem> problems) {
-        putAllProblemsOnMap(problems);
+        FragmentEcoMap.problems = problems;
+        putAllProblemsOnMap(problems, null);
+    }
+
+
+    /**
+     * Update filter
+     * @param filterState state of filter
+     */
+    public void updateFilterState(FilterState filterState) {
+        putAllProblemsOnMap(problems, filterState);
     }
 
     /**
@@ -117,14 +142,36 @@ public class FragmentEcoMap extends android.support.v4.app.Fragment implements P
      * Puts all problems on map
      * @param problems list of problems
      */
-    public void putAllProblemsOnMap(List<Problem> problems) {
+    public void putAllProblemsOnMap(List<Problem> problems, FilterState filterState) {
         clusterManager = new ClusterManager<>(getActivity().getApplicationContext(), googleMap);
         googleMap.setOnCameraChangeListener(clusterManager);
         googleMap.setOnMarkerClickListener(clusterManager);
-        for (Problem problem : problems) {
-            clusterManager.setRenderer(new IconRenderer(getActivity(), googleMap, clusterManager));
-            clusterManager.addItem(problem);
-        }
+        Calendar date = Calendar.getInstance();
+            if (filterState!=null) {
+                googleMap.clear();
+                    for (Problem problem : problems) {
+                        //int day = Integer.parseInt(problem.getDate().substring(8, 9))-1;
+                      //  int year = Integer.parseInt(problem.getDate().substring(0,3))-1900; ;
+                       // int mounth = Integer.parseInt(problem.getDate().substring(5,6))-1;
+                    //    date.set(year, mounth,day);
+                        if(filterState.isShowProblemType(problem.getProblemTypesId())) {
+                            if (((filterState.isShowResolvedProblem()) && (problem.getStatusId()==1))
+                            || (((filterState.isShowUnsolvedProblem()) && (problem.getStatusId()==0)))) {
+                               // if ( this have to be compare by date  ) {
+                                    clusterManager.setRenderer(new IconRenderer(getActivity(), googleMap, clusterManager));
+                                    clusterManager.addItem(problem);
+                               // }
+                            }
+                        }
+                }
+            }
+            else {
+                for (Problem problem : problems) {
+                clusterManager.setRenderer(new IconRenderer(getActivity(), googleMap, clusterManager));
+                clusterManager.addItem(problem);
+            }
+            }
+
     }
 
     /**
@@ -162,5 +209,7 @@ public class FragmentEcoMap extends android.support.v4.app.Fragment implements P
         CameraUpdate cameraUpdate = CameraUpdateFactory.newCameraPosition(cameraPosition);
         googleMap.moveCamera(cameraUpdate);
     }
+
+
 
 }

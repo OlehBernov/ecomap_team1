@@ -94,6 +94,11 @@ public class MainActivity extends AppCompatActivity implements LogOutListener {
     private User user;
 
     /**
+     * Filter manager instance
+     */
+    private FilterManager fmanager;
+
+    /**
      * Initialize activity
      *
      * @param savedInstanceState Contains the data it most recently
@@ -106,6 +111,8 @@ public class MainActivity extends AppCompatActivity implements LogOutListener {
         dataManager = DataManager.getInstance(getApplicationContext());
         dataManager.registerLogOutListener(this);
 
+        fmanager = FilterManager.getInstance();
+        DrawerLayout drawerLayout = (DrawerLayout) findViewById(R.id.drawer);
         setupToolbar();
         setUpDrawerLayout();
         setupFilter();
@@ -203,7 +210,7 @@ public class MainActivity extends AppCompatActivity implements LogOutListener {
             filterLayout.openDrawer(GravityCompat.END);
             toolbar.setTitle(FILTER);
         } else {
-            buildFiltersState();
+            fmanager.getFilterState(buildFiltersState());
             filterLayout.closeDrawer(GravityCompat.END);
             toolbar.setTitle(ECOMAP);
         }
@@ -362,7 +369,7 @@ public class MainActivity extends AppCompatActivity implements LogOutListener {
     }
 
     /**
-     *
+     * Adds google map
      */
     private void setupFilter() {
         filterLayout = (DrawerLayout) findViewById(R.id.drawer2);
@@ -403,6 +410,11 @@ public class MainActivity extends AppCompatActivity implements LogOutListener {
             //TODO
             Log.e("parseException", "setDate to");
             return;
+
+    public void setLogOutResult(boolean success) {
+        Log.e("logout", "here2" + success);
+        if (success) {
+            setUserInformation(null);
         }
 
         setDateOnScreen(calendarDateFrom, calendarDateTo);
