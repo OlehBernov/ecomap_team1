@@ -410,16 +410,11 @@ public class MainActivity extends AppCompatActivity implements LogOutListener {
             //TODO
             Log.e("parseException", "setDate to");
             return;
-
-    public void setLogOutResult(boolean success) {
-        Log.e("logout", "here2" + success);
-        if (success) {
-            setUserInformation(null);
         }
 
         setDateOnScreen(calendarDateFrom, calendarDateTo);
     }
-
+    
     /**
      *
      * @param filtersState
