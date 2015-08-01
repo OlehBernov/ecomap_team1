@@ -1,5 +1,6 @@
 package com.ecomap.ukraine.activities;
 
+import android.content.Context;
 import android.graphics.BitmapFactory;
 import android.support.annotation.DrawableRes;
 import android.support.v4.content.res.ResourcesCompat;
@@ -9,6 +10,8 @@ import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -21,6 +24,15 @@ import butterknife.ButterKnife;
 
 public class SignupActivity extends AppCompatActivity {
     private static final String TAG = "SignupActivity";
+
+    View.OnFocusChangeListener focusChangeListener = new View.OnFocusChangeListener() {
+        @Override
+        public void onFocusChange(View v, boolean hasFocus) {
+            if(!hasFocus) {
+                hideKeyboard(v);
+            }
+        }
+    };
 
     @InjectView(R.id.input_name) EditText _nameText;
     @InjectView(R.id.input_surname) EditText _surnameText;
@@ -35,6 +47,11 @@ public class SignupActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_signup);
         ButterKnife.inject(this);
+        _nameText.setOnFocusChangeListener(focusChangeListener);
+        _surnameText.setOnFocusChangeListener(focusChangeListener);
+        _emailText.setOnFocusChangeListener(focusChangeListener);
+        _passwordText.setOnFocusChangeListener(focusChangeListener);
+        _passwordConfirmText.setOnFocusChangeListener(focusChangeListener);
 
         _signupButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -138,13 +155,21 @@ public class SignupActivity extends AppCompatActivity {
             _passwordText.setError(null);
         }
 
-        if (!passwordConfirm.contentEquals(password)) {
+        if (passwordConfirm.isEmpty() || passwordConfirm.length() < 4
+                || !passwordConfirm.contentEquals(password)) {
             _passwordConfirmText.setError("passwords do not match");
             valid = false;
         } else {
             _passwordConfirmText.setError(null);
         }
 
+
         return valid;
+    }
+
+    public void hideKeyboard(View view) {
+        InputMethodManager inputMethodManager
+                =(InputMethodManager)getSystemService(this.INPUT_METHOD_SERVICE);
+        inputMethodManager.hideSoftInputFromWindow(view.getWindowToken(), 0);
     }
 }
