@@ -15,6 +15,7 @@ import com.ecomap.ukraine.data.manager.LogInListener;
 import com.ecomap.ukraine.models.User;
 import com.facebook.FacebookActivity;
 import com.facebook.FacebookSdk;
+import com.facebook.login.widget.LoginButton;
 
 /**
  * Created by Andriy on 31.07.2015.
@@ -24,6 +25,8 @@ public class LoginScreen extends Activity implements LogInListener {
     private Intent intent;
 
     private DataManager dataManager;
+
+    private LoginButton loginButton;
 
     /**
      * Initialize activity
@@ -35,6 +38,7 @@ public class LoginScreen extends Activity implements LogInListener {
         super.onCreate(savedInstanceState);
         FacebookSdk.sdkInitialize(this);
         setContentView(R.layout.login_activity);
+        loginButton = (LoginButton)findViewById(R.id.facebook_button);
 
         dataManager = DataManager.getInstance(getApplicationContext());
         dataManager.registerLogInListener(this);
