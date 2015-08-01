@@ -25,7 +25,9 @@
     <string name="water_pollution">Water pollution</string>
     <string name="illegal_building">Illegal building</string>
     <string name="rubish_dump">Rubbish dump</string>
-    <string name="deforestation">Deforestation</string>
+    <string name="deforestation">Forest destruction</string>
     <string name="type">Type</string>
     <string name="date">Date</string>
+    <string name="date_from">From</string>
+    <string name="date_to">To</string>
 </resources>

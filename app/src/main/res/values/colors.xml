@@ -2,6 +2,15 @@
 <resources>
     <color name="window_background">#CC000000</color>
 
-    <color name="my">#dd2b21ff</color>
-    <color name="my_divider">#B6B6B6</color>
+    <color name="toolbar_teal">#004D40</color>
+    <color name="filter_off">#BDBDBD</color>
+    <color name="filter_on">#E0E0E0</color>
+    <color name="navigation">#D9D9D9</color>
+    <color name="filter_background">#728CA6</color>
+    <color name="filter_title">#01312D</color>
+    <color name="filter_button_text">#004D40</color>
+    <color name="card_view_background">#E0E0E0</color>
+
+    <!-- #24646A -->
+
 </resources>
