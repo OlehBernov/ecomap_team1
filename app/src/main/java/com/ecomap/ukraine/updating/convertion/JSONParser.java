@@ -7,6 +7,7 @@ import com.ecomap.ukraine.models.ProblemActivity;
 import com.ecomap.ukraine.models.Details;
 import com.ecomap.ukraine.models.Photo;
 import com.ecomap.ukraine.models.Problem;
+import com.ecomap.ukraine.models.User;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -102,6 +103,34 @@ public class JSONParser {
     }
 
     /**
+     * TODO docs
+     *
+     * @param userInformationJson
+     * @return
+     * @throws JSONException
+     */
+    public User parseUserInformation(final String userInformationJson)
+            throws JSONException {
+
+        if (userInformationJson == null) {
+            throw new JSONException(NULL_ARGUMENT);
+        }
+
+        JSONObject userInformation = new JSONObject(userInformationJson);
+        User user = new User(
+                userInformation.optInt(JSONFields.USER_ID, DEFAULT_VALUE),
+                userInformation.getString(JSONFields.NAME),
+                userInformation.getString(JSONFields.SURNAME),
+                userInformation.getString(JSONFields.ROLE),
+                userInformation.getString(JSONFields.IAT),
+                userInformation.getString(JSONFields.TOKEN),
+                userInformation.getString(JSONFields.EMAIL)
+        );
+
+        return user;
+    }
+
+    /**
      * Converts brief information about concrete problem from JSONObject
      * to Problem object.
      *
@@ -139,7 +168,7 @@ public class JSONParser {
     private List<ProblemActivity> getProblemActivities(final JSONArray problemActivitiesArray)
             throws JSONException {
 
-        List<ProblemActivity> problemActivities = new ArrayList<ProblemActivity>();
+        List<ProblemActivity> problemActivities = new ArrayList<>();
         ProblemActivity currentProblemActivity;
         for (int i = 0; i < problemActivitiesArray.length(); i++) {
             JSONObject commentObject = problemActivitiesArray.getJSONObject(i);

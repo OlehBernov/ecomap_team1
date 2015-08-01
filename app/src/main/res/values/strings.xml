@@ -31,4 +31,10 @@
     <string name="date">Date</string>
     <string name="facebook_app_id">1501305643493375</string>
     <string name="Password">Password</string>
+    <string name="login">Login</string>
+    <string name="email">Email</string>
+    <string name="user_name">User Name</string>
+    <string name="log_out">Log out</string>
+    <string name="log_in">Log in</string>
+    <string name="sing_up">Sign up</string>
 </resources>
