@@ -25,6 +25,8 @@
     <string name="illegal_building">Illegal building</string>
     <string name="rubish_dump">Rubbish dump</string>
     <string name="deforestation">Deforestation</string>
+    <string name="date_from">From</string>
+    <string name="date_to">To</string>
     <string name="type">Type</string>
     <string name="date">Date</string>
     <string name="facebook_app_id">1501305643493375</string>

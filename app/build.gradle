@@ -30,4 +30,5 @@ dependencies {
     compile files('libs/svg-android-1.1.jar')
     compile 'com.android.support:cardview-v7:22.2.0'
     compile 'com.facebook.android:facebook-android-sdk:4.0.0'
+	compile 'com.code-troopers.betterpickers:library:2.0.0'
 }
