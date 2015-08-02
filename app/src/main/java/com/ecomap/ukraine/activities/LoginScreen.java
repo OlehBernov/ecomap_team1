@@ -66,8 +66,6 @@ public class LoginScreen extends Activity implements LogInListener {
                 facebookLogIn(loginResult);
             }
 
-        accountManager = AccountManager.getInstance(getApplicationContext());
-        accountManager.registerLogInListener(this);
             @Override
             public void onCancel() {
                 Log.e("login", "facebook login canceled");
@@ -80,8 +78,8 @@ public class LoginScreen extends Activity implements LogInListener {
         });
         LoginManager.getInstance().logInWithReadPermissions(this, Arrays.asList("public_profile", "user"));
 
-        dataManager = DataManager.getInstance(getApplicationContext());
-        dataManager.registerLogInListener(this);
+        accountManager = accountManager.getInstance(getApplicationContext());
+        accountManager.registerLogInListener(this);
         intent = new Intent(this, MainActivity.class);
 
         View skip = findViewById(R.id.skip);
@@ -106,17 +104,15 @@ public class LoginScreen extends Activity implements LogInListener {
     }
 
     private void openMainActivity() {
+        onDestroy();
+        startActivity(intent);
+    }
     private void saveLoginResult(LoginResult loginResult) {
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putString("token", loginResult.getAccessToken().getToken());
         editor.putString("userId", loginResult.getAccessToken().getUserId());
         editor.putString("AccessToken", loginResult.getAccessToken().toString());
         editor.apply();
-    }
-
-    private void openMainActvity() {
-        onDestroy();
-        startActivity(intent);
     }
 
     public void LogIn(View view) {
