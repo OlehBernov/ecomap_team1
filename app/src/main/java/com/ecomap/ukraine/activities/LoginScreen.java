@@ -2,24 +2,48 @@ package com.ecomap.ukraine.activities;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.media.tv.TvInputService;
 import android.os.Bundle;
+import android.os.Handler;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import com.ecomap.ukraine.R;
 import com.ecomap.ukraine.account.manager.AccountManager;
 import com.ecomap.ukraine.account.manager.LogInListener;
 import com.ecomap.ukraine.models.User;
+import com.facebook.AccessToken;
+import com.facebook.CallbackManager;
+import com.facebook.FacebookActivity;
+import com.facebook.FacebookCallback;
+import com.facebook.FacebookException;
 import com.facebook.FacebookSdk;
+import com.facebook.GraphRequest;
+import com.facebook.GraphResponse;
+import com.facebook.login.LoginManager;
+import com.facebook.login.LoginResult;
+import com.facebook.login.widget.LoginButton;
 
-/**
- * Created by Andriy on 31.07.2015.
- */
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.Arrays;
+import java.util.Random;
+
 public class LoginScreen extends Activity implements LogInListener {
 
     private Intent intent;
 
     private AccountManager accountManager;
+
+    private LoginButton loginButton;
+
+    private SharedPreferences sharedPreferences;
+
+    private CallbackManager callbackManager;
 
     /**
      * Initialize activity
@@ -30,10 +54,34 @@ public class LoginScreen extends Activity implements LogInListener {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         FacebookSdk.sdkInitialize(this);
+        sharedPreferences = this.getSharedPreferences("security", MODE_PRIVATE);
         setContentView(R.layout.login_activity);
+        callbackManager = CallbackManager.Factory.create();
+        loginButton = (LoginButton)findViewById(R.id.facebook_button);
+        final LoginManager loginManager = LoginManager.getInstance();
+        String s = sharedPreferences.getString("token", "fuckedUp");
+        loginManager.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
+            @Override
+            public void onSuccess(LoginResult loginResult) {
+                facebookLogIn(loginResult);
+            }
 
         accountManager = AccountManager.getInstance(getApplicationContext());
         accountManager.registerLogInListener(this);
+            @Override
+            public void onCancel() {
+                Log.e("login", "facebook login canceled");
+            }
+
+            @Override
+            public void onError(FacebookException e) {
+                Log.e("login", "facebook login error", e);
+            }
+        });
+        LoginManager.getInstance().logInWithReadPermissions(this, Arrays.asList("public_profile", "user"));
+
+        dataManager = DataManager.getInstance(getApplicationContext());
+        dataManager.registerLogInListener(this);
         intent = new Intent(this, MainActivity.class);
 
         View skip = findViewById(R.id.skip);
@@ -58,6 +106,15 @@ public class LoginScreen extends Activity implements LogInListener {
     }
 
     private void openMainActivity() {
+    private void saveLoginResult(LoginResult loginResult) {
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString("token", loginResult.getAccessToken().getToken());
+        editor.putString("userId", loginResult.getAccessToken().getUserId());
+        editor.putString("AccessToken", loginResult.getAccessToken().toString());
+        editor.apply();
+    }
+
+    private void openMainActvity() {
         onDestroy();
         startActivity(intent);
     }
@@ -74,7 +131,38 @@ public class LoginScreen extends Activity implements LogInListener {
         if (user != null) {
             intent.putExtra("User", user);
             openMainActivity();
+        } else {
+            Log.e("log in", "null");
         }
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        callbackManager.onActivityResult(requestCode, resultCode, data);
+    }
+
+    private void facebookLogIn(LoginResult loginResult) {
+        GraphRequest request = GraphRequest.newMeRequest(loginResult.getAccessToken(),
+                new GraphRequest.GraphJSONObjectCallback() {
+                    @Override
+                    public void onCompleted(JSONObject jsonObject, GraphResponse graphResponse) {
+                        try {
+                            jsonObject.getString("id");
+                        } catch (JSONException e){
+                            Log.e("parsing", "invalid response from server", e);
+                        }
+                    }
+                });
+        Bundle parameters = new Bundle();
+        parameters.putString("fields", "id,name,link");
+        request.setParameters(parameters);
+        request.executeAsync();
+    }
+
+    private long generatePassword(String id) {
+        long input = Long.getLong(id);
+        return new Random(input + 1).nextLong();
     }
 
 }

@@ -1,14 +1,22 @@
 package com.ecomap.ukraine.activities;
 
+import android.content.Context;
+import android.graphics.BitmapFactory;
+import android.support.annotation.DrawableRes;
+import android.support.v4.content.res.ResourcesCompat;
+import android.support.design.widget.CoordinatorLayout;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 
 import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -95,7 +103,6 @@ public class SignupActivity extends AppCompatActivity {
                 }, 3000);
     }
 
-
     public void onSignupSuccess() {
         signUpButton.setEnabled(true);
         setResult(RESULT_OK, null);
@@ -110,7 +117,7 @@ public class SignupActivity extends AppCompatActivity {
 
     public void hideKeyboard(View view) {
         InputMethodManager inputMethodManager
-                =(InputMethodManager)getSystemService(this.INPUT_METHOD_SERVICE);
+                =(InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
         inputMethodManager.hideSoftInputFromWindow(view.getWindowToken(), 0);
     }
 }
