@@ -21,15 +21,15 @@ public class FilterState {
     private boolean showResolvedProblem;
     private boolean showUnsolvedProblem;
 
-    private Date DateFrom;
-    private Date DateTo;
+    private Calendar DateFrom;
+    private Calendar DateTo;
 
     public FilterState(boolean showProblemType1, boolean showProblemType2,
                        boolean showProblemType3, boolean showProblemType4,
                        boolean showProblemType5, boolean showProblemType6,
                        boolean showProblemType7, boolean showResolvedProblem,
-                       boolean showUnsolvedProblem, Date DateFrom,
-                       Date DateTo) {
+                       boolean showUnsolvedProblem, Calendar DateFrom,
+                       Calendar DateTo) {
 
         this.showProblemType1 = showProblemType1;
         this.showProblemType2 = showProblemType2;
@@ -95,11 +95,11 @@ public class FilterState {
         return showUnsolvedProblem;
     }
 
-    public Date getDateFrom() {
+    public Calendar getDateFrom() {
         return DateFrom;
     }
 
-    public Date getDateTo() {
+    public Calendar getDateTo() {
         return DateTo;
     }
 }

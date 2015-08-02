@@ -67,7 +67,7 @@ public class FilterManager implements FilterListenersNotifier {
      * @param filterState this filterState gets for filter manager
      */
         public void getFilterState (FilterState filterState) {
-            sendFilterState(filterState);
+         //   sendFilterState(filterState);
 
     }
 

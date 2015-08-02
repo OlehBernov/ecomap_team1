@@ -21,18 +21,25 @@ import android.widget.TextView;
 import com.codetroopers.betterpickers.calendardatepicker.CalendarDatePickerDialog;
 import com.ecomap.ukraine.R;
 import com.ecomap.ukraine.data.manager.DataManager;
+import com.ecomap.ukraine.data.manager.LogOutListener;
 import com.ecomap.ukraine.filter.FilterState;
+import com.ecomap.ukraine.filter.JSONConverter;
 import com.ecomap.ukraine.models.User;
+import com.pkmmte.view.CircularImageView;
 
+import org.json.JSONException;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.Date;
+import java.util.Locale;
 
 /**
  * Created by Andriy on 01.07.2015.
  * <p/>
  * Main activity, represent GUI and provides access to all functional
  */
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements LogOutListener {
 
     /**
      * Name of the filter window.
@@ -49,6 +56,16 @@ public class MainActivity extends AppCompatActivity {
     private static final String DATE_TO_TAG = "Date to tag";
 
     private static final String FILTERS_STATE = "Filters state";
+
+    private static final String ANONYM_USER_NAME = "Anonym";
+
+    private static final String ANONYM_USER_EMAIL = "secret@gmail.com";
+
+    private static final String DATE_TEMPLATE = "dd-MM-yyyy";
+
+    private static final String DEFAULT_DATE_FROM = "01-01-1990";
+
+    private static final String DEFAULT_DATE_TO = "31-12-2030";
 
     /**
      * Drawer toggle.
@@ -69,11 +86,13 @@ public class MainActivity extends AppCompatActivity {
 
     private CalendarDatePickerDialog dialogDateTo;
 
-    private Date calendarDateFrom;
+    private Calendar calendarDateFrom;
 
-    private Date calendarDateTo;
+    private Calendar calendarDateTo;
 
     private DataManager dataManager;
+
+    private User user;
 
     /**
      * Filter manager instance
@@ -90,25 +109,26 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        dataManager = DataManager.getInstance(getApplicationContext());
+        dataManager.registerLogOutListener(this);
+
         fmanager = FilterManager.getInstance();
         DrawerLayout drawerLayout = (DrawerLayout) findViewById(R.id.drawer);
         setupToolbar();
-        drawerToggle = new ActionBarDrawerToggle(this, drawerLayout,
-                R.string.drawer_open,
-                R.string.drawer_close);
+        setUpDrawerLayout();
+        setupFilter();
 
-        User user = (User) getIntent().getSerializableExtra("User");
+        user = (User) getIntent().getSerializableExtra("User");
         setUserInformation(user);
 
-        filterLayout = (DrawerLayout) findViewById(R.id.drawer2);
-        filterLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
+        CircularImageView circularImageView = (CircularImageView)findViewById(R.id.circle_photo);
+        circularImageView.setImageResource(R.drawable.unsolved);
+
         this.addMapFragment();
 
         createDateFromPickerDialog();
         createDateToPickerDialog();
-        setStartDateOnScreen();
     }
-
 
     /**
      * Sync the toggle state after change application configuration.
@@ -148,11 +168,49 @@ public class MainActivity extends AppCompatActivity {
     }
 
     /**
+     * Sync the toggle state after onRestoreInstanceState has occurred.
+     *
+     * @param savedInstanceState saved application state.
+     */
+    @Override
+    protected void onPostCreate(Bundle savedInstanceState) {
+        super.onPostCreate(savedInstanceState);
+        drawerToggle.syncState();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+
+        SharedPreferences settings = getApplicationContext().getSharedPreferences(FILTERS_STATE, 0);
+        SharedPreferences.Editor editor = settings.edit();
+        FilterState filterState = buildFiltersState();
+        try {
+            editor.putString(FILTERS_STATE, new JSONConverter().convertToJson(filterState));
+        } catch (JSONException e) {
+            Log.e("JSONException", "onDestroy");
+        }
+        editor.commit();
+    }
+
+    @Override
+    public void setLogOutResult(boolean success) {
+        if (success) {
+            setUserInformation(null);
+        }
+    }
+
+    public void logOut(MenuItem item) {
+        dataManager.logOutUser();
+    }
+
+    /**
      * Controls the position of the filter7 window on the screen.
      */
     public void showFilter(MenuItem item) {
         filterLayout = (DrawerLayout) findViewById(R.id.drawer2);
         if (!filterLayout.isDrawerOpen(GravityCompat.END)) {
+            setDate();
             filterLayout.openDrawer(GravityCompat.END);
             toolbar.setTitle(FILTER);
         } else {
@@ -163,15 +221,11 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void switchCheckButtonState(View view) {
-        Button button = (Button) view;
         ColorDrawable buttonColor = (ColorDrawable) view.getBackground();
-
         if (isFilterOff(buttonColor)) {
-            view.setBackgroundColor(getResources().getColor(R.color.filter_on));
-            button.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.check_off, 0);
+            setFilterOn(view);
         } else {
-            view.setBackgroundColor(getResources().getColor(R.color.filter_off));
-            button.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.check_on2, 0);
+            setFilterOff(view);
         }
     }
 
@@ -183,6 +237,28 @@ public class MainActivity extends AppCompatActivity {
         dialogDateTo.show(getSupportFragmentManager(), DATE_TO_TAG);
     }
 
+    private void setDateOnScreen(Calendar dateFrom, Calendar dateTo) {
+        SimpleDateFormat dateFormat = new SimpleDateFormat(DATE_TEMPLATE, Locale.ENGLISH);
+
+        TextView dateFromView = (TextView) findViewById(R.id.date_from);
+        String formattedDate = dateFormat.format(dateFrom.getTime());
+        dateFromView.setText(formattedDate);
+
+        TextView dateToView = (TextView) findViewById(R.id.date_to);
+        formattedDate = dateFormat.format(dateTo.getTime());
+        dateToView.setText(formattedDate);
+    }
+
+    private void setFilterOn(View view) {
+        view.setBackgroundColor(getResources().getColor(R.color.filter_on));
+        ((Button) view).setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.filter_on, 0);
+    }
+
+    private void setFilterOff(View view) {
+        view.setBackgroundColor(getResources().getColor(R.color.filter_off));
+        ((Button) view).setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.filter_off, 0);
+    }
+
     private void setUserInformation(User user) {
         TextView userName = (TextView) findViewById(R.id.navigation_user_name);
         TextView email = (TextView) findViewById(R.id.navigation_email);
@@ -190,53 +266,10 @@ public class MainActivity extends AppCompatActivity {
             userName.setText(user.getName() + " " + user.getSurname());
             email.setText(user.getEmail());
         } else {
-            Log.e("logout", "here");
-            userName.setText("Anonym");
-            email.setText("secret@mail.com");
+            userName.setText(ANONYM_USER_NAME);
+            email.setText(ANONYM_USER_EMAIL);
         }
     }
-
-
-
-
-
-
-    private void setStartDateOnScreen() {
-        //TODO from pref
-    }
-
-    private void setDateOnScreen(Date date) {
-        //TODO
-    }
-
-    //TODO JSON
-    //
-   /*   @Override
-    protected void onDestroy() {
-      SharedPreferences settings = getApplicationContext().getSharedPreferences(FILTERS_STATE, 0);
-        SharedPreferences.Editor editor = settings.edit();
-        FilterState filterState = buildFiltersState();
-        saveProblemsTypeFilters(filterState, editor);
-        editor.putBoolean(FilterContract.RESOLVED, filterState.isShowResolvedProblem());
-        editor.putBoolean(FilterContract.UNSOLVED, filterState.isShowUnsolvedProblem());
-
-        editor.commit();
-    }
-
- /*   private void saveDateFilters(FilterState filterState, SharedPreferences.Editor editor) {
-       // editor.putInt(FilterContract.DATE_FROM_YEAR, filterState.getDateFrom().);
-
-    }
-
-    private void saveProblemsTypeFilters(FilterState filterState, SharedPreferences.Editor editor) {
-        editor.putBoolean(FilterContract.TYPE_1, filterState.isShowProblemType1());
-        editor.putBoolean(FilterContract.TYPE_2, filterState.isShowProblemType2());
-        editor.putBoolean(FilterContract.TYPE_3, filterState.isShowProblemType3());
-        editor.putBoolean(FilterContract.TYPE_4, filterState.isShowProblemType4());
-        editor.putBoolean(FilterContract.TYPE_5, filterState.isShowProblemType5());
-        editor.putBoolean(FilterContract.TYPE_6, filterState.isShowProblemType6());
-        editor.putBoolean(FilterContract.TYPE_7, filterState.isShowProblemType7());
-    } */
 
     private void createDateFromPickerDialog() {
         CalendarDatePickerDialog.OnDateSetListener dateFromListener =
@@ -249,7 +282,8 @@ public class MainActivity extends AppCompatActivity {
                 date.set(Calendar.MONTH, monthOfYear);
                 date.set(Calendar.DAY_OF_MONTH, dayOfMonth);
 
-                calendarDateFrom = new Date(date.getTimeInMillis());
+                calendarDateFrom = date;
+                setDate();
             }
         };
 
@@ -268,7 +302,8 @@ public class MainActivity extends AppCompatActivity {
                 date.set(Calendar.MONTH, monthOfYear);
                 date.set(Calendar.DAY_OF_MONTH, dayOfMonth);
 
-                calendarDateTo = new Date(date.getTimeInMillis());
+                calendarDateTo = date;
+                setDate();
             }
         };
 
@@ -276,20 +311,56 @@ public class MainActivity extends AppCompatActivity {
         dialogDateTo.setOnDateSetListener(dateToListener);
     }
 
-    /**
-     * Sync the toggle state after onRestoreInstanceState has occurred.
-     *
-     * @param savedInstanceState saved application state.
-     */
-    @Override
-    protected void onPostCreate(Bundle savedInstanceState) {
-        super.onPostCreate(savedInstanceState);
-        drawerToggle.syncState();
-    }
-
     private FilterState buildFiltersState() {
+        Button button;
+        ColorDrawable buttonColor;
 
-        boolean stateType1 = getFilterState(R.id.type1);
+        button = (Button) findViewById(R.id.type1);
+        buttonColor = (ColorDrawable) button.getBackground();
+        boolean stateType1= (buttonColor.getColor() ==
+                getResources().getColor(R.color.filter_off));
+
+        button = (Button) findViewById(R.id.type2);
+        buttonColor = (ColorDrawable) button.getBackground();
+        boolean stateType2= (buttonColor.getColor() ==
+                getResources().getColor(R.color.filter_off));
+
+        button = (Button) findViewById(R.id.type3);
+        buttonColor = (ColorDrawable) button.getBackground();
+        boolean stateType3= (buttonColor.getColor() ==
+                getResources().getColor(R.color.filter_off));
+
+        button = (Button) findViewById(R.id.type4);
+        buttonColor = (ColorDrawable) button.getBackground();
+        boolean stateType4= (buttonColor.getColor() ==
+                getResources().getColor(R.color.filter_off));
+
+        button = (Button) findViewById(R.id.type5);
+        buttonColor = (ColorDrawable) button.getBackground();
+        boolean stateType5= (buttonColor.getColor() ==
+                getResources().getColor(R.color.filter_off));
+
+        button = (Button) findViewById(R.id.type6);
+        buttonColor = (ColorDrawable) button.getBackground();
+        boolean stateType6= (buttonColor.getColor() ==
+                getResources().getColor(R.color.filter_off));
+
+        button = (Button) findViewById(R.id.type7);
+        buttonColor = (ColorDrawable) button.getBackground();
+        boolean stateType7= (buttonColor.getColor() ==
+                getResources().getColor(R.color.filter_off));
+
+        button = (Button) findViewById(R.id.ButtonResolved);
+        buttonColor = (ColorDrawable) button.getBackground();
+        boolean stateResolved= (buttonColor.getColor() ==
+                getResources().getColor(R.color.filter_off));
+
+        button = (Button) findViewById(R.id.ButtonUnsolved);
+        buttonColor = (ColorDrawable) button.getBackground();
+        boolean stateUnsolved = (buttonColor.getColor() ==
+                getResources().getColor(R.color.filter_off));
+
+     /*   boolean stateType1 = getFilterState(R.id.type1);
         boolean stateType2 = getFilterState(R.id.type2);
         boolean stateType3 = getFilterState(R.id.type3);
         boolean stateType4 = getFilterState(R.id.type4);
@@ -298,38 +369,16 @@ public class MainActivity extends AppCompatActivity {
         boolean stateType7 = getFilterState(R.id.type7);
 
         boolean stateResolved = getFilterState(R.id.ButtonResolved);
-        boolean stateUnsolved = getFilterState(R.id.ButtonUnsolved);
+        boolean stateUnsolved = getFilterState(R.id.ButtonUnsolved); */
 
-        FilterState filterState = new FilterState(stateType1, stateType2,
+        return new FilterState(stateType1, stateType2,
                 stateType3, stateType4, stateType5, stateType6, stateType7,
                 stateResolved, stateUnsolved, calendarDateFrom, calendarDateTo);
-
-        return filterState;
-    }
-
-    private boolean getFilterState(int id) {
-        Button button;
-        ColorDrawable buttonColor;
-
-        button = (Button) findViewById(id);
-        buttonColor = (ColorDrawable) button.getBackground();
-
-        return isFilterOff(buttonColor);
     }
 
     private boolean isFilterOff(ColorDrawable buttonColor) {
         return (buttonColor.getColor() ==
                 getResources().getColor(R.color.filter_off));
-    }
-
-    /**
-     * Sets application toolbar.
-     */
-    private void setupToolbar() {
-        toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        final ActionBar ab = getSupportActionBar();
-        ab.setDisplayHomeAsUpEnabled(true);
     }
 
     /**
@@ -342,16 +391,123 @@ public class MainActivity extends AppCompatActivity {
                 .commit();
     }
 
+    /**
+     * Sets application toolbar.
+     */
+    private void setupToolbar() {
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        final ActionBar ab = getSupportActionBar();
+        ab.setDisplayHomeAsUpEnabled(true);
+    }
 
-    public void setLogOutResult(boolean success) {
-        Log.e("logout", "here2" + success);
-        if (success) {
-            setUserInformation(null);
+    private void setUpDrawerLayout() {
+        DrawerLayout drawerLayout = (DrawerLayout) findViewById(R.id.drawer);
+        drawerToggle = new ActionBarDrawerToggle(this, drawerLayout,
+                R.string.drawer_open,
+                R.string.drawer_close);
+    }
+
+    private boolean getFilterState(int id) {
+        Button button;
+        ColorDrawable buttonColor;
+
+        button = (Button) findViewById(id);
+        buttonColor = (ColorDrawable) button.getBackground();
+
+        return isFilterOff(buttonColor);
+    }
+
+    /**
+     * Adds google map
+     */
+    private void setupFilter() {
+        filterLayout = (DrawerLayout) findViewById(R.id.drawer2);
+        filterLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
+
+        SharedPreferences settings = getApplicationContext()
+                                    .getSharedPreferences(FILTERS_STATE, MODE_PRIVATE);
+        String filterStateJson = settings.getString(FILTERS_STATE, null);
+
+        FilterState filterState;
+        if (filterStateJson != null) {
+            try {
+                filterState = new JSONConverter().convertToFilterState(filterStateJson);
+            } catch (JSONException e) {
+                filterState = null;
+                Log.e("JSONException", "setup filter");
+            }
+        } else {
+            filterState = null;
+            Log.e("JSONException", "filter null");
         }
+
+        setFiltersState(filterState);
     }
 
-    public void logOut(MenuItem item) {
-        Log.e("logout", "here");
-        dataManager.logOutUser();
+    private void setDate() {
+        SimpleDateFormat dateFormat = new SimpleDateFormat(DATE_TEMPLATE, Locale.ENGLISH);
+        try {
+            if (calendarDateFrom == null) {
+                calendarDateFrom = Calendar.getInstance();
+                calendarDateFrom.setTime(dateFormat.parse(DEFAULT_DATE_FROM));
+            }
+            if (calendarDateTo == null) {
+                calendarDateTo = Calendar.getInstance();
+                calendarDateTo.setTime(dateFormat.parse(DEFAULT_DATE_TO));
+            }
+        } catch (ParseException e) {
+            //TODO
+            Log.e("parseException", "setDate to");
+            return;
+        }
+
+        setDateOnScreen(calendarDateFrom, calendarDateTo);
     }
+    
+    /**
+     *
+     * @param filtersState
+     */
+    private void setFiltersState(FilterState filtersState) {
+        if (filtersState == null) {
+            return;
+        }
+
+        Log.e("tag", "set Filters " + filtersState.getDateFrom() + " " + filtersState.isShowProblemType1() + " " +
+                filtersState.isShowProblemType2());
+
+        if (!filtersState.isShowProblemType1()) {
+            setFilterOn(findViewById(R.id.type1));
+        }
+        if (!filtersState.isShowProblemType2()) {
+            setFilterOn(findViewById(R.id.type2));
+        }
+        if (!filtersState.isShowProblemType3()) {
+            setFilterOn(findViewById(R.id.type3));
+        }
+        if (!filtersState.isShowProblemType4()) {
+            setFilterOn(findViewById(R.id.type4));
+        }
+        if (!filtersState.isShowProblemType5()) {
+            setFilterOn(findViewById(R.id.type5));
+        }
+        if (!filtersState.isShowProblemType6()) {
+            setFilterOn(findViewById(R.id.type6));
+        }
+        if (!filtersState.isShowProblemType7()) {
+            setFilterOn(findViewById(R.id.type7));
+        }
+        if (!filtersState.isShowResolvedProblem()) {
+            setFilterOn(findViewById(R.id.ButtonResolved));
+        }
+        if (!filtersState.isShowResolvedProblem()) {
+            setFilterOn(findViewById(R.id.ButtonUnsolved));
+        }
+
+        calendarDateFrom = filtersState.getDateFrom();
+        calendarDateTo = filtersState.getDateTo();
+        setDate();
+    }
+
 }

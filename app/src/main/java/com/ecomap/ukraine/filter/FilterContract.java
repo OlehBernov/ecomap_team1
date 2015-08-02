@@ -1,7 +1,7 @@
 package com.ecomap.ukraine.filter;
 
 /**
- * Created by Alexander on 01.08.2015.
+ *
  */
 public class FilterContract {
 
@@ -23,15 +23,8 @@ public class FilterContract {
 
     public static final String UNSOLVED = "Unsolved";
 
-    public static final String DATE_FROM_YEAR = "Date from year";
+    public static final String DATE_FROM = "Date from year";
 
-    public static final String DATE_FROM_MONTH = "Date from month";
+    public static final String DATE_TO = "Date to year";
 
-    public static final String DATE_FROM_DAY = "Date from day";
-
-    public static final String DATE_TO_YEAR= "Date to year";
-
-    public static final String DATE_TO_MONTH = "Date to month";
-
-    public static final String DATE_TO_DAY = "Date to date";
 }
