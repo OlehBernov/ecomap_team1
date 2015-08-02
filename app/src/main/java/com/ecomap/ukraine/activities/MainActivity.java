@@ -25,6 +25,7 @@ import com.ecomap.ukraine.data.manager.LogOutListener;
 import com.ecomap.ukraine.filter.FilterState;
 import com.ecomap.ukraine.filter.JSONConverter;
 import com.ecomap.ukraine.models.User;
+import com.pkmmte.view.CircularImageView;
 
 import org.json.JSONException;
 
@@ -119,6 +120,9 @@ public class MainActivity extends AppCompatActivity implements LogOutListener {
 
         user = (User) getIntent().getSerializableExtra("User");
         setUserInformation(user);
+
+        CircularImageView circularImageView = (CircularImageView)findViewById(R.id.circle_photo);
+        circularImageView.setImageResource(R.drawable.unsolved);
 
         this.addMapFragment();
 
@@ -308,7 +312,55 @@ public class MainActivity extends AppCompatActivity implements LogOutListener {
     }
 
     private FilterState buildFiltersState() {
-        boolean stateType1 = getFilterState(R.id.type1);
+        Button button;
+        ColorDrawable buttonColor;
+
+        button = (Button) findViewById(R.id.type1);
+        buttonColor = (ColorDrawable) button.getBackground();
+        boolean stateType1= (buttonColor.getColor() ==
+                getResources().getColor(R.color.filter_off));
+
+        button = (Button) findViewById(R.id.type2);
+        buttonColor = (ColorDrawable) button.getBackground();
+        boolean stateType2= (buttonColor.getColor() ==
+                getResources().getColor(R.color.filter_off));
+
+        button = (Button) findViewById(R.id.type3);
+        buttonColor = (ColorDrawable) button.getBackground();
+        boolean stateType3= (buttonColor.getColor() ==
+                getResources().getColor(R.color.filter_off));
+
+        button = (Button) findViewById(R.id.type4);
+        buttonColor = (ColorDrawable) button.getBackground();
+        boolean stateType4= (buttonColor.getColor() ==
+                getResources().getColor(R.color.filter_off));
+
+        button = (Button) findViewById(R.id.type5);
+        buttonColor = (ColorDrawable) button.getBackground();
+        boolean stateType5= (buttonColor.getColor() ==
+                getResources().getColor(R.color.filter_off));
+
+        button = (Button) findViewById(R.id.type6);
+        buttonColor = (ColorDrawable) button.getBackground();
+        boolean stateType6= (buttonColor.getColor() ==
+                getResources().getColor(R.color.filter_off));
+
+        button = (Button) findViewById(R.id.type7);
+        buttonColor = (ColorDrawable) button.getBackground();
+        boolean stateType7= (buttonColor.getColor() ==
+                getResources().getColor(R.color.filter_off));
+
+        button = (Button) findViewById(R.id.ButtonResolved);
+        buttonColor = (ColorDrawable) button.getBackground();
+        boolean stateResolved= (buttonColor.getColor() ==
+                getResources().getColor(R.color.filter_off));
+
+        button = (Button) findViewById(R.id.ButtonUnsolved);
+        buttonColor = (ColorDrawable) button.getBackground();
+        boolean stateUnsolved = (buttonColor.getColor() ==
+                getResources().getColor(R.color.filter_off));
+
+     /*   boolean stateType1 = getFilterState(R.id.type1);
         boolean stateType2 = getFilterState(R.id.type2);
         boolean stateType3 = getFilterState(R.id.type3);
         boolean stateType4 = getFilterState(R.id.type4);
@@ -317,13 +369,11 @@ public class MainActivity extends AppCompatActivity implements LogOutListener {
         boolean stateType7 = getFilterState(R.id.type7);
 
         boolean stateResolved = getFilterState(R.id.ButtonResolved);
-        boolean stateUnsolved = getFilterState(R.id.ButtonUnsolved);
+        boolean stateUnsolved = getFilterState(R.id.ButtonUnsolved); */
 
-        FilterState filterState = new FilterState(stateType1, stateType2,
+        return new FilterState(stateType1, stateType2,
                 stateType3, stateType4, stateType5, stateType6, stateType7,
                 stateResolved, stateUnsolved, calendarDateFrom, calendarDateTo);
-
-        return filterState;
     }
 
     private boolean isFilterOff(ColorDrawable buttonColor) {
