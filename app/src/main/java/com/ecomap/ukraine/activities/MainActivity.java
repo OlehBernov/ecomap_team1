@@ -21,7 +21,8 @@ import android.widget.TextView;
 import com.codetroopers.betterpickers.calendardatepicker.CalendarDatePickerDialog;
 import com.ecomap.ukraine.R;
 import com.ecomap.ukraine.data.manager.DataManager;
-import com.ecomap.ukraine.data.manager.LogOutListener;
+import com.ecomap.ukraine.account.manager.LogOutListener;
+import com.ecomap.ukraine.filter.FilterManager;
 import com.ecomap.ukraine.filter.FilterState;
 import com.ecomap.ukraine.filter.JSONConverter;
 import com.ecomap.ukraine.models.User;
@@ -110,10 +111,8 @@ public class MainActivity extends AppCompatActivity implements LogOutListener {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         dataManager = DataManager.getInstance(getApplicationContext());
-        dataManager.registerLogOutListener(this);
 
         fmanager = FilterManager.getInstance();
-        DrawerLayout drawerLayout = (DrawerLayout) findViewById(R.id.drawer);
         setupToolbar();
         setUpDrawerLayout();
         setupFilter();
@@ -201,7 +200,7 @@ public class MainActivity extends AppCompatActivity implements LogOutListener {
     }
 
     public void logOut(MenuItem item) {
-        dataManager.logOutUser();
+        //TODO
     }
 
     /**

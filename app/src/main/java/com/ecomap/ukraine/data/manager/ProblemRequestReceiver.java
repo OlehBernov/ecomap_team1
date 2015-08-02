@@ -9,7 +9,7 @@ import java.util.List;
 /**
  * Interface of class, which receives server responses.
  */
-public interface RequestReceiver {
+public interface ProblemRequestReceiver {
 
     /**
      * Receives server response to the request of all problems,
@@ -27,17 +27,4 @@ public interface RequestReceiver {
      */
     void setProblemDetailsRequestResult(Details details);
 
-    /**
-     * TODO docs
-     *
-     * @param user
-     */
-    void setLogInRequestResult(User user);
-
-    /**
-     * TODO
-     *
-     * @param success
-     */
-    void setLogOutRequestResult(boolean success);
 }

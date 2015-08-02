@@ -1,6 +1,4 @@
-package com.ecomap.ukraine.activities;
-
-import com.ecomap.ukraine.filter.FilterState;
+package com.ecomap.ukraine.filter;
 
 import java.util.HashSet;
 import java.util.Set;

@@ -1,4 +1,4 @@
-package com.ecomap.ukraine.data.manager;
+package com.ecomap.ukraine.account.manager;
 
 /**
  * TODO

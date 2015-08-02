@@ -3,17 +3,13 @@ package com.ecomap.ukraine.activities;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
-import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.TextView;
 
 import com.ecomap.ukraine.R;
-import com.ecomap.ukraine.data.manager.DataManager;
-import com.ecomap.ukraine.data.manager.LogInListener;
+import com.ecomap.ukraine.account.manager.AccountManager;
+import com.ecomap.ukraine.account.manager.LogInListener;
 import com.ecomap.ukraine.models.User;
-import com.facebook.FacebookActivity;
 import com.facebook.FacebookSdk;
 
 /**
@@ -23,7 +19,7 @@ public class LoginScreen extends Activity implements LogInListener {
 
     private Intent intent;
 
-    private DataManager dataManager;
+    private AccountManager accountManager;
 
     /**
      * Initialize activity
@@ -36,15 +32,15 @@ public class LoginScreen extends Activity implements LogInListener {
         FacebookSdk.sdkInitialize(this);
         setContentView(R.layout.login_activity);
 
-        dataManager = DataManager.getInstance(getApplicationContext());
-        dataManager.registerLogInListener(this);
+        accountManager = AccountManager.getInstance(getApplicationContext());
+        accountManager.registerLogInListener(this);
         intent = new Intent(this, MainActivity.class);
 
         View skip = findViewById(R.id.skip);
         skip.setOnClickListener(new View.OnClickListener() {
                                     @Override
                                     public void onClick(View v) {
-                                        openMainActvity();
+                                        openMainActivity();
                                     }
                                 }
         );
@@ -61,7 +57,7 @@ public class LoginScreen extends Activity implements LogInListener {
         );
     }
 
-    private void openMainActvity() {
+    private void openMainActivity() {
         onDestroy();
         startActivity(intent);
     }
@@ -69,15 +65,15 @@ public class LoginScreen extends Activity implements LogInListener {
     public void LogIn(View view) {
         EditText password = (EditText) findViewById(R.id.Password);
         EditText login = (EditText) findViewById(R.id.Login);
-        dataManager.logInUser(password.getText().toString(),
-                              login.getText().toString());
+        accountManager.logInUser(password.getText().toString(),
+                login.getText().toString());
     }
 
     @Override
     public void setLogInResult(User user) {
         if (user != null) {
             intent.putExtra("User", user);
-            openMainActvity();
+            openMainActivity();
         }
     }
 

@@ -7,16 +7,14 @@ import android.graphics.BitmapFactory;
 import android.util.Log;
 
 import com.android.volley.AuthFailureError;
-import com.android.volley.NetworkResponse;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.HttpStack;
 import com.android.volley.toolbox.ImageRequest;
 import com.android.volley.toolbox.StringRequest;
 
 import com.ecomap.ukraine.R;
-import com.ecomap.ukraine.data.manager.RequestReceiver;
+import com.ecomap.ukraine.data.manager.ProblemRequestReceiver;
 import com.ecomap.ukraine.models.Details;
 import com.ecomap.ukraine.models.Photo;
 
@@ -24,11 +22,9 @@ import com.ecomap.ukraine.models.User;
 import com.ecomap.ukraine.updating.convertion.JSONFields;
 import com.ecomap.ukraine.updating.convertion.JSONParser;
 
-import org.apache.http.HttpStatus;
 import org.json.JSONException;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -44,10 +40,6 @@ public class LoadingClient {
 
     private static final String PHOTOS_URL = "http://ecomap.org/photos/large/";
 
-    private static final String LOG_IN_URL = "http://ecomap.org/api/login/";
-
-    private static final String LOG_OUT_URL = "http://ecomap.org/api/logout/";
-
     /**
      * Application context.
      */
@@ -56,16 +48,16 @@ public class LoadingClient {
     /**
      * Request receiver.
      */
-    private RequestReceiver requestReceiver;
+    private ProblemRequestReceiver problemRequestReceiver;
 
     /**
      * Constructor of LoadingClient.
      *
-     * @param requestReceiver  request receiver.
+     * @param problemRequestReceiver  request receiver.
      * @param context application context.
      */
-    public LoadingClient(RequestReceiver requestReceiver, Context context) {
-        this.requestReceiver = requestReceiver;
+    public LoadingClient(ProblemRequestReceiver problemRequestReceiver, Context context) {
+        this.problemRequestReceiver = problemRequestReceiver;
         this.context = context;
     }
 
@@ -79,17 +71,17 @@ public class LoadingClient {
                     @Override
                     public void onResponse(String response) {
                         try {
-                            requestReceiver.setAllProblemsRequestResult(
+                            problemRequestReceiver.setAllProblemsRequestResult(
                                     new JSONParser().parseBriefProblems(response));
                         } catch (JSONException e) {
                             Log.e("exception", "JSONException in LoadingClient");
-                            requestReceiver.setAllProblemsRequestResult(null);
+                            problemRequestReceiver.setAllProblemsRequestResult(null);
                         }
                     }
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                requestReceiver.setAllProblemsRequestResult(null);
+                problemRequestReceiver.setAllProblemsRequestResult(null);
             }
         });
         RequestQueueWrapper.getInstance(context).addToRequestQueue(stringRequest);
@@ -112,79 +104,16 @@ public class LoadingClient {
                             getPhotos(details);
                         } catch (JSONException e) {
                             Log.e("exception", "JSONException in getProblemDetail");
-                            requestReceiver.setProblemDetailsRequestResult(null);
+                            problemRequestReceiver.setProblemDetailsRequestResult(null);
                         }
                     }
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
                 Log.e("error response", "onErrorResponse in getProblemDetail");
-                requestReceiver.setProblemDetailsRequestResult(null);
+                problemRequestReceiver.setProblemDetailsRequestResult(null);
             }
         });
-        RequestQueueWrapper.getInstance(context).addToRequestQueue(stringRequest);
-    }
-
-    /**
-     * TODO docs
-     *
-     * @param password
-     * @param login
-     */
-    public void postLogIn(final String password, final String login) {
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, LOG_IN_URL,
-                new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-                        try {
-                            User user = new JSONParser().parseUserInformation(response);
-                            requestReceiver.setLogInRequestResult(user);
-                        } catch (JSONException e) {
-                            Log.e("exception", "JSONException in LogInUser");
-                            requestReceiver.setLogInRequestResult(null);
-                        }
-                    }
-                }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError volleyError) {
-                requestReceiver.setLogInRequestResult(null);
-            }
-        }) {
-            @Override
-            protected Map<String, String> getParams(){
-                Map<String, String> params = new HashMap<>();
-                params.put(JSONFields.EMAIL, login);
-                params.put(JSONFields.PASSWORD, password);
-                return params;
-            }
-
-            @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
-                Map<String, String> params = new HashMap<>();
-                return params;
-            }
-        };
-
-        RequestQueueWrapper.getInstance(context).addToRequestQueue(stringRequest);
-    }
-
-    /**
-     * TODO
-     */
-    public void getLogOut() {
-        StringRequest stringRequest = new StringRequest(Request.Method.GET, LOG_OUT_URL,
-                new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-                            requestReceiver.setLogOutRequestResult(true);
-                    }
-                }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError volleyError) {
-                requestReceiver.setLogOutRequestResult(false);
-            }
-        });
-
         RequestQueueWrapper.getInstance(context).addToRequestQueue(stringRequest);
     }
 
@@ -201,7 +130,7 @@ public class LoadingClient {
                     public void onResponse(Bitmap bitmap) {
                         photos.put(photo, bitmap);
                         if (allInitialized(photos)) {
-                           requestReceiver.setProblemDetailsRequestResult(details);
+                           problemRequestReceiver.setProblemDetailsRequestResult(details);
                         }
                     }
                 }, 0, 0, null,
@@ -211,7 +140,7 @@ public class LoadingClient {
                         photos.put(photo, BitmapFactory.decodeResource(context.getResources(),
                                 R.drawable.photo_error1));
                         if (allInitialized(photos)) {
-                            requestReceiver.setProblemDetailsRequestResult(details);
+                            problemRequestReceiver.setProblemDetailsRequestResult(details);
                         }
                     }
                 });

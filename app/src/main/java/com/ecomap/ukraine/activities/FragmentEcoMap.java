@@ -10,6 +10,8 @@ import android.view.ViewGroup;
 import com.ecomap.ukraine.R;
 import com.ecomap.ukraine.data.manager.DataManager;
 import com.ecomap.ukraine.data.manager.ProblemListener;
+import com.ecomap.ukraine.filter.FilterListener;
+import com.ecomap.ukraine.filter.FilterManager;
 import com.ecomap.ukraine.filter.FilterState;
 import com.ecomap.ukraine.models.Details;
 import com.ecomap.ukraine.models.Problem;
@@ -24,7 +26,6 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.maps.android.clustering.ClusterManager;
 
 import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 
 /**

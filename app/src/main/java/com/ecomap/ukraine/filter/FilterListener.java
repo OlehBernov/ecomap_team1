@@ -1,4 +1,4 @@
-package com.ecomap.ukraine.activities;
+package com.ecomap.ukraine.filter;
 
 import com.ecomap.ukraine.filter.FilterState;
 

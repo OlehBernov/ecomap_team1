@@ -8,7 +8,6 @@ import com.ecomap.ukraine.database.DBHelper;
 import com.ecomap.ukraine.models.Details;
 import com.ecomap.ukraine.models.Problem;
 
-import com.ecomap.ukraine.models.User;
 import com.ecomap.ukraine.updating.serverclient.LoadingClient;
 
 import java.util.HashSet;
@@ -19,9 +18,8 @@ import java.util.Set;
  * Coordinates the work of the database, data loading client and activities.
  * Provides updates of the database.
  */
-public class DataManager implements LogInListenerNotifier,
-                                    ProblemListenersNotifier,
-                                    RequestReceiver {
+public class DataManager implements ProblemListenersNotifier,
+        ProblemRequestReceiver {
 
     /**
      * The name of the preference to retrieve.
@@ -42,16 +40,6 @@ public class DataManager implements LogInListenerNotifier,
      * Set of problem listeners.
      */
     private Set<ProblemListener> problemListeners = new HashSet<>();
-
-    /**
-     * TODO docs
-     */
-    private Set<LogInListener> logInListeners = new HashSet<>();
-
-    /**
-     *
-     */
-    private Set<LogOutListener> logOutListeners = new HashSet<>();
 
     /**
      * Holds the reference to LoadingClient used by DataManager.
@@ -137,15 +125,7 @@ public class DataManager implements LogInListenerNotifier,
         getProblemDetail(details.getProblemId());
     }
 
-    @Override
-    public void setLogInRequestResult(User user) {
-        sendLogInResult(user);
-    }
 
-    @Override
-    public void setLogOutRequestResult(boolean success) {
-        sendLogOutResult(success);
-    }
 
     /**
      * Send to listeners list of all problems.
@@ -164,40 +144,6 @@ public class DataManager implements LogInListenerNotifier,
     public void sendProblemDetails(Details details) {
         for (ProblemListener listener: problemListeners) {
             listener.updateProblemDetails(details);
-        }
-    }
-
-    @Override
-    public void registerLogInListener(LogInListener listener) {
-        logInListeners.add(listener);
-    }
-
-    @Override
-    public void removeLogInListener(LogInListener listener) {
-        logInListeners.remove(listener);
-    }
-
-    @Override
-    public void registerLogOutListener(LogOutListener listener) {
-        logOutListeners.add(listener);
-    }
-
-    @Override
-    public void removeLogOutListener(LogOutListener listener) {
-        logOutListeners.remove(listener);
-    }
-
-    @Override
-    public void sendLogInResult(User user) {
-        for (LogInListener listener: logInListeners) {
-            listener.setLogInResult(user);
-        }
-    }
-
-    @Override
-    public void sendLogOutResult(boolean success) {
-        for (LogOutListener listener: logOutListeners) {
-            listener.setLogOutResult(success);
         }
     }
 
@@ -244,16 +190,6 @@ public class DataManager implements LogInListenerNotifier,
     }
 
     /**
-     * TODO docs
-     *
-     * @param password
-     * @param login
-     */
-    public void logInUser(String password, String login) {
-        loadingClient.postLogIn(password, login);
-    }
-
-    /**
      * Saves time of the last database update
      * to the SharedPreferences.
      */
@@ -274,7 +210,4 @@ public class DataManager implements LogInListenerNotifier,
         return (System.currentTimeMillis() - lastUpdateTime) >= UPDATE_PERIOD;
     }
 
-    public void logOutUser() {
-        loadingClient.getLogOut();
-    }
 }
