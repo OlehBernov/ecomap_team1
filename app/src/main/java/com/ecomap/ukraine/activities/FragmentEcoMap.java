@@ -105,6 +105,7 @@ public class FragmentEcoMap extends android.support.v4.app.Fragment implements P
     public void onDestroy() {
         super.onDestroy();
         manager.removeProblemListener(this);
+        fmanager.removeFilterListener(this);
         SharedPreferences.Editor editor = getActivity().getSharedPreferences(FragmentEcoMap.POSITION, Context.MODE_PRIVATE).edit();
         editor.putFloat(LATITUDE, (float) googleMap.getCameraPosition().target.latitude);
         editor.putFloat(LONGITUDE, (float) googleMap.getCameraPosition().target.longitude);
@@ -149,28 +150,24 @@ public class FragmentEcoMap extends android.support.v4.app.Fragment implements P
      *
      * @param problems list of problems
      */
-    public void putAllProblemsOnMap(List<Problem> problems, FilterState filterState) {
+    public void putAllProblemsOnMap(final List<Problem> problems, final FilterState filterState) {
         clusterManager = new ClusterManager<>(getActivity().getApplicationContext(), googleMap);
         googleMap.setOnCameraChangeListener(clusterManager);
         googleMap.setOnMarkerClickListener(clusterManager);
-        Calendar date = Calendar.getInstance();
+
         if (filterState != null) {
             googleMap.clear();
             for (Problem problem : problems) {
-
                 if (filtration(filterState, problem)) {
-                    clusterManager.setRenderer(new IconRenderer(getActivity(), googleMap, clusterManager));
                     clusterManager.addItem(problem);
-
-
                 }
             }
         } else {
             for (Problem problem : problems) {
-                clusterManager.setRenderer(new IconRenderer(getActivity(), googleMap, clusterManager));
                 clusterManager.addItem(problem);
             }
         }
+        clusterManager.setRenderer(new IconRenderer(getActivity(), googleMap, clusterManager));
 
     }
 
