@@ -110,7 +110,6 @@ public class LoginScreen extends AppCompatActivity implements LogInListener {
         LoginManager.getInstance().logInWithReadPermissions(this, Arrays.asList("public_profile", "user"));
 
         accountManager = accountManager.getInstance(getApplicationContext());
-        accountManager.registerLogInListener(this);
 
         View skip = findViewById(R.id.skip_button);
         skip.setOnClickListener(new View.OnClickListener() {
@@ -152,6 +151,7 @@ public class LoginScreen extends AppCompatActivity implements LogInListener {
         String email = emailText.getText().toString();
         String password = passwordText.getText().toString();
 
+        accountManager.registerLogInListener(this);
         accountManager.logInUser(password, email);
 
     /*    new android.os.Handler().postDelayed(
@@ -176,6 +176,7 @@ public class LoginScreen extends AppCompatActivity implements LogInListener {
 
     @Override
     public void setLogInResult(User user) {
+        accountManager.removeLogInListener(this);
         logInButton.setEnabled(true);
         if (user != null) {
             mainIntent.putExtra("User", user);

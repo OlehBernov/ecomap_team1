@@ -128,6 +128,7 @@ public class SignupActivity extends AppCompatActivity implements LogInListener {
 
     @Override
     public void setLogInResult(User user) {
+        accountManager.removeLogInListener(this);
         if (user != null) {
             mainIntent.putExtra("User", user);
             openMainActivity();

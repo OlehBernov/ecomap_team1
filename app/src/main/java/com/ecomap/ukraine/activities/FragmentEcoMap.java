@@ -120,7 +120,6 @@ public class FragmentEcoMap extends android.support.v4.app.Fragment implements P
         editor.putFloat(ZOOM, (float) googleMap.getCameraPosition().zoom);
         editor.apply();
 
-
     }
 
     /**
