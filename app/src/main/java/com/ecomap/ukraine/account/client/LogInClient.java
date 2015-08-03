@@ -28,6 +28,8 @@ public class LogInClient {
 
     private static final String LOG_OUT_URL = "http://ecomap.org/api/logout/";
 
+    private static final String REGISTRATION_URL = "http://ecomap.org/api/register/";
+
     private Context context;
 
     private LogRequestReceiver logRequestReceiver;
@@ -73,6 +75,51 @@ public class LogInClient {
 
         RequestQueueWrapper.getInstance(context).addToRequestQueue(stringRequest);
     }
+
+
+
+    public void postRegistration (final String firstname, final String lastname,
+                                  final String email, final String password) {
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, REGISTRATION_URL,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        try {
+                            User user = new JSONParser().parseRegistrationInformation(response, email);
+                            logRequestReceiver.setLogInRequestResult(user);
+                        } catch (JSONException e) {
+                            Log.e("exception", "JSONException in Registration");
+                            logRequestReceiver.setLogInRequestResult(null);
+                        }
+                    } }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError volleyError) {
+                logRequestReceiver.setLogInRequestResult(null);
+                Log.e("error response", "onErrorResponse in postRegistration");
+            }
+        }) {
+            @Override
+            protected Map<String, String> getParams(){
+                Map<String, String> params = new HashMap<>();
+                params.put(JSONFields.FIRST_NAME, firstname);
+                params.put(JSONFields.LAST_NAME, lastname);
+                params.put(JSONFields.EMAIL, email);
+                params.put(JSONFields.PASSWORD, password);
+                return params;
+            }
+
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> params = new HashMap<>();
+                return params;
+            }
+        };
+
+        RequestQueueWrapper.getInstance(context).addToRequestQueue(stringRequest);
+    }
+
+
+
 
     /**
      * TODO

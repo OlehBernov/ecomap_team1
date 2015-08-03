@@ -1,6 +1,7 @@
 package com.ecomap.ukraine.activities;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 
 import android.app.ProgressDialog;
@@ -14,16 +15,23 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.ecomap.ukraine.R;
+import com.ecomap.ukraine.account.manager.AccountManager;
+import com.ecomap.ukraine.account.manager.LogInListener;
+import com.ecomap.ukraine.models.User;
 import com.ecomap.ukraine.validation.Validator;
 
 import butterknife.ButterKnife;
         import butterknife.InjectView;
 
-public class SignupActivity extends AppCompatActivity {
+public class SignupActivity extends AppCompatActivity implements LogInListener {
 
     private static final String TAG = "SignUp Activity";
     private static final String CREATING_ACCOUNT = "Creating Account...";
     private static final String SIGN_UP_FAILED = "Sign Up failed";
+
+    private Intent mainIntent;
+
+    private AccountManager accountManager;
 
     View.OnFocusChangeListener focusChangeListener = new View.OnFocusChangeListener() {
         @Override
@@ -52,6 +60,11 @@ public class SignupActivity extends AppCompatActivity {
         emailText.setOnFocusChangeListener(focusChangeListener);
         passwordText.setOnFocusChangeListener(focusChangeListener);
         passwordConfirmText.setOnFocusChangeListener(focusChangeListener);
+
+        mainIntent = new Intent(this, MainActivity.class);
+
+        accountManager = accountManager.getInstance(getApplicationContext());
+        accountManager.registerLogInListener(this);
 
         signUpButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -90,9 +103,11 @@ public class SignupActivity extends AppCompatActivity {
         String email = emailText.getText().toString();
         String password = passwordText.getText().toString();
 
-        // TODO: Implement your own signUp logic here.
+        accountManager.registerUser(name, surname, email, password);
 
-        new android.os.Handler().postDelayed(
+
+
+       /* new android.os.Handler().postDelayed(
                 new Runnable() {
                     public void run() {
                         // On complete call either onSignUpSuccess or onSignUpFailed
@@ -102,6 +117,7 @@ public class SignupActivity extends AppCompatActivity {
                         progressDialog.dismiss();
                     }
                 }, 3000);
+                */
     }
 
     public void onSignUpSuccess() {
@@ -119,6 +135,21 @@ public class SignupActivity extends AppCompatActivity {
         InputMethodManager inputMethodManager
                 =(InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
         inputMethodManager.hideSoftInputFromWindow(view.getWindowToken(), 0);
+    }
+
+    @Override
+    public void setLogInResult(User user) {
+        if (user != null) {
+            mainIntent.putExtra("User", user);
+            openMainActivity();
+        } else {
+            Log.e("Registration", "null");
+        }
+    }
+
+    private void openMainActivity() {
+        startActivity(mainIntent);
+        finish();
     }
 
 }

@@ -88,4 +88,8 @@ public class AccountManager implements LogInListenerNotifier,
         logInClient.getLogOut();
     }
 
+    public void registerUser (String firstname, String lastname, String email, String password) {
+        logInClient.postRegistration(firstname, lastname, email, password);
+    }
+
 }

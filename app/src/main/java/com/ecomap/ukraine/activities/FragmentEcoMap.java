@@ -26,6 +26,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.maps.android.clustering.ClusterManager;
 
 import java.util.Calendar;
+import java.util.GregorianCalendar;
 import java.util.List;
 
 /**
@@ -36,7 +37,7 @@ public class FragmentEcoMap extends android.support.v4.app.Fragment implements P
     private MapView mapView;
     private GoogleMap googleMap;
     private DataManager manager;
-    private static final LatLng INITIAL_POSITION = new LatLng(48.4 , 31.2);
+    private static final LatLng INITIAL_POSITION = new LatLng(48.4, 31.2);
     private static final float INITIAL_ZOOM = 5;
     private ClusterManager<Problem> clusterManager;
     private FilterState filterState;
@@ -57,7 +58,7 @@ public class FragmentEcoMap extends android.support.v4.app.Fragment implements P
     private static final String ZOOM = "zoom";
 
     public static FragmentEcoMap newInstance() {
-       return new FragmentEcoMap();
+        return new FragmentEcoMap();
     }
 
     /**
@@ -69,14 +70,15 @@ public class FragmentEcoMap extends android.support.v4.app.Fragment implements P
     /**
      * Called to have the fragment instantiate its user interface view.
      * This is optional, and non-graphical fragments can return null (which is the default implementation).
-     * @param inflater The LayoutInflater object that can be used to inflate any views in the fragment,
-     * @param container If non-null, this is the parent view that the fragment's UI should be attached to.
-     *                  The fragment should not add the view itself, but this can be used to generate the LayoutParams of the view.
+     *
+     * @param inflater           The LayoutInflater object that can be used to inflate any views in the fragment,
+     * @param container          If non-null, this is the parent view that the fragment's UI should be attached to.
+     *                           The fragment should not add the view itself, but this can be used to generate the LayoutParams of the view.
      * @param savedInstanceState If non-null, this fragment is being re-constructed from a previous saved state as given here.
      * @return Return the View for the fragment's UI, or null.
      */
     @Override
-    public View onCreateView  (LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         manager = DataManager.getInstance(getActivity().getApplicationContext());
         fmanager = FilterManager.getInstance();
@@ -113,6 +115,7 @@ public class FragmentEcoMap extends android.support.v4.app.Fragment implements P
 
     /**
      * Get list of all problems.
+     *
      * @param problems list of all problems.
      */
     @Override
@@ -124,6 +127,7 @@ public class FragmentEcoMap extends android.support.v4.app.Fragment implements P
 
     /**
      * Update filter
+     *
      * @param filterState state of filter
      */
     public void updateFilterState(FilterState filterState) {
@@ -132,6 +136,7 @@ public class FragmentEcoMap extends android.support.v4.app.Fragment implements P
 
     /**
      * Get list of all details.
+     *
      * @param details details of concrete problem.
      */
     @Override
@@ -141,6 +146,7 @@ public class FragmentEcoMap extends android.support.v4.app.Fragment implements P
 
     /**
      * Puts all problems on map
+     *
      * @param problems list of problems
      */
     public void putAllProblemsOnMap(List<Problem> problems, FilterState filterState) {
@@ -148,30 +154,23 @@ public class FragmentEcoMap extends android.support.v4.app.Fragment implements P
         googleMap.setOnCameraChangeListener(clusterManager);
         googleMap.setOnMarkerClickListener(clusterManager);
         Calendar date = Calendar.getInstance();
-            if (filterState!=null) {
-                googleMap.clear();
-                    for (Problem problem : problems) {
-                        //int day = Integer.parseInt(problem.getDate().substring(8, 9))-1;
-                      //  int year = Integer.parseInt(problem.getDate().substring(0,3))-1900; ;
-                       // int mounth = Integer.parseInt(problem.getDate().substring(5,6))-1;
-                    //    date.set(year, mounth,day);
-                        if(filterState.isShowProblemType(problem.getProblemTypesId())) {
-                            if (((filterState.isShowResolvedProblem()) && (problem.getStatusId()==1))
-                            || (((filterState.isShowUnsolvedProblem()) && (problem.getStatusId()==0)))) {
-                               // if ( this have to be compare by date  ) {
-                                    clusterManager.setRenderer(new IconRenderer(getActivity(), googleMap, clusterManager));
-                                    clusterManager.addItem(problem);
-                               // }
-                            }
-                        }
+        if (filterState != null) {
+            googleMap.clear();
+            for (Problem problem : problems) {
+
+                if (filtration(filterState, problem)) {
+                    clusterManager.setRenderer(new IconRenderer(getActivity(), googleMap, clusterManager));
+                    clusterManager.addItem(problem);
+
+
                 }
             }
-            else {
-                for (Problem problem : problems) {
+        } else {
+            for (Problem problem : problems) {
                 clusterManager.setRenderer(new IconRenderer(getActivity(), googleMap, clusterManager));
                 clusterManager.addItem(problem);
             }
-            }
+        }
 
     }
 
@@ -179,7 +178,7 @@ public class FragmentEcoMap extends android.support.v4.app.Fragment implements P
      * Sets up the map if it is possible to do so (i.e., the Google Play services APK is correctly
      * installed) and the map has not already been instantiated.
      */
-    private void setUpMapIfNeeded()  {
+    private void setUpMapIfNeeded() {
         if (googleMap == null) {
             googleMap = mapView.getMap();
             if (googleMap != null) {
@@ -202,15 +201,30 @@ public class FragmentEcoMap extends android.support.v4.app.Fragment implements P
         CameraPosition cameraPosition = new CameraPosition
                 .Builder()
                 .target(new LatLng(getActivity().getSharedPreferences(POSITION,
-                        Context.MODE_PRIVATE).getFloat(LATITUDE,(float)INITIAL_POSITION.latitude),
+                        Context.MODE_PRIVATE).getFloat(LATITUDE, (float) INITIAL_POSITION.latitude),
                         getActivity().getSharedPreferences(POSITION,
-                                Context.MODE_PRIVATE).getFloat(LONGITUDE, (float)INITIAL_POSITION.longitude)))
+                                Context.MODE_PRIVATE).getFloat(LONGITUDE, (float) INITIAL_POSITION.longitude)))
                 .zoom(getActivity().getSharedPreferences(POSITION, Context.MODE_PRIVATE).getFloat(ZOOM, INITIAL_ZOOM))
                 .build();
         CameraUpdate cameraUpdate = CameraUpdateFactory.newCameraPosition(cameraPosition);
         googleMap.moveCamera(cameraUpdate);
     }
 
+    private boolean filtration(FilterState filterState, Problem problem) {
+        if (filterState.isShowProblemType(problem.getProblemTypesId())) {
+            if (((filterState.isShowResolvedProblem()) && (problem.getStatusId() == 1))
+                    || (((filterState.isShowUnsolvedProblem()) && (problem.getStatusId() == 0)))) {
+                int day = Integer.parseInt(problem.getDate().substring(8, 10));
+                int year = Integer.parseInt(problem.getDate().substring(0, 4));
+                int mounth = Integer.parseInt(problem.getDate().substring(5, 7)) - 1;
+                Calendar creatingProblemDate = new GregorianCalendar(year, mounth, day);
+                if ((creatingProblemDate.after(filterState.getDateFrom())) &&
+                        (filterState.getDateTo().after(creatingProblemDate))) {
+                    return true;
+                }
 
-
+            }
+        }
+         return false;
+    }
 }
