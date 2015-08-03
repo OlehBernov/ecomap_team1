@@ -1,28 +1,22 @@
 package com.ecomap.ukraine.activities;
 
-import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.media.tv.TvInputService;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
 
 import com.ecomap.ukraine.R;
 import com.ecomap.ukraine.account.manager.AccountManager;
 import com.ecomap.ukraine.account.manager.LogInListener;
 import com.ecomap.ukraine.models.User;
-import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
-import com.facebook.FacebookActivity;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
 import com.facebook.FacebookSdk;
@@ -43,11 +37,11 @@ import butterknife.InjectView;
 
 public class LoginScreen extends AppCompatActivity implements LogInListener {
 
-    private Intent intent;
+    private Intent mainIntent;
 
     private AccountManager accountManager;
 
-    private LoginButton loginButton;
+    private LoginButton logInFacebookButton;
 
     private SharedPreferences sharedPreferences;
 
@@ -66,8 +60,7 @@ public class LoginScreen extends AppCompatActivity implements LogInListener {
 
     @InjectView(R.id.input_email_log) EditText emailText;
     @InjectView(R.id.input_password_log) EditText passwordText;
-    @InjectView(R.id.btn_log_in) Button logInBut;
-    @InjectView(R.id.sign_up) TextView signUpLink;
+    @InjectView(R.id.btn_log_in) Button logInButton;
 
     /**
      * Initialize activity
@@ -80,28 +73,21 @@ public class LoginScreen extends AppCompatActivity implements LogInListener {
         FacebookSdk.sdkInitialize(this);
         sharedPreferences = this.getSharedPreferences("security", MODE_PRIVATE);
         setContentView(R.layout.login_activity);
+        mainIntent = new Intent(this, MainActivity.class);
 
         ButterKnife.inject(this);
         emailText.setOnFocusChangeListener(focusChangeListener);
         passwordText.setOnFocusChangeListener(focusChangeListener);
 
-        logInBut.setOnClickListener(new View.OnClickListener() {
+        logInButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 login();
             }
         });
 
-     /*   signUpLink.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // Finish the registration screen and return to the Login activity
-                finish();
-            }
-        }); */
-
         callbackManager = CallbackManager.Factory.create();
-        loginButton = (LoginButton)findViewById(R.id.facebook_button);
+        logInFacebookButton = (LoginButton)findViewById(R.id.facebook_button);
         final LoginManager loginManager = LoginManager.getInstance();
         String s = sharedPreferences.getString("token", "fuckedUp");
         loginManager.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
@@ -124,7 +110,6 @@ public class LoginScreen extends AppCompatActivity implements LogInListener {
 
         accountManager = accountManager.getInstance(getApplicationContext());
         accountManager.registerLogInListener(this);
-        intent = new Intent(this, MainActivity.class);
 
         View skip = findViewById(R.id.skip_button);
         skip.setOnClickListener(new View.OnClickListener() {
@@ -149,7 +134,7 @@ public class LoginScreen extends AppCompatActivity implements LogInListener {
     public void login() {
         Log.d(TAG, "login");
 
-        logInBut.setEnabled(false);
+        logInButton.setEnabled(false);
 
         final ProgressDialog progressDialog = new ProgressDialog(LoginScreen.this,
                 R.style.Base_V11_Theme_AppCompat_Dialog);
@@ -159,7 +144,6 @@ public class LoginScreen extends AppCompatActivity implements LogInListener {
 
         String email = emailText.getText().toString();
         String password = passwordText.getText().toString();
-
 
         accountManager.logInUser(password, email);
 
@@ -175,11 +159,6 @@ public class LoginScreen extends AppCompatActivity implements LogInListener {
                 }, 3000); */
     }
 
-    private void openMainActivity() {
-     //   onDestroy();
-        startActivity(intent);
-    }
-
     private void saveLoginResult(LoginResult loginResult) {
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putString("token", loginResult.getAccessToken().getToken());
@@ -188,22 +167,20 @@ public class LoginScreen extends AppCompatActivity implements LogInListener {
         editor.apply();
     }
 
- /*   public void LogIn(View view) {
-        EditText password = (EditText) findViewById(R.id.Password);
-        EditText login = (EditText) findViewById(R.id.Login);
-        accountManager.logInUser(password.getText().toString(),
-                login.getText().toString());
-    } */
-
     @Override
     public void setLogInResult(User user) {
-        logInBut.setEnabled(true);
+        logInButton.setEnabled(true);
         if (user != null) {
-            intent.putExtra("User", user);
+            mainIntent.putExtra("User", user);
             openMainActivity();
         } else {
             Log.e("log in", "null");
         }
+    }
+
+    private void openMainActivity() {
+        startActivity(mainIntent);
+        finish();
     }
 
     @Override
@@ -234,7 +211,6 @@ public class LoginScreen extends AppCompatActivity implements LogInListener {
         long input = Long.getLong(id);
         return new Random(input + 1).nextLong();
     }
-
 
     public void hideKeyboard(View view) {
         InputMethodManager inputMethodManager
