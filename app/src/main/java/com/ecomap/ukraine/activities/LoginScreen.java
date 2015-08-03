@@ -16,6 +16,7 @@ import com.ecomap.ukraine.R;
 import com.ecomap.ukraine.account.manager.AccountManager;
 import com.ecomap.ukraine.account.manager.LogInListener;
 import com.ecomap.ukraine.models.User;
+import com.ecomap.ukraine.validation.Validator;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
@@ -123,16 +124,22 @@ public class LoginScreen extends AppCompatActivity implements LogInListener {
         final Intent signUpIntent = new Intent(this, SignupActivity.class);
         View signUp = findViewById(R.id.sign_up);
         signUp.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        startActivity(signUpIntent);
-                    }
-                }
+                                      @Override
+                                      public void onClick(View v) {
+                                          startActivity(signUpIntent);
+                                      }
+                                  }
         );
     }
 
     public void login() {
         Log.d(TAG, "login");
+
+        boolean isLogInValid;
+        isLogInValid = new Validator().logInValid(emailText, passwordText);
+        if (!isLogInValid) {
+            return;
+        }
 
         logInButton.setEnabled(false);
 
@@ -150,10 +157,10 @@ public class LoginScreen extends AppCompatActivity implements LogInListener {
     /*    new android.os.Handler().postDelayed(
                 new Runnable() {
                     public void run() {
-                        // On complete call either onSignupSuccess or onSignupFailed
+                        // On complete call either onSignUpSuccess or onSignUpFailed
                         // depending on success
-                        onSignupSuccess();
-                        // onSignupFailed();
+                        onSignUpSuccess();
+                        // onSignUpFailed();
                         progressDialog.dismiss();
                     }
                 }, 3000); */

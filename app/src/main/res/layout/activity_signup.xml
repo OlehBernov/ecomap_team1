@@ -11,7 +11,14 @@
     <android.support.design.widget.CoordinatorLayout
         android:id="@+id/background_layout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        app:layout_collapseMode="parallax">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:clickable="true"
+            android:scaleType="centerCrop" />
 
     </android.support.design.widget.CoordinatorLayout>
 
@@ -24,23 +31,24 @@
             android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingTop="15dp"
+            android:paddingTop="56dp"
             android:paddingLeft="24dp"
             android:paddingRight="24dp"
             android:clickable="true"
             android:focusableInTouchMode="true">
 
             <ImageView android:src="@drawable/wwflogo1"
-                android:layout_width="294dp"
-                android:layout_height="111dp"
+                android:layout_width="wrap_content"
+                android:layout_height="127dp"
+                android:layout_marginBottom="24dp"
                 android:layout_gravity="center_horizontal" />
 
             <!--  Name Label -->
             <android.support.design.widget.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="2dp"
-                android:layout_marginBottom="2dp">
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="8dp">
                 <EditText android:id="@+id/input_name"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -52,8 +60,8 @@
             <android.support.design.widget.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="2dp"
-                android:layout_marginBottom="2dp">
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="8dp">
                 <EditText android:id="@+id/input_surname"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -65,8 +73,8 @@
             <android.support.design.widget.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="2dp"
-                android:layout_marginBottom="2dp">
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="8dp">
                 <EditText android:id="@+id/input_email"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -78,8 +86,8 @@
             <android.support.design.widget.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="2dp"
-                android:layout_marginBottom="2dp">
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="8dp">
                 <EditText android:id="@+id/input_password"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -91,25 +99,23 @@
             <android.support.design.widget.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="2dp"
-                android:layout_marginBottom="2dp">
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="8dp">
                 <EditText android:id="@+id/input_password_confirmation"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="textPassword"
-                    android:hint="Confirm Password"/>
+                    android:hint="@string/confirm_password"/>
             </android.support.design.widget.TextInputLayout>
 
             <!-- Signup Button -->
             <android.support.v7.widget.AppCompatButton
                 android:id="@+id/btn_signup"
                 android:layout_width="fill_parent"
-                android:textSize="18sp"
                 android:layout_height="wrap_content"
-                android:textAllCaps="false"
-                android:layout_marginTop="12dp"
-                android:layout_marginBottom="10dp"
-                android:padding="10dp"
+                android:layout_marginTop="24dp"
+                android:layout_marginBottom="24dp"
+                android:padding="12dp"
                 android:text="Create Account"/>
 
             <LinearLayout
@@ -120,7 +126,7 @@
                 <TextView android:id="@+id/link_login_p1"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="10dp"
+                    android:layout_marginBottom="24dp"
                     android:text="Already a member? "
                     android:gravity="center"
                     android:textSize="16dip"/>
@@ -139,4 +145,4 @@
 
         </LinearLayout>
     </ScrollView>
-    </RelativeLayout>
+</RelativeLayout>

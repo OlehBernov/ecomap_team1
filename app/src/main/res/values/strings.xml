@@ -37,4 +37,5 @@
     <string name="log_out">Log out</string>
     <string name="log_in">Log in</string>
     <string name="sing_up">Sign up</string>
+    <string name="confirm_password">Confirm Password</string>
 </resources>

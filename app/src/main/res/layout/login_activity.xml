@@ -1,125 +1,128 @@
 <?xml version="1.0" encoding="utf-8"?>
-    <RelativeLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        android:orientation="vertical"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/toolbar_teal"
+    android:orientation="vertical"
+    app:layout_scrollFlags="scroll|exitUntilCollapsed">
+
+    <android.support.design.widget.CoordinatorLayout
+        android:id="@+id/background_layout"
         android:layout_width="match_parent"
-        android:background="@color/toolbar_teal"
-        app:layout_scrollFlags="scroll|exitUntilCollapsed"
         android:layout_height="match_parent">
 
-        <android.support.design.widget.CoordinatorLayout
-            android:id="@+id/background_layout"
+    </android.support.design.widget.CoordinatorLayout>
+
+    <ScrollView
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:fitsSystemWindows="true">
+
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="wrap_content"
+            android:clickable="true"
+            android:focusableInTouchMode="true"
+            android:orientation="vertical"
+            android:paddingLeft="24dp"
+            android:paddingRight="24dp"
+            android:paddingTop="10dp">
 
-        </android.support.design.widget.CoordinatorLayout>
-
-        <ScrollView
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:fitsSystemWindows="true">
-
-            <LinearLayout
-                android:orientation="vertical"
+            <TextView
+                android:id="@+id/Ecomap"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:paddingTop="10dp"
-                android:paddingLeft="24dp"
-                android:paddingRight="24dp"
-                android:clickable="true"
-                android:focusableInTouchMode="true">
+                android:layout_alignParentTop="true"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="2dp"
+                android:gravity="center"
+                android:text="@string/ECOMAP"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:textColor="@color/abc_input_method_navigation_guard"
+                android:textSize="60dp"
+                android:textStyle="bold" />
 
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:textAppearance="?android:attr/textAppearanceLarge"
-                    android:text="@string/ECOMAP"
-                    android:id="@+id/Ecomap"
-                    android:gravity="center"
-                    android:textColor="@color/abc_input_method_navigation_guard"
-                    android:layout_marginTop="2dp"
-                    android:textSize="60dp"
-                    android:textStyle="bold"
-                    android:layout_alignParentTop="true"
-                    android:layout_centerHorizontal="true" />
+            <ImageView
+                android:layout_width="294dp"
+                android:layout_height="111dp"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginBottom="24dp"
+                android:src="@drawable/wwflogo1" />
 
-                <ImageView android:src="@drawable/wwflogo1"
-                    android:layout_width="294dp"
-                    android:layout_height="111dp"
-                    android:layout_marginBottom="24dp"
-                    android:layout_gravity="center_horizontal" />
+            <EditText
+                android:id="@+id/input_email_log"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Email"
+                android:inputType="textEmailAddress" />
 
-                <!-- Email Label -->
-                <EditText android:id="@+id/input_email_log"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:inputType="textEmailAddress"
-                    android:hint="Email" />
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:layout_marginTop="8dp">
 
-                <android.support.design.widget.TextInputLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
-                    android:layout_marginBottom="8dp"></android.support.design.widget.TextInputLayout>
+            </android.support.design.widget.TextInputLayout>
 
-                <!-- Password Label -->
-                <EditText android:id="@+id/input_password_log"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:inputType="textPassword"
-                    android:hint="Password"/>
+            <EditText
+                android:id="@+id/input_password_log"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Password"
+                android:inputType="textPassword" />
 
-                <android.support.design.widget.TextInputLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
-                    android:layout_marginBottom="8dp"></android.support.design.widget.TextInputLayout>
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:layout_marginTop="8dp">
 
-                <!-- Signup Button -->
-                <view
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    class="com.facebook.login.widget.LoginButton"
-                    android:id="@+id/facebook_button"
-                    android:layout_above="@+id/Logo"
-                    android:layout_alignLeft="@+id/Ukraine_text"
-                    android:layout_alignStart="@+id/Ukraine_text"
-                    android:layout_gravity="center_horizontal" />
+            </android.support.design.widget.TextInputLayout>
 
-                <android.support.v7.widget.AppCompatButton
-                    android:id="@+id/btn_log_in"
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="12dp"
-                    android:textSize="18sp"
-                    android:textAllCaps="false"
-                    android:layout_marginBottom="4dp"
-                    android:padding="12dp"
-                    android:text="Log in"/>
+            <view
+                android:id="@+id/facebook_button"
+                class="com.facebook.login.widget.LoginButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_above="@+id/Logo"
+                android:layout_alignLeft="@+id/Ukraine_text"
+                android:layout_alignStart="@+id/Ukraine_text"
+                android:layout_gravity="center_horizontal" />
 
-                <android.support.v7.widget.AppCompatButton
-                    android:id="@+id/skip_button"
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:textSize="18sp"
-                    android:layout_marginTop="4dp"
-                    android:textAllCaps="false"
-                    android:layout_marginBottom="4dp"
-                    android:padding="12dp"
-                    android:text="Skip"/>
+            <android.support.v7.widget.AppCompatButton
+                android:id="@+id/btn_log_in"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="4dp"
+                android:layout_marginTop="12dp"
+                android:padding="12dp"
+                android:text="Log in"
+                android:textAllCaps="false"
+                android:textSize="18sp" />
 
-                <android.support.v7.widget.AppCompatButton
-                    android:id="@+id/sign_up"
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:textSize="18sp"
-                    android:textAllCaps="false"
-                    android:layout_marginTop="4dp"
-                    android:layout_marginBottom="4dp"
-                    android:padding="12dp"
-                    android:text="Sign up"/>
+            <android.support.v7.widget.AppCompatButton
+                android:id="@+id/skip_button"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="4dp"
+                android:layout_marginTop="4dp"
+                android:padding="12dp"
+                android:text="Skip"
+                android:textAllCaps="false"
+                android:textSize="18sp" />
 
-            </LinearLayout>
-        </ScrollView>
-    </RelativeLayout>
+            <android.support.v7.widget.AppCompatButton
+                android:id="@+id/sign_up"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="4dp"
+                android:layout_marginTop="4dp"
+                android:padding="12dp"
+                android:text="Sign up"
+                android:textAllCaps="false"
+                android:textSize="18sp" />
+
+        </LinearLayout>
+    </ScrollView>
+</RelativeLayout>

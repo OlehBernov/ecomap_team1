@@ -24,9 +24,8 @@ import com.ecomap.ukraine.data.manager.DataManager;
 import com.ecomap.ukraine.account.manager.LogOutListener;
 import com.ecomap.ukraine.filter.FilterManager;
 import com.ecomap.ukraine.filter.FilterState;
-import com.ecomap.ukraine.filter.JSONConverter;
+import com.ecomap.ukraine.filter.FilterStateConverter;
 import com.ecomap.ukraine.models.User;
-import com.pkmmte.view.CircularImageView;
 
 import org.json.JSONException;
 
@@ -185,7 +184,7 @@ public class MainActivity extends AppCompatActivity implements LogOutListener {
         SharedPreferences.Editor editor = settings.edit();
         FilterState filterState = buildFiltersState();
         try {
-            editor.putString(FILTERS_STATE, new JSONConverter().convertToJson(filterState));
+            editor.putString(FILTERS_STATE, new FilterStateConverter().convertToJson(filterState));
         } catch (JSONException e) {
             Log.e("JSONException", "onDestroy");
         }
@@ -383,7 +382,7 @@ public class MainActivity extends AppCompatActivity implements LogOutListener {
         FilterState filterState;
         if (filterStateJson != null) {
             try {
-                filterState = new JSONConverter().convertToFilterState(filterStateJson);
+                filterState = new FilterStateConverter().convertToFilterState(filterStateJson);
             } catch (JSONException e) {
                 filterState = null;
                 Log.e("JSONException", "setup filter");

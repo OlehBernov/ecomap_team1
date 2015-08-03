@@ -13,7 +13,7 @@ import java.util.Locale;
 /**
  * TODO docs
  */
-public class JSONConverter {
+public class FilterStateConverter {
 
     private static final String DATE_TEMPLATE = "dd-MM-yyyy";
 

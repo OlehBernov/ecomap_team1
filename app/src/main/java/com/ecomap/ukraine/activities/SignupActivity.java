@@ -1,32 +1,29 @@
 package com.ecomap.ukraine.activities;
 
 import android.content.Context;
-import android.graphics.BitmapFactory;
-import android.support.annotation.DrawableRes;
-import android.support.v4.content.res.ResourcesCompat;
-import android.support.design.widget.CoordinatorLayout;
-import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 
 import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.ecomap.ukraine.R;
+import com.ecomap.ukraine.validation.Validator;
 
 import butterknife.ButterKnife;
         import butterknife.InjectView;
 
 public class SignupActivity extends AppCompatActivity {
-    private static final String TAG = "SignupActivity";
+
+    private static final String TAG = "SignUp Activity";
+    private static final String CREATING_ACCOUNT = "Creating Account...";
+    private static final String SIGN_UP_FAILED = "Sign Up failed";
 
     View.OnFocusChangeListener focusChangeListener = new View.OnFocusChangeListener() {
         @Override
@@ -59,28 +56,33 @@ public class SignupActivity extends AppCompatActivity {
         signUpButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                signup();
+                signUp();
             }
         });
 
         loginLink.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Finish the registration screen and return to the Login activity
                 finish();
             }
         });
     }
 
-    public void signup() {
-        Log.d(TAG, "Signup");
+    public void signUp() {
+        Log.d(TAG, "SignUp");
+
+        boolean isRegistrationValid;
+        isRegistrationValid = new Validator().registrationValidation(nameText, surnameText, emailText,
+                passwordText, passwordConfirmText);
+        if (!isRegistrationValid) {
+            return;
+        }
 
         signUpButton.setEnabled(false);
-
         final ProgressDialog progressDialog = new ProgressDialog(SignupActivity.this,
                 R.style.Base_V11_Theme_AppCompat_Dialog);
         progressDialog.setIndeterminate(true);
-        progressDialog.setMessage("Creating Account...");
+        progressDialog.setMessage(CREATING_ACCOUNT);
         progressDialog.show();
 
         String name = nameText.getText().toString();
@@ -88,30 +90,28 @@ public class SignupActivity extends AppCompatActivity {
         String email = emailText.getText().toString();
         String password = passwordText.getText().toString();
 
-
-        // TODO: Implement your own signup logic here.
+        // TODO: Implement your own signUp logic here.
 
         new android.os.Handler().postDelayed(
                 new Runnable() {
                     public void run() {
-                        // On complete call either onSignupSuccess or onSignupFailed
+                        // On complete call either onSignUpSuccess or onSignUpFailed
                         // depending on success
-                        onSignupSuccess();
-                        // onSignupFailed();
+                        onSignUpSuccess();
+                        // onSignUpFailed();
                         progressDialog.dismiss();
                     }
                 }, 3000);
     }
 
-    public void onSignupSuccess() {
+    public void onSignUpSuccess() {
         signUpButton.setEnabled(true);
         setResult(RESULT_OK, null);
         finish();
     }
 
-    public void onSignupFailed() {
-        Toast.makeText(getBaseContext(), "Login failed", Toast.LENGTH_LONG).show();
-
+    public void onSignUpFailed() {
+        Toast.makeText(getBaseContext(), SIGN_UP_FAILED, Toast.LENGTH_LONG).show();
         signUpButton.setEnabled(true);
     }
 
@@ -120,4 +120,5 @@ public class SignupActivity extends AppCompatActivity {
                 =(InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
         inputMethodManager.hideSoftInputFromWindow(view.getWindowToken(), 0);
     }
+
 }
