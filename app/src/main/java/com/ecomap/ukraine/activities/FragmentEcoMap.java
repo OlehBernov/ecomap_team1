@@ -3,6 +3,7 @@ package com.ecomap.ukraine.activities;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,6 +14,7 @@ import com.ecomap.ukraine.data.manager.ProblemListener;
 import com.ecomap.ukraine.filter.FilterListener;
 import com.ecomap.ukraine.filter.FilterManager;
 import com.ecomap.ukraine.filter.FilterState;
+import com.ecomap.ukraine.filter.FilterStateConverter;
 import com.ecomap.ukraine.models.Details;
 import com.ecomap.ukraine.models.Problem;
 import com.google.android.gms.maps.CameraUpdate;
@@ -24,6 +26,8 @@ import com.google.android.gms.maps.UiSettings;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.maps.android.clustering.ClusterManager;
+
+import org.json.JSONException;
 
 import java.util.Calendar;
 import java.util.GregorianCalendar;
@@ -42,6 +46,10 @@ public class FragmentEcoMap extends android.support.v4.app.Fragment implements P
     private ClusterManager<Problem> clusterManager;
     private FilterState filterState;
     private static List<Problem> problems;
+
+
+
+
 
     /**
      * Filter manager instance
@@ -81,7 +89,7 @@ public class FragmentEcoMap extends android.support.v4.app.Fragment implements P
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         manager = DataManager.getInstance(getActivity().getApplicationContext());
-        fmanager = FilterManager.getInstance();
+        fmanager = FilterManager.getInstance(getActivity());
         manager.registerProblemListener(this);
 
         View rootView = inflater.inflate(R.layout.fragement_map, container, false);
@@ -105,11 +113,13 @@ public class FragmentEcoMap extends android.support.v4.app.Fragment implements P
     public void onDestroy() {
         super.onDestroy();
         manager.removeProblemListener(this);
+        fmanager.removeFilterListener(this);
         SharedPreferences.Editor editor = getActivity().getSharedPreferences(FragmentEcoMap.POSITION, Context.MODE_PRIVATE).edit();
         editor.putFloat(LATITUDE, (float) googleMap.getCameraPosition().target.latitude);
         editor.putFloat(LONGITUDE, (float) googleMap.getCameraPosition().target.longitude);
         editor.putFloat(ZOOM, (float) googleMap.getCameraPosition().zoom);
         editor.apply();
+
 
     }
 
@@ -149,29 +159,20 @@ public class FragmentEcoMap extends android.support.v4.app.Fragment implements P
      *
      * @param problems list of problems
      */
-    public void putAllProblemsOnMap(List<Problem> problems, FilterState filterState) {
+    public void putAllProblemsOnMap(final List<Problem> problems,  FilterState filterState) {
         clusterManager = new ClusterManager<>(getActivity().getApplicationContext(), googleMap);
         googleMap.setOnCameraChangeListener(clusterManager);
         googleMap.setOnMarkerClickListener(clusterManager);
-        Calendar date = Calendar.getInstance();
-        if (filterState != null) {
+        if (filterState==null) {
+            filterState = fmanager.getFilterStateFromPreference();
+        }
             googleMap.clear();
             for (Problem problem : problems) {
-
                 if (filtration(filterState, problem)) {
-                    clusterManager.setRenderer(new IconRenderer(getActivity(), googleMap, clusterManager));
                     clusterManager.addItem(problem);
-
-
                 }
             }
-        } else {
-            for (Problem problem : problems) {
-                clusterManager.setRenderer(new IconRenderer(getActivity(), googleMap, clusterManager));
-                clusterManager.addItem(problem);
-            }
-        }
-
+        clusterManager.setRenderer(new IconRenderer(getActivity(), googleMap, clusterManager));
     }
 
     /**
@@ -227,4 +228,6 @@ public class FragmentEcoMap extends android.support.v4.app.Fragment implements P
         }
          return false;
     }
+
+
 }

@@ -1,5 +1,12 @@
 package com.ecomap.ukraine.filter;
 
+import android.app.Activity;
+import android.content.Context;
+import android.content.SharedPreferences;
+import android.util.Log;
+
+import org.json.JSONException;
+
 import java.util.HashSet;
 import java.util.Set;
 
@@ -8,10 +15,17 @@ import java.util.Set;
  */
 public class FilterManager implements FilterListenersNotifier {
 
+    private static final String FILTERS_STATE = "Filters state";
+
     /**
      * Holds the Singleton global instance of FilterManager.
      */
     private static FilterManager instance;
+
+    /**
+     * Activity which callback filter-manager
+     */
+    private  Activity activity;
 
 
     /**
@@ -30,11 +44,19 @@ public class FilterManager implements FilterListenersNotifier {
     }
 
     /**
+     * Filter manager constructor.
+     */
+    private FilterManager(Activity activity) {
+        this.activity = activity;
+    }
+
+    /**
      * Returns Singleton instance of FilterManger
      */
-    public static FilterManager getInstance() {
+    public static FilterManager getInstance(Activity activity) {
         if (instance == null) {
-            instance = new FilterManager();
+            instance = new FilterManager(activity);
+
         }
         return instance;
     }
@@ -67,6 +89,30 @@ public class FilterManager implements FilterListenersNotifier {
         public void getFilterState (FilterState filterState) {
             sendFilterState(filterState);
 
+    }
+
+    /**
+     * Gets filter state form SharedPreferences
+     * @return filter state
+     */
+    public FilterState getFilterStateFromPreference () {
+        SharedPreferences settings = activity.getApplicationContext()
+                .getSharedPreferences(FILTERS_STATE, Context.MODE_PRIVATE);
+        String filterStateJson = settings.getString(FILTERS_STATE, null);
+        FilterState filterState;
+        if (filterStateJson != null) {
+            try {
+                filterState = new FilterStateConverter().convertToFilterState(filterStateJson);
+
+            } catch (JSONException e) {
+                filterState = null;
+                Log.e("JSONException", "convert filter");
+            }
+        } else {
+            filterState = null;
+            Log.e("JSONException", "filter null");
+        }
+        return filterState;
     }
 
 }
