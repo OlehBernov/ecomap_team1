@@ -12,12 +12,12 @@
         android:adjustViewBounds="true"
         android:orientation="vertical"
         android:scaleType="fitCenter"
-        android:src="@drawable/drawer_background8"
+        android:src="@drawable/drawer_background9"
         android:id="@+id/imageView2">
 
     </ImageView>
 
-    <com.pkmmte.view.CircularImageView xmlns:app="http://schemas.android.com/apk/res-auto"
+  <!--  <com.pkmmte.view.CircularImageView xmlns:app="http://schemas.android.com/apk/res-auto"
         android:layout_width="75dp"
         android:layout_height="75dp"
         android:src="@drawable/type1"
@@ -29,7 +29,7 @@
         android:layout_marginBottom="10dp"
         android:layout_above="@+id/navigation_user_name"
         android:layout_alignLeft="@+id/navigation_user_name"
-        android:layout_alignStart="@+id/navigation_user_name" />
+        android:layout_alignStart="@+id/navigation_user_name" /> -->
 
     <TextView
         android:layout_width="wrap_content"

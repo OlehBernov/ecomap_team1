@@ -1,13 +1,18 @@
 package com.ecomap.ukraine.activities;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.media.tv.TvInputService;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
@@ -33,7 +38,10 @@ import org.json.JSONObject;
 import java.util.Arrays;
 import java.util.Random;
 
-public class LoginScreen extends Activity implements LogInListener {
+import butterknife.ButterKnife;
+import butterknife.InjectView;
+
+public class LoginScreen extends AppCompatActivity implements LogInListener {
 
     private Intent intent;
 
@@ -44,6 +52,22 @@ public class LoginScreen extends Activity implements LogInListener {
     private SharedPreferences sharedPreferences;
 
     private CallbackManager callbackManager;
+
+    private static final String TAG = "LoginActivity";
+
+    View.OnFocusChangeListener focusChangeListener = new View.OnFocusChangeListener() {
+        @Override
+        public void onFocusChange(View v, boolean hasFocus) {
+            if(!hasFocus) {
+                hideKeyboard(v);
+            }
+        }
+    };
+
+    @InjectView(R.id.input_email_log) EditText emailText;
+    @InjectView(R.id.input_password_log) EditText passwordText;
+    @InjectView(R.id.btn_log_in) Button logInBut;
+    @InjectView(R.id.sign_up) TextView signUpLink;
 
     /**
      * Initialize activity
@@ -56,6 +80,26 @@ public class LoginScreen extends Activity implements LogInListener {
         FacebookSdk.sdkInitialize(this);
         sharedPreferences = this.getSharedPreferences("security", MODE_PRIVATE);
         setContentView(R.layout.login_activity);
+
+        ButterKnife.inject(this);
+        emailText.setOnFocusChangeListener(focusChangeListener);
+        passwordText.setOnFocusChangeListener(focusChangeListener);
+
+        logInBut.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                login();
+            }
+        });
+
+     /*   signUpLink.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Finish the registration screen and return to the Login activity
+                finish();
+            }
+        }); */
+
         callbackManager = CallbackManager.Factory.create();
         loginButton = (LoginButton)findViewById(R.id.facebook_button);
         final LoginManager loginManager = LoginManager.getInstance();
@@ -82,7 +126,7 @@ public class LoginScreen extends Activity implements LogInListener {
         accountManager.registerLogInListener(this);
         intent = new Intent(this, MainActivity.class);
 
-        View skip = findViewById(R.id.skip);
+        View skip = findViewById(R.id.skip_button);
         skip.setOnClickListener(new View.OnClickListener() {
                                     @Override
                                     public void onClick(View v) {
@@ -97,16 +141,45 @@ public class LoginScreen extends Activity implements LogInListener {
                     @Override
                     public void onClick(View v) {
                         startActivity(signUpIntent);
-
                     }
                 }
         );
     }
 
+    public void login() {
+        Log.d(TAG, "login");
+
+        logInBut.setEnabled(false);
+
+        final ProgressDialog progressDialog = new ProgressDialog(LoginScreen.this,
+                R.style.Base_V11_Theme_AppCompat_Dialog);
+        progressDialog.setIndeterminate(true);
+        progressDialog.setMessage("Log in...");
+        progressDialog.show();
+
+        String email = emailText.getText().toString();
+        String password = passwordText.getText().toString();
+
+
+        accountManager.logInUser(password, email);
+
+    /*    new android.os.Handler().postDelayed(
+                new Runnable() {
+                    public void run() {
+                        // On complete call either onSignupSuccess or onSignupFailed
+                        // depending on success
+                        onSignupSuccess();
+                        // onSignupFailed();
+                        progressDialog.dismiss();
+                    }
+                }, 3000); */
+    }
+
     private void openMainActivity() {
-        onDestroy();
+     //   onDestroy();
         startActivity(intent);
     }
+
     private void saveLoginResult(LoginResult loginResult) {
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putString("token", loginResult.getAccessToken().getToken());
@@ -115,15 +188,16 @@ public class LoginScreen extends Activity implements LogInListener {
         editor.apply();
     }
 
-    public void LogIn(View view) {
+ /*   public void LogIn(View view) {
         EditText password = (EditText) findViewById(R.id.Password);
         EditText login = (EditText) findViewById(R.id.Login);
         accountManager.logInUser(password.getText().toString(),
                 login.getText().toString());
-    }
+    } */
 
     @Override
     public void setLogInResult(User user) {
+        logInBut.setEnabled(true);
         if (user != null) {
             intent.putExtra("User", user);
             openMainActivity();
@@ -159,6 +233,13 @@ public class LoginScreen extends Activity implements LogInListener {
     private long generatePassword(String id) {
         long input = Long.getLong(id);
         return new Random(input + 1).nextLong();
+    }
+
+
+    public void hideKeyboard(View view) {
+        InputMethodManager inputMethodManager
+                =(InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+        inputMethodManager.hideSoftInputFromWindow(view.getWindowToken(), 0);
     }
 
 }

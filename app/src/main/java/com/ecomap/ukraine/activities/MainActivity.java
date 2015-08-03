@@ -120,8 +120,8 @@ public class MainActivity extends AppCompatActivity implements LogOutListener {
         user = (User) getIntent().getSerializableExtra("User");
         setUserInformation(user);
 
-        CircularImageView circularImageView = (CircularImageView)findViewById(R.id.circle_photo);
-        circularImageView.setImageResource(R.drawable.unsolved);
+      /*  CircularImageView circularImageView = (CircularImageView)findViewById(R.id.circle_photo);
+        circularImageView.setImageResource(R.drawable.unsolved); */
 
         this.addMapFragment();
 
