@@ -1,5 +1,6 @@
 package com.ecomap.ukraine.activities;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -32,7 +33,8 @@ import java.util.List;
 /**
  * Created by Andriy on 25.07.2015.
  */
-public class FragmentEcoMap extends android.support.v4.app.Fragment implements ProblemListener, FilterListener {
+public class FragmentEcoMap extends android.support.v4.app.Fragment
+        implements ProblemListener, FilterListener {
 
     private MapView mapView;
     private GoogleMap googleMap;
@@ -57,7 +59,10 @@ public class FragmentEcoMap extends android.support.v4.app.Fragment implements P
     private static final String LONGITUDE = "longitude";
     private static final String ZOOM = "zoom";
 
-    public static FragmentEcoMap newInstance() {
+    private static Activity activity;
+
+    public static FragmentEcoMap newInstance(Activity activity_) {
+        activity = activity_;
         return new FragmentEcoMap();
     }
 
@@ -153,7 +158,8 @@ public class FragmentEcoMap extends android.support.v4.app.Fragment implements P
     public void putAllProblemsOnMap(final List<Problem> problems, final FilterState filterState) {
         clusterManager = new ClusterManager<>(getActivity().getApplicationContext(), googleMap);
         googleMap.setOnCameraChangeListener(clusterManager);
-        googleMap.setOnMarkerClickListener(clusterManager);
+    //    googleMap.setOnMarkerClickListener(clusterManager);
+        googleMap.setOnMarkerClickListener(new MarkerListener(activity));
 
         if (filterState != null) {
             googleMap.clear();
@@ -163,9 +169,7 @@ public class FragmentEcoMap extends android.support.v4.app.Fragment implements P
                 }
             }
         } else {
-            for (Problem problem : problems) {
-                clusterManager.addItem(problem);
-            }
+            clusterManager.addItems(problems);
         }
         clusterManager.setRenderer(new IconRenderer(getActivity(), googleMap, clusterManager));
 

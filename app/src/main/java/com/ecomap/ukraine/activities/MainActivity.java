@@ -26,6 +26,7 @@ import com.ecomap.ukraine.filter.FilterManager;
 import com.ecomap.ukraine.filter.FilterState;
 import com.ecomap.ukraine.filter.FilterStateConverter;
 import com.ecomap.ukraine.models.User;
+import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 
 import org.json.JSONException;
 
@@ -121,6 +122,9 @@ public class MainActivity extends AppCompatActivity implements LogOutListener {
 
       /*  CircularImageView circularImageView = (CircularImageView)findViewById(R.id.circle_photo);
         circularImageView.setImageResource(R.drawable.unsolved); */
+
+        SlidingUpPanelLayout sm = (SlidingUpPanelLayout) findViewById(R.id.sliding_layout);
+        sm.setAnchorPoint(0.5f);
 
         this.addMapFragment();
 
@@ -337,7 +341,7 @@ public class MainActivity extends AppCompatActivity implements LogOutListener {
     private void addMapFragment() {
         FragmentManager fragmentManager = getSupportFragmentManager();
         fragmentManager.beginTransaction()
-                .replace(R.id.container, FragmentEcoMap.newInstance())
+                .replace(R.id.container, FragmentEcoMap.newInstance(this))
                 .commit();
     }
 
