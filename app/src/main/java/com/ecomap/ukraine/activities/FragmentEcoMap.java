@@ -165,12 +165,20 @@ public class FragmentEcoMap extends android.support.v4.app.Fragment implements P
         if (filterState==null) {
             filterState = fmanager.getFilterStateFromPreference();
         }
-            googleMap.clear();
+        googleMap.clear();
+        if(filterState!=null) {
             for (Problem problem : problems) {
                 if (filtration(filterState, problem)) {
                     clusterManager.addItem(problem);
                 }
             }
+        }
+        else {
+            for (Problem problem : problems) {
+                clusterManager.addItem(problem);
+            }
+        }
+
         clusterManager.setRenderer(new IconRenderer(getActivity(), googleMap, clusterManager));
     }
 
