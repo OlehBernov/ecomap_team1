@@ -159,13 +159,13 @@ public class FragmentEcoMap extends android.support.v4.app.Fragment
      *
      * @param problems list of problems
      */
-    public void putAllProblemsOnMap(final List<Problem> problems, final FilterState filterState) {
+    public void putAllProblemsOnMap(final List<Problem> problems, FilterState filterState) {
         clusterManager = new ClusterManager<>(getActivity().getApplicationContext(), googleMap);
         googleMap.setOnCameraChangeListener(clusterManager);
     //    googleMap.setOnMarkerClickListener(clusterManager);
         googleMap.setOnMarkerClickListener(new MarkerListener(activity));
         
-        if (filterState==null) {
+        if (filterState == null) {
             filterState = fmanager.getFilterStateFromPreference();
         }
         googleMap.clear();
