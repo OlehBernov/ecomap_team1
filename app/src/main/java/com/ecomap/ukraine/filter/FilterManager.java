@@ -103,7 +103,6 @@ public class FilterManager implements FilterListenersNotifier {
         if (filterStateJson != null) {
             try {
                 filterState = new FilterStateConverter().convertToFilterState(filterStateJson);
-
             } catch (JSONException e) {
                 filterState = null;
                 Log.e("JSONException", "convert filter");
