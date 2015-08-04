@@ -112,7 +112,7 @@ public class MainActivity extends AppCompatActivity implements LogOutListener {
         setContentView(R.layout.activity_main);
         dataManager = DataManager.getInstance(getApplicationContext());
 
-        fmanager = FilterManager.getInstance();
+        fmanager = FilterManager.getInstance(this);
         setupToolbar();
         setUpDrawerLayout();
         setupFilter();
@@ -379,22 +379,8 @@ public class MainActivity extends AppCompatActivity implements LogOutListener {
         filterLayout = (DrawerLayout) findViewById(R.id.drawer2);
         filterLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
 
-        SharedPreferences settings = getApplicationContext()
-                                    .getSharedPreferences(FILTERS_STATE, MODE_PRIVATE);
-        String filterStateJson = settings.getString(FILTERS_STATE, null);
 
-        FilterState filterState;
-        if (filterStateJson != null) {
-            try {
-                filterState = new FilterStateConverter().convertToFilterState(filterStateJson);
-            } catch (JSONException e) {
-                filterState = null;
-                Log.e("JSONException", "setup filter");
-            }
-        } else {
-            filterState = null;
-            Log.e("JSONException", "filter null");
-        }
+        FilterState filterState = fmanager.getFilterStateFromPreference();
 
         setFiltersState(filterState);
     }

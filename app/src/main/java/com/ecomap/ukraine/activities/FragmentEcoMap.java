@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,6 +15,7 @@ import com.ecomap.ukraine.data.manager.ProblemListener;
 import com.ecomap.ukraine.filter.FilterListener;
 import com.ecomap.ukraine.filter.FilterManager;
 import com.ecomap.ukraine.filter.FilterState;
+import com.ecomap.ukraine.filter.FilterStateConverter;
 import com.ecomap.ukraine.models.Details;
 import com.ecomap.ukraine.models.Problem;
 import com.google.android.gms.maps.CameraUpdate;
@@ -25,6 +27,8 @@ import com.google.android.gms.maps.UiSettings;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.maps.android.clustering.ClusterManager;
+
+import org.json.JSONException;
 
 import java.util.Calendar;
 import java.util.GregorianCalendar;
@@ -86,7 +90,7 @@ public class FragmentEcoMap extends android.support.v4.app.Fragment
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         manager = DataManager.getInstance(getActivity().getApplicationContext());
-        fmanager = FilterManager.getInstance();
+        fmanager = FilterManager.getInstance(getActivity());
         manager.registerProblemListener(this);
 
         View rootView = inflater.inflate(R.layout.fragement_map, container, false);
@@ -160,9 +164,12 @@ public class FragmentEcoMap extends android.support.v4.app.Fragment
         googleMap.setOnCameraChangeListener(clusterManager);
     //    googleMap.setOnMarkerClickListener(clusterManager);
         googleMap.setOnMarkerClickListener(new MarkerListener(activity));
-
-        if (filterState != null) {
-            googleMap.clear();
+        
+        if (filterState==null) {
+            filterState = fmanager.getFilterStateFromPreference();
+        }
+        googleMap.clear();
+        if(filterState!=null) {
             for (Problem problem : problems) {
                 if (filtration(filterState, problem)) {
                     clusterManager.addItem(problem);
@@ -171,8 +178,8 @@ public class FragmentEcoMap extends android.support.v4.app.Fragment
         } else {
             clusterManager.addItems(problems);
         }
-        clusterManager.setRenderer(new IconRenderer(getActivity(), googleMap, clusterManager));
 
+        clusterManager.setRenderer(new IconRenderer(getActivity(), googleMap, clusterManager));
     }
 
     /**
