@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/toolbar_teal"
+    android:orientation="vertical"
+    app:layout_scrollFlags="scroll|exitUntilCollapsed">
+
+    <android.support.design.widget.CoordinatorLayout
+        android:id="@+id/background_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+    </android.support.design.widget.CoordinatorLayout>
+
+    <ScrollView
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:fitsSystemWindows="true">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:clickable="true"
+            android:focusableInTouchMode="true"
+            android:orientation="vertical"
+            android:paddingLeft="24dp"
+            android:paddingRight="24dp"
+            android:paddingTop="10dp">
+
+            <TextView
+                android:id="@+id/Ecomap"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="2dp"
+                android:gravity="center"
+                android:text="@string/ECOMAP"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:textColor="@color/abc_input_method_navigation_guard"
+                android:textSize="60dp"
+                android:textStyle="bold" />
+
+            <ImageView
+                android:layout_width="294dp"
+                android:layout_height="111dp"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginBottom="24dp"
+                android:src="@drawable/wwflogo1" />
+
+            <EditText
+                android:id="@+id/input_email_log"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Email"
+                android:inputType="textEmailAddress" />
+
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:layout_marginTop="8dp">
+
+            </android.support.design.widget.TextInputLayout>
+
+            <EditText
+                android:id="@+id/input_password_log"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Password"
+                android:inputType="textPassword" />
+
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:layout_marginTop="8dp">
+
+            </android.support.design.widget.TextInputLayout>
+
+            <view
+                android:id="@+id/facebook_button"
+                class="com.facebook.login.widget.LoginButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_above="@+id/Logo"
+                android:layout_alignLeft="@+id/Ukraine_text"
+                android:layout_alignStart="@+id/Ukraine_text"
+                android:layout_gravity="center_horizontal" />
+
+            <android.support.v7.widget.AppCompatButton
+                android:id="@+id/btn_log_in"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="4dp"
+                android:layout_marginTop="12dp"
+                android:padding="12dp"
+                android:text="Log in"
+                android:textAllCaps="false"
+                android:textSize="18sp" />
+
+            <android.support.v7.widget.AppCompatButton
+                android:id="@+id/skip_button"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="4dp"
+                android:layout_marginTop="4dp"
+                android:padding="12dp"
+                android:text="Skip"
+                android:textAllCaps="false"
+                android:textSize="18sp" />
+
+            <android.support.v7.widget.AppCompatButton
+                android:id="@+id/sign_up"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="4dp"
+                android:layout_marginTop="4dp"
+                android:padding="12dp"
+                android:text="Sign up"
+                android:textAllCaps="false"
+                android:textSize="18sp" />
+
+        </LinearLayout>
+    </ScrollView>
+</RelativeLayout>

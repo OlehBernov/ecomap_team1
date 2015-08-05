@@ -101,7 +101,8 @@ public class LoadingClient {
                     public void onResponse(String response) {
                         try {
                             Details details = new JSONParser().parseDetailedProblem(response);
-                            getPhotos(details);
+                            problemRequestReceiver.setProblemDetailsRequestResult(details);
+                           // getPhotos(details);
                         } catch (JSONException e) {
                             Log.e("exception", "JSONException in getProblemDetail");
                             problemRequestReceiver.setProblemDetailsRequestResult(null);

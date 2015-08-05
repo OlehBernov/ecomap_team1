@@ -114,7 +114,7 @@ public class IconRenderer extends DefaultClusterRenderer<Problem> {
      * @param typeId id of type
      * @return icon resourse
      */
-    private int getResourceIdForMarker (int typeId) {
+    public static int getResourceIdForMarker (int typeId) {
         int resId = 0;
         switch (typeId) {
             case 1:

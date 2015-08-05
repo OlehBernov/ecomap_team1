@@ -120,9 +120,10 @@ public class DataManager implements ProblemListenersNotifier,
     public void setProblemDetailsRequestResult(Details details) {
         if (details != null) {
             dbHelper.updateProblemDetails(details);
+            getProblemDetail(details.getProblemId());
+        } else {
+            sendProblemDetails(null);
         }
-
-        getProblemDetail(details.getProblemId());
     }
 
 
