@@ -64,7 +64,6 @@ public class SignupActivity extends AppCompatActivity implements LogInListener {
         mainIntent = new Intent(this, MainActivity.class);
 
         accountManager = accountManager.getInstance(getApplicationContext());
-       
 
         signUpButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -105,8 +104,6 @@ public class SignupActivity extends AppCompatActivity implements LogInListener {
 
 		accountManager.registerLogInListener(this);
         accountManager.registerUser(name, surname, email, password);
-
-
     }
 
     public void onSignUpSuccess() {

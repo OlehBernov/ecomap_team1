@@ -90,7 +90,6 @@ public class LoginScreen extends AppCompatActivity implements LogInListener {
         callbackManager = CallbackManager.Factory.create();
         logInFacebookButton = (LoginButton)findViewById(R.id.facebook_button);
         final LoginManager loginManager = LoginManager.getInstance();
-        String s = sharedPreferences.getString("token", "fuckedUp");
         loginManager.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
             @Override
             public void onSuccess(LoginResult loginResult) {

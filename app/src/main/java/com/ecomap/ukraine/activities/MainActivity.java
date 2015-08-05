@@ -68,6 +68,8 @@ public class MainActivity extends AppCompatActivity implements LogOutListener {
 
     private static final String DEFAULT_DATE_TO = "31-12-2030";
 
+    private static final String USER = "User";
+
     /**
      * Drawer toggle.
      */
@@ -117,7 +119,7 @@ public class MainActivity extends AppCompatActivity implements LogOutListener {
         setUpDrawerLayout();
         setupFilter();
 
-        user = (User) getIntent().getSerializableExtra("User");
+        user = (User) getIntent().getSerializableExtra(USER);
         setUserInformation(user);
 
       /*  CircularImageView circularImageView = (CircularImageView)findViewById(R.id.circle_photo);
@@ -212,11 +214,12 @@ public class MainActivity extends AppCompatActivity implements LogOutListener {
     public void showFilter(MenuItem item) {
         filterLayout = (DrawerLayout) findViewById(R.id.drawer2);
         if (!filterLayout.isDrawerOpen(GravityCompat.END)) {
+            item.setIcon(R.drawable.filter_back);
             setDate();
             filterLayout.openDrawer(GravityCompat.END);
             toolbar.setTitle(FILTER);
         } else {
-            fmanager.getFilterState(buildFiltersState());
+            item.setIcon(R.drawable.filter8);
             filterLayout.closeDrawer(GravityCompat.END);
             toolbar.setTitle(ECOMAP);
         }
@@ -229,6 +232,7 @@ public class MainActivity extends AppCompatActivity implements LogOutListener {
         } else {
             setFilterOff(view);
         }
+        fmanager.getFilterState(buildFiltersState());
     }
 
     public void dateFromChoosing(View view) {
@@ -286,6 +290,8 @@ public class MainActivity extends AppCompatActivity implements LogOutListener {
 
                 calendarDateFrom = date;
                 setDate();
+
+                fmanager.getFilterState(buildFiltersState());
             }
         };
 
@@ -306,6 +312,8 @@ public class MainActivity extends AppCompatActivity implements LogOutListener {
 
                 calendarDateTo = date;
                 setDate();
+
+                fmanager.getFilterState(buildFiltersState());
             }
         };
 
@@ -378,10 +386,7 @@ public class MainActivity extends AppCompatActivity implements LogOutListener {
     private void setupFilter() {
         filterLayout = (DrawerLayout) findViewById(R.id.drawer2);
         filterLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
-
-
         FilterState filterState = fmanager.getFilterStateFromPreference();
-
         setFiltersState(filterState);
     }
 
