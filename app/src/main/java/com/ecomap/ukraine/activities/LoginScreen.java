@@ -72,11 +72,14 @@ public class LoginScreen extends AppCompatActivity implements LogInListener {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         FacebookSdk.sdkInitialize(this);
-        sharedPreferences = this.getSharedPreferences("security", MODE_PRIVATE);
+        sharedPreferences = this.getSharedPreferences(AccountManager.USER_INFO, MODE_PRIVATE);
+
         setContentView(R.layout.login_activity);
         mainIntent = new Intent(this, MainActivity.class);
 
         ButterKnife.inject(this);
+        emailText.setText(sharedPreferences.getString(AccountManager.LOGIN, ""));
+        passwordText.setText(sharedPreferences.getString(AccountManager.PASSWORD, ""));
         emailText.setOnFocusChangeListener(focusChangeListener);
         passwordText.setOnFocusChangeListener(focusChangeListener);
 
@@ -150,25 +153,8 @@ public class LoginScreen extends AppCompatActivity implements LogInListener {
         accountManager.registerLogInListener(this);
         accountManager.logInUser(password, email);
 
-    /*    new android.os.Handler().postDelayed(
-                new Runnable() {
-                    public void run() {
-                        // On complete call either onSignUpSuccess or onSignUpFailed
-                        // depending on success
-                        onSignUpSuccess();
-                        // onSignUpFailed();
-                        progressDialog.dismiss();
-                    }
-                }, 3000); */
     }
 
-    private void saveLoginResult(LoginResult loginResult) {
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putString("token", loginResult.getAccessToken().getToken());
-        editor.putString("userId", loginResult.getAccessToken().getUserId());
-        editor.putString("AccessToken", loginResult.getAccessToken().toString());
-        editor.apply();
-    }
 
     @Override
     public void setLogInResult(User user) {

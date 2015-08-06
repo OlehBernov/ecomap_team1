@@ -1,6 +1,7 @@
 package com.ecomap.ukraine.account.manager;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 
@@ -23,6 +24,13 @@ public class AccountManager implements LogInListenerNotifier,
     private LogInClient logInClient;
 
     private Context context;
+
+    /**
+     * The name of the preference to retrieve.
+     */
+    public static final String USER_INFO = "USER_INFO";
+    public static final String LOGIN = "LOGIN";
+    public static final String PASSWORD = "PASSWORD";
 
     private AccountManager(Context context) {
         this.context = context;
@@ -66,5 +74,11 @@ public class AccountManager implements LogInListenerNotifier,
         logInClient.postRegistration(firstname, lastname, email, password);
     }
 
-
+    @Override
+    public void putLogInResultToPreferences (final String password, final String login) {
+        SharedPreferences.Editor editor = context.getSharedPreferences(USER_INFO, Context.MODE_PRIVATE).edit();
+        editor.putString(LOGIN, login);
+        editor.putString(PASSWORD, password);
+        editor.apply();
+    }
 }

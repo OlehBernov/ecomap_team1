@@ -9,4 +9,6 @@ public interface LogRequestReceiver {
 
     void setLogInRequestResult(User user);
 
+    void putLogInResultToPreferences (final String password, final String login);
+
 }

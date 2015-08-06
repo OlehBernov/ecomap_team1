@@ -10,6 +10,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.ecomap.ukraine.account.convertion.JSONFields;
 import com.ecomap.ukraine.account.convertion.JSONParser;
+import com.ecomap.ukraine.account.manager.AccountManager;
 import com.ecomap.ukraine.account.manager.LogRequestReceiver;
 import com.ecomap.ukraine.models.User;
 import com.ecomap.ukraine.updating.serverclient.RequestQueueWrapper;
@@ -47,6 +48,7 @@ public class LogInClient {
                         try {
                             User user = new JSONParser().parseUserInformation(response);
                             logRequestReceiver.setLogInRequestResult(user);
+                           logRequestReceiver.putLogInResultToPreferences(password, login);
                         } catch (JSONException e) {
                             Log.e("exception", "JSONException in LogInUser");
                             logRequestReceiver.setLogInRequestResult(null);
@@ -87,6 +89,7 @@ public class LogInClient {
                         try {
                             User user = new JSONParser().parseRegistrationInformation(response, email);
                             logRequestReceiver.setLogInRequestResult(user);
+                            logRequestReceiver.putLogInResultToPreferences(password, email);
                         } catch (JSONException e) {
                             Log.e("exception", "JSONException in Registration");
                             logRequestReceiver.setLogInRequestResult(null);
@@ -117,5 +120,8 @@ public class LogInClient {
 
         RequestQueueWrapper.getInstance(context).addToRequestQueue(stringRequest);
     }
+
+
+
 
 }
