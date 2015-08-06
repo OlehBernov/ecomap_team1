@@ -201,10 +201,6 @@ public class MainActivity extends AppCompatActivity {
         editor.commit();
     }
 
-    public void logOut(MenuItem item) {
-        //TODO
-    }
-
     /**
      * Controls the position of the filter7 window on the screen.
      */

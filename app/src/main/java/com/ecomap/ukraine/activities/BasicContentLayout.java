@@ -64,7 +64,6 @@ public class BasicContentLayout {
         vto.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
             @Override
             public void onGlobalLayout() {
-                // rootLayout.getViewTreeObserver().removeGlobalOnLayoutListener(this);
                 currentLayoutHeight = rootLayout.getMeasuredHeight();
                 getCurrentLayoutWidth = rootLayout.getMeasuredWidth();
 

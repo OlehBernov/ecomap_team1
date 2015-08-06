@@ -31,13 +31,16 @@ import java.util.List;
 import java.util.Map;
 
 
-public class MarkerListener implements ProblemListener {
+public class MarkerListener {
 
     private static final float ANCHOR_POINT = 0.23f;
 
     private static final String DEFAULT_DESCRIPTION = "Description is missing";
     private static final String DEFAULT_PROPOSAL = "Proposal is missing";
-    private static final String ADD_COMMENT_HINT = "Add comment";
+    private static final String ADD_COMMENT_HINT = "Add comment...";
+
+    private static final String NOT_RESOLVED = "not resolved";
+    private static final String RESOLVED = "resolved";
 
     private static final int STAR_NUMBER = 5;
     private static final int DEFAULT_PHOTO_MARGIN = 25;
@@ -58,13 +61,13 @@ public class MarkerListener implements ProblemListener {
     private TableLayout activitiesLayout;
     private EditText addComment;
 
-    Context context;
+    private Context context;
 
-    private static int[] STARS_ID = {R.id.star1, R.id.star2, R.id.star3, R.id.star4, R.id.star1,};
+    private static int[] STARS_ID = {R.id.star1, R.id.star2, R.id.star3, R.id.star4, R.id.star5};
 
     private Toolbar toolbar;
 
-    public MarkerListener(Activity activity, Problem problem) {
+    public MarkerListener(final Activity activity, final Problem problem) {
         this.context = activity.getApplicationContext();
         this.activity = activity;
         this.toolbar = (Toolbar) activity.findViewById(R.id.toolbar);
@@ -88,9 +91,6 @@ public class MarkerListener implements ProblemListener {
         toolbar.setTitle("");
         this.votesNumber.setText("");
         this.putBriefInformation();
-
-        clearDetailsPanel();
-
     }
 
     private void clearDetailsPanel() {
@@ -104,7 +104,7 @@ public class MarkerListener implements ProblemListener {
         addComment.setText(ADD_COMMENT_HINT);
 
         if (isPhotoContainerHavePhotos()) {
-            photoContainer.removeViews(1, photoContainer.getChildCount() - 1);
+            photoContainer.removeViews(0, photoContainer.getChildCount());
         }
 
         if (isActivityLayoutHaveChild()) {
@@ -113,30 +113,25 @@ public class MarkerListener implements ProblemListener {
     }
 
     private boolean isPhotoContainerHavePhotos() {
-        return  photoContainer != null && (photoContainer.getChildCount() > 1);
+        return  photoContainer != null && (photoContainer.getChildCount() > 0);
     }
 
     private boolean isActivityLayoutHaveChild() {
         return activitiesLayout != null && (activitiesLayout.getChildCount() > 0);
     }
 
-    @Override
-    public void updateAllProblems(List<Problem> problems) {
-    }
-
-    @Override
-    public void updateProblemDetails(Details details) {
+    public void setProblemDetails(final Details details) {
         if (details == null) {
             return;
-
         }
 
+        clearDetailsPanel();
         putDetailsOnPanel(details);
 
         if (details.getProblemActivities() != null) {
             for (ProblemActivity problemActivity : details.getProblemActivities()) {
-                if ((problemActivity.getActivityTypesId() == ActivityType.CREATE) &&
-                        (problemActivity.getProblemId() == problem.getProblemId())) {
+                if ((problemActivity.getActivityTypesId() == ActivityType.CREATE)
+                     && (problemActivity.getProblemId() == problem.getProblemId())) {
                     userInformation.setText(getPostInformation(problemActivity));
                     break;
                 }
@@ -146,7 +141,7 @@ public class MarkerListener implements ProblemListener {
         addPhotos(details);
     }
 
-    private String getPostInformation(ProblemActivity problemActivity) {
+    private String getPostInformation(final ProblemActivity problemActivity) {
         String userName = problemActivity.getFirstName();
         String day = problemActivity.getDate().substring(8, 10);
         String year = problemActivity.getDate().substring(0, 4);
@@ -171,7 +166,7 @@ public class MarkerListener implements ProblemListener {
         }
     }
 
-    private void setPostInformation(ProblemActivity problemActivity) {
+    private void setPostInformation(final ProblemActivity problemActivity) {
         TableRow activityRow = new TableRow(context);
         activityRow.addView(new ImageView(context));
         activityRow.setGravity(Gravity.LEFT);
@@ -182,7 +177,7 @@ public class MarkerListener implements ProblemListener {
         activitiesLayout.addView(activityRow);
     }
 
-    private ImageView buildActivityIcon(ProblemActivity problemActivity) {
+    private ImageView buildActivityIcon(final ProblemActivity problemActivity) {
         TableRow.LayoutParams imageParams = new TableRow.LayoutParams(100, 100);
         imageParams.topMargin = (int) context.getResources().getDimension(R.dimen.slide_panel_items_margin);
         imageParams.bottomMargin = (int) context.getResources().getDimension(R.dimen.slide_panel_items_margin);
@@ -190,10 +185,10 @@ public class MarkerListener implements ProblemListener {
         activityTypeIcon.setImageDrawable(getActivityIcon(problemActivity.getActivityTypesId()));
         activityTypeIcon.setLayoutParams(imageParams);
 
-        return  activityTypeIcon;
+        return activityTypeIcon;
     }
 
-    private TextView buildActivityMessage(ProblemActivity problemActivity) {
+    private TextView buildActivityMessage(final ProblemActivity problemActivity) {
         TextView activityMessage = new TextView(context);
         TableRow.LayoutParams params =
                 new TableRow.LayoutParams(TableRow.LayoutParams.MATCH_PARENT,
@@ -211,7 +206,7 @@ public class MarkerListener implements ProblemListener {
         return activityMessage;
     }
 
-    private Drawable getActivityIcon(ActivityType activityType) {
+    private Drawable getActivityIcon(final ActivityType activityType) {
         switch (activityType) {
             case CREATE:
                 return context.getResources().getDrawable(R.drawable.create);
@@ -230,7 +225,7 @@ public class MarkerListener implements ProblemListener {
         }
     }
 
-    private void putDetailsOnPanel(Details details) {
+    private void putDetailsOnPanel(final Details details) {
         this.votesNumber.setText(String.valueOf(details.getVotes()));
         for (int i = 0; i < details.getSeverity(); i++) {
             ImageView star = (ImageView) activity.findViewById(STARS_ID[i]);
@@ -246,12 +241,12 @@ public class MarkerListener implements ProblemListener {
         this.markerIcon.setImageResource(IconRenderer.getResourceIdForMarker(problem.getProblemTypesId()));
     }
 
-    private void setProblemStatus(int problemStatusId) {
+    private void setProblemStatus(final int problemStatusId) {
         if (problemStatusId == 0) {
-            this.problemStatus.setText("not resolved");
+            this.problemStatus.setText(NOT_RESOLVED);
             this.problemStatus.setTextColor(Color.RED);
         } else {
-            this.problemStatus.setText("resolved");
+            this.problemStatus.setText(RESOLVED);
             this.problemStatus.setTextColor(Color.GREEN);
         }
     }
@@ -263,11 +258,11 @@ public class MarkerListener implements ProblemListener {
             return;
         }
 
-        BasicContentLayout bcl = new BasicContentLayout(photoContainer,
-                                                        activity.getApplicationContext());
+        BasicContentLayout photosLayout =
+                new BasicContentLayout(photoContainer, activity.getApplicationContext());
 
-        for (final Photo photo: photos.keySet()) {
-            final  ImageView imagePhoto = new ImageView(context);
+        for (Photo photo: photos.keySet()) {
+            ImageView imagePhoto = new ImageView(context);
             imagePhoto.setImageBitmap(photos.get(photo));
 
             LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(-100, -100);
@@ -275,38 +270,8 @@ public class MarkerListener implements ProblemListener {
             params.height = 10;
             imagePhoto.setLayoutParams(params);
 
-    /*      imagePhoto.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    LayoutInflater layoutInflater
-                            = (LayoutInflater) context
-                            .getSystemService(context.LAYOUT_INFLATER_SERVICE);
-
-                    View popupView = layoutInflater.inflate(R.layout.popup_window, null);
-
-                    ImageView im = (ImageView) popupView.findViewById(R.id.imageView3);
-                    im.setImageBitmap(photos.get(photo));
-
-                    final PopupWindow popupWindow = new PopupWindow(
-                            popupView,
-                            LinearLayout.LayoutParams.WRAP_CONTENT,
-                            LinearLayout.LayoutParams.WRAP_CONTENT);
-
-                    popupWindow.showAsDropDown(imagePhoto, 100, 100);
-                    popupWindow.setAnimationStyle(R.anim.abc_popup_enter);
-
-                    im.setOnClickListener(new View.OnClickListener() {
-
-                        @Override
-                        public void onClick(View v) {
-                            popupWindow.dismiss();
-                        }
-                    });
-
-                }
-            }); */
-            bcl.addHorizontalBlock(imagePhoto, DEFAULT_PHOTO_MARGIN);
+            photosLayout.addHorizontalBlock(imagePhoto, DEFAULT_PHOTO_MARGIN);
         }
-
     }
+
 }

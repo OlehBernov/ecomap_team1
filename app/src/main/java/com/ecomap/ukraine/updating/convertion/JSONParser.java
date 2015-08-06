@@ -161,10 +161,13 @@ public class JSONParser {
             contentObject = new JSONObject(commentObject
                                           .getString(JSONFields.PROBLEM_ACTIVITY_CONTENT));
 
+            int activityTypeId = commentObject.optInt(JSONFields.ACTIVITY_TYPES_ID, DEFAULT_VALUE);
+            ActivityType activityTypeEnum = getActivityType(activityTypeId);
+
                 currentProblemActivity = new ProblemActivity(
                         commentObject.optInt(JSONFields.PROBLEMS_ID, DEFAULT_VALUE),
                         commentObject.optInt(JSONFields.ID, DEFAULT_VALUE),
-                        getActivityType(commentObject.optInt(JSONFields.ACTIVITY_TYPES_ID, DEFAULT_VALUE)),
+                        activityTypeEnum,
                         commentObject.optInt(JSONFields.COMMENT_USERS_ID, DEFAULT_VALUE),
                         contentObject.getString(JSONFields.COMMENT_CORE),
                         commentObject.getString(JSONFields.PROBLEM_ACTIVITY_DATE),
