@@ -53,7 +53,8 @@ public class LoadingClient {
      * @param problemRequestReceiver  request receiver.
      * @param context application context.
      */
-    public LoadingClient(ProblemRequestReceiver problemRequestReceiver, Context context) {
+    public LoadingClient(final ProblemRequestReceiver problemRequestReceiver,
+                         final Context context) {
         this.problemRequestReceiver = problemRequestReceiver;
         this.context = context;
     }
@@ -118,7 +119,7 @@ public class LoadingClient {
         RequestQueueWrapper.getInstance(context).addToRequestQueue(stringRequest);
     }
 
-    private boolean isPhotosExist(Details details) {
+    private boolean isPhotosExist(final Details details) {
         return details.getPhotos().size() > 0;
     }
 
@@ -153,7 +154,7 @@ public class LoadingClient {
         }
     }
 
-    private boolean allInitialized(Map<Photo, Bitmap> photos) {
+    private boolean allInitialized(final Map<Photo, Bitmap> photos) {
         for (Photo photo : photos.keySet()) {
             if (photos.get(photo) == null) {
                 return false;

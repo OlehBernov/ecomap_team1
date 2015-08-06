@@ -24,12 +24,12 @@ public class AccountManager implements LogInListenerNotifier,
 
     private Context context;
 
-    private AccountManager(Context context) {
+    private AccountManager(final Context context) {
         this.context = context;
         logInClient = new LogInClient(this, context);
     }
 
-    public static AccountManager getInstance(Context context) {
+    public static AccountManager getInstance(final Context context) {
         if (instance == null) {
             instance = new AccountManager(context);
         }
@@ -37,32 +37,33 @@ public class AccountManager implements LogInListenerNotifier,
     }
 
     @Override
-    public void setLogInRequestResult(User user) {
+    public void setLogInRequestResult(final User user) {
         sendLogInResult(user);
     }
 
     @Override
-    public void registerLogInListener(LogInListener listener) {
+    public void registerLogInListener(final LogInListener listener) {
         logInListeners.add(listener);
     }
 
     @Override
-    public void removeLogInListener(LogInListener listener) {
+    public void removeLogInListener(final LogInListener listener) {
         logInListeners.remove(listener);
     }
 
     @Override
-    public void sendLogInResult(User user) {
+    public void sendLogInResult(final User user) {
         for (LogInListener listener: logInListeners) {
             listener.setLogInResult(user);
         }
     }
 
-    public void logInUser(String password, String login) {
+    public void logInUser(final String password, final String login) {
         logInClient.postLogIn(password, login);
     }
 
-    public void registerUser (String firstname, String lastname, String email, String password) {
+    public void registerUser (final String firstname, final String lastname,
+                              final String email, final String password) {
         logInClient.postRegistration(firstname, lastname, email, password);
     }
 

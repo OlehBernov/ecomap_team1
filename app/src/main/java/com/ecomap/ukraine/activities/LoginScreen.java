@@ -165,7 +165,7 @@ public class LoginScreen extends AppCompatActivity implements LogInListener {
                 }, 3000); */
     }
 
-    private void saveLoginResult(LoginResult loginResult) {
+    private void saveLoginResult(final LoginResult loginResult) {
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putString("token", loginResult.getAccessToken().getToken());
         editor.putString("userId", loginResult.getAccessToken().getUserId());
@@ -174,7 +174,7 @@ public class LoginScreen extends AppCompatActivity implements LogInListener {
     }
 
     @Override
-    public void setLogInResult(User user) {
+    public void setLogInResult(final User user) {
         accountManager.removeLogInListener(this);
         logInButton.setEnabled(true);
         if (user != null) {
@@ -191,12 +191,12 @@ public class LoginScreen extends AppCompatActivity implements LogInListener {
     }
 
     @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+    public void onActivityResult(final int requestCode, final int resultCode, final Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         callbackManager.onActivityResult(requestCode, resultCode, data);
     }
 
-    private void facebookLogIn(LoginResult loginResult) {
+    private void facebookLogIn(final LoginResult loginResult) {
         GraphRequest request = GraphRequest.newMeRequest(loginResult.getAccessToken(),
                 new GraphRequest.GraphJSONObjectCallback() {
                     @Override
@@ -214,7 +214,7 @@ public class LoginScreen extends AppCompatActivity implements LogInListener {
         request.executeAsync();
     }
 
-    private long generatePassword(String id) {
+    private long generatePassword(final String id) {
         long input = Long.getLong(id);
         return new Random(input + 1).nextLong();
     }

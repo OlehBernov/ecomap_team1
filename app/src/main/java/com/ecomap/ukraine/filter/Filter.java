@@ -10,7 +10,8 @@ import java.util.List;
 
 public class Filter {
 
-    public List<Problem> filterProblem(List<Problem> problems, FilterState filterState) {
+    public List<Problem> filterProblem(final List<Problem> problems,
+                                       final FilterState filterState) {
         if (filterState != null) {
             List<Problem> filteredProblem = new ArrayList<>();
             for (Problem problem : problems) {
@@ -24,7 +25,7 @@ public class Filter {
         }
     }
 
-    private boolean filtration(FilterState filterState, Problem problem) {
+    private boolean filtration(final FilterState filterState, final Problem problem) {
         if (filterState.isShowProblemType(problem.getProblemTypesId())) {
             if (((filterState.isShowResolvedProblem()) && (problem.getStatusId() == 1))
                     || (((filterState.isShowUnsolvedProblem()) && (problem.getStatusId() == 0)))) {

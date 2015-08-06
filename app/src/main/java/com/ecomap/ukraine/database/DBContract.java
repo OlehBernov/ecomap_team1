@@ -9,6 +9,7 @@ import android.provider.BaseColumns;
 class DBContract {
 
     public static abstract class Problems implements BaseColumns {
+
         public static final String TABLE_NAME = "Problems";
 
         public static final String ID = "Id";
@@ -28,6 +29,7 @@ class DBContract {
     }
 
     public static abstract class Details implements BaseColumns {
+
         public static final String TABLE_NAME = "Details";
 
         public static final String PROBLEM_ID = "Problem_ID";
@@ -48,6 +50,7 @@ class DBContract {
     }
 
     public static abstract class Photos implements BaseColumns {
+
         public static final String TABLE_NAME = "Photos";
 
         public static final String PROBLEM_ID = "Problem_ID";
@@ -64,13 +67,21 @@ class DBContract {
     }
 
     public static abstract class ProblemActivity implements BaseColumns {
+
         public static final String TABLE_NAME = "Activities";
+
         public static final String PROBLEM_ID = "Problem_ID";
+
         public static final String ACTIVITY_TYPES_ID = "ActivityTypes_Id";
+
         public static final String ACTIVITY_USERS_ID = "Users_Id";
+
         public static final String PROBLEM_ACTIVITY_DATE = "Date";
+
         public static final String PROBLEM_ACTIVITY_ID = "Problem_Activity_id";
+
         public static final String PROBLEM_ACTIVITY_CONTENT = "Content";
+
         public static final String USER_NAME = "userName";
     }
 

@@ -16,12 +16,12 @@ public interface ProblemListener {
      *
      * @param problems list of all problems.
      */
-    void updateAllProblems(List<Problem> problems);
+    void updateAllProblems(final List<Problem> problems);
 
     /**
      * Send to listeners list of problem details.
      *
      * @param details details of concrete problem.
      */
-    void updateProblemDetails(Details details);
+    void updateProblemDetails(final Details details);
 }

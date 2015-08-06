@@ -1,9 +1,6 @@
 package com.ecomap.ukraine.filter;
 
-import android.widget.Switch;
-
 import java.util.Calendar;
-import java.util.Date;
 
 /**
  * to be continued...
@@ -24,12 +21,12 @@ public class FilterState {
     private Calendar DateFrom;
     private Calendar DateTo;
 
-    public FilterState(boolean showProblemType1, boolean showProblemType2,
-                       boolean showProblemType3, boolean showProblemType4,
-                       boolean showProblemType5, boolean showProblemType6,
-                       boolean showProblemType7, boolean showResolvedProblem,
-                       boolean showUnsolvedProblem, Calendar DateFrom,
-                       Calendar DateTo) {
+    public FilterState(final boolean showProblemType1, final boolean showProblemType2,
+                       final boolean showProblemType3, final boolean showProblemType4,
+                       final boolean showProblemType5, final boolean showProblemType6,
+                       final boolean showProblemType7, final boolean showResolvedProblem,
+                       final boolean showUnsolvedProblem, final Calendar DateFrom,
+                       final Calendar DateTo) {
 
         this.showProblemType1 = showProblemType1;
         this.showProblemType2 = showProblemType2;
@@ -74,7 +71,7 @@ public class FilterState {
     }
 
 
-    public boolean isShowProblemType (int type) {
+    public boolean isShowProblemType (final int type) {
         switch (type) {
             case 1: return isShowProblemType1();
             case 2: return isShowProblemType2();

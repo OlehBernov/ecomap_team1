@@ -102,7 +102,7 @@ public class Splashscreen extends Activity implements ProblemListener {
      * @param problems list of all problems.
      */
     @Override
-    public void updateAllProblems(List<Problem> problems) {
+    public void updateAllProblems(final List<Problem> problems) {
         if (problems != null) {
             if (!state) {
                 state = true;
@@ -121,11 +121,11 @@ public class Splashscreen extends Activity implements ProblemListener {
     }
 
     @Override
-    public void updateProblemDetails(Details details) {
+    public void updateProblemDetails(final Details details) {
 
     }
 
-    private long loadingTime(long endLoading) {
+    private long loadingTime(final long endLoading) {
         return MINIMAL_DELAY - (endLoading - startLoading);
     }
 

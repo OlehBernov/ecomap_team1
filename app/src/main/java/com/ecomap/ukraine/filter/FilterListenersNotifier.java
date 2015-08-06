@@ -10,7 +10,7 @@ public interface FilterListenersNotifier {
      *
      * @param listener the FilterListener to add.
      */
-    void registerFilterListener(FilterListener listener);
+    void registerFilterListener(final FilterListener listener);
 
 
     /**
@@ -18,7 +18,7 @@ public interface FilterListenersNotifier {
      *
      * @param listener the FilterListener to remove.
      */
-    void removeFilterListener(FilterListener listener);
+    void removeFilterListener(final FilterListener listener);
 
 
 }

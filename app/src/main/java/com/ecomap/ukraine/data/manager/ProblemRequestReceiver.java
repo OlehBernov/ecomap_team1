@@ -17,7 +17,7 @@ public interface ProblemRequestReceiver {
      *
      * @param problems list of all problems.
      */
-    void setAllProblemsRequestResult(List<Problem> problems);
+    void setAllProblemsRequestResult(final List<Problem> problems);
 
     /**
      * Receives server response to the request of details of
@@ -25,6 +25,6 @@ public interface ProblemRequestReceiver {
      *
      * @param details details of concrete problem.
      */
-    void setProblemDetailsRequestResult(Details details);
+    void setProblemDetailsRequestResult(final Details details);
 
 }

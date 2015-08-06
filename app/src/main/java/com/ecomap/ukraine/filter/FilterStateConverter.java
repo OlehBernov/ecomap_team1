@@ -10,14 +10,12 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Locale;
 
-/**
- * TODO docs
- */
+
 public class FilterStateConverter {
 
     private static final String DATE_TEMPLATE = "dd-MM-yyyy";
 
-    public String convertToJson(FilterState filterState) throws JSONException {
+    public String convertToJson(final FilterState filterState) throws JSONException {
 
         JSONObject filterStateJson = new JSONObject();
         filterStateJson.put(FilterContract.TYPE_1, filterState.isShowProblemType1());
@@ -43,7 +41,7 @@ public class FilterStateConverter {
         return filterStateJson.toString();
     }
 
-    public FilterState convertToFilterState(String filterStateJson)
+    public FilterState convertToFilterState(final String filterStateJson)
             throws JSONException {
 
         JSONObject filterStateJsonObject = new JSONObject(filterStateJson);

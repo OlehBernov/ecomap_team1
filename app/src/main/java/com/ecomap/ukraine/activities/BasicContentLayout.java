@@ -18,36 +18,36 @@ public class BasicContentLayout {
     private int currentLayoutHeight;
     private int getCurrentLayoutWidth;
 
-    public BasicContentLayout(LinearLayout rootLayout, Context context) {
+    public BasicContentLayout(final LinearLayout rootLayout, final Context context) {
         this.rootLayout = rootLayout;
         this.context = context;
         numberOfBlocks = rootLayout.getChildCount();
         setViewTreeObserver();
     }
 
-    public void addVerticalBlock(View newView) {
+    public void addVerticalBlock(final View newView) {
         addVerticalBlock(newView, numberOfBlocks);
     }
 
-    public void addVerticalBlock(View newView, int position) {
+    public void addVerticalBlock(final View newView, final int position) {
         rootLayout.addView(newView, position, getVerticalLayoutParams(DEFAULT_TOP_MARGIN));
         numberOfBlocks++;
     }
 
-    public void addHorizontallBlock(View newView) {
+    public void addHorizontallBlock(final View newView) {
         addHorizontalBlock(newView, DEFAULT_LEFT_MARGIN);
     }
 
-    public void addHorizontalBlock(View view, int margin) {
+    public void addHorizontalBlock(final View view, final int margin) {
         rootLayout.addView(view, numberOfBlocks, getHorizontalLayoutParams(margin));
         numberOfBlocks++;
     }
 
-    public void addText(String text) {
+    public void addText(final String text) {
         addText(text, numberOfBlocks);
     }
 
-    public void addText(String text, int position) {
+    public void addText(final String text, final int position) {
         TextView newTextView = new TextView(context);
         newTextView.append(text);
         LinearLayout newView = new LinearLayout(context);
@@ -71,7 +71,7 @@ public class BasicContentLayout {
         });
     }
 
-    private LinearLayout.LayoutParams getVerticalLayoutParams(int topMargin) {
+    private LinearLayout.LayoutParams getVerticalLayoutParams(final int topMargin) {
         LinearLayout.LayoutParams marginParams =
                 new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
                         LinearLayout.LayoutParams.WRAP_CONTENT);
@@ -80,7 +80,7 @@ public class BasicContentLayout {
         return marginParams;
     }
 
-    private LinearLayout.LayoutParams getHorizontalLayoutParams(int leftMargin) {
+    private LinearLayout.LayoutParams getHorizontalLayoutParams(final int leftMargin) {
         LinearLayout.LayoutParams marginParams =
                 new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
                         LinearLayout.LayoutParams.WRAP_CONTENT);

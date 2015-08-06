@@ -25,8 +25,7 @@ public class FilterManager implements FilterListenersNotifier {
     /**
      * Activity which callback filter-manager
      */
-    private  Activity activity;
-
+    private Activity activity;
 
     /**
      * Set of problem listeners.
@@ -39,21 +38,21 @@ public class FilterManager implements FilterListenersNotifier {
      *
      * @param listener the FilterListener to add.
      */
-    public void registerFilterListener(FilterListener listener) {
+    public void registerFilterListener(final FilterListener listener) {
         filterListeners.add(listener);
     }
 
     /**
      * Filter manager constructor.
      */
-    private FilterManager(Activity activity) {
+    private FilterManager(final Activity activity) {
         this.activity = activity;
     }
 
     /**
      * Returns Singleton instance of FilterManger
      */
-    public static FilterManager getInstance(Activity activity) {
+    public static FilterManager getInstance(final Activity activity) {
         if (instance == null) {
             instance = new FilterManager(activity);
 
@@ -61,22 +60,20 @@ public class FilterManager implements FilterListenersNotifier {
         return instance;
     }
 
-
     /**
      * Removes the specified listener from the set of problemaListeners.
      *
      * @param listener the FilterListener to remove.
      */
-    public void removeFilterListener(FilterListener listener) {
+    public void removeFilterListener(final FilterListener listener) {
         filterListeners.remove(listener);
     }
-
 
     /**
      * This method use to send to listeners filter state
      * @param filterState this filterState sends to all listeners
      */
-    public void sendFilterState (FilterState filterState) {
+    public void sendFilterState (final FilterState filterState) {
         for (FilterListener listener : filterListeners) {
             listener.updateFilterState(filterState);
         }
@@ -86,7 +83,7 @@ public class FilterManager implements FilterListenersNotifier {
      * This method use to get  filter state for filter manager
      * @param filterState this filterState gets for filter manager
      */
-        public void getFilterState (FilterState filterState) {
+        public void getFilterState (final FilterState filterState) {
             sendFilterState(filterState);
 
     }

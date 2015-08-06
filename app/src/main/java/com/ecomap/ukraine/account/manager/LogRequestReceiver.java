@@ -7,6 +7,6 @@ import com.ecomap.ukraine.models.User;
  */
 public interface LogRequestReceiver {
 
-    void setLogInRequestResult(User user);
+    void setLogInRequestResult(final User user);
 
 }

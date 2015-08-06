@@ -60,7 +60,7 @@ public class FragmentEcoMap extends android.support.v4.app.Fragment
 
     private static Activity activity;
 
-    public static FragmentEcoMap newInstance(Activity activity) {
+    public static FragmentEcoMap newInstance(final Activity activity) {
         FragmentEcoMap.activity = activity;
         return new FragmentEcoMap();
     }
@@ -122,7 +122,7 @@ public class FragmentEcoMap extends android.support.v4.app.Fragment
      * @param problems list of all problems.
      */
     @Override
-    public void updateAllProblems(List<Problem> problems) {
+    public void updateAllProblems(final List<Problem> problems) {
         FragmentEcoMap.problems = problems;
         putAllProblemsOnMap(problems, null);
     }
@@ -132,7 +132,7 @@ public class FragmentEcoMap extends android.support.v4.app.Fragment
      *
      * @param filterState state of filter
      */
-    public void updateFilterState(FilterState filterState) {
+    public void updateFilterState(final FilterState filterState) {
         putAllProblemsOnMap(problems, filterState);
     }
 
@@ -142,7 +142,7 @@ public class FragmentEcoMap extends android.support.v4.app.Fragment
      * @param details details of concrete problem.
      */
     @Override
-    public void updateProblemDetails(Details details) {
+    public void updateProblemDetails(final Details details) {
         markerListener.setProblemDetails(details);
     }
 
@@ -206,7 +206,7 @@ public class FragmentEcoMap extends android.support.v4.app.Fragment
     }
 
     @Override
-    public boolean onClusterItemClick(Problem item) {
+    public boolean onClusterItemClick(final Problem item) {
         markerListener = new MarkerListener(activity, item);
         dataManager.getProblemDetail(item.getProblemId());
 

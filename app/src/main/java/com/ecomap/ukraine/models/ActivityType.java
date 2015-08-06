@@ -7,5 +7,5 @@ public enum ActivityType {
     PHOTO,
     COMMENT,
     UNKNOWN2,
-    UNKNOWN_TYPE;
+    UNKNOWN_TYPE
 }

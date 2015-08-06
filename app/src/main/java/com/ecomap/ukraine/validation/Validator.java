@@ -8,8 +8,9 @@ import com.ecomap.ukraine.R;
 
 public class Validator {
 
-    public boolean registrationValidation(EditText name, EditText surname, EditText email,
-                                          EditText password, EditText passwordConfirmation) {
+    public boolean registrationValidation(final EditText name, final EditText surname,
+                                          final EditText email, final EditText password,
+                                          final EditText passwordConfirmation) {
         return nameValidation(name)
                & surnameValidation(surname)
                & emailValidation(email)
@@ -17,11 +18,11 @@ public class Validator {
                & passwordConfirmation(password, passwordConfirmation);
     }
 
-    public boolean logInValid(EditText email, EditText password) {
+    public boolean logInValid(final EditText email, final EditText password) {
         return emailValidation(email) & passwordValidation(password);
     }
 
-    private boolean nameValidation(EditText nameField) {
+    private boolean nameValidation(final EditText nameField) {
         String name = nameField.getText().toString();
         if (name.isEmpty()) {
             nameField.setError(ValidationRequirements.NAME_FIELD_EMPTY);
@@ -36,7 +37,7 @@ public class Validator {
         return true;
     }
 
-    private boolean surnameValidation(EditText surnameField) {
+    private boolean surnameValidation(final EditText surnameField) {
         String surname = surnameField.getText().toString();
         if (surname.isEmpty()) {
             surnameField.setError(ValidationRequirements.SURNAME_FIELD_EMPTY);
@@ -51,7 +52,7 @@ public class Validator {
         return true;
     }
 
-    private boolean emailValidation(EditText emailField) {
+    private boolean emailValidation(final EditText emailField) {
         String email = emailField.getText().toString();
         if (email.isEmpty()) {
             emailField.setError(ValidationRequirements.EMAIL_FIELD_EMPTY);
@@ -63,7 +64,7 @@ public class Validator {
         return true;
     }
 
-    private boolean passwordValidation(EditText passwordField) {
+    private boolean passwordValidation(final EditText passwordField) {
         String password = passwordField.getText().toString();
         if (password.isEmpty()) {
             passwordField.setError(ValidationRequirements.PASSWORD_FIELD_EMPTY);
@@ -78,7 +79,8 @@ public class Validator {
         return true;
     }
 
-    private boolean passwordConfirmation(EditText passwordField, EditText passwordConfirmationField) {
+    private boolean passwordConfirmation(final EditText passwordField,
+                                         final EditText passwordConfirmationField) {
         String passwordConfirmation = passwordConfirmationField.getText().toString();
         String password = passwordField.getText().toString();
         if (passwordConfirmation.isEmpty()) {

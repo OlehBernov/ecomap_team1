@@ -12,20 +12,20 @@ public interface LogInListenerNotifier {
      *
      * @param listener
      */
-    void registerLogInListener(LogInListener listener);
+    void registerLogInListener(final LogInListener listener);
 
     /**
      *
      *
      * @param listener
      */
-    void removeLogInListener(LogInListener listener);
+    void removeLogInListener(final LogInListener listener);
 
     /**
      *
      *
      * @param user
      */
-    void sendLogInResult(User user);
+    void sendLogInResult(final User user);
 
 }

@@ -101,7 +101,8 @@ public class MarkerListener {
 
         descriptionFiled.setText(DEFAULT_DESCRIPTION);
         proposalFiled.setText(DEFAULT_PROPOSAL);
-        addComment.setText(ADD_COMMENT_HINT);
+        addComment.setText("");
+        addComment.setHint(ADD_COMMENT_HINT);
 
         if (isPhotoContainerHavePhotos()) {
             photoContainer.removeViews(0, photoContainer.getChildCount());

@@ -19,7 +19,7 @@ import java.util.Set;
  * Provides updates of the database.
  */
 public class DataManager implements ProblemListenersNotifier,
-        ProblemRequestReceiver {
+                                    ProblemRequestReceiver {
 
     /**
      * The name of the preference to retrieve.
@@ -59,7 +59,7 @@ public class DataManager implements ProblemListenersNotifier,
     /**
      * Data manager constructor.
      */
-    private DataManager(Context context) {
+    private DataManager(final Context context) {
         this.context = context;
         dbHelper = new DBHelper(context);
         loadingClient = new LoadingClient(this, context);
@@ -68,7 +68,7 @@ public class DataManager implements ProblemListenersNotifier,
     /**
      * Returns Singleton instance of DataManger
      */
-    public static DataManager getInstance(Context context) {
+    public static DataManager getInstance(final Context context) {
         if (instance == null) {
             instance = new DataManager(context);
         }
@@ -81,7 +81,7 @@ public class DataManager implements ProblemListenersNotifier,
      *
      * @param listener the ProblemListener to add.
      */
-    public void registerProblemListener(ProblemListener listener) {
+    public void registerProblemListener(final ProblemListener listener) {
         problemListeners.add(listener);
     }
 
@@ -90,7 +90,7 @@ public class DataManager implements ProblemListenersNotifier,
      *
      * @param listener the ProblemListener to remove.
      */
-    public void removeProblemListener(ProblemListener listener) {
+    public void removeProblemListener(final ProblemListener listener) {
         problemListeners.remove(listener);
     }
 
@@ -101,13 +101,14 @@ public class DataManager implements ProblemListenersNotifier,
      * @param problems list of all problems.
      */
     @Override
-    public void setAllProblemsRequestResult(List<Problem> problems) {
+    public void setAllProblemsRequestResult(final List<Problem> problems) {
         if (problems != null) {
             dbHelper.updateAllProblems(problems);
             saveUpdateTime();
+            getAllProblems();
+        } else {
+            sendAllProblems(null);
         }
-
-        getAllProblems();
     }
 
     /**
@@ -117,7 +118,7 @@ public class DataManager implements ProblemListenersNotifier,
      * @param details details of concrete problem.
      */
     @Override
-    public void setProblemDetailsRequestResult(Details details) {
+    public void setProblemDetailsRequestResult(final Details details) {
         if (details != null) {
             dbHelper.updateProblemDetails(details);
             getProblemDetail(details.getProblemId());
@@ -126,13 +127,11 @@ public class DataManager implements ProblemListenersNotifier,
         }
     }
 
-
-
     /**
      * Send to listeners list of all problems.
      */
     @Override
-    public void sendAllProblems(List<Problem> problems) {
+    public void sendAllProblems(final List<Problem> problems) {
         for (ProblemListener listener: problemListeners) {
             listener.updateAllProblems(problems);
         }
@@ -142,7 +141,7 @@ public class DataManager implements ProblemListenersNotifier,
      * Send to listeners details of concrete problem.
      */
     @Override
-    public void sendProblemDetails(Details details) {
+    public void sendProblemDetails(final Details details) {
         for (ProblemListener listener: problemListeners) {
             listener.updateProblemDetails(details);
         }
@@ -176,7 +175,7 @@ public class DataManager implements ProblemListenersNotifier,
      *
      * @param problemId the id of the problem.
      */
-    public void getProblemDetail(int problemId) {
+    public void getProblemDetail(final int problemId) {
         Details details = dbHelper.getProblemDetails(problemId);
         if (details == null) {
             loadingClient.getProblemDetail(problemId);
@@ -207,7 +206,7 @@ public class DataManager implements ProblemListenersNotifier,
      * @param lastUpdateTime time of the last database update.
      * @return the need to update.
      */
-    private boolean isUpdateTime(long lastUpdateTime) {
+    private boolean isUpdateTime(final long lastUpdateTime) {
         return (System.currentTimeMillis() - lastUpdateTime) >= UPDATE_PERIOD;
     }
 

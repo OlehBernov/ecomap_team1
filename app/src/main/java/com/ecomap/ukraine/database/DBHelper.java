@@ -30,6 +30,7 @@ import java.util.Map;
  * Exposes methods to work with inner database.
  */
 public class DBHelper extends SQLiteOpenHelper {
+
     private static final String DELETE_ACTIVITIES_TABLE =
             "DROP TABLE IF EXISTS " + DBContract.ProblemActivity.TABLE_NAME;
     private static final String DELETE_PHOTOS_TABLE =
@@ -45,6 +46,7 @@ public class DBHelper extends SQLiteOpenHelper {
     private static final String INT_TYPE = " INTEGER";
     private static final String REAL_TYPE = " REAL";
     private static final String COMMA_SEP = ", ";
+
     private static final String CREATE_ACTIVITIES_TABLE
             = "CREATE TABLE " + DBContract.ProblemActivity.TABLE_NAME + " (" +
             DBContract.ProblemActivity.PROBLEM_ACTIVITY_ID + INT_TYPE + COMMA_SEP +
@@ -93,7 +95,7 @@ public class DBHelper extends SQLiteOpenHelper {
      */
     private Context context;
 
-    public DBHelper(Context context) {
+    public DBHelper(final Context context) {
         super(context, DB_NAME, null, DB_VERSION);
         this.context = context;
     }
@@ -121,7 +123,7 @@ public class DBHelper extends SQLiteOpenHelper {
      *
      * @param problems new list of all problems.
      */
-    public void updateAllProblems(List<Problem> problems) {
+    public void updateAllProblems(final List<Problem> problems) {
         if (problems == null) {
             return;
         }
@@ -136,7 +138,7 @@ public class DBHelper extends SQLiteOpenHelper {
      *
      * @param details new details of concrete problem.
      */
-    public void updateProblemDetails(Details details) {
+    public void updateProblemDetails(final Details details) {
         if (details == null) {
             return;
         }
@@ -174,7 +176,7 @@ public class DBHelper extends SQLiteOpenHelper {
      *
      * @param problems server response to all problems request.
      */
-    public void setAllProblems(List<Problem> problems){
+    public void setAllProblems(final List<Problem> problems){
         if (problems == null) {
             return;
         }
@@ -199,7 +201,7 @@ public class DBHelper extends SQLiteOpenHelper {
      * @param problemId id of required problem.
      * @return problem details.
      */
-    public Details getProblemDetails(int problemId) {
+    public Details getProblemDetails(final int problemId) {
         if (problemId < 0) {
             return null;
         }
@@ -233,7 +235,7 @@ public class DBHelper extends SQLiteOpenHelper {
      *
      * @param details the details to add to the database.
      */
-    public void setProblemDetails(Details details) {
+    public void setProblemDetails(final Details details) {
         if (details == null) {
             return;
         }
@@ -266,7 +268,7 @@ public class DBHelper extends SQLiteOpenHelper {
      *
      * @param photos photos of a problem.
      */
-    private void setPhotos(Map<Photo, Bitmap> photos) {
+    private void setPhotos(final Map<Photo, Bitmap> photos) {
         if (photos == null) {
             return;
         }
@@ -289,7 +291,7 @@ public class DBHelper extends SQLiteOpenHelper {
         }
     }
 
-    private void writeToFile(Bitmap bitmap, String name) {
+    private void writeToFile(final Bitmap bitmap, final String name) {
         FileOutputStream outputStream = null;
         try {
             String path = context.getFilesDir().getPath();
@@ -316,7 +318,7 @@ public class DBHelper extends SQLiteOpenHelper {
      * @param problemId id of required problem.
      * @return time of the last updateAllProblems.
      */
-    public String getLastUpdateTime(int problemId) {
+    public String getLastUpdateTime(final int problemId) {
         if (problemId < 0) {
             return null;
         }
@@ -343,7 +345,7 @@ public class DBHelper extends SQLiteOpenHelper {
      * @param problemId id of the required problem.
      * @return map of photos.
      */
-    private Map<Photo, Bitmap> getProblemPhotos(int problemId) {
+    private Map<Photo, Bitmap> getProblemPhotos(final int problemId) {
         if (problemId < 0) {
             return null;
         }
@@ -368,7 +370,7 @@ public class DBHelper extends SQLiteOpenHelper {
         return map;
     }
 
-    private Bitmap getBitmapByName(String fileName) {
+    private Bitmap getBitmapByName(final String fileName) {
         FileInputStream inputStream = null;
         try {
             String path = context.getFilesDir().getPath();
@@ -395,7 +397,7 @@ public class DBHelper extends SQLiteOpenHelper {
      * @param problemId id of the required problem.
      * @return list of problem activities.
      */
-    private List<ProblemActivity> getProblemActivities(int problemId) {
+    private List<ProblemActivity> getProblemActivities(final int problemId) {
         if (problemId < 0) {
             return null;
         }
@@ -428,7 +430,7 @@ public class DBHelper extends SQLiteOpenHelper {
      *
      * @param problemActivities activities of the problem.
      */
-    private void setProblemActivities(List<ProblemActivity> problemActivities) {
+    private void setProblemActivities(final List<ProblemActivity> problemActivities) {
         if (problemActivities == null) {
             return;
         }
@@ -465,7 +467,7 @@ public class DBHelper extends SQLiteOpenHelper {
      * @param cursor contains query result.
      * @return list of all problems.
      */
-    private List<Problem> buildAllProblemList(Cursor cursor) {
+    private List<Problem> buildAllProblemList(final Cursor cursor) {
         List<Problem> problems = new ArrayList<>();
         for (int i = 0; i < cursor.getCount(); i++) {
             Problem problem = new Problem(
@@ -493,9 +495,9 @@ public class DBHelper extends SQLiteOpenHelper {
      * @param photos photos of a problem.
      * @return constructed Details object.
      */
-    private Details buildProblemDetails(int problemId, Cursor cursor,
-                                        List<ProblemActivity> problemActivities,
-                                        Map<Photo, Bitmap> photos) {
+    private Details buildProblemDetails(final int problemId, final Cursor cursor,
+                                        final List<ProblemActivity> problemActivities,
+                                        final Map<Photo, Bitmap> photos) {
         Details details = new Details(
                 problemId,
                 cursor.getInt(cursor.getColumnIndex(DBContract.Details.SEVERITY)),
@@ -520,7 +522,7 @@ public class DBHelper extends SQLiteOpenHelper {
      * @param cursor contains query result.
      * @return map of photos.
      */
-    private Map<Photo, Bitmap> buildPhotosMap(int problemId, Cursor cursor) {
+    private Map<Photo, Bitmap> buildPhotosMap(final int problemId, final Cursor cursor) {
         Map<Photo, Bitmap> photos = new HashMap<>();
         for (int i = 0; i < cursor.getCount(); i++) {
             Photo photo = new Photo(
@@ -547,8 +549,8 @@ public class DBHelper extends SQLiteOpenHelper {
      * @param cursor contains query result.
      * @return list of problem activities.
      */
-    private List<ProblemActivity> buildProblemActivitiesList(int problemId,
-                                                             Cursor cursor) {
+    private List<ProblemActivity> buildProblemActivitiesList(final int problemId,
+                                                             final Cursor cursor) {
         List<ProblemActivity> problemActivities = new ArrayList<>();
         for (int i = 0; i < cursor.getCount(); i++) {
 
@@ -572,7 +574,7 @@ public class DBHelper extends SQLiteOpenHelper {
         return problemActivities;
     }
 
-    private int getActivityTypeId(ActivityType activityType) {
+    private int getActivityTypeId(final ActivityType activityType) {
         switch (activityType) {
             case CREATE:
                 return 1;
@@ -591,7 +593,7 @@ public class DBHelper extends SQLiteOpenHelper {
         }
     }
 
-    private ActivityType getActivityType(int activityTypeId) {
+    private ActivityType getActivityType(final int activityTypeId) {
         switch (activityTypeId) {
             case 1:
                 return ActivityType.CREATE;

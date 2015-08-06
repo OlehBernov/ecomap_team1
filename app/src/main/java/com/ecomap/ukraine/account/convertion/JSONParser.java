@@ -42,14 +42,16 @@ public class JSONParser {
         return user;
     }
 
-    public User parseRegistrationInformation (final String registrationUserInformationJson, final String email)
+    public User parseRegistrationInformation (final String registrationUserInformationJson,
+                                              final String email)
             throws JSONException {
         if (registrationUserInformationJson == null) {
             throw new JSONException(NULL_ARGUMENT);
         }
         JSONObject registrationUserInformation = new JSONObject(registrationUserInformationJson);
         User user = new User(
-                registrationUserInformation.getJSONObject(JSONFields.REGISTRATION_ID).getInt(JSONFields.ID_OF_REGISTRATION_USER),
+                registrationUserInformation.getJSONObject(JSONFields.REGISTRATION_ID)
+                                           .getInt(JSONFields.ID_OF_REGISTRATION_USER),
                 registrationUserInformation.getString(JSONFields.NAME),
                 registrationUserInformation.getString(JSONFields.SURNAME),
                 registrationUserInformation.getString(JSONFields.ROLE),

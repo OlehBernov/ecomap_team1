@@ -12,5 +12,5 @@ public interface LogInListener {
      *
      * @param user
      */
-    void setLogInResult(User user);
+    void setLogInResult(final User user);
 }

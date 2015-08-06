@@ -26,15 +26,13 @@ public class LogInClient {
 
     private static final String LOG_IN_URL = "http://ecomap.org/api/login/";
 
-    private static final String LOG_OUT_URL = "http://ecomap.org/api/logout/";
-
     private static final String REGISTRATION_URL = "http://ecomap.org/api/register/";
 
     private Context context;
 
     private LogRequestReceiver logRequestReceiver;
 
-    public LogInClient(LogRequestReceiver logRequestReceiver, Context context) {
+    public LogInClient(final LogRequestReceiver logRequestReceiver, final Context context) {
         this.logRequestReceiver = logRequestReceiver;
         this.context = context;
     }

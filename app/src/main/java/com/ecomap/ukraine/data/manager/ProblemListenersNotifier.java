@@ -17,23 +17,23 @@ interface ProblemListenersNotifier {
      *
      * @param listener the ProblemListener to add.
      */
-    void registerProblemListener(ProblemListener listener);
+    void registerProblemListener(final ProblemListener listener);
 
     /**
      * Removes the specified listener from the set of problemaListeners.
      *
      * @param listener the ProblemListener to remove.
      */
-    void removeProblemListener(ProblemListener listener);
+    void removeProblemListener(final ProblemListener listener);
 
 
     /**
      * Send to listeners list of all problems.
     */
-    void sendAllProblems(List<Problem> problems);
+    void sendAllProblems(final List<Problem> problems);
 
     /**
      * Send to listeners details of concrete problem.
      */
-    void sendProblemDetails(Details details);
+    void sendProblemDetails(final Details details);
 }

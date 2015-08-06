@@ -36,8 +36,6 @@ public class IconRenderer extends DefaultClusterRenderer<Problem> {
                            ClusterManager<Problem> clusterManager) {
         super(activity.getApplicationContext(), map, clusterManager);
         this.activity = activity;
-
-
     }
 
     /**
@@ -143,9 +141,9 @@ public class IconRenderer extends DefaultClusterRenderer<Problem> {
     }
 
     /**
-     * Gets markers resourses
+     * Gets markers resources
      * @param size Numbers of markers in cluster
-     * @return icon resourse
+     * @return icon resource
      */
     private int getResourceIdForCluster (int size) {
         int resId = 0;

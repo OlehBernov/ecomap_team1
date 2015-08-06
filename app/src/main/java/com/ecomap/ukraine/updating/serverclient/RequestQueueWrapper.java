@@ -32,7 +32,7 @@ public class RequestQueueWrapper {
      *
      * @param context application context.
      */
-    private RequestQueueWrapper(Context context) {
+    private RequestQueueWrapper(final Context context) {
         RequestQueueWrapper.context = context;
         requestQueue = getRequestQueue();
     }
@@ -43,7 +43,7 @@ public class RequestQueueWrapper {
      * @param context application context.
      * @return request queue wrapper instance.
      */
-    public static synchronized RequestQueueWrapper getInstance(Context context) {
+    public static synchronized RequestQueueWrapper getInstance(final Context context) {
         if (instance == null) {
             instance = new RequestQueueWrapper(context);
         }
@@ -68,7 +68,7 @@ public class RequestQueueWrapper {
      * @param request request.
      * @param <T> request type.
      */
-    public <T> void addToRequestQueue(Request<T> request) {
+    public <T> void addToRequestQueue(final Request<T> request) {
         getRequestQueue().add(request);
     }
 
