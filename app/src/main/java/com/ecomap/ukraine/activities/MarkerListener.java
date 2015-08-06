@@ -10,6 +10,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.animation.DecelerateInterpolator;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -58,13 +59,15 @@ public class MarkerListener implements ProblemListener {
     private TableLayout activitiesLayout;
     private EditText addComment;
 
+    private TextView titleView;
+
     Context context;
 
     private static int[] STARS_ID = {R.id.star1, R.id.star2, R.id.star3, R.id.star4, R.id.star1,};
 
     private Toolbar toolbar;
 
-    public MarkerListener(Activity activity, Problem problem) {
+    public MarkerListener(final Activity activity, Problem problem) {
         this.context = activity.getApplicationContext();
         this.activity = activity;
         this.toolbar = (Toolbar) activity.findViewById(R.id.toolbar);
@@ -85,7 +88,79 @@ public class MarkerListener implements ProblemListener {
 
         slidingUpPanelLayout.setAnchorPoint(ANCHOR_POINT);
         slidingUpPanelLayout.setPanelState(SlidingUpPanelLayout.PanelState.ANCHORED);
-        toolbar.setTitle("");
+
+        titleView = (TextView)activity.findViewById(R.id.details_title);
+        toolbar.setBackgroundColor(0xff004d40);
+
+        slidingUpPanelLayout = (SlidingUpPanelLayout) activity.findViewById(R.id.sliding_layout);
+        slidingUpPanelLayout.setPanelSlideListener(new SlidingUpPanelLayout.PanelSlideListener() {
+            @Override
+            public void onPanelSlide(View view, float v) {
+                rescaleText(v);
+                moveToolbar(v);
+            }
+
+            @Override
+            public void onPanelCollapsed(View view) {
+                setToolbarInitialState();
+                toolbar.animate().translationY(0)
+                        .setInterpolator(new DecelerateInterpolator(2)).start();
+            }
+
+            private void setToolbarInitialState() {
+                toolbar.setTitle("Ecomap Ukraine");
+                toolbar.setBackgroundColor(0xff004d40);
+            }
+
+            @Override
+            public void onPanelExpanded(View view) {
+                setToolbarTransparent();
+            }
+
+            private void setToolbarTransparent() {
+                toolbar.setBackgroundColor(0x00000000);
+                toolbar.setTitle("");
+                toolbar.setTranslationY(0);
+            }
+
+            @Override
+            public void onPanelAnchored(View view) {
+                slidingUpPanelLayout.setCoveredFadeColor(0x00000000);
+            }
+
+            @Override
+            public void onPanelHidden(View view) {
+            }
+
+
+            private void rescaleText(float v) {
+                float scale = (Math.max(v - 0.9F, 0) * 3);
+                titleView.setScaleX(1 - scale);
+                titleView.setScaleY(1 - scale);
+            }
+
+
+            private void moveToolbar(float v) {
+                if ((v > slidingUpPanelLayout.getAnchorPoint())) {
+                    setToolbarInitialState();
+                    slidingUpPanelLayout.setCoveredFadeColor(0xff004d40);
+                    if (convertToPixels(v) < (convertToPixels(slidingUpPanelLayout
+                            .getAnchorPoint() + toolbar.getHeight()))) {
+                        toolbar.setY(convertToPixels(slidingUpPanelLayout
+                                .getAnchorPoint()) - convertToPixels(v));
+                    } else {
+                        toolbar.setY(-toolbar.getHeight());
+                    }
+                }
+            }
+
+            private int convertToPixels(float value) {
+                int displayHeightInPixels = activity.getResources()
+                        .getDisplayMetrics().heightPixels;
+                return (int) (value * displayHeightInPixels);
+            }
+        });
+
         this.votesNumber.setText("");
         this.putBriefInformation();
 

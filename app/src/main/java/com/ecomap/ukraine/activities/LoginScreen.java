@@ -89,8 +89,7 @@ public class LoginScreen extends AppCompatActivity implements LogInListener {
 
         callbackManager = CallbackManager.Factory.create();
         logInFacebookButton = (LoginButton)findViewById(R.id.facebook_button);
-        final LoginManager loginManager = LoginManager.getInstance();
-        loginManager.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
+        logInFacebookButton.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
             @Override
             public void onSuccess(LoginResult loginResult) {
                 facebookLogIn(loginResult);
@@ -106,8 +105,6 @@ public class LoginScreen extends AppCompatActivity implements LogInListener {
                 Log.e("login", "facebook login error", e);
             }
         });
-        LoginManager.getInstance().logInWithReadPermissions(this, Arrays.asList("public_profile", "user"));
-
         accountManager = accountManager.getInstance(getApplicationContext());
 
         View skip = findViewById(R.id.skip_button);
