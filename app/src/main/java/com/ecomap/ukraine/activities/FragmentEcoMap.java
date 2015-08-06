@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,10 +27,6 @@ import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.maps.android.clustering.ClusterManager;
 
-import org.json.JSONException;
-
-import java.util.Calendar;
-import java.util.GregorianCalendar;
 import java.util.List;
 
 /**
@@ -42,19 +37,18 @@ public class FragmentEcoMap extends android.support.v4.app.Fragment
 
     private MapView mapView;
     private GoogleMap googleMap;
-    private DataManager manager;
+    private DataManager dataManager;
     private static final LatLng INITIAL_POSITION = new LatLng(48.4, 31.2);
     private static final float INITIAL_ZOOM = 5;
     private ClusterManager<Problem> clusterManager;
     private static List<Problem> problems;
 
     /**
-     * Filter manager instance
+     * Filter dataManager instance
      */
-    private FilterManager fmanager;
+    private FilterManager filterManager;
 
-   private MarkerListener markerListener;
-
+    private MarkerListener markerListener;
 
     /**
      * The name of the preference to retrieve.
@@ -90,16 +84,16 @@ public class FragmentEcoMap extends android.support.v4.app.Fragment
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        manager = DataManager.getInstance(getActivity().getApplicationContext());
-        manager.registerProblemListener(this);
-        fmanager = FilterManager.getInstance(getActivity());
+        dataManager = DataManager.getInstance(getActivity().getApplicationContext());
+        dataManager.registerProblemListener(this);
 
         View rootView = inflater.inflate(R.layout.fragement_map, container, false);
         mapView = (MapView) rootView.findViewById(R.id.mapView);
         mapView.onCreate(savedInstanceState);
         mapView.onResume();
 
-        fmanager.registerFilterListener(this);
+        filterManager = FilterManager.getInstance(getActivity());
+        filterManager.registerFilterListener(this);
 
         MapsInitializer.initialize(getActivity().getApplicationContext());
         this.setUpMapIfNeeded();
@@ -113,8 +107,8 @@ public class FragmentEcoMap extends android.support.v4.app.Fragment
     @Override
     public void onDestroy() {
         super.onDestroy();
-        manager.removeProblemListener(this);
-        fmanager.removeFilterListener(this);
+        dataManager.removeProblemListener(this);
+        filterManager.removeFilterListener(this);
         SharedPreferences.Editor editor = getActivity().getSharedPreferences(FragmentEcoMap.POSITION, Context.MODE_PRIVATE).edit();
         editor.putFloat(LATITUDE, (float) googleMap.getCameraPosition().target.latitude);
         editor.putFloat(LONGITUDE, (float) googleMap.getCameraPosition().target.longitude);
@@ -133,7 +127,6 @@ public class FragmentEcoMap extends android.support.v4.app.Fragment
         putAllProblemsOnMap(problems, null);
     }
 
-
     /**
      * Update filter
      *
@@ -150,7 +143,7 @@ public class FragmentEcoMap extends android.support.v4.app.Fragment
      */
     @Override
     public void updateProblemDetails(Details details) {
-        //TODO implement
+        markerListener.setProblemDetails(details);
     }
 
     /**
@@ -163,10 +156,9 @@ public class FragmentEcoMap extends android.support.v4.app.Fragment
         googleMap.setOnCameraChangeListener(clusterManager);
         clusterManager.setOnClusterItemClickListener(this);
         googleMap.setOnMarkerClickListener(clusterManager);
-       // googleMap.setOnMarkerClickListener(new MarkerListener(activity));
 
         if (filterState == null) {
-            filterState = fmanager.getFilterStateFromPreference();
+            filterState = filterManager.getFilterStateFromPreference();
         }
         googleMap.clear();
         List<Problem> filteredProblems = new Filter().filterProblem(problems, filterState);
@@ -197,28 +189,26 @@ public class FragmentEcoMap extends android.support.v4.app.Fragment
         settings.setMapToolbarEnabled(false);
         googleMap.setMyLocationEnabled(true);
         settings.setMyLocationButtonEnabled(true);
-        manager.getAllProblems();
+        dataManager.getAllProblems();
 
         CameraPosition cameraPosition = new CameraPosition
                 .Builder()
-                .target(new LatLng(getActivity().getSharedPreferences(POSITION,
-                        Context.MODE_PRIVATE).getFloat(LATITUDE, (float) INITIAL_POSITION.latitude),
-                        getActivity().getSharedPreferences(POSITION,
-                                Context.MODE_PRIVATE).getFloat(LONGITUDE, (float) INITIAL_POSITION.longitude)))
-                .zoom(getActivity().getSharedPreferences(POSITION, Context.MODE_PRIVATE).getFloat(ZOOM, INITIAL_ZOOM))
-                .build();
+                .target(new LatLng(getActivity()
+                        .getSharedPreferences(POSITION, Context.MODE_PRIVATE)
+                        .getFloat(LATITUDE, (float) INITIAL_POSITION.latitude),
+                        getActivity()
+                        .getSharedPreferences(POSITION, Context.MODE_PRIVATE)
+                        .getFloat(LONGITUDE, (float) INITIAL_POSITION.longitude)))
+                        .zoom(getActivity().getSharedPreferences(POSITION, Context.MODE_PRIVATE).getFloat(ZOOM, INITIAL_ZOOM))
+                        .build();
         CameraUpdate cameraUpdate = CameraUpdateFactory.newCameraPosition(cameraPosition);
         googleMap.moveCamera(cameraUpdate);
     }
 
     @Override
     public boolean onClusterItemClick(Problem item) {
-        if(markerListener != null) {
-            manager.removeProblemListener(markerListener);
-        }
         markerListener = new MarkerListener(activity, item);
-        manager.registerProblemListener(markerListener);
-        manager.getProblemDetail(item.getProblemId());
+        dataManager.getProblemDetail(item.getProblemId());
 
         return true;
     }

@@ -7,6 +7,8 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.util.Log;
+
 import com.ecomap.ukraine.R;
 
 import com.ecomap.ukraine.models.ActivityType;
@@ -433,6 +435,8 @@ public class DBHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values;
         for (ProblemActivity problemActivity: problemActivities) {
+            int activityTypeId = getActivityTypeId(problemActivity.getActivityTypesId());
+
             values = new ContentValues();
             values.put(DBContract.ProblemActivity.PROBLEM_ACTIVITY_ID,
                        problemActivity.getProblemActivityId());
@@ -440,14 +444,15 @@ public class DBHelper extends SQLiteOpenHelper {
                        problemActivity.getDate());
             values.put(DBContract.ProblemActivity.PROBLEM_ID,
                        problemActivity.getProblemId());
-            values.put(DBContract.ProblemActivity.ACTIVITY_TYPES_ID,
-                       problemActivity.getActivityTypesId().name());
+            values.put(DBContract.ProblemActivity.ACTIVITY_TYPES_ID, activityTypeId);
             values.put(DBContract.ProblemActivity.USER_NAME,
                        problemActivity.getFirstName());
             values.put(DBContract.ProblemActivity.ACTIVITY_USERS_ID,
                        problemActivity.getUserId());
             values.put(DBContract.ProblemActivity.PROBLEM_ACTIVITY_CONTENT,
                        problemActivity.getContent());
+
+            Log.e("type", "" + problemActivity.getActivityTypesId().name());
 
             db.insert(DBContract.ProblemActivity.TABLE_NAME, null, values);
             values.clear();
@@ -546,11 +551,14 @@ public class DBHelper extends SQLiteOpenHelper {
                                                              Cursor cursor) {
         List<ProblemActivity> problemActivities = new ArrayList<>();
         for (int i = 0; i < cursor.getCount(); i++) {
-            ActivityType activityType =getActivityType(cursor.getInt(cursor.getColumnIndex(DBContract.ProblemActivity.ACTIVITY_TYPES_ID)));
+
+            int activityTypeId = cursor.getInt(cursor.getColumnIndex(DBContract.ProblemActivity.ACTIVITY_TYPES_ID));
+            ActivityType activityTypeEnum = getActivityType(activityTypeId);
+
             ProblemActivity problemActivity = new ProblemActivity(
                     problemId,
                     cursor.getInt(cursor.getColumnIndex(DBContract.ProblemActivity.PROBLEM_ACTIVITY_ID)),
-                    activityType,
+                    activityTypeEnum,
                     cursor.getInt(cursor.getColumnIndex(DBContract.ProblemActivity.ACTIVITY_USERS_ID)),
                     cursor.getString(cursor.getColumnIndex(DBContract.ProblemActivity.PROBLEM_ACTIVITY_CONTENT)),
                     cursor.getString(cursor.getColumnIndex(DBContract.ProblemActivity.PROBLEM_ACTIVITY_DATE)),
@@ -562,6 +570,25 @@ public class DBHelper extends SQLiteOpenHelper {
         cursor.close();
 
         return problemActivities;
+    }
+
+    private int getActivityTypeId(ActivityType activityType) {
+        switch (activityType) {
+            case CREATE:
+                return 1;
+            case UNKNOWN:
+                return 2;
+            case LIKE:
+                return 3;
+            case PHOTO:
+                return 4;
+            case COMMENT:
+                return 5;
+            case UNKNOWN2:
+                return 6;
+            default:
+                return 7;
+        }
     }
 
     private ActivityType getActivityType(int activityTypeId) {
