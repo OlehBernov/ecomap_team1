@@ -38,4 +38,7 @@
     <string name="log_in">Log in</string>
     <string name="sing_up">Sign up</string>
     <string name="confirm_password">Confirm Password</string>
+
+    <string name="photos">Photos:</string>
+
 </resources>

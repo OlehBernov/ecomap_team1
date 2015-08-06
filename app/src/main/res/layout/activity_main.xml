@@ -244,9 +244,11 @@
 
                                 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
                                     android:layout_width="match_parent"
+                                    android:id="@+id/information"
                                     android:layout_height="match_parent"
                                     android:layout_alignParentBottom="true"
                                     android:layout_centerHorizontal="true"
+                                    android:layout_marginTop="30dp"
                                     android:background="#fafafa"
                                     android:orientation="vertical">
 
@@ -313,7 +315,6 @@
                                         android:textColor="@color/abc_primary_text_disable_only_material_light"
                                         android:textSize="15dp" />
 
-
                                     <HorizontalScrollView
                                         android:id="@+id/photo_scroll"
                                         android:layout_width="match_parent"
@@ -347,9 +348,9 @@
                                         android:layout_height="wrap_content"
                                         android:background="@drawable/edit_text_style"
                                         android:gravity="top"
-                                        android:hint="Add comment..."
                                         android:descendantFocusability="beforeDescendants"
                                         android:focusableInTouchMode="true"
+                                        android:hint="Add comment..."
                                         android:minLines="6"
                                         android:paddingLeft="12dp"
                                         android:paddingRight="10dp"

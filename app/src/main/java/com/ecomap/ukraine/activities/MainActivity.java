@@ -20,6 +20,7 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 
 import com.codetroopers.betterpickers.calendardatepicker.CalendarDatePickerDialog;
@@ -129,9 +130,6 @@ public class MainActivity extends AppCompatActivity {
 
         user = (User) getIntent().getSerializableExtra(USER);
         setUserInformation(user);
-
-      /*  CircularImageView circularImageView = (CircularImageView)findViewById(R.id.circle_photo);
-        circularImageView.setImageResource(R.drawable.unsolved); */
 
         slidingUpPanelLayout = (SlidingUpPanelLayout) findViewById(R.id.sliding_layout);
         slidingUpPanelLayout.setAnchorPoint(0.5f);

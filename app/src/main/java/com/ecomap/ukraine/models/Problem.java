@@ -83,9 +83,6 @@ public class Problem implements ClusterItem {
         return position;
     }
 
-
-
-
     /**
      * Constructor of class
      * @param problemId id of current problem
