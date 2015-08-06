@@ -16,6 +16,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
@@ -97,12 +98,17 @@ public class MainActivity extends AppCompatActivity {
 
     private DataManager dataManager;
 
+    private SlidingUpPanelLayout slidingUpPanelLayout;
+
     private User user;
+
+    private Menu menu;
 
     /**
      * Filter manager instance
      */
     private FilterManager fmanager;
+    private CharSequence previousTitle;
 
     /**
      * Initialize activity
@@ -127,8 +133,8 @@ public class MainActivity extends AppCompatActivity {
       /*  CircularImageView circularImageView = (CircularImageView)findViewById(R.id.circle_photo);
         circularImageView.setImageResource(R.drawable.unsolved); */
 
-        SlidingUpPanelLayout sm = (SlidingUpPanelLayout) findViewById(R.id.sliding_layout);
-        sm.setAnchorPoint(0.5f);
+        slidingUpPanelLayout = (SlidingUpPanelLayout) findViewById(R.id.sliding_layout);
+        slidingUpPanelLayout.setAnchorPoint(0.5f);
 
         this.addMapFragment();
 
@@ -172,6 +178,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_main, menu);
+        this.menu = menu;
         return true;
     }
 
@@ -201,6 +208,30 @@ public class MainActivity extends AppCompatActivity {
         editor.commit();
     }
 
+    public void logOut(MenuItem item) {
+        //TODO
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (filterLayout.isDrawerOpen(GravityCompat.END)) {
+            menu.findItem(R.id.action_find_location)
+                    .setIcon(R.drawable.filter8);
+            filterLayout.closeDrawer(GravityCompat.END);
+            toolbar.setTitle(previousTitle);
+        } else if (slidingUpPanelLayout.getPanelState()
+                == SlidingUpPanelLayout.PanelState.EXPANDED) {
+            slidingUpPanelLayout.setPanelState(SlidingUpPanelLayout
+                    .PanelState.ANCHORED);
+        } else if (slidingUpPanelLayout.getPanelState()
+                == SlidingUpPanelLayout.PanelState.ANCHORED) {
+            slidingUpPanelLayout.setPanelState(SlidingUpPanelLayout
+                    .PanelState.HIDDEN);
+        } else {
+            super.onBackPressed();
+        }
+    }
+
     /**
      * Controls the position of the filter7 window on the screen.
      */
@@ -210,11 +241,12 @@ public class MainActivity extends AppCompatActivity {
             item.setIcon(R.drawable.filter_back);
             setDate();
             filterLayout.openDrawer(GravityCompat.END);
+            previousTitle = toolbar.getTitle();
             toolbar.setTitle(FILTER);
         } else {
             item.setIcon(R.drawable.filter8);
             filterLayout.closeDrawer(GravityCompat.END);
-            toolbar.setTitle(ECOMAP);
+            toolbar.setTitle(previousTitle);
         }
     }
 
@@ -358,6 +390,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void setUpDrawerLayout() {
         DrawerLayout drawerLayout = (DrawerLayout) findViewById(R.id.drawer);
+        drawerLayout.setDescendantFocusability(ViewGroup.FOCUS_BLOCK_DESCENDANTS);
         drawerToggle = new ActionBarDrawerToggle(this, drawerLayout,
                 R.string.drawer_open,
                 R.string.drawer_close);

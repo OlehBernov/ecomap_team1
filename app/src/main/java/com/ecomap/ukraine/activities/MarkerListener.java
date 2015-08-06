@@ -10,6 +10,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.animation.DecelerateInterpolator;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -31,16 +32,13 @@ import java.util.List;
 import java.util.Map;
 
 
-public class MarkerListener {
+public class MarkerListener implements ProblemListener {
 
     private static final float ANCHOR_POINT = 0.23f;
 
     private static final String DEFAULT_DESCRIPTION = "Description is missing";
     private static final String DEFAULT_PROPOSAL = "Proposal is missing";
-    private static final String ADD_COMMENT_HINT = "Add comment...";
-
-    private static final String NOT_RESOLVED = "not resolved";
-    private static final String RESOLVED = "resolved";
+    private static final String ADD_COMMENT_HINT = "Add comment";
 
     private static final int STAR_NUMBER = 5;
     private static final int DEFAULT_PHOTO_MARGIN = 25;
@@ -61,13 +59,15 @@ public class MarkerListener {
     private TableLayout activitiesLayout;
     private EditText addComment;
 
-    private Context context;
+    private TextView titleView;
 
-    private static int[] STARS_ID = {R.id.star1, R.id.star2, R.id.star3, R.id.star4, R.id.star5};
+    Context context;
+
+    private static int[] STARS_ID = {R.id.star1, R.id.star2, R.id.star3, R.id.star4, R.id.star1,};
 
     private Toolbar toolbar;
 
-    public MarkerListener(final Activity activity, final Problem problem) {
+    public MarkerListener(final Activity activity, Problem problem) {
         this.context = activity.getApplicationContext();
         this.activity = activity;
         this.toolbar = (Toolbar) activity.findViewById(R.id.toolbar);
@@ -88,9 +88,84 @@ public class MarkerListener {
 
         slidingUpPanelLayout.setAnchorPoint(ANCHOR_POINT);
         slidingUpPanelLayout.setPanelState(SlidingUpPanelLayout.PanelState.ANCHORED);
-        toolbar.setTitle("");
+
+        titleView = (TextView)activity.findViewById(R.id.details_title);
+        toolbar.setBackgroundColor(0xff004d40);
+
+        slidingUpPanelLayout = (SlidingUpPanelLayout) activity.findViewById(R.id.sliding_layout);
+        slidingUpPanelLayout.setPanelSlideListener(new SlidingUpPanelLayout.PanelSlideListener() {
+            @Override
+            public void onPanelSlide(View view, float v) {
+                rescaleText(v);
+                moveToolbar(v);
+            }
+
+            @Override
+            public void onPanelCollapsed(View view) {
+                setToolbarInitialState();
+                toolbar.animate().translationY(0)
+                        .setInterpolator(new DecelerateInterpolator(2)).start();
+            }
+
+            private void setToolbarInitialState() {
+                toolbar.setTitle("Ecomap Ukraine");
+                toolbar.setBackgroundColor(0xff004d40);
+            }
+
+            @Override
+            public void onPanelExpanded(View view) {
+                setToolbarTransparent();
+            }
+
+            private void setToolbarTransparent() {
+                toolbar.setBackgroundColor(0x00000000);
+                toolbar.setTitle("");
+                toolbar.setTranslationY(0);
+            }
+
+            @Override
+            public void onPanelAnchored(View view) {
+                slidingUpPanelLayout.setCoveredFadeColor(0x00000000);
+            }
+
+            @Override
+            public void onPanelHidden(View view) {
+            }
+
+
+            private void rescaleText(float v) {
+                float scale = (Math.max(v - 0.9F, 0) * 3);
+                titleView.setScaleX(1 - scale);
+                titleView.setScaleY(1 - scale);
+            }
+
+
+            private void moveToolbar(float v) {
+                if ((v > slidingUpPanelLayout.getAnchorPoint())) {
+                    setToolbarInitialState();
+                    slidingUpPanelLayout.setCoveredFadeColor(0xff004d40);
+                    if (convertToPixels(v) < (convertToPixels(slidingUpPanelLayout
+                            .getAnchorPoint() + toolbar.getHeight()))) {
+                        toolbar.setY(convertToPixels(slidingUpPanelLayout
+                                .getAnchorPoint()) - convertToPixels(v));
+                    } else {
+                        toolbar.setY(-toolbar.getHeight());
+                    }
+                }
+            }
+
+            private int convertToPixels(float value) {
+                int displayHeightInPixels = activity.getResources()
+                        .getDisplayMetrics().heightPixels;
+                return (int) (value * displayHeightInPixels);
+            }
+        });
+
         this.votesNumber.setText("");
         this.putBriefInformation();
+
+        clearDetailsPanel();
+
     }
 
     private void clearDetailsPanel() {
@@ -105,7 +180,7 @@ public class MarkerListener {
         addComment.setHint(ADD_COMMENT_HINT);
 
         if (isPhotoContainerHavePhotos()) {
-            photoContainer.removeViews(0, photoContainer.getChildCount());
+            photoContainer.removeViews(1, photoContainer.getChildCount() - 1);
         }
 
         if (isActivityLayoutHaveChild()) {
@@ -114,25 +189,30 @@ public class MarkerListener {
     }
 
     private boolean isPhotoContainerHavePhotos() {
-        return  photoContainer != null && (photoContainer.getChildCount() > 0);
+        return  photoContainer != null && (photoContainer.getChildCount() > 1);
     }
 
     private boolean isActivityLayoutHaveChild() {
         return activitiesLayout != null && (activitiesLayout.getChildCount() > 0);
     }
 
-    public void setProblemDetails(final Details details) {
+    @Override
+    public void updateAllProblems(List<Problem> problems) {
+    }
+
+    @Override
+    public void updateProblemDetails(Details details) {
         if (details == null) {
             return;
+
         }
 
-        clearDetailsPanel();
         putDetailsOnPanel(details);
 
         if (details.getProblemActivities() != null) {
             for (ProblemActivity problemActivity : details.getProblemActivities()) {
-                if ((problemActivity.getActivityTypesId() == ActivityType.CREATE)
-                     && (problemActivity.getProblemId() == problem.getProblemId())) {
+                if ((problemActivity.getActivityTypesId() == ActivityType.CREATE) &&
+                        (problemActivity.getProblemId() == problem.getProblemId())) {
                     userInformation.setText(getPostInformation(problemActivity));
                     break;
                 }
@@ -142,7 +222,7 @@ public class MarkerListener {
         addPhotos(details);
     }
 
-    private String getPostInformation(final ProblemActivity problemActivity) {
+    private String getPostInformation(ProblemActivity problemActivity) {
         String userName = problemActivity.getFirstName();
         String day = problemActivity.getDate().substring(8, 10);
         String year = problemActivity.getDate().substring(0, 4);
@@ -167,7 +247,7 @@ public class MarkerListener {
         }
     }
 
-    private void setPostInformation(final ProblemActivity problemActivity) {
+    private void setPostInformation(ProblemActivity problemActivity) {
         TableRow activityRow = new TableRow(context);
         activityRow.addView(new ImageView(context));
         activityRow.setGravity(Gravity.LEFT);
@@ -178,7 +258,7 @@ public class MarkerListener {
         activitiesLayout.addView(activityRow);
     }
 
-    private ImageView buildActivityIcon(final ProblemActivity problemActivity) {
+    private ImageView buildActivityIcon(ProblemActivity problemActivity) {
         TableRow.LayoutParams imageParams = new TableRow.LayoutParams(100, 100);
         imageParams.topMargin = (int) context.getResources().getDimension(R.dimen.slide_panel_items_margin);
         imageParams.bottomMargin = (int) context.getResources().getDimension(R.dimen.slide_panel_items_margin);
@@ -186,10 +266,10 @@ public class MarkerListener {
         activityTypeIcon.setImageDrawable(getActivityIcon(problemActivity.getActivityTypesId()));
         activityTypeIcon.setLayoutParams(imageParams);
 
-        return activityTypeIcon;
+        return  activityTypeIcon;
     }
 
-    private TextView buildActivityMessage(final ProblemActivity problemActivity) {
+    private TextView buildActivityMessage(ProblemActivity problemActivity) {
         TextView activityMessage = new TextView(context);
         TableRow.LayoutParams params =
                 new TableRow.LayoutParams(TableRow.LayoutParams.MATCH_PARENT,
@@ -207,7 +287,7 @@ public class MarkerListener {
         return activityMessage;
     }
 
-    private Drawable getActivityIcon(final ActivityType activityType) {
+    private Drawable getActivityIcon(ActivityType activityType) {
         switch (activityType) {
             case CREATE:
                 return context.getResources().getDrawable(R.drawable.create);
@@ -226,7 +306,7 @@ public class MarkerListener {
         }
     }
 
-    private void putDetailsOnPanel(final Details details) {
+    private void putDetailsOnPanel(Details details) {
         this.votesNumber.setText(String.valueOf(details.getVotes()));
         for (int i = 0; i < details.getSeverity(); i++) {
             ImageView star = (ImageView) activity.findViewById(STARS_ID[i]);
@@ -242,12 +322,12 @@ public class MarkerListener {
         this.markerIcon.setImageResource(IconRenderer.getResourceIdForMarker(problem.getProblemTypesId()));
     }
 
-    private void setProblemStatus(final int problemStatusId) {
+    private void setProblemStatus(int problemStatusId) {
         if (problemStatusId == 0) {
-            this.problemStatus.setText(NOT_RESOLVED);
+            this.problemStatus.setText("not resolved");
             this.problemStatus.setTextColor(Color.RED);
         } else {
-            this.problemStatus.setText(RESOLVED);
+            this.problemStatus.setText("resolved");
             this.problemStatus.setTextColor(Color.GREEN);
         }
     }
@@ -259,11 +339,11 @@ public class MarkerListener {
             return;
         }
 
-        BasicContentLayout photosLayout =
-                new BasicContentLayout(photoContainer, activity.getApplicationContext());
+        BasicContentLayout bcl = new BasicContentLayout(photoContainer,
+                                                        activity.getApplicationContext());
 
-        for (Photo photo: photos.keySet()) {
-            ImageView imagePhoto = new ImageView(context);
+        for (final Photo photo: photos.keySet()) {
+            final  ImageView imagePhoto = new ImageView(context);
             imagePhoto.setImageBitmap(photos.get(photo));
 
             LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(-100, -100);
@@ -271,8 +351,38 @@ public class MarkerListener {
             params.height = 10;
             imagePhoto.setLayoutParams(params);
 
-            photosLayout.addHorizontalBlock(imagePhoto, DEFAULT_PHOTO_MARGIN);
-        }
-    }
+    /*      imagePhoto.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    LayoutInflater layoutInflater
+                            = (LayoutInflater) context
+                            .getSystemService(context.LAYOUT_INFLATER_SERVICE);
 
+                    View popupView = layoutInflater.inflate(R.layout.popup_window, null);
+
+                    ImageView im = (ImageView) popupView.findViewById(R.id.imageView3);
+                    im.setImageBitmap(photos.get(photo));
+
+                    final PopupWindow popupWindow = new PopupWindow(
+                            popupView,
+                            LinearLayout.LayoutParams.WRAP_CONTENT,
+                            LinearLayout.LayoutParams.WRAP_CONTENT);
+
+                    popupWindow.showAsDropDown(imagePhoto, 100, 100);
+                    popupWindow.setAnimationStyle(R.anim.abc_popup_enter);
+
+                    im.setOnClickListener(new View.OnClickListener() {
+
+                        @Override
+                        public void onClick(View v) {
+                            popupWindow.dismiss();
+                        }
+                    });
+
+                }
+            }); */
+            bcl.addHorizontalBlock(imagePhoto, DEFAULT_PHOTO_MARGIN);
+        }
+
+    }
 }

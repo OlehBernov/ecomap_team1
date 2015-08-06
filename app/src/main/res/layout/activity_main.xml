@@ -15,15 +15,7 @@
             android:layout_gravity="start|top"
             android:orientation="vertical">
 
-            <android.support.v7.widget.Toolbar
-                android:id="@+id/toolbar"
-                android:layout_width="match_parent"
-                android:layout_height="?attr/actionBarSize"
-                android:background="@color/toolbar_teal"
-                android:theme="@style/DrawerArrowStyle"
-                android:title="@string/app_name">
 
-            </android.support.v7.widget.Toolbar>
 
             <android.support.v4.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
                 xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -39,23 +31,48 @@
                     android:gravity="bottom"
                     sothree:umanoPanelHeight="0dp"
                     sothree:umanoParalaxOffset="200dp"
-                    sothree:umanoShadowHeight="4dp">
+                    sothree:umanoShadowHeight="0dp"
+                    sothree:umanoOverlay="true">
 
-
-                    <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                        android:id="@+id/container"
+                    <RelativeLayout
                         android:layout_width="match_parent"
                         android:layout_height="match_parent">
 
-                    </FrameLayout>
+                        <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                            android:id="@+id/container"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent">
+
+                        </FrameLayout>
+
+                    </RelativeLayout>
+
+
 
                     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_alignParentBottom="true"
                         android:layout_centerHorizontal="true"
-                        android:background="#fafafa"
+                        android:background="#60004d40"
                         android:orientation="vertical">
+
+                        <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="?attr/actionBarSize">
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:id="@+id/details_title"
+                                android:transformPivotX="@dimen/activity_vertical_margin"
+                                android:transformPivotY="16dp"
+                                android:textSize="30sp"
+                                android:text="Details"
+                                android:textColor="#ffffffff"
+
+                                android:gravity="center"
+                                android:layout_centerVertical="true"/>
+                        </RelativeLayout>
 
                         <ScrollView
                             android:id="@+id/panelScrollView"
@@ -378,6 +395,7 @@
 
                 </com.sothree.slidinguppanel.SlidingUpPanelLayout>
 
+
                 <android.support.design.widget.NavigationView
                     android:id="@+id/navigation2"
                     android:layout_width="match_parent"
@@ -393,6 +411,11 @@
                         android:layout_height="match_parent"
                         android:color="#BCBCBC"
                         android:orientation="vertical">
+
+                        <ImageView
+                            android:layout_width="match_parent"
+                            android:layout_height="?attr/actionBarSize"
+                            android:background="#ff004d40"/>
 
                         <ScrollView
                             android:id="@+id/scrollView"
@@ -960,9 +983,20 @@
 
                 </android.support.design.widget.NavigationView>
 
+
             </android.support.v4.widget.DrawerLayout>
 
         </LinearLayout>
+
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="#ff004d40"
+            android:theme="@style/DrawerArrowStyle"
+            android:title="@string/app_name">
+
+        </android.support.v7.widget.Toolbar>
 
     </RelativeLayout>
 
