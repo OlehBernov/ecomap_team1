@@ -10,7 +10,6 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.ecomap.ukraine.account.convertion.JSONFields;
 import com.ecomap.ukraine.account.convertion.JSONParser;
-import com.ecomap.ukraine.account.manager.AccountManager;
 import com.ecomap.ukraine.account.manager.LogRequestReceiver;
 import com.ecomap.ukraine.models.User;
 import com.ecomap.ukraine.updating.serverclient.RequestQueueWrapper;
@@ -35,11 +34,21 @@ public class LogInClient {
 
     private LogRequestReceiver logRequestReceiver;
 
+    /**
+     * Constructor
+     * @param logRequestReceiver receive request result
+     * @param context appication context
+     */
     public LogInClient(LogRequestReceiver logRequestReceiver, Context context) {
         this.logRequestReceiver = logRequestReceiver;
         this.context = context;
     }
 
+    /**
+     * Sends request to login user
+     * @param password acount password
+     * @param login  user login
+     */
     public void postLogIn(final String password, final String login) {
         StringRequest stringRequest = new StringRequest(Request.Method.POST, LOG_IN_URL,
                 new Response.Listener<String>() {
@@ -79,6 +88,13 @@ public class LogInClient {
     }
 
 
+    /**
+     *
+     * @param firstname user firstname
+     * @param lastname user surname
+     * @param email user email
+     * @param password  acount password
+     */
 
     public void postRegistration (final String firstname, final String lastname,
                                   final String email, final String password) {
