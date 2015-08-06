@@ -32,11 +32,21 @@ public class LogInClient {
 
     private LogRequestReceiver logRequestReceiver;
 
+    /**
+     * Constructor
+     * @param logRequestReceiver receive request result
+     * @param context appication context
+     */
     public LogInClient(final LogRequestReceiver logRequestReceiver, final Context context) {
         this.logRequestReceiver = logRequestReceiver;
         this.context = context;
     }
 
+    /**
+     * Sends request to login user
+     * @param password acount password
+     * @param login  user login
+     */
     public void postLogIn(final String password, final String login) {
         StringRequest stringRequest = new StringRequest(Request.Method.POST, LOG_IN_URL,
                 new Response.Listener<String>() {
@@ -45,6 +55,7 @@ public class LogInClient {
                         try {
                             User user = new JSONParser().parseUserInformation(response);
                             logRequestReceiver.setLogInRequestResult(user);
+                           logRequestReceiver.putLogInResultToPreferences(password, login);
                         } catch (JSONException e) {
                             Log.e("exception", "JSONException in LogInUser");
                             logRequestReceiver.setLogInRequestResult(null);
@@ -75,6 +86,13 @@ public class LogInClient {
     }
 
 
+    /**
+     *
+     * @param firstname user firstname
+     * @param lastname user surname
+     * @param email user email
+     * @param password  acount password
+     */
 
     public void postRegistration (final String firstname, final String lastname,
                                   final String email, final String password) {
@@ -85,6 +103,7 @@ public class LogInClient {
                         try {
                             User user = new JSONParser().parseRegistrationInformation(response, email);
                             logRequestReceiver.setLogInRequestResult(user);
+                            logRequestReceiver.putLogInResultToPreferences(password, email);
                         } catch (JSONException e) {
                             Log.e("exception", "JSONException in Registration");
                             logRequestReceiver.setLogInRequestResult(null);

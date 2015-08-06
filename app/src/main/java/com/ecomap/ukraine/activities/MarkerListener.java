@@ -9,6 +9,7 @@ import android.graphics.drawable.Drawable;
 import android.support.v4.content.res.ResourcesCompat;
 import android.support.v7.widget.Toolbar;
 import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.animation.DecelerateInterpolator;
 import android.widget.EditText;
@@ -20,6 +21,7 @@ import android.widget.TableRow;
 import android.widget.TextView;
 
 import com.ecomap.ukraine.R;
+import com.ecomap.ukraine.data.manager.ProblemListener;
 import com.ecomap.ukraine.models.ActivityType;
 import com.ecomap.ukraine.models.Details;
 import com.ecomap.ukraine.models.Photo;
@@ -38,6 +40,9 @@ public class MarkerListener {
     private static final String DEFAULT_DESCRIPTION = "Description is missing";
     private static final String DEFAULT_PROPOSAL = "Proposal is missing";
     private static final String ADD_COMMENT_HINT = "Add comment";
+    private static final String RESOLVED = "resolved";
+    private static final String UNSOLVED = "unsolved";
+    private static final String ECOMAP_UKRAINE= "Ecomap Ukraine";
 
     private static final int STAR_NUMBER = 5;
     private static final int DEFAULT_PHOTO_MARGIN = 25;
@@ -69,6 +74,11 @@ public class MarkerListener {
 
     private Toolbar toolbar;
 
+    /**
+     * Constructor
+     * @param activity callback activity
+     * @param problem clicked problem
+     */
     public MarkerListener(final Activity activity, Problem problem) {
         this.context = activity.getApplicationContext();
         this.activity = activity;
@@ -111,7 +121,7 @@ public class MarkerListener {
             }
 
             private void setToolbarInitialState() {
-                toolbar.setTitle("Ecomap Ukraine");
+                toolbar.setTitle(ECOMAP_UKRAINE);
                 toolbar.setBackgroundColor(0xff004d40);
             }
 
@@ -169,6 +179,9 @@ public class MarkerListener {
 
     }
 
+    /**
+     * Clear details panel
+     */
     private void clearDetailsPanel() {
         for (int i = 0; i < STAR_NUMBER; i++) {
             ImageView star = (ImageView) activity.findViewById(STARS_ID[i]);
@@ -219,6 +232,11 @@ public class MarkerListener {
         addPhotos(details);
     }
 
+    /**
+     * Gets information about post from details
+     * @param problemActivity current problemActivity
+     * @return information about post
+     */
     private String getPostInformation(ProblemActivity problemActivity) {
         String userName = problemActivity.getFirstName();
         String day = problemActivity.getDate().substring(8, 10);
@@ -244,6 +262,10 @@ public class MarkerListener {
         }
     }
 
+    /**
+     * Sets post information
+     * @param problemActivity current problemActivity
+     */
     private void setPostInformation(ProblemActivity problemActivity) {
         TableRow activityRow = new TableRow(context);
         activityRow.addView(new ImageView(context));
@@ -255,6 +277,11 @@ public class MarkerListener {
         activitiesLayout.addView(activityRow);
     }
 
+    /**
+     * Builds activity icon
+     * @param problemActivity current problemActivity
+     * @return icon
+     */
     private ImageView buildActivityIcon(ProblemActivity problemActivity) {
         TableRow.LayoutParams imageParams = new TableRow.LayoutParams(ACTIVITY_ICON_WIDTH, ACTIVITY_ICON_HEIGHT);
         imageParams.topMargin = (int) context.getResources().getDimension(R.dimen.slide_panel_items_margin);
@@ -266,6 +293,11 @@ public class MarkerListener {
         return  activityTypeIcon;
     }
 
+    /**
+     * Builds activity context
+     * @param problemActivity current problemActivity
+     * @return activity context
+     */
     private TextView buildActivityMessage(ProblemActivity problemActivity) {
         TextView activityMessage = new TextView(context);
         TableRow.LayoutParams params =
@@ -284,6 +316,11 @@ public class MarkerListener {
         return activityMessage;
     }
 
+    /**
+     * Gets icon resource for activity by activityType
+     * @param activityType activityType
+     * @return icon resource
+     */
     private Drawable getActivityIcon(ActivityType activityType) {
         switch (activityType) {
             case CREATE:
@@ -304,6 +341,10 @@ public class MarkerListener {
 
     }
 
+    /**
+     * Puts details on sliding panel
+     * @param details details of problem
+     */
     private void putDetailsOnPanel(Details details) {
         this.votesNumber.setText(String.valueOf(details.getVotes()));
         for (int i = 0; i < details.getSeverity(); i++) {
@@ -322,14 +363,18 @@ public class MarkerListener {
 
     private void setProblemStatus(int problemStatusId) {
         if (problemStatusId == 0) {
-            this.problemStatus.setText("not resolved");
+            this.problemStatus.setText(UNSOLVED);
             this.problemStatus.setTextColor(Color.RED);
         } else {
-            this.problemStatus.setText("resolved");
+            this.problemStatus.setText(RESOLVED);
             this.problemStatus.setTextColor(Color.GREEN);
         }
     }
 
+    /**
+     * Adds photos to sliding panel
+     * @param details details of problem
+     */
     private void addPhotos (final Details details) {
         Map<Photo, Bitmap> photos = details.getPhotos();
 
