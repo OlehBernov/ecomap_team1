@@ -8,10 +8,10 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
+import com.ecomap.ukraine.account.convertion.JSONFields;
+import com.ecomap.ukraine.account.convertion.JSONParser;
 import com.ecomap.ukraine.account.manager.LogRequestReceiver;
 import com.ecomap.ukraine.models.User;
-import com.ecomap.ukraine.updating.convertion.JSONFields;
-import com.ecomap.ukraine.updating.convertion.JSONParser;
 import com.ecomap.ukraine.updating.serverclient.RequestQueueWrapper;
 
 import org.json.JSONException;
@@ -114,29 +114,6 @@ public class LogInClient {
                 return params;
             }
         };
-
-        RequestQueueWrapper.getInstance(context).addToRequestQueue(stringRequest);
-    }
-
-
-
-
-    /**
-     * TODO
-     */
-    public void getLogOut() {
-        StringRequest stringRequest = new StringRequest(Request.Method.GET, LOG_OUT_URL,
-                new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-                        logRequestReceiver.setLogOutRequestResult(true);
-                    }
-                }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError volleyError) {
-                logRequestReceiver.setLogOutRequestResult(false);
-            }
-        });
 
         RequestQueueWrapper.getInstance(context).addToRequestQueue(stringRequest);
     }

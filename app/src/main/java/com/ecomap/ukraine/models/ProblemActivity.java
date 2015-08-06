@@ -20,7 +20,7 @@ public class ProblemActivity {
     /**
      * represend type of current problemActivity
      */
-    private int activityTypesId;
+    private ActivityType activityTypesId;
 
     /**
      * id of user who added this problemActivity
@@ -60,7 +60,7 @@ public class ProblemActivity {
     /**
      * provides access to position
      */
-    public int getActivityTypesId() {
+    public ActivityType getActivityTypesId() {
         return activityTypesId;
     }
 
@@ -102,7 +102,7 @@ public class ProblemActivity {
      * @param date contains adding date of current problemActivity
      * @param userName name of user who added this problemActivity
      */
-    public ProblemActivity(int probemId, int problemActivityId, int activityTypesId, int userId,
+    public ProblemActivity(int probemId, int problemActivityId, ActivityType activityTypesId, int userId,
                            String content, String date, String userName) {
         this.problemId = probemId;
         this.problemActivityId = problemActivityId;

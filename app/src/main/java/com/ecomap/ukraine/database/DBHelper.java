@@ -9,6 +9,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import com.ecomap.ukraine.R;
 
+import com.ecomap.ukraine.models.ActivityType;
 import com.ecomap.ukraine.models.Details;
 import com.ecomap.ukraine.models.Photo;
 import com.ecomap.ukraine.models.Problem;
@@ -125,7 +126,6 @@ public class DBHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
         db.execSQL(DBHelper.DELETE_FROM + DBContract.Problems.TABLE_NAME);
         setAllProblems(problems);
-        db.close();
     }
 
     /**
@@ -150,7 +150,6 @@ public class DBHelper extends SQLiteOpenHelper {
                 DBContract.ProblemActivity.PROBLEM_ID + " = ?",
                 new String[]{"" + problemId});
         setProblemDetails(details);
-        //db.close();
     }
 
     /**
@@ -165,7 +164,6 @@ public class DBHelper extends SQLiteOpenHelper {
         if (cursor.moveToFirst()) {
             problems = buildAllProblemList(cursor);
         }
-       // db.close();
         return problems;
     }
 
@@ -191,7 +189,6 @@ public class DBHelper extends SQLiteOpenHelper {
             db.insert(DBContract.Problems.TABLE_NAME, null, contentValues);
             contentValues.clear();
         }
-       // db.close();
     }
 
     /**
@@ -225,7 +222,6 @@ public class DBHelper extends SQLiteOpenHelper {
         if (cursor.moveToFirst()) {
             details = buildProblemDetails(problemId, cursor, problemActivities, photos);
         }
-        //db.close();
 
         return details;
     }
@@ -253,10 +249,12 @@ public class DBHelper extends SQLiteOpenHelper {
 
         SQLiteDatabase db = this.getWritableDatabase();
         db.insert(DBContract.Details.TABLE_NAME, null, values);
-        //db.close();
 
         List<ProblemActivity> problemActivities = details.getProblemActivities();
-        setProblemActivities(problemActivities);
+        if (problemActivities != null) {
+            setProblemActivities(problemActivities);
+        }
+
         Map<Photo, Bitmap> photos = details.getPhotos();
         setPhotos(photos);
     }
@@ -287,7 +285,6 @@ public class DBHelper extends SQLiteOpenHelper {
             db.insert(DBContract.Photos.TABLE_NAME, null, values);
             values.clear();
         }
-       // db.close();
     }
 
     private void writeToFile(Bitmap bitmap, String name) {
@@ -329,7 +326,6 @@ public class DBHelper extends SQLiteOpenHelper {
 
         Cursor cursor = db.query(DBContract.Details.TABLE_NAME, projection,
                 selection, selectionArgs, null, null, null);
-       // db.close();
 
         if (cursor.moveToFirst()) {
             return cursor.getString(cursor.getColumnIndex(DBContract.Details.LAST_UPDATE));
@@ -366,7 +362,6 @@ public class DBHelper extends SQLiteOpenHelper {
         if (cursor.moveToFirst()) {
             map = buildPhotosMap(problemId, cursor);
         }
-       // db.close();
 
         return map;
     }
@@ -422,7 +417,6 @@ public class DBHelper extends SQLiteOpenHelper {
         if (cursor.moveToFirst()) {
             problemActivities = buildProblemActivitiesList(problemId, cursor);
         }
-        //db.close();
 
         return problemActivities;
     }
@@ -447,7 +441,7 @@ public class DBHelper extends SQLiteOpenHelper {
             values.put(DBContract.ProblemActivity.PROBLEM_ID,
                        problemActivity.getProblemId());
             values.put(DBContract.ProblemActivity.ACTIVITY_TYPES_ID,
-                       problemActivity.getActivityTypesId());
+                       problemActivity.getActivityTypesId().name());
             values.put(DBContract.ProblemActivity.USER_NAME,
                        problemActivity.getFirstName());
             values.put(DBContract.ProblemActivity.ACTIVITY_USERS_ID,
@@ -458,7 +452,6 @@ public class DBHelper extends SQLiteOpenHelper {
             db.insert(DBContract.ProblemActivity.TABLE_NAME, null, values);
             values.clear();
         }
-       // db.close();
     }
 
     /**
@@ -553,10 +546,11 @@ public class DBHelper extends SQLiteOpenHelper {
                                                              Cursor cursor) {
         List<ProblemActivity> problemActivities = new ArrayList<>();
         for (int i = 0; i < cursor.getCount(); i++) {
+            ActivityType activityType =getActivityType(cursor.getInt(cursor.getColumnIndex(DBContract.ProblemActivity.ACTIVITY_TYPES_ID)));
             ProblemActivity problemActivity = new ProblemActivity(
                     problemId,
                     cursor.getInt(cursor.getColumnIndex(DBContract.ProblemActivity.PROBLEM_ACTIVITY_ID)),
-                    cursor.getInt(cursor.getColumnIndex(DBContract.ProblemActivity.ACTIVITY_TYPES_ID)),
+                    activityType,
                     cursor.getInt(cursor.getColumnIndex(DBContract.ProblemActivity.ACTIVITY_USERS_ID)),
                     cursor.getString(cursor.getColumnIndex(DBContract.ProblemActivity.PROBLEM_ACTIVITY_CONTENT)),
                     cursor.getString(cursor.getColumnIndex(DBContract.ProblemActivity.PROBLEM_ACTIVITY_DATE)),
@@ -570,4 +564,24 @@ public class DBHelper extends SQLiteOpenHelper {
         return problemActivities;
     }
 
+    private ActivityType getActivityType(int activityTypeId) {
+        switch (activityTypeId) {
+            case 1:
+                return ActivityType.CREATE;
+            case 2:
+                return ActivityType.UNKNOWN;
+            case 3:
+                return ActivityType.LIKE;
+            case 4:
+                return ActivityType.PHOTO;
+            case 5:
+                return ActivityType.COMMENT;
+            case 6:
+                return ActivityType.UNKNOWN2;
+            default:
+                return ActivityType.UNKNOWN_TYPE;
+        }
+    }
+
 }
+

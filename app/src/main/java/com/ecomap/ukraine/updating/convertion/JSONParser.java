@@ -2,7 +2,9 @@ package com.ecomap.ukraine.updating.convertion;
 
 
 import android.graphics.Bitmap;
+import android.util.Log;
 
+import com.ecomap.ukraine.models.ActivityType;
 import com.ecomap.ukraine.models.ProblemActivity;
 import com.ecomap.ukraine.models.Details;
 import com.ecomap.ukraine.models.Photo;
@@ -83,6 +85,16 @@ public class JSONParser {
         JSONObject problemDetails = (detailedProblemArray
                 .getJSONArray(JSONFields.DETAILS_POSITION))
                 .getJSONObject(0);
+
+        List<ProblemActivity> problemActivities;
+        try {
+            problemActivities = getProblemActivities(detailedProblemArray
+                    .getJSONArray(JSONFields.PROBLEM_ACTIVITY_POSITION));
+        } catch (JSONException e) {
+            Log.e("JSONException", "ParseDetailes");
+            problemActivities = null;
+        }
+
         Details details;
         details = new Details(
                 problemDetails.optInt(JSONFields.ID, DEFAULT_VALUE),
@@ -92,8 +104,7 @@ public class JSONParser {
                 problemDetails.getString(JSONFields.PROBLEM_CONTENT),
                 problemDetails.getString(JSONFields.PROPOSAL),
                 problemDetails.getString(JSONFields.TITLE),
-                getProblemActivities(detailedProblemArray
-                        .getJSONArray(JSONFields.PROBLEM_ACTIVITY_POSITION)),
+                problemActivities,
                 getPhotos(detailedProblemArray
                         .getJSONArray(JSONFields.PHOTOS_POSITION)),
                 String.valueOf(System.currentTimeMillis())
@@ -102,54 +113,7 @@ public class JSONParser {
         return details;
     }
 
-    /**
-     * TODO docs
-     *
-     * @param userInformationJson
-     * @return
-     * @throws JSONException
-     */
-    public User parseUserInformation(final String userInformationJson)
-            throws JSONException {
-
-        if (userInformationJson == null) {
-            throw new JSONException(NULL_ARGUMENT);
-        }
-
-        JSONObject userInformation = new JSONObject(userInformationJson);
-        User user = new User(
-                userInformation.optInt(JSONFields.USER_ID, DEFAULT_VALUE),
-                userInformation.getString(JSONFields.NAME),
-                userInformation.getString(JSONFields.SURNAME),
-                userInformation.getString(JSONFields.ROLE),
-                userInformation.getString(JSONFields.IAT),
-                userInformation.getString(JSONFields.TOKEN),
-                userInformation.getString(JSONFields.EMAIL)
-        );
-
-        return user;
-    }
-
-
-
-    public User parseRegistrationInformation (final String registrationUserInformationJson, final String email)
-            throws JSONException {
-        if (registrationUserInformationJson == null) {
-            throw new JSONException(NULL_ARGUMENT);
-        }
-        JSONObject registrationUserInformation = new JSONObject(registrationUserInformationJson);
-        User user = new User(
-                registrationUserInformation.getJSONObject(JSONFields.REGISTRATION_ID).getInt(JSONFields.ID_OF_REGISTRATION_USER),
-                registrationUserInformation.getString(JSONFields.NAME),
-                registrationUserInformation.getString(JSONFields.SURNAME),
-                registrationUserInformation.getString(JSONFields.ROLE),
-                registrationUserInformation.getString(JSONFields.IAT),
-                registrationUserInformation.getString(JSONFields.TOKEN),
-                email
-        );
-
-        return user;
-    }
+   
 
     /**
      * Converts brief information about concrete problem from JSONObject
@@ -197,15 +161,15 @@ public class JSONParser {
             contentObject = new JSONObject(commentObject
                                           .getString(JSONFields.PROBLEM_ACTIVITY_CONTENT));
 
-            currentProblemActivity = new ProblemActivity(
-                    commentObject.optInt(JSONFields.PROBLEMS_ID, DEFAULT_VALUE),
-                    commentObject.optInt(JSONFields.ID, DEFAULT_VALUE),
-                    commentObject.optInt(JSONFields.ACTIVITY_TYPES_ID, DEFAULT_VALUE),
-                    commentObject.optInt(JSONFields.COMMENT_USERS_ID, DEFAULT_VALUE),
-                    contentObject.getString(JSONFields.COMMENT_CORE),
-                    commentObject.getString(JSONFields.PROBLEM_ACTIVITY_DATE),
-                    contentObject.getString(JSONFields.USER_NAME)
-            );
+                currentProblemActivity = new ProblemActivity(
+                        commentObject.optInt(JSONFields.PROBLEMS_ID, DEFAULT_VALUE),
+                        commentObject.optInt(JSONFields.ID, DEFAULT_VALUE),
+                        getActivityType(commentObject.optInt(JSONFields.ACTIVITY_TYPES_ID, DEFAULT_VALUE)),
+                        commentObject.optInt(JSONFields.COMMENT_USERS_ID, DEFAULT_VALUE),
+                        contentObject.getString(JSONFields.COMMENT_CORE),
+                        commentObject.getString(JSONFields.PROBLEM_ACTIVITY_DATE),
+                        contentObject.getString(JSONFields.USER_NAME)
+                );
 
             problemActivities.add(currentProblemActivity);
         }
@@ -243,6 +207,25 @@ public class JSONParser {
         }
 
         return photos;
+    }
+
+    private ActivityType getActivityType(int activityTypeId) {
+        switch (activityTypeId) {
+            case 1:
+                return ActivityType.CREATE;
+            case 2:
+                return ActivityType.UNKNOWN;
+            case 3:
+                return ActivityType.LIKE;
+            case 4:
+                return ActivityType.PHOTO;
+            case 5:
+                return ActivityType.COMMENT;
+            case 6:
+                return ActivityType.UNKNOWN2;
+            default:
+                return ActivityType.UNKNOWN_TYPE;
+        }
     }
 
 }

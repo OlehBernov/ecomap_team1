@@ -18,13 +18,10 @@ import com.ecomap.ukraine.data.manager.ProblemRequestReceiver;
 import com.ecomap.ukraine.models.Details;
 import com.ecomap.ukraine.models.Photo;
 
-import com.ecomap.ukraine.models.User;
-import com.ecomap.ukraine.updating.convertion.JSONFields;
 import com.ecomap.ukraine.updating.convertion.JSONParser;
 
 import org.json.JSONException;
 
-import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -101,8 +98,11 @@ public class LoadingClient {
                     public void onResponse(String response) {
                         try {
                             Details details = new JSONParser().parseDetailedProblem(response);
-                            problemRequestReceiver.setProblemDetailsRequestResult(details);
-                           // getPhotos(details);
+                            if (isPhotosExist(details)) {
+                                getPhotos(details);
+                            } else {
+                                problemRequestReceiver.setProblemDetailsRequestResult(details);
+                            }
                         } catch (JSONException e) {
                             Log.e("exception", "JSONException in getProblemDetail");
                             problemRequestReceiver.setProblemDetailsRequestResult(null);
@@ -116,6 +116,10 @@ public class LoadingClient {
             }
         });
         RequestQueueWrapper.getInstance(context).addToRequestQueue(stringRequest);
+    }
+
+    private boolean isPhotosExist(Details details) {
+        return details.getPhotos().size() > 0;
     }
 
     /**

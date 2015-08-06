@@ -1,6 +1,8 @@
 package com.ecomap.ukraine.account.manager;
 
 import android.content.Context;
+import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 
 import com.ecomap.ukraine.account.client.LogInClient;
 import com.ecomap.ukraine.models.User;
@@ -17,8 +19,6 @@ public class AccountManager implements LogInListenerNotifier,
     private static AccountManager instance;
 
     private Set<LogInListener> logInListeners = new HashSet<>();
-
-    private Set<LogOutListener> logOutListeners = new HashSet<>();
 
     private LogInClient logInClient;
 
@@ -42,11 +42,6 @@ public class AccountManager implements LogInListenerNotifier,
     }
 
     @Override
-    public void setLogOutRequestResult(boolean success) {
-        sendLogOutResult(success);
-    }
-
-    @Override
     public void registerLogInListener(LogInListener listener) {
         logInListeners.add(listener);
     }
@@ -57,26 +52,9 @@ public class AccountManager implements LogInListenerNotifier,
     }
 
     @Override
-    public void registerLogOutListener(LogOutListener listener) {
-        logOutListeners.add(listener);
-    }
-
-    @Override
-    public void removeLogOutListener(LogOutListener listener) {
-        logOutListeners.remove(listener);
-    }
-
-    @Override
     public void sendLogInResult(User user) {
         for (LogInListener listener: logInListeners) {
             listener.setLogInResult(user);
-        }
-    }
-
-    @Override
-    public void sendLogOutResult(boolean success) {
-        for (LogOutListener listener: logOutListeners) {
-            listener.setLogOutResult(success);
         }
     }
 
@@ -84,12 +62,9 @@ public class AccountManager implements LogInListenerNotifier,
         logInClient.postLogIn(password, login);
     }
 
-    public void logOutUser() {
-        logInClient.getLogOut();
-    }
-
     public void registerUser (String firstname, String lastname, String email, String password) {
         logInClient.postRegistration(firstname, lastname, email, password);
     }
+
 
 }

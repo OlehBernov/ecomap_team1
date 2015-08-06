@@ -9,5 +9,4 @@ public interface LogRequestReceiver {
 
     void setLogInRequestResult(User user);
 
-    void setLogOutRequestResult(boolean success);
 }

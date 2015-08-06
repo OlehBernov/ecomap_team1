@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 import com.ecomap.ukraine.R;
 import com.ecomap.ukraine.data.manager.DataManager;
 import com.ecomap.ukraine.data.manager.ProblemListener;
+import com.ecomap.ukraine.filter.Filter;
 import com.ecomap.ukraine.filter.FilterListener;
 import com.ecomap.ukraine.filter.FilterManager;
 import com.ecomap.ukraine.filter.FilterState;
@@ -65,8 +66,8 @@ public class FragmentEcoMap extends android.support.v4.app.Fragment
 
     private static Activity activity;
 
-    public static FragmentEcoMap newInstance(Activity activity_) {
-        activity = activity_;
+    public static FragmentEcoMap newInstance(Activity activity) {
+        FragmentEcoMap.activity = activity;
         return new FragmentEcoMap();
     }
 
@@ -90,18 +91,15 @@ public class FragmentEcoMap extends android.support.v4.app.Fragment
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         manager = DataManager.getInstance(getActivity().getApplicationContext());
-        fmanager = FilterManager.getInstance(getActivity());
         manager.registerProblemListener(this);
+        fmanager = FilterManager.getInstance(getActivity());
 
         View rootView = inflater.inflate(R.layout.fragement_map, container, false);
         mapView = (MapView) rootView.findViewById(R.id.mapView);
         mapView.onCreate(savedInstanceState);
         mapView.onResume();
 
-
         fmanager.registerFilterListener(this);
-
-
 
         MapsInitializer.initialize(getActivity().getApplicationContext());
         this.setUpMapIfNeeded();
@@ -122,7 +120,6 @@ public class FragmentEcoMap extends android.support.v4.app.Fragment
         editor.putFloat(LONGITUDE, (float) googleMap.getCameraPosition().target.longitude);
         editor.putFloat(ZOOM, (float) googleMap.getCameraPosition().zoom);
         editor.apply();
-
     }
 
     /**
@@ -167,20 +164,13 @@ public class FragmentEcoMap extends android.support.v4.app.Fragment
         clusterManager.setOnClusterItemClickListener(this);
         googleMap.setOnMarkerClickListener(clusterManager);
        // googleMap.setOnMarkerClickListener(new MarkerListener(activity));
-        
+
         if (filterState == null) {
             filterState = fmanager.getFilterStateFromPreference();
         }
         googleMap.clear();
-        if(filterState!=null) {
-            for (Problem problem : problems) {
-                if (filtration(filterState, problem)) {
-                    clusterManager.addItem(problem);
-                }
-            }
-        } else {
-            clusterManager.addItems(problems);
-        }
+        List<Problem> filteredProblems = new Filter().filterProblem(problems, filterState);
+        clusterManager.addItems(filteredProblems);
 
         clusterManager.setRenderer(new IconRenderer(getActivity(), googleMap, clusterManager));
     }
@@ -221,23 +211,7 @@ public class FragmentEcoMap extends android.support.v4.app.Fragment
         googleMap.moveCamera(cameraUpdate);
     }
 
-    private boolean filtration(FilterState filterState, Problem problem) {
-        if (filterState.isShowProblemType(problem.getProblemTypesId())) {
-            if (((filterState.isShowResolvedProblem()) && (problem.getStatusId() == 1))
-                    || (((filterState.isShowUnsolvedProblem()) && (problem.getStatusId() == 0)))) {
-                int day = Integer.parseInt(problem.getDate().substring(8, 10));
-                int year = Integer.parseInt(problem.getDate().substring(0, 4));
-                int mounth = Integer.parseInt(problem.getDate().substring(5, 7)) - 1;
-                Calendar creatingProblemDate = new GregorianCalendar(year, mounth, day);
-                if ((creatingProblemDate.after(filterState.getDateFrom())) &&
-                        (filterState.getDateTo().after(creatingProblemDate))) {
-                    return true;
-                }
 
-            }
-        }
-         return false;
-    }
 
     @Override
     public boolean onClusterItemClick(Problem item) {

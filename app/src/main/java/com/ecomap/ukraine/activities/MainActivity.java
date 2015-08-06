@@ -1,5 +1,6 @@
 package com.ecomap.ukraine.activities;
 
+import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.graphics.drawable.ColorDrawable;
@@ -15,13 +16,14 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.TextView;
 
 import com.codetroopers.betterpickers.calendardatepicker.CalendarDatePickerDialog;
 import com.ecomap.ukraine.R;
 import com.ecomap.ukraine.data.manager.DataManager;
-import com.ecomap.ukraine.account.manager.LogOutListener;
 import com.ecomap.ukraine.filter.FilterManager;
 import com.ecomap.ukraine.filter.FilterState;
 import com.ecomap.ukraine.filter.FilterStateConverter;
@@ -40,7 +42,7 @@ import java.util.Locale;
  * <p/>
  * Main activity, represent GUI and provides access to all functional
  */
-public class MainActivity extends AppCompatActivity implements LogOutListener {
+public class MainActivity extends AppCompatActivity {
 
     /**
      * Name of the filter window.
@@ -132,6 +134,8 @@ public class MainActivity extends AppCompatActivity implements LogOutListener {
 
         createDateFromPickerDialog();
         createDateToPickerDialog();
+
+        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
     }
 
     /**
@@ -195,13 +199,6 @@ public class MainActivity extends AppCompatActivity implements LogOutListener {
             Log.e("JSONException", "onDestroy");
         }
         editor.commit();
-    }
-
-    @Override
-    public void setLogOutResult(boolean success) {
-        if (success) {
-            setUserInformation(null);
-        }
     }
 
     public void logOut(MenuItem item) {

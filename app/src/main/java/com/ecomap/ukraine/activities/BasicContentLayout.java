@@ -10,11 +10,13 @@ import android.widget.TextView;
 public class BasicContentLayout {
 
     private static final int DEFAULT_TOP_MARGIN = 0;
+    private static final int DEFAULT_LEFT_MARGIN = 0;
 
     private LinearLayout rootLayout;
     private Context context;
     private int numberOfBlocks;
     private int currentLayoutHeight;
+    private int getCurrentLayoutWidth;
 
     public BasicContentLayout(LinearLayout rootLayout, Context context) {
         this.rootLayout = rootLayout;
@@ -23,21 +25,21 @@ public class BasicContentLayout {
         setViewTreeObserver();
     }
 
-    public void addBlock(int newViewId) {
-        addBlock(newViewId, numberOfBlocks);
+    public void addVerticalBlock(View newView) {
+        addVerticalBlock(newView, numberOfBlocks);
     }
 
-    public void addBlock(int newViewId, int position) {
-        View newView = View.inflate(context, newViewId, null);
-        addBlock(newView, position);
+    public void addVerticalBlock(View newView, int position) {
+        rootLayout.addView(newView, position, getVerticalLayoutParams(DEFAULT_TOP_MARGIN));
+        numberOfBlocks++;
     }
 
-    public void addBlock(View newView) {
-        addBlock(newView, numberOfBlocks);
+    public void addHorizontallBlock(View newView) {
+        addHorizontalBlock(newView, DEFAULT_LEFT_MARGIN);
     }
 
-    public void addBlock(View newView, int position) {
-        rootLayout.addView(newView, position, getLayoutParams(DEFAULT_TOP_MARGIN));
+    public void addHorizontalBlock(View view, int margin) {
+        rootLayout.addView(view, numberOfBlocks, getHorizontalLayoutParams(margin));
         numberOfBlocks++;
     }
 
@@ -50,7 +52,7 @@ public class BasicContentLayout {
         newTextView.append(text);
         LinearLayout newView = new LinearLayout(context);
         newView.addView(newTextView);
-        addBlock(newView, position);
+        addVerticalBlock(newView, position);
     }
 
     public View getResultView() {
@@ -64,15 +66,26 @@ public class BasicContentLayout {
             public void onGlobalLayout() {
                 // rootLayout.getViewTreeObserver().removeGlobalOnLayoutListener(this);
                 currentLayoutHeight = rootLayout.getMeasuredHeight();
+                getCurrentLayoutWidth = rootLayout.getMeasuredWidth();
+
             }
         });
     }
 
-    private LinearLayout.LayoutParams getLayoutParams(int topMargin) {
+    private LinearLayout.LayoutParams getVerticalLayoutParams(int topMargin) {
         LinearLayout.LayoutParams marginParams =
                 new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
                         LinearLayout.LayoutParams.WRAP_CONTENT);
         marginParams.topMargin = currentLayoutHeight + topMargin;
+
+        return marginParams;
+    }
+
+    private LinearLayout.LayoutParams getHorizontalLayoutParams(int leftMargin) {
+        LinearLayout.LayoutParams marginParams =
+                new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
+                        LinearLayout.LayoutParams.WRAP_CONTENT);
+        marginParams.leftMargin = getCurrentLayoutWidth + leftMargin;
 
         return marginParams;
     }
