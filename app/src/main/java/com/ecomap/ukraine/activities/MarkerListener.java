@@ -33,11 +33,14 @@ import java.util.Map;
 
 public class MarkerListener {
 
-    private static final float ANCHOR_POINT = 0.3f;
+    private static final float ANCHOR_POINT = 0.25f;
 
     private static final String DEFAULT_DESCRIPTION = "Description is missing";
     private static final String DEFAULT_PROPOSAL = "Proposal is missing";
     private static final String ADD_COMMENT_HINT = "Add comment";
+    private static final String RESOLVED = "resolved";
+    private static final String UNSOLVED = "unsolved";
+    private static final String ECOMAP_UKRAINE= "Ecomap Ukraine";
 
     private static final int STAR_NUMBER = 5;
     private static final int DEFAULT_PHOTO_MARGIN = 25;
@@ -112,7 +115,7 @@ public class MarkerListener {
             }
 
             private void setToolbarInitialState() {
-                toolbar.setTitle("Ecomap Ukraine");
+                toolbar.setTitle(ECOMAP_UKRAINE);
                 toolbar.setBackgroundColor(0xff004d40);
             }
 
@@ -354,10 +357,10 @@ public class MarkerListener {
 
     private void setProblemStatus(int problemStatusId) {
         if (problemStatusId == 0) {
-            this.problemStatus.setText("not resolved");
+            this.problemStatus.setText(UNSOLVED);
             this.problemStatus.setTextColor(Color.RED);
         } else {
-            this.problemStatus.setText("resolved");
+            this.problemStatus.setText(RESOLVED);
             this.problemStatus.setTextColor(Color.GREEN);
         }
     }
