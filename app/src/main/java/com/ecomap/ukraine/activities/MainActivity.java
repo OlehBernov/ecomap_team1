@@ -412,43 +412,37 @@ public class MainActivity extends AppCompatActivity {
      * @param filtersState
      */
     private void setFiltersState(FilterState filtersState) {
-        if (filtersState == null) {
-            return;
+        if (filtersState != null) {
+            if (!filtersState.isShowProblemType1()) {
+                setFilterOn(findViewById(R.id.type1));
+            }
+            if (!filtersState.isShowProblemType2()) {
+                setFilterOn(findViewById(R.id.type2));
+            }
+            if (!filtersState.isShowProblemType3()) {
+                setFilterOn(findViewById(R.id.type3));
+            }
+            if (!filtersState.isShowProblemType4()) {
+                setFilterOn(findViewById(R.id.type4));
+            }
+            if (!filtersState.isShowProblemType5()) {
+                setFilterOn(findViewById(R.id.type5));
+            }
+            if (!filtersState.isShowProblemType6()) {
+                setFilterOn(findViewById(R.id.type6));
+            }
+            if (!filtersState.isShowProblemType7()) {
+                setFilterOn(findViewById(R.id.type7));
+            }
+            if (!filtersState.isShowResolvedProblem()) {
+                setFilterOn(findViewById(R.id.ButtonResolved));
+            }
+            if (!filtersState.isShowResolvedProblem()) {
+                setFilterOn(findViewById(R.id.ButtonUnsolved));
+            }
+            calendarDateFrom = filtersState.getDateFrom();
+            calendarDateTo = filtersState.getDateTo();
         }
-
-        Log.e("tag", "set Filters " + filtersState.getDateFrom() + " " + filtersState.isShowProblemType1() + " " +
-                filtersState.isShowProblemType2());
-
-        if (!filtersState.isShowProblemType1()) {
-            setFilterOn(findViewById(R.id.type1));
-        }
-        if (!filtersState.isShowProblemType2()) {
-            setFilterOn(findViewById(R.id.type2));
-        }
-        if (!filtersState.isShowProblemType3()) {
-            setFilterOn(findViewById(R.id.type3));
-        }
-        if (!filtersState.isShowProblemType4()) {
-            setFilterOn(findViewById(R.id.type4));
-        }
-        if (!filtersState.isShowProblemType5()) {
-            setFilterOn(findViewById(R.id.type5));
-        }
-        if (!filtersState.isShowProblemType6()) {
-            setFilterOn(findViewById(R.id.type6));
-        }
-        if (!filtersState.isShowProblemType7()) {
-            setFilterOn(findViewById(R.id.type7));
-        }
-        if (!filtersState.isShowResolvedProblem()) {
-            setFilterOn(findViewById(R.id.ButtonResolved));
-        }
-        if (!filtersState.isShowResolvedProblem()) {
-            setFilterOn(findViewById(R.id.ButtonUnsolved));
-        }
-
-        calendarDateFrom = filtersState.getDateFrom();
-        calendarDateTo = filtersState.getDateTo();
         setDate();
     }
 

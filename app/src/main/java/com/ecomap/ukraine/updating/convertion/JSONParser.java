@@ -91,7 +91,7 @@ public class JSONParser {
             problemActivities = getProblemActivities(detailedProblemArray
                     .getJSONArray(JSONFields.PROBLEM_ACTIVITY_POSITION));
         } catch (JSONException e) {
-            Log.e("JSONException", "ParseDetailes");
+            Log.e("JSONException", "ParseDetails");
             problemActivities = null;
         }
 

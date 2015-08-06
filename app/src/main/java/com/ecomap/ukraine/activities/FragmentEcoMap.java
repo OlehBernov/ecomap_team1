@@ -211,8 +211,6 @@ public class FragmentEcoMap extends android.support.v4.app.Fragment
         googleMap.moveCamera(cameraUpdate);
     }
 
-
-
     @Override
     public boolean onClusterItemClick(Problem item) {
         if(markerListener != null) {
