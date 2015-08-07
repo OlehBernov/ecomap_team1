@@ -33,7 +33,7 @@ import java.util.List;
 import java.util.Map;
 
 
-public class MarkerListener {
+public class InformationPanel {
 
     private static final float ANCHOR_POINT = 0.3f;
 
@@ -79,7 +79,7 @@ public class MarkerListener {
      * @param activity callback activity
      * @param problem clicked problem
      */
-    public MarkerListener(final Activity activity, Problem problem) {
+    public InformationPanel(final Activity activity, Problem problem) {
         this.context = activity.getApplicationContext();
         this.activity = activity;
         this.toolbar = (Toolbar) activity.findViewById(R.id.toolbar);

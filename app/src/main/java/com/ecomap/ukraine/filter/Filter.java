@@ -20,8 +20,6 @@ public class Filter {
      */
     public List<Problem> filterProblem(final List<Problem> problems,
                                        final FilterState filterState) {
-
-    public List<Problem> filterProblem(List<Problem> problems, FilterState filterState) {
         if (filterState != null) {
             List<Problem> filteredProblem = new ArrayList<>();
             for (Problem problem : problems) {
@@ -42,8 +40,6 @@ public class Filter {
     * @return
     */    
     private boolean filtration(final FilterState filterState, final Problem problem) {
-
-    private boolean filtration(FilterState filterState, Problem problem) {
         if (filterState.isShowProblemType(problem.getProblemTypesId())) {
             if (showProblemBySolvedFilter(filterState, problem)) {
                 if (showActualProblem(filterState, problem)) {

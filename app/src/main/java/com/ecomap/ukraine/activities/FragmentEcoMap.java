@@ -48,7 +48,7 @@ public class FragmentEcoMap extends android.support.v4.app.Fragment
      */
     private FilterManager filterManager;
 
-    private MarkerListener markerListener;
+    private InformationPanel informationPanel;
 
     /**
      * The name of the preference to retrieve.
@@ -143,7 +143,7 @@ public class FragmentEcoMap extends android.support.v4.app.Fragment
      */
     @Override
     public void updateProblemDetails(final Details details) {
-        markerListener.setProblemDetails(details);
+        informationPanel.setProblemDetails(details);
     }
 
     /**
@@ -212,7 +212,7 @@ public class FragmentEcoMap extends android.support.v4.app.Fragment
      */
     @Override
     public boolean onClusterItemClick(final Problem item) {
-        markerListener = new MarkerListener(activity, item);
+        informationPanel = new InformationPanel(activity, item);
         dataManager.getProblemDetail(item.getProblemId());
 
         return true;
