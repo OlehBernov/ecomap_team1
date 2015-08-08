@@ -8,13 +8,19 @@ import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.support.v4.content.res.ResourcesCompat;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Gravity;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.view.animation.DecelerateInterpolator;
+import android.widget.AbsListView;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.ScrollView;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
@@ -49,10 +55,12 @@ public class InformationPanel {
     private static final int ACTIVITY_ICON_WIDTH = 75;
     private static final int ACTIVITY_ICON_HEIGHT = 75;
 
+    private SlidingUpPanelLayout slidingUpPanelLayout;
+    private ScrollView scrollView;
+
     private Problem problem;
     private Activity activity;
-    private SlidingUpPanelLayout slidingUpPanelLayout;
-    private RelativeLayout slidingUpLayout;
+
     private ImageView markerIcon;
     private TextView problemTitle;
     private TextView problemStatus;
@@ -66,12 +74,13 @@ public class InformationPanel {
     private EditText addComment;
 
     private TextView titleView;
+    private Toolbar toolbar;
 
-    Context context;
+    private Context context;
+
+    private boolean isScrollDisable;
 
     private static int[] STARS_ID = {R.id.star1, R.id.star2, R.id.star3, R.id.star4, R.id.star5};
-
-    private Toolbar toolbar;
 
     /**
      * Constructor
@@ -83,8 +92,10 @@ public class InformationPanel {
         this.activity = activity;
         this.toolbar = (Toolbar) activity.findViewById(R.id.toolbar);
         this.problem = problem;
+
         slidingUpPanelLayout = (SlidingUpPanelLayout) activity.findViewById(R.id.sliding_layout);
-        slidingUpLayout = (RelativeLayout) activity.findViewById(R.id.slidingUpLayout);
+        scrollView = (ScrollView) activity.findViewById(R.id.panelScrollView);
+
         markerIcon = (ImageView) activity.findViewById(R.id.markerIcon);
         problemTitle = (TextView) activity.findViewById(R.id.title_of_problem);
         problemStatus = (TextView) activity.findViewById(R.id.status_of_problem);
@@ -126,6 +137,8 @@ public class InformationPanel {
 
             @Override
             public void onPanelExpanded(View view) {
+                scrollView.setVerticalScrollBarEnabled(true);
+                isScrollDisable = false;
                 setToolbarTransparent();
             }
 
@@ -137,7 +150,10 @@ public class InformationPanel {
 
             @Override
             public void onPanelAnchored(View view) {
+                scrollView.setVerticalScrollBarEnabled(false);
                 slidingUpPanelLayout.setCoveredFadeColor(0x00000000);
+                scrollView.fullScroll(ScrollView.FOCUS_UP);
+                isScrollDisable = true;
             }
 
             @Override
@@ -176,6 +192,15 @@ public class InformationPanel {
         this.votesNumber.setText("");
         this.putBriefInformation();
 
+        isScrollDisable = true;
+        scrollView.fullScroll(ScrollView.FOCUS_UP);
+        scrollView.setVerticalScrollBarEnabled(false);
+        scrollView.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                return isScrollDisable;
+            }
+        });
     }
 
     /**
@@ -387,11 +412,6 @@ public class InformationPanel {
         for (Photo photo: photos.keySet()) {
             ImageView imagePhoto = new ImageView(context);
             imagePhoto.setImageBitmap(photos.get(photo));
-
-          /*  LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(0, 0);
-            params.width = 10;
-            params.height = 10;
-            imagePhoto.setLayoutParams(params);*/
 
             photoLayout.addHorizontalBlock(imagePhoto, DEFAULT_PHOTO_MARGIN);
         }

@@ -40,6 +40,7 @@ public class FragmentEcoMap extends android.support.v4.app.Fragment
     private DataManager dataManager;
     private static final LatLng INITIAL_POSITION = new LatLng(48.4, 31.2);
     private static final float INITIAL_ZOOM = 5;
+    private static final float ON_MARKER_CLICK_ZOOM = 12;
     private ClusterManager<Problem> clusterManager;
     private static List<Problem> problems;
 
@@ -168,6 +169,20 @@ public class FragmentEcoMap extends android.support.v4.app.Fragment
     }
 
     /**
+     * Action after click on Marker
+     * @param problem clicked marker
+     * @return result of action
+     */
+    @Override
+    public boolean onClusterItemClick(final Problem problem) {
+        informationPanel = new InformationPanel(activity, problem);
+        dataManager.getProblemDetail(problem.getProblemId());
+        moveCameraToProblem(problem);
+
+        return true;
+    }
+
+    /**
      * Sets up the map if it is possible to do so (i.e., the Google Play services APK is correctly
      * installed) and the map has not already been instantiated.
      */
@@ -193,29 +208,28 @@ public class FragmentEcoMap extends android.support.v4.app.Fragment
 
         CameraPosition cameraPosition = new CameraPosition
                 .Builder()
-                .target(new LatLng(getActivity()
-                        .getSharedPreferences(POSITION, Context.MODE_PRIVATE)
-                        .getFloat(LATITUDE, (float) INITIAL_POSITION.latitude),
+                .target(new LatLng(
                         getActivity()
-                        .getSharedPreferences(POSITION, Context.MODE_PRIVATE)
-                        .getFloat(LONGITUDE, (float) INITIAL_POSITION.longitude)))
-                        .zoom(getActivity().getSharedPreferences(POSITION, Context.MODE_PRIVATE).getFloat(ZOOM, INITIAL_ZOOM))
-                        .build();
+                                .getSharedPreferences(POSITION, Context.MODE_PRIVATE)
+                                .getFloat(LATITUDE, (float) INITIAL_POSITION.latitude),
+                        getActivity()
+                                .getSharedPreferences(POSITION, Context.MODE_PRIVATE)
+                                .getFloat(LONGITUDE, (float) INITIAL_POSITION.longitude)))
+                .zoom(getActivity().getSharedPreferences(POSITION, Context.MODE_PRIVATE).getFloat(ZOOM, INITIAL_ZOOM))
+                .build();
         CameraUpdate cameraUpdate = CameraUpdateFactory.newCameraPosition(cameraPosition);
         googleMap.moveCamera(cameraUpdate);
     }
 
-    /**
-     * Action after click on Marker
-     * @param item clicked marker
-     * @return result of action
-     */
-    @Override
-    public boolean onClusterItemClick(final Problem item) {
-        informationPanel = new InformationPanel(activity, item);
-        dataManager.getProblemDetail(item.getProblemId());
 
-        return true;
+    private void moveCameraToProblem(Problem problem) {
+        CameraPosition cameraPosition = new CameraPosition
+                .Builder()
+                .target(new LatLng(problem.getPosition().latitude, problem.getPosition().longitude))
+                .zoom(ON_MARKER_CLICK_ZOOM)
+                .build();
+        CameraUpdate cameraUpdate = CameraUpdateFactory.newCameraPosition(cameraPosition);
+        googleMap.animateCamera(cameraUpdate);
     }
 
 }

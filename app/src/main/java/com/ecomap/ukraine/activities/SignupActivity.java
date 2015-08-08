@@ -63,7 +63,7 @@ public class SignupActivity extends AppCompatActivity implements LogInListener {
 
         mainIntent = new Intent(this, MainActivity.class);
 
-        accountManager = accountManager.getInstance(getApplicationContext());
+        accountManager = AccountManager.getInstance(getApplicationContext());
 
         signUpButton.setOnClickListener(new View.OnClickListener() {
             @Override

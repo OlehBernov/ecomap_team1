@@ -1,6 +1,5 @@
 package com.ecomap.ukraine.activities;
 
-import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.graphics.drawable.ColorDrawable;
@@ -18,9 +17,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.TextView;
 
 import com.codetroopers.betterpickers.calendardatepicker.CalendarDatePickerDialog;
@@ -108,7 +105,7 @@ public class MainActivity extends AppCompatActivity {
     /**
      * Filter manager instance
      */
-    private FilterManager fmanager;
+    private FilterManager filterManager;
     private CharSequence previousTitle;
 
     /**
@@ -123,7 +120,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         dataManager = DataManager.getInstance(getApplicationContext());
 
-        fmanager = FilterManager.getInstance(this);
+        filterManager = FilterManager.getInstance(this);
         setupToolbar();
         setUpDrawerLayout();
         setupFilter();
@@ -133,6 +130,7 @@ public class MainActivity extends AppCompatActivity {
 
         slidingUpPanelLayout = (SlidingUpPanelLayout) findViewById(R.id.sliding_layout);
         slidingUpPanelLayout.setAnchorPoint(0.5f);
+        slidingUpPanelLayout.setDragView(R.id.sliding_linear_layout);
 
         this.addMapFragment();
 
@@ -203,7 +201,7 @@ public class MainActivity extends AppCompatActivity {
         } catch (JSONException e) {
             Log.e("JSONException", "onDestroy");
         }
-        editor.commit();
+        editor.apply();
     }
 
     public void logOut(MenuItem item) {
@@ -255,7 +253,7 @@ public class MainActivity extends AppCompatActivity {
         } else {
             setFilterOff(view);
         }
-        fmanager.getFilterState(buildFiltersState());
+        filterManager.getFilterState(buildFiltersState());
     }
 
     public void dateFromChoosing(View view) {
@@ -314,7 +312,7 @@ public class MainActivity extends AppCompatActivity {
                 calendarDateFrom = date;
                 setDate();
 
-                fmanager.getFilterState(buildFiltersState());
+                filterManager.getFilterState(buildFiltersState());
             }
         };
 
@@ -336,7 +334,7 @@ public class MainActivity extends AppCompatActivity {
                 calendarDateTo = date;
                 setDate();
 
-                fmanager.getFilterState(buildFiltersState());
+                filterManager.getFilterState(buildFiltersState());
             }
         };
 
@@ -410,7 +408,7 @@ public class MainActivity extends AppCompatActivity {
     private void setupFilter() {
         filterLayout = (DrawerLayout) findViewById(R.id.drawer2);
         filterLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
-        FilterState filterState = fmanager.getFilterStateFromPreference();
+        FilterState filterState = filterManager.getFilterStateFromPreference();
         setFiltersState(filterState);
     }
 
