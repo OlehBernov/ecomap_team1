@@ -1,5 +1,7 @@
 package com.ecomap.ukraine.filter;
 
+import com.ecomap.ukraine.models.Types.ProblemType;
+
 import java.util.Calendar;
 
 /**
@@ -71,15 +73,22 @@ public class FilterState {
     }
 
 
-    public boolean isShowProblemType (final int type) {
+    public boolean isShowProblemType (final ProblemType type) {
         switch (type) {
-            case 1: return isShowProblemType1();
-            case 2: return isShowProblemType2();
-            case 3: return isShowProblemType3();
-            case 4: return isShowProblemType4();
-            case 5: return isShowProblemType5();
-            case 6: return isShowProblemType6();
-            case 7: return isShowProblemType7();
+            case FOREST_DESTRUCTION:
+                return isShowProblemType1();
+            case RUBBISH_DUMP:
+                return isShowProblemType2();
+            case ILLEGAL_BUILDING:
+                return isShowProblemType3();
+            case WATER_POLLUTION:
+                return isShowProblemType4();
+            case THREAD_TO_BIODIVERSITY:
+                return isShowProblemType5();
+            case POACHING:
+                return isShowProblemType6();
+            case OTHER:
+                return isShowProblemType7();
         }
         return false;
     }

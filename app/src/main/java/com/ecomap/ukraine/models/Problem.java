@@ -1,6 +1,8 @@
 package com.ecomap.ukraine.models;
 
 
+import com.ecomap.ukraine.models.Types.ProblemStatus;
+import com.ecomap.ukraine.models.Types.ProblemType;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.maps.android.clustering.ClusterItem;
 
@@ -17,14 +19,14 @@ public class Problem implements ClusterItem {
     private int problemId;
 
     /**
-     * represend status of current problem resolved (1) or not resolved (0)
+     * represent status of current problem resolved (1) or not resolved (0)
      */
-    private int statusId;
+    private ProblemStatus statusId;
 
     /**
-     * represend type of current problem
+     * represent type of current problem
      */
-    private int problemTypesId;
+    private ProblemType problemType;
 
     /**
      * contains title of current problem
@@ -50,15 +52,15 @@ public class Problem implements ClusterItem {
     /**
      * provides access to statusId
      */
-    public int getStatusId() {
+    public ProblemStatus getStatus() {
         return statusId;
     }
 
     /**
-     * provides access to problemTypesId
+     * provides access to problemType
      */
-    public int getProblemTypesId() {
-        return problemTypesId;
+    public ProblemType getProblemType() {
+        return problemType;
     }
 
     /**
@@ -87,21 +89,21 @@ public class Problem implements ClusterItem {
      * Constructor of class
      * @param problemId id of current problem
      * @param statusId  represend status of current problem resolved (1) or not resolved (0)
-     * @param problemTypesId represend type of current problem
+     * @param problemType represend type of current problem
      * @param title contains title of current problem
      * @param date contains adding date of current problem
      * @param latitude contains latitude of coordinate current problem
-     * @param longtitude contains longtitude of coordinate current problem
+     * @param longitude contains longitude of coordinate current problem
      */
 
-    public Problem(int problemId, int statusId, int problemTypesId,
-                   String title, String date, double latitude, double longtitude) {
+    public Problem(int problemId, ProblemStatus statusId, ProblemType  problemType,
+                   String title, String date, double latitude, double longitude) {
         this.problemId = problemId;
         this.statusId = statusId;
-        this.problemTypesId = problemTypesId;
+        this.problemType = problemType;
         this.title = title;
         this.date = date;
-        this.position = new LatLng(latitude, longtitude);
+        this.position = new LatLng(latitude, longitude);
     }
 
 }

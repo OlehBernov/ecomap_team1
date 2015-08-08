@@ -9,7 +9,6 @@ import android.graphics.drawable.Drawable;
 import android.support.v4.content.res.ResourcesCompat;
 import android.support.v7.widget.Toolbar;
 import android.view.Gravity;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.animation.DecelerateInterpolator;
 import android.widget.EditText;
@@ -21,12 +20,12 @@ import android.widget.TableRow;
 import android.widget.TextView;
 
 import com.ecomap.ukraine.R;
-import com.ecomap.ukraine.data.manager.ProblemListener;
-import com.ecomap.ukraine.models.ActivityType;
+import com.ecomap.ukraine.models.Types.ActivityType;
 import com.ecomap.ukraine.models.Details;
 import com.ecomap.ukraine.models.Photo;
 import com.ecomap.ukraine.models.Problem;
 import com.ecomap.ukraine.models.ProblemActivity;
+import com.ecomap.ukraine.models.Types.ProblemStatus;
 import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 
 import java.util.List;
@@ -221,7 +220,7 @@ public class InformationPanel {
 
         if (details.getProblemActivities() != null) {
             for (ProblemActivity problemActivity : details.getProblemActivities()) {
-                if ((problemActivity.getActivityTypesId() == ActivityType.CREATE) &&
+                if ((problemActivity.getActivityType() == ActivityType.CREATE) &&
                         (problemActivity.getProblemId() == problem.getProblemId())) {
                     userInformation.setText(getPostInformation(problemActivity));
                     break;
@@ -287,7 +286,7 @@ public class InformationPanel {
         imageParams.topMargin = (int) context.getResources().getDimension(R.dimen.slide_panel_items_margin);
         imageParams.bottomMargin = (int) context.getResources().getDimension(R.dimen.slide_panel_items_margin);
         ImageView activityTypeIcon = new ImageView(context);
-        activityTypeIcon.setImageDrawable(getActivityIcon(problemActivity.getActivityTypesId()));
+        activityTypeIcon.setImageDrawable(getActivityIcon(problemActivity.getActivityType()));
         activityTypeIcon.setLayoutParams(imageParams);
 
         return  activityTypeIcon;
@@ -357,12 +356,12 @@ public class InformationPanel {
 
     public void putBriefInformation() {
         problemTitle.setText(problem.getTitle());
-        this.setProblemStatus(problem.getStatusId());
-        this.markerIcon.setImageResource(IconRenderer.getResourceIdForMarker(problem.getProblemTypesId()));
+        this.setProblemStatus(problem.getStatus());
+        this.markerIcon.setImageResource(IconRenderer.getResourceIdForMarker(problem.getProblemType()));
     }
 
-    private void setProblemStatus(int problemStatusId) {
-        if (problemStatusId == 0) {
+    private void setProblemStatus(ProblemStatus problemStatus) {
+        if (problemStatus.equals(ProblemStatus.UNSOLVED)) {
             this.problemStatus.setText(UNSOLVED);
             this.problemStatus.setTextColor(Color.RED);
         } else {

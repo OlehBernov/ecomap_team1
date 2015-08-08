@@ -1,5 +1,7 @@
 package com.ecomap.ukraine.models;
 
+import com.ecomap.ukraine.models.Types.ActivityType;
+
 /**
  * Class ProblemActivity represent information about activity that are related to the problem.
  * Activity - some action which is related to the problem (like, comment, creation).
@@ -20,7 +22,7 @@ public class ProblemActivity {
     /**
      * represend type of current problemActivity
      */
-    private ActivityType activityTypesId;
+    private ActivityType activityType;
 
     /**
      * id of user who added this problemActivity
@@ -60,8 +62,8 @@ public class ProblemActivity {
     /**
      * provides access to position
      */
-    public ActivityType getActivityTypesId() {
-        return activityTypesId;
+    public ActivityType getActivityType() {
+        return activityType;
     }
 
 
@@ -96,17 +98,17 @@ public class ProblemActivity {
     /**
      * Constructor of class
      * @param problemActivityId id of current problemActivity
-     * @param activityTypesId represend type of current problemActivity
+     * @param activityType represend type of current problemActivity
      * @param userId id of user who added this problemActivity
      * @param content contains text of current problemActivity
      * @param date contains adding date of current problemActivity
      * @param userName name of user who added this problemActivity
      */
-    public ProblemActivity(int probemId, int problemActivityId, ActivityType activityTypesId, int userId,
+    public ProblemActivity(int problemId, int problemActivityId, ActivityType activityType, int userId,
                            String content, String date, String userName) {
-        this.problemId = probemId;
+        this.problemId = problemId;
         this.problemActivityId = problemActivityId;
-        this.activityTypesId = activityTypesId;
+        this.activityType = activityType;
         this.userId = userId;
         this.content = content;
         this.date = date;

@@ -11,11 +11,13 @@ import android.util.Log;
 
 import com.ecomap.ukraine.R;
 
-import com.ecomap.ukraine.models.ActivityType;
+import com.ecomap.ukraine.models.Types.ActivityType;
 import com.ecomap.ukraine.models.Details;
 import com.ecomap.ukraine.models.Photo;
 import com.ecomap.ukraine.models.Problem;
 import com.ecomap.ukraine.models.ProblemActivity;
+import com.ecomap.ukraine.models.Types.ProblemStatus;
+import com.ecomap.ukraine.models.Types.ProblemType;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -184,8 +186,8 @@ public class DBHelper extends SQLiteOpenHelper {
         ContentValues contentValues = new ContentValues();
         for (Problem problem : problems) {
             contentValues.put(DBContract.Problems.ID, problem.getProblemId());
-            contentValues.put(DBContract.Problems.PROBLEM_STATUS, problem.getStatusId());
-            contentValues.put(DBContract.Problems.PROBLEM_TYPES_ID, problem.getProblemTypesId());
+            contentValues.put(DBContract.Problems.PROBLEM_STATUS, problem.getStatus().getId());
+            contentValues.put(DBContract.Problems.PROBLEM_TYPES_ID, problem.getProblemType().getId());
             contentValues.put(DBContract.Problems.PROBLEM_TITLE, problem.getTitle());
             contentValues.put(DBContract.Problems.PROBLEM_DATE, problem.getDate());
             contentValues.put(DBContract.Problems.LATITUDE, problem.getPosition().latitude);
@@ -245,7 +247,7 @@ public class DBHelper extends SQLiteOpenHelper {
         values.put(DBContract.Details.PROBLEM_CONTENT, details.getContent());
         values.put(DBContract.Details.PROPOSAL, details.getProposal());
         values.put(DBContract.Details.TITLE, details.getTitle());
-        values.put(DBContract.Details.MODERATION, details.getModerations());
+        values.put(DBContract.Details.MODERATION, details.getModeration());
         values.put(DBContract.Details.SEVERITY, details.getSeverity());
         values.put(DBContract.Details.VOTES, details.getVotes());
         values.put(DBContract.Details.SEVERITY, details.getSeverity());
@@ -437,7 +439,7 @@ public class DBHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values;
         for (ProblemActivity problemActivity: problemActivities) {
-            int activityTypeId = getActivityTypeId(problemActivity.getActivityTypesId());
+            int activityTypeId = problemActivity.getActivityType().getId();
 
             values = new ContentValues();
             values.put(DBContract.ProblemActivity.PROBLEM_ACTIVITY_ID,
@@ -454,7 +456,7 @@ public class DBHelper extends SQLiteOpenHelper {
             values.put(DBContract.ProblemActivity.PROBLEM_ACTIVITY_CONTENT,
                        problemActivity.getContent());
 
-            Log.e("type", "" + problemActivity.getActivityTypesId().name());
+            Log.e("type", "" + problemActivity.getActivityType().name());
 
             db.insert(DBContract.ProblemActivity.TABLE_NAME, null, values);
             values.clear();
@@ -470,10 +472,17 @@ public class DBHelper extends SQLiteOpenHelper {
     private List<Problem> buildAllProblemList(final Cursor cursor) {
         List<Problem> problems = new ArrayList<>();
         for (int i = 0; i < cursor.getCount(); i++) {
+            int problemStatusId = cursor.getInt(cursor.getColumnIndex(DBContract
+                                                                      .Problems
+                                                                      .PROBLEM_STATUS));
+            int problemTypeId = cursor.getInt(cursor.getColumnIndex(DBContract
+                                                                    .Problems
+                                                                    .PROBLEM_TYPES_ID));
+
             Problem problem = new Problem(
                 cursor.getInt(cursor.getColumnIndex(DBContract.Problems.ID)),
-                cursor.getInt(cursor.getColumnIndex(DBContract.Problems.PROBLEM_STATUS)),
-                cursor.getInt(cursor.getColumnIndex(DBContract.Problems.PROBLEM_TYPES_ID)),
+                ProblemStatus.getProblemStatus(problemStatusId),
+                ProblemType.getProblemType(problemTypeId),
                 cursor.getString(cursor.getColumnIndex(DBContract.Problems.PROBLEM_TITLE)),
                 cursor.getString(cursor.getColumnIndex(DBContract.Problems.PROBLEM_DATE)),
                 cursor.getDouble(cursor.getColumnIndex(DBContract.Problems.LATITUDE)),
@@ -555,7 +564,7 @@ public class DBHelper extends SQLiteOpenHelper {
         for (int i = 0; i < cursor.getCount(); i++) {
 
             int activityTypeId = cursor.getInt(cursor.getColumnIndex(DBContract.ProblemActivity.ACTIVITY_TYPES_ID));
-            ActivityType activityTypeEnum = getActivityType(activityTypeId);
+            ActivityType activityTypeEnum = ActivityType.getActivityType(activityTypeId);
 
             ProblemActivity problemActivity = new ProblemActivity(
                     problemId,
@@ -572,44 +581,6 @@ public class DBHelper extends SQLiteOpenHelper {
         cursor.close();
 
         return problemActivities;
-    }
-
-    private int getActivityTypeId(final ActivityType activityType) {
-        switch (activityType) {
-            case CREATE:
-                return 1;
-            case UNKNOWN:
-                return 2;
-            case LIKE:
-                return 3;
-            case PHOTO:
-                return 4;
-            case COMMENT:
-                return 5;
-            case UNKNOWN2:
-                return 6;
-            default:
-                return 7;
-        }
-    }
-
-    private ActivityType getActivityType(final int activityTypeId) {
-        switch (activityTypeId) {
-            case 1:
-                return ActivityType.CREATE;
-            case 2:
-                return ActivityType.UNKNOWN;
-            case 3:
-                return ActivityType.LIKE;
-            case 4:
-                return ActivityType.PHOTO;
-            case 5:
-                return ActivityType.COMMENT;
-            case 6:
-                return ActivityType.UNKNOWN2;
-            default:
-                return ActivityType.UNKNOWN_TYPE;
-        }
     }
 
 }

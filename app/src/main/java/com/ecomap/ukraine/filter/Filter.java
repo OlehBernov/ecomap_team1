@@ -1,6 +1,7 @@
 package com.ecomap.ukraine.filter;
 
 import com.ecomap.ukraine.models.Problem;
+import com.ecomap.ukraine.models.Types.ProblemStatus;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -16,7 +17,7 @@ public class Filter {
      * Filter all problem
      * @param problems all problems
      * @param filterState rules of filtration
-     * @return ufiltered problems
+     * @return unfiltered problems
      */
     public List<Problem> filterProblem(final List<Problem> problems,
                                        final FilterState filterState) {
@@ -40,7 +41,7 @@ public class Filter {
     * @return
     */    
     private boolean filtration(final FilterState filterState, final Problem problem) {
-        if (filterState.isShowProblemType(problem.getProblemTypesId())) {
+        if (filterState.isShowProblemType(problem.getProblemType())) {
             if (showProblemBySolvedFilter(filterState, problem)) {
                 if (showActualProblem(filterState, problem)) {
                     return true;
@@ -57,12 +58,8 @@ public class Filter {
      * @return access to show problem
      */
     private boolean showProblemBySolvedFilter (FilterState filterState, Problem problem) {
-        if ((showResolwedProblem(filterState, problem)) || (showUnsolwedProblem(filterState, problem))) {
-            return true;
-        }
-        else {
-            return false;
-        }
+        return showResolvedProblem(filterState, problem) || showUnsolvedProblem(filterState, problem);
+
     }
 
     /**
@@ -71,28 +68,19 @@ public class Filter {
      * @param problem problem under filtration
      * @return access to show problem
      */
-    private  boolean showUnsolwedProblem (FilterState filterState, Problem problem) {
-        if ((filterState.isShowUnsolvedProblem()) && (problem.getStatusId() == 0)) {
-            return true;
-        }
-        else {
-            return false;
-        }
+    private  boolean showUnsolvedProblem(FilterState filterState, Problem problem) {
+        return (filterState.isShowUnsolvedProblem()) && (problem.getStatus().equals(ProblemStatus.UNSOLVED));
+
     }
 
     /**
-     * Show problem if it is resolwed and filter allows to show resolwed problem
+     * Show problem if it is resolved and filter allows to show resolved problem
      * @param filterState rules of filtration
      * @param problem problem under filtration
      * @return access to show problem
      */
-    private  boolean showResolwedProblem (FilterState filterState, Problem problem) {
-        if ((filterState.isShowResolvedProblem()) && (problem.getStatusId() == 1)) {
-            return true;
-        }
-        else {
-            return false;
-        }
+    private  boolean showResolvedProblem(FilterState filterState, Problem problem) {
+        return (filterState.isShowResolvedProblem()) && (problem.getStatus().equals(ProblemStatus.RESOLVED));
     }
 
     /**
@@ -106,11 +94,8 @@ public class Filter {
         int year = Integer.parseInt(problem.getDate().substring(0, 4));
         int month = Integer.parseInt(problem.getDate().substring(5, 7)) - 1;
         Calendar creatingProblemDate = new GregorianCalendar(year, month, day);
-        if ((creatingProblemDate.after(filterState.getDateFrom())) &&
-                (filterState.getDateTo().after(creatingProblemDate))) {
-            return true;
-        }
-        else return false;
+        return creatingProblemDate.after(filterState.getDateFrom())
+               && filterState.getDateTo().after(creatingProblemDate);
     }
 
 }

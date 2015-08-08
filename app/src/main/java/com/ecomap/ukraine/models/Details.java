@@ -23,7 +23,7 @@ public class Details {
     /**
      * number of changes to this problem
      */
-    private int moderations;
+    private int moderation;
     /**
      * number of people, who set like to this problem
      */
@@ -75,10 +75,10 @@ public class Details {
     }
 
     /**
-     * provides access to moderations
+     * provides access to moderation
      */
-    public int getModerations() {
-        return moderations;
+    public int getModeration() {
+        return moderation;
     }
 
     /**
@@ -137,19 +137,19 @@ public class Details {
     /**
      * Constructor of class
      * @param severity represents the level of severity of the problem (from 1 to 5)
-     * @param moderations number of changes to this problem
+     * @param moderation number of changes to this problem
      * @param votes number of people, who set like to this problem
      * @param content contains content of current problem
      * @param proposal contains proposals for solving this problem
      * @param problemActivities array of problemActivity that are related to the problem
      * @param photos array of photos that are related to the problem
      */
-    public Details(int problemId, int severity, int moderations, int votes, String content,
+    public Details(int problemId, int severity, int moderation, int votes, String content,
                    String proposal, String title, List<ProblemActivity> problemActivities,
                    Map<Photo, Bitmap> photos, String lastUpdate) {
         this.problemId = problemId;
         this.severity = severity;
-        this.moderations = moderations;
+        this.moderation = moderation;
         this.votes = votes;
         this.content = content;
         this.proposal = proposal;

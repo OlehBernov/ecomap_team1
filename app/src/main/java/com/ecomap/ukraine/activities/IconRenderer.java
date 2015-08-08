@@ -8,6 +8,7 @@ import android.widget.TextView;
 
 import com.ecomap.ukraine.R;
 import com.ecomap.ukraine.models.Problem;
+import com.ecomap.ukraine.models.Types.ProblemType;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
@@ -23,7 +24,7 @@ public class IconRenderer extends DefaultClusterRenderer<Problem> {
     /**
      * Icons for each bucket.
      */
-    private SparseArray<BitmapDescriptor> icons = new SparseArray<BitmapDescriptor>();
+    private SparseArray<BitmapDescriptor> icons = new SparseArray<>();
     private Activity activity;
 
     /**
@@ -33,7 +34,7 @@ public class IconRenderer extends DefaultClusterRenderer<Problem> {
      * @param clusterManager managed clusters
      */
     public IconRenderer(Activity activity, GoogleMap map,
-                           ClusterManager<Problem> clusterManager) {
+                        ClusterManager<Problem> clusterManager) {
         super(activity.getApplicationContext(), map, clusterManager);
         this.activity = activity;
     }
@@ -44,7 +45,6 @@ public class IconRenderer extends DefaultClusterRenderer<Problem> {
      * @return generated bitmap
      */
     public static Bitmap createDrawableFromView(View view) {
-
         view.setDrawingCacheEnabled(true);
         view.measure(View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED),
                 View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED));
@@ -62,7 +62,7 @@ public class IconRenderer extends DefaultClusterRenderer<Problem> {
     @Override
     protected void onBeforeClusterItemRendered(Problem problem, MarkerOptions markerOptions) {
         BitmapDescriptor icon = BitmapDescriptorFactory.fromResource(this.getResourceIdForMarker(
-                problem.getProblemTypesId()));
+                problem.getProblemType()));
         markerOptions.icon(icon)
                 .title(problem.getTitle())
                 .anchor(0.5f, 1f);
@@ -109,31 +109,31 @@ public class IconRenderer extends DefaultClusterRenderer<Problem> {
 
     /**
      * Gets markers resourses
-     * @param typeId id of type
+     * @param problemType id of type
      * @return icon resourse
      */
-    public static int getResourceIdForMarker (int typeId) {
+    public static int getResourceIdForMarker (ProblemType problemType) {
         int resId = 0;
-        switch (typeId) {
-            case 1:
+        switch (problemType) {
+            case FOREST_DESTRUCTION:
                 resId = R.drawable.type1;
                 break;
-            case 2:
+            case RUBBISH_DUMP:
                 resId = R.drawable.type2;
                 break;
-            case 3:
+            case ILLEGAL_BUILDING:
                 resId = R.drawable.type3;
                 break;
-            case 4:
+            case WATER_POLLUTION:
                 resId = R.drawable.type4;
                 break;
-            case 5:
+            case THREAD_TO_BIODIVERSITY:
                 resId = R.drawable.type5;
                 break;
-            case 6:
+            case POACHING:
                 resId = R.drawable.type6;
                 break;
-            case 7:
+            case OTHER:
                 resId = R.drawable.type7;
                 break;
         }

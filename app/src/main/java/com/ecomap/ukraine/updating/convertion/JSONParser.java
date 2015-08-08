@@ -4,12 +4,13 @@ package com.ecomap.ukraine.updating.convertion;
 import android.graphics.Bitmap;
 import android.util.Log;
 
-import com.ecomap.ukraine.models.ActivityType;
+import com.ecomap.ukraine.models.Types.ActivityType;
 import com.ecomap.ukraine.models.ProblemActivity;
 import com.ecomap.ukraine.models.Details;
 import com.ecomap.ukraine.models.Photo;
 import com.ecomap.ukraine.models.Problem;
-import com.ecomap.ukraine.models.User;
+import com.ecomap.ukraine.models.Types.ProblemStatus;
+import com.ecomap.ukraine.models.Types.ProblemType;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -128,10 +129,15 @@ public class JSONParser {
             throws JSONException {
         Problem problem;
 
+        int problemStatusId = problemJsonObject.optInt(JSONFields.PROBLEM_STATUS,
+                                                       DEFAULT_VALUE);
+        int problemTypesId = problemJsonObject.optInt(JSONFields.PROBLEM_TYPES_ID,
+                                                      DEFAULT_VALUE);
+
         problem = new Problem(
                 problemJsonObject.optInt(JSONFields.ID, DEFAULT_VALUE),
-                problemJsonObject.optInt(JSONFields.PROBLEM_STATUS, DEFAULT_VALUE),
-                problemJsonObject.optInt(JSONFields.PROBLEM_TYPES_ID, DEFAULT_VALUE),
+                ProblemStatus.getProblemStatus(problemStatusId),
+                ProblemType.getProblemType(problemTypesId),
                 problemJsonObject.getString(JSONFields.TITLE),
                 problemJsonObject.getString(JSONFields.PROBLEM_DATE),
                 problemJsonObject.getDouble(JSONFields.LATITUDE),
@@ -162,7 +168,7 @@ public class JSONParser {
                                           .getString(JSONFields.PROBLEM_ACTIVITY_CONTENT));
 
             int activityTypeId = commentObject.optInt(JSONFields.ACTIVITY_TYPES_ID, DEFAULT_VALUE);
-            ActivityType activityTypeEnum = getActivityType(activityTypeId);
+            ActivityType activityTypeEnum = ActivityType.getActivityType(activityTypeId);
 
                 currentProblemActivity = new ProblemActivity(
                         commentObject.optInt(JSONFields.PROBLEMS_ID, DEFAULT_VALUE),
@@ -210,25 +216,6 @@ public class JSONParser {
         }
 
         return photos;
-    }
-
-    private ActivityType getActivityType(int activityTypeId) {
-        switch (activityTypeId) {
-            case 1:
-                return ActivityType.CREATE;
-            case 2:
-                return ActivityType.UNKNOWN;
-            case 3:
-                return ActivityType.LIKE;
-            case 4:
-                return ActivityType.PHOTO;
-            case 5:
-                return ActivityType.COMMENT;
-            case 6:
-                return ActivityType.UNKNOWN2;
-            default:
-                return ActivityType.UNKNOWN_TYPE;
-        }
     }
 
 }
