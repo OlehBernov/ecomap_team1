@@ -1,10 +1,12 @@
 package com.ecomap.ukraine.activities;
 
+import android.app.ActionBar;
 import android.app.Activity;
 
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.graphics.Matrix;
 import android.graphics.drawable.Drawable;
 import android.support.v4.content.res.ResourcesCompat;
 import android.support.v7.widget.Toolbar;
@@ -54,6 +56,7 @@ public class InformationPanel {
 
     private static final int ACTIVITY_ICON_WIDTH = 75;
     private static final int ACTIVITY_ICON_HEIGHT = 75;
+    private static final int PHOTO_BOUNDS = 190;
 
     private SlidingUpPanelLayout slidingUpPanelLayout;
     private ScrollView scrollView;
@@ -411,8 +414,8 @@ public class InformationPanel {
 
         for (Photo photo: photos.keySet()) {
             ImageView imagePhoto = new ImageView(context);
-            imagePhoto.setImageBitmap(photos.get(photo));
-
+            Bitmap bitmap = photos.get(photo);
+            imagePhoto.setImageBitmap(resizeBitmap(bitmap, PHOTO_BOUNDS));
             photoLayout.addHorizontalBlock(imagePhoto, DEFAULT_PHOTO_MARGIN);
         }
     }
@@ -422,6 +425,23 @@ public class InformationPanel {
         photosTitle.setText("");
         photosTitle.setPadding(0, 0, 0, 0);
         photosTitle.setTextSize(0.0f);
+    }
+
+    private Bitmap resizeBitmap(Bitmap bitmap, int bounds) {
+        int width = bitmap.getWidth();
+        int height = bitmap.getHeight();
+        int bounding = dpToPx(bounds);
+        float yScale = ((float) bounding) / height;
+
+        Matrix matrix = new Matrix();
+        matrix.postScale(yScale, yScale);
+
+        return Bitmap.createBitmap(bitmap, 0, 0, width, height, matrix, true);
+    }
+
+    private int dpToPx(int dp) {
+        float density = context.getResources().getDisplayMetrics().density;
+        return Math.round((float)dp * density);
     }
 
 }

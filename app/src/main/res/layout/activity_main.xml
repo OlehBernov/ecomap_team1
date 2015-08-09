@@ -320,7 +320,7 @@
                                         android:id="@+id/photo_scroll"
                                         android:layout_width="match_parent"
                                         android:layout_height="match_parent"
-                                        android:paddingLeft="10dp"
+                                        android:paddingLeft="5dp"
                                         android:paddingRight="10dp"
                                         android:paddingTop="10dp"
                                         android:scrollbars="none">
@@ -330,14 +330,6 @@
                                             android:layout_width="match_parent"
                                             android:layout_height="wrap_content"
                                             android:orientation="horizontal">
-
-                                            <ImageView
-                                                android:id="@+id/add_photo"
-                                                android:layout_width="100dp"
-                                                android:layout_height="100dp"
-                                                android:layout_gravity="center_vertical"
-                                                android:layout_marginTop="2dp"
-                                                android:src="@drawable/add_photo2" />
 
                                         </LinearLayout>
 
