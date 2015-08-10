@@ -88,13 +88,8 @@ public class JSONParser {
                 .getJSONObject(0);
 
         List<ProblemActivity> problemActivities;
-        try {
-            problemActivities = getProblemActivities(detailedProblemArray
-                    .getJSONArray(JSONFields.PROBLEM_ACTIVITY_POSITION));
-        } catch (JSONException e) {
-            Log.e("JSONException", "ParseDetails");
-            problemActivities = null;
-        }
+        problemActivities = getProblemActivities(detailedProblemArray
+                            .getJSONArray(JSONFields.PROBLEM_ACTIVITY_POSITION));
 
         Details details;
         details = new Details(
@@ -164,8 +159,13 @@ public class JSONParser {
         for (int i = 0; i < problemActivitiesArray.length(); i++) {
             JSONObject commentObject = problemActivitiesArray.getJSONObject(i);
             JSONObject contentObject;
-            contentObject = new JSONObject(commentObject
-                                          .getString(JSONFields.PROBLEM_ACTIVITY_CONTENT));
+
+            try {
+                contentObject = new JSONObject(commentObject
+                                               .getString(JSONFields.PROBLEM_ACTIVITY_CONTENT));
+            } catch (JSONException e) {
+                continue;
+            }
 
             int activityTypeId = commentObject.optInt(JSONFields.ACTIVITY_TYPES_ID, DEFAULT_VALUE);
             ActivityType activityTypeEnum = ActivityType.getActivityType(activityTypeId);

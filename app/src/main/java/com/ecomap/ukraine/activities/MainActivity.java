@@ -370,7 +370,7 @@ public class MainActivity extends AppCompatActivity {
     private void addMapFragment() {
         FragmentManager fragmentManager = getSupportFragmentManager();
         fragmentManager.beginTransaction()
-                .replace(R.id.container, FragmentEcoMap.newInstance(this))
+                .replace(R.id.container, FragmentEcoMap.newInstance(this, fragmentManager))
                 .commit();
     }
 

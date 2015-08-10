@@ -40,5 +40,7 @@
     <string name="confirm_password">Confirm Password</string>
 
     <string name="photos">Photos:</string>
+    <string name="title_activity_photo_viewe">PhotoViewe</string>
+    <string name="title_activity_photo_viewer">PhotoViewer</string>
 
 </resources>

@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.support.v4.app.FragmentManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -60,9 +61,11 @@ public class FragmentEcoMap extends android.support.v4.app.Fragment
     private static final String ZOOM = "zoom";
 
     private static Activity activity;
+   static FragmentManager fragmentManager;
 
-    public static FragmentEcoMap newInstance(final Activity activity) {
+    public static FragmentEcoMap newInstance(final Activity activity, FragmentManager fragmentManager) {
         FragmentEcoMap.activity = activity;
+        FragmentEcoMap.fragmentManager = fragmentManager;
         return new FragmentEcoMap();
     }
 
@@ -175,7 +178,7 @@ public class FragmentEcoMap extends android.support.v4.app.Fragment
      */
     @Override
     public boolean onClusterItemClick(final Problem problem) {
-        informationPanel = new InformationPanel(activity, problem);
+        informationPanel = new InformationPanel(activity, problem, fragmentManager);
         dataManager.getProblemDetail(problem.getProblemId());
         moveCameraToProblem(problem);
 

@@ -1,27 +1,23 @@
 package com.ecomap.ukraine.activities;
 
-import android.app.ActionBar;
 import android.app.Activity;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.Matrix;
 import android.graphics.drawable.Drawable;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.content.res.ResourcesCompat;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.ViewGroup;
-import android.view.ViewTreeObserver;
 import android.view.animation.DecelerateInterpolator;
-import android.widget.AbsListView;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.TableLayout;
 import android.widget.TableRow;
@@ -39,7 +35,6 @@ import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 import java.util.List;
 import java.util.Map;
 
-
 public class InformationPanel {
 
     private static final float ANCHOR_POINT = 0.3f;
@@ -49,14 +44,14 @@ public class InformationPanel {
     private static final String ADD_COMMENT_HINT = "Add comment";
     private static final String RESOLVED = "resolved";
     private static final String UNSOLVED = "unsolved";
-    private static final String ECOMAP_UKRAINE= "Ecomap Ukraine";
+    private static final String ECOMAP_UKRAINE = "Ecomap Ukraine";
 
     private static final int STAR_NUMBER = 5;
     private static final int DEFAULT_PHOTO_MARGIN = 25;
 
     private static final int ACTIVITY_ICON_WIDTH = 75;
     private static final int ACTIVITY_ICON_HEIGHT = 75;
-    private static final int PHOTO_BOUNDS = 190;
+    private static final int PHOTO_BOUNDS = 150;
 
     private SlidingUpPanelLayout slidingUpPanelLayout;
     private ScrollView scrollView;
@@ -85,12 +80,17 @@ public class InformationPanel {
 
     private static int[] STARS_ID = {R.id.star1, R.id.star2, R.id.star3, R.id.star4, R.id.star5};
 
+    FragmentManager fragmentManager;
+
     /**
      * Constructor
+     *
      * @param activity callback activity
-     * @param problem clicked problem
+     * @param problem  clicked problem
      */
-    public InformationPanel(final Activity activity, Problem problem) {
+    public InformationPanel(final Activity activity, Problem problem, FragmentManager fragmentManager) {
+        this.fragmentManager = fragmentManager;
+
         this.context = activity.getApplicationContext();
         this.activity = activity;
         this.toolbar = (Toolbar) activity.findViewById(R.id.toolbar);
@@ -114,7 +114,7 @@ public class InformationPanel {
         slidingUpPanelLayout.setAnchorPoint(ANCHOR_POINT);
         slidingUpPanelLayout.setPanelState(SlidingUpPanelLayout.PanelState.ANCHORED);
 
-        titleView = (TextView)activity.findViewById(R.id.details_title);
+        titleView = (TextView) activity.findViewById(R.id.details_title);
         toolbar.setBackgroundColor(0xff004d40);
 
         slidingUpPanelLayout = (SlidingUpPanelLayout) activity.findViewById(R.id.sliding_layout);
@@ -230,7 +230,7 @@ public class InformationPanel {
     }
 
     private boolean isPhotoContainerHavePhotos() {
-        return  photoContainer != null && (photoContainer.getChildCount() > 0);
+        return photoContainer != null && (photoContainer.getChildCount() > 0);
     }
 
     private boolean isActivityLayoutHaveChild() {
@@ -261,6 +261,7 @@ public class InformationPanel {
 
     /**
      * Gets information about post from details
+     *
      * @param problemActivity current problemActivity
      * @return information about post
      */
@@ -279,18 +280,19 @@ public class InformationPanel {
         if (problemActivities == null) {
             return;
         }
-        for (ProblemActivity problemActivity: problemActivities) {
-            setPostInformation(problemActivity);
+        for (int i = problemActivities.size() - 1; i >= 0; i--) {
+            setPostInformation(problemActivities.get(i));
 
             TableRow activityRow = new TableRow(context);
-            activityRow.addView(buildActivityIcon(problemActivity));
-            activityRow.addView(buildActivityMessage(problemActivity));
+            activityRow.addView(buildActivityIcon(problemActivities.get(i)));
+            activityRow.addView(buildActivityMessage(problemActivities.get(i)));
             activitiesLayout.addView(activityRow);
         }
     }
 
     /**
      * Sets post information
+     *
      * @param problemActivity current problemActivity
      */
     private void setPostInformation(ProblemActivity problemActivity) {
@@ -306,6 +308,7 @@ public class InformationPanel {
 
     /**
      * Builds activity icon
+     *
      * @param problemActivity current problemActivity
      * @return icon
      */
@@ -317,11 +320,12 @@ public class InformationPanel {
         activityTypeIcon.setImageDrawable(getActivityIcon(problemActivity.getActivityType()));
         activityTypeIcon.setLayoutParams(imageParams);
 
-        return  activityTypeIcon;
+        return activityTypeIcon;
     }
 
     /**
      * Builds activity context
+     *
      * @param problemActivity current problemActivity
      * @return activity context
      */
@@ -345,6 +349,7 @@ public class InformationPanel {
 
     /**
      * Gets icon resource for activity by activityType
+     *
      * @param activityType activityType
      * @return icon resource
      */
@@ -370,6 +375,7 @@ public class InformationPanel {
 
     /**
      * Puts details on sliding panel
+     *
      * @param details details of problem
      */
     private void putDetailsOnPanel(Details details) {
@@ -400,9 +406,10 @@ public class InformationPanel {
 
     /**
      * Adds photos to sliding panel
+     *
      * @param details details of problem
      */
-    private void addPhotos (final Details details) {
+    private void addPhotos(final Details details) {
         Map<Photo, Bitmap> photos = details.getPhotos();
 
         if (photos == null) {
@@ -412,10 +419,34 @@ public class InformationPanel {
 
         BasicContentLayout photoLayout = new BasicContentLayout(photoContainer, context);
 
-        for (Photo photo: photos.keySet()) {
-            ImageView imagePhoto = new ImageView(context);
+        for (final Photo photo : photos.keySet()) {
+            final ImageView imagePhoto = new ImageView(context);
             Bitmap bitmap = photos.get(photo);
             imagePhoto.setImageBitmap(resizeBitmap(bitmap, PHOTO_BOUNDS));
+            imagePhoto.setAdjustViewBounds(true);
+
+            imagePhoto.setOnClickListener(new View.OnClickListener() {
+
+                @Override
+                public void onClick(View view) {
+                    Intent fullScreen = new Intent(context, PhotoViewer.class);
+                    fullScreen.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+
+                    ImageView image = (ImageView) view;
+                    image.buildDrawingCache();
+                    Bitmap imageBitmap = image.getDrawingCache();
+
+                    fragmentManager.beginTransaction()
+                                   .setCustomAnimations(R.anim.abc_popup_enter,
+                                                        R.anim.abc_popup_exit)
+                                   .add(R.id.photoViewer,
+                                        PhotoViewer.newInstance(imageBitmap,
+                                                                photo.getDescription(),
+                                                                fragmentManager))
+                                   .commit();
+                }
+            });
+
             photoLayout.addHorizontalBlock(imagePhoto, DEFAULT_PHOTO_MARGIN);
         }
     }
@@ -441,7 +472,7 @@ public class InformationPanel {
 
     private int dpToPx(int dp) {
         float density = context.getResources().getDisplayMetrics().density;
-        return Math.round((float)dp * density);
+        return Math.round((float) dp * density);
     }
 
 }

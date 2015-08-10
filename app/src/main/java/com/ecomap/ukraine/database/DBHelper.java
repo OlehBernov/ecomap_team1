@@ -456,8 +456,6 @@ public class DBHelper extends SQLiteOpenHelper {
             values.put(DBContract.ProblemActivity.PROBLEM_ACTIVITY_CONTENT,
                        problemActivity.getContent());
 
-            Log.e("type", "" + problemActivity.getActivityType().name());
-
             db.insert(DBContract.ProblemActivity.TABLE_NAME, null, values);
             values.clear();
         }
