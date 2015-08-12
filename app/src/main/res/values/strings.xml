@@ -45,10 +45,11 @@
 
     <string name="choose_problem_location">Choose problem location</string>
     <string name="CANCEL">CANCEL</string>
-    <string name="add_problem_type">Problem Type</string>
+    <string name="add_problem_type">Problem Type:</string>
     <string name="problem_title">Problem title</string>
     <string name="problem_description">Problem description</string>
     <string name="problem_solution">Proposals to solve the problem</string>
+    <string name="send_problem">SEND PROBLEM</string>
 
 
     <string-array name="types">
