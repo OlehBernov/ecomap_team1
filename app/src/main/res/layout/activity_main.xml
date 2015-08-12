@@ -39,9 +39,11 @@
                     sothree:umanoShadowHeight="0dp"
                     sothree:umanoOverlay="true">
 
+
                     <RelativeLayout
                         android:layout_width="match_parent"
                         android:layout_height="match_parent">
+
 
                         <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
                             android:id="@+id/container"
@@ -49,6 +51,10 @@
                             android:layout_height="match_parent">
 
                         </FrameLayout>
+
+
+
+
 
                     </RelativeLayout>
 
@@ -339,6 +345,8 @@
                                             android:orientation="horizontal">
 
                                         </LinearLayout>
+
+
 
                                     </HorizontalScrollView>
 
@@ -985,6 +993,8 @@
 
             </android.support.v4.widget.DrawerLayout>
 
+
+
         </LinearLayout>
 
         <android.support.v7.widget.Toolbar
@@ -1019,6 +1029,30 @@
         android:layout_height="match_parent">
 
     </FrameLayout>
+
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_gravity="right|bottom"
+        android:layout_marginRight="15dp"
+        android:layout_marginBottom="15dp">
+
+        <ImageButton
+            android:layout_width="70dp"
+            android:layout_height="70dp"
+            android:src="@drawable/ic_room_white_24dp"
+            android:id="@+id/add_problem_button"
+            android:onClick="openChooseProblemLocationActivity"
+            android:background="@drawable/circle"
+            android:layout_alignParentTop="false"
+            android:layout_alignParentLeft="false"
+            android:layout_alignParentStart="false"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentRight="true" />
+
+    </RelativeLayout>
+
+
 
 </RelativeLayout>
 

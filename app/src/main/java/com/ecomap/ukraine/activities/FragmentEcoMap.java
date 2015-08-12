@@ -8,6 +8,7 @@ import android.support.v4.app.FragmentManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 
 import com.ecomap.ukraine.R;
 import com.ecomap.ukraine.data.manager.DataManager;
@@ -179,6 +180,7 @@ public class FragmentEcoMap extends android.support.v4.app.Fragment
     @Override
     public boolean onClusterItemClick(final Problem problem) {
         informationPanel = new InformationPanel(activity, problem, fragmentManager);
+         getActivity().findViewById(R.id.add_problem_button).setVisibility(View.INVISIBLE);
         dataManager.getProblemDetail(problem.getProblemId());
         moveCameraToProblem(problem);
 

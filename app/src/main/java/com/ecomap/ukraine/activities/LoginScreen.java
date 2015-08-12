@@ -170,6 +170,7 @@ public class LoginScreen extends AppCompatActivity implements LogInListener {
 
     private void openMainActivity() {
         startActivity(mainIntent);
+
         finish();
     }
 

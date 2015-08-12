@@ -5,9 +5,33 @@
         Customize your theme here.
     </style>  -->
 
+
+    <color name="white">#FFFFFF</color>
+    <color name="primary_text">#212121</color>
+    <color name="secondary_text">#727272</color>
+    <color name="divider">#B6B6B6</color>
+
+
+    <style name="Add_problem_theme" parent="Base.ThemeOverlay.AppCompat.Dark">
+    </style>
+
+
+    <style name="spinner_style">
+        <item name="android:background">@drawable/gradient_spinner</item>
+
+
+    </style>
+
+    <style name="Base.Theme.DesignDemo" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="android:windowBackground">@color/window_background</item>
+
+    </style>
+
+
+
     <style name="Base.Theme.HMKCodeApp" parent="Theme.AppCompat.NoActionBar">
 
-        <item name="android:windowBackground">@color/window_background</item>
+
     </style>
 
     <style name="DrawerArrowStyle" parent="Widget.AppCompat.DrawerArrowToggle">
@@ -24,11 +48,22 @@
             res/values-vXX/styles.xml, while customizations related to
             backward-compatibility can go here.
         -->
+
     </style>
 
     <!-- Application theme. -->
-    <style name="AppTheme" parent="AppBaseTheme">
+    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <!-- All customizations that are NOT specific to a particular API-level can go here. -->
+
+
+        <item name="android:textColorHint">@color/secondary_text</item>
+        <item name="colorAccent">@color/ColorPrimary</item>
+        <item name="android:editTextColor">@color/primary_text</item>
+        <item name="android:textColor">@color/primary_text</item>
+        <item name="android:textColorPrimary">@color/white</item>
+
+
+
     </style>
 
 </resources>

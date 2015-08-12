@@ -43,4 +43,22 @@
     <string name="title_activity_photo_viewe">PhotoViewe</string>
     <string name="title_activity_photo_viewer">PhotoViewer</string>
 
+    <string name="choose_problem_location">Choose problem location</string>
+    <string name="CANCEL">CANCEL</string>
+    <string name="add_problem_type">Problem Type</string>
+    <string name="problem_title">Problem title</string>
+    <string name="problem_description">Problem description</string>
+    <string name="problem_solution">Proposals to solve the problem</string>
+
+
+    <string-array name="types">
+        <item>Forestry issues</item>
+        <item>Rubbish dump</item>
+        <item>Illegal building</item>
+        <item>Water pollution</item>
+        <item>Threat to biodiversity</item>
+        <item>Poaching</item>
+        <item>Other issues</item>
+    </string-array>
+
 </resources>
