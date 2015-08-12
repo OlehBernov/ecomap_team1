@@ -8,7 +8,6 @@ import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.Matrix;
 import android.graphics.drawable.Drawable;
-import android.support.v4.app.FragmentManager;
 import android.support.v4.content.res.ResourcesCompat;
 import android.support.v7.widget.Toolbar;
 import android.view.Gravity;
@@ -32,6 +31,7 @@ import com.ecomap.ukraine.models.ProblemActivity;
 import com.ecomap.ukraine.models.Types.ProblemStatus;
 import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -80,16 +80,13 @@ public class InformationPanel {
 
     private static int[] STARS_ID = {R.id.star1, R.id.star2, R.id.star3, R.id.star4, R.id.star5};
 
-    FragmentManager fragmentManager;
-
     /**
      * Constructor
      *
      * @param activity callback activity
      * @param problem  clicked problem
      */
-    public InformationPanel(final Activity activity, Problem problem, FragmentManager fragmentManager) {
-        this.fragmentManager = fragmentManager;
+    public InformationPanel(final Activity activity, Problem problem) {
 
         this.context = activity.getApplicationContext();
         this.activity = activity;
@@ -410,7 +407,7 @@ public class InformationPanel {
      * @param details details of problem
      */
     private void addPhotos(final Details details) {
-        Map<Photo, Bitmap> photos = details.getPhotos();
+        final Map<Photo, Bitmap> photos = details.getPhotos();
 
         if (photos == null) {
             hidePhotosTitle();
@@ -418,9 +415,8 @@ public class InformationPanel {
         }
 
         BasicContentLayout photoLayout = new BasicContentLayout(photoContainer, context);
-
-        for (final Photo photo : photos.keySet()) {
-            final ImageView imagePhoto = new ImageView(context);
+        for (Photo photo : photos.keySet()) {
+            ImageView imagePhoto = new ImageView(context);
             Bitmap bitmap = photos.get(photo);
             imagePhoto.setImageBitmap(resizeBitmap(bitmap, PHOTO_BOUNDS));
             imagePhoto.setAdjustViewBounds(true);
@@ -429,25 +425,15 @@ public class InformationPanel {
 
                 @Override
                 public void onClick(View view) {
-                    Intent fullScreen = new Intent(context, PhotoViewer.class);
-                    fullScreen.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-
-                    ImageView image = (ImageView) view;
-                    image.buildDrawingCache();
-                    Bitmap imageBitmap = image.getDrawingCache();
-
-                    fragmentManager.beginTransaction()
-                                   .setCustomAnimations(R.anim.abc_popup_enter,
-                                                        R.anim.abc_popup_exit)
-                                   .add(R.id.photoViewer,
-                                        PhotoViewer.newInstance(imageBitmap,
-                                                                photo.getDescription(),
-                                                                fragmentManager))
-                                   .commit();
+                    PhotoSlidePagerActivity.newInstance(photos);
+                    Intent intent = new Intent(activity, PhotoSlidePagerActivity.class);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    context.startActivity(intent);
                 }
+
             });
 
-            photoLayout.addHorizontalBlock(imagePhoto, DEFAULT_PHOTO_MARGIN);
+            photoLayout.addHorizontalBlock(imagePhoto,DEFAULT_PHOTO_MARGIN);
         }
     }
 

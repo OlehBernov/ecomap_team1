@@ -178,7 +178,7 @@ public class FragmentEcoMap extends android.support.v4.app.Fragment
      */
     @Override
     public boolean onClusterItemClick(final Problem problem) {
-        informationPanel = new InformationPanel(activity, problem, fragmentManager);
+        informationPanel = new InformationPanel(activity, problem);
         dataManager.getProblemDetail(problem.getProblemId());
         moveCameraToProblem(problem);
 
