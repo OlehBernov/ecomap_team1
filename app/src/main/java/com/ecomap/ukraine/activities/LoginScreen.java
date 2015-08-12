@@ -142,7 +142,7 @@ public class LoginScreen extends AppCompatActivity implements LogInListener {
         logInButton.setEnabled(false);
 
         final ProgressDialog progressDialog = new ProgressDialog(LoginScreen.this,
-                R.style.Base_V11_Theme_AppCompat_Dialog);
+                android.R.style.Theme_Holo_Light_Panel);
         progressDialog.setIndeterminate(true);
         progressDialog.setMessage("Log in...");
         progressDialog.show();

@@ -92,7 +92,7 @@ public class SignupActivity extends AppCompatActivity implements LogInListener {
 
         signUpButton.setEnabled(false);
         final ProgressDialog progressDialog = new ProgressDialog(SignupActivity.this,
-                R.style.Base_V11_Theme_AppCompat_Dialog);
+                android.R.style.Theme_Holo_Light_Panel);
         progressDialog.setIndeterminate(true);
         progressDialog.setMessage(CREATING_ACCOUNT);
         progressDialog.show();

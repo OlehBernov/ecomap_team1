@@ -94,4 +94,18 @@ public class Validator {
         return true;
     }
 
+    public boolean addProblemValidation(final EditText problemTitle) {
+
+        String title = problemTitle.getText().toString();
+        if (title.isEmpty()) {
+            problemTitle.setError(ValidationRequirements.Title_FIELD_EMPTY);
+            return false;
+        }
+
+        return true;
+    }
+
+
+
+
 }

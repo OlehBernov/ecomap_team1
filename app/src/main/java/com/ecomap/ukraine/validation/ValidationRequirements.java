@@ -12,6 +12,8 @@ class ValidationRequirements {
 
     public static final String NAME_FIELD_EMPTY = "Please fill out name field";
 
+    public static final String Title_FIELD_EMPTY = "Please fill out problem title field";
+
     public static final String NAME_FIELD_SHORT = "Name must be at least " +
             MIN_NAME_LENGTH + " characters.";
 

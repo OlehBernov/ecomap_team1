@@ -89,7 +89,8 @@ public class AddNewProblemDecriptionActivity extends AppCompatActivity {
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
+        if (id == R.id.action_confirm_problem) {
+            Tab1.getInstance().sendProblem();
             return true;
         }
 
@@ -103,14 +104,12 @@ public class AddNewProblemDecriptionActivity extends AppCompatActivity {
     private void setupToolbar() {
         toolbar = (Toolbar) findViewById(R.id.tool_bar);
         toolbar.setTitle("Add description");
-        //setSupportActionBar(toolbar);
         toolbar.setNavigationIcon(R.drawable.ic_arrow_back_white_24dp);
         toolbar.setClickable(true);
         setSupportActionBar(toolbar);
         final ActionBar ab = getSupportActionBar();
         ab.setDisplayHomeAsUpEnabled(true);
 
-       // final ActionBar ab = getSupportActionBar();
-       // ab.setDisplayHomeAsUpEnabled(true);
+
     }
 }
