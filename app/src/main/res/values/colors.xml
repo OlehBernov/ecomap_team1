@@ -2,6 +2,7 @@
 <resources>
     <color name="window_background">#CC000000</color>
 
+
     <color name="toolbar_teal">#004D40</color>
     <color name="filter_off">#BDBDBD</color>
     <color name="filter_on">#E0E0E0</color>
@@ -12,6 +13,10 @@
     <color name="filter_title">#01312D</color>
     <color name="filter_button_text">#004D40</color>
     <color name="card_view_background">#E0E0E0</color>
+    <color name="ColorPrimary">#00897B</color>
+    <color name="ColorPrimaryDark">#00695C</color>
+    <color name="tabsScrollColor">#004D40</color>
+    <color name="add_problem_description_bg">#eceff1</color>
 
     <!-- #24646A -->
 

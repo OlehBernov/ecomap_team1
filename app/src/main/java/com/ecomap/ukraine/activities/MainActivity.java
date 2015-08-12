@@ -1,5 +1,6 @@
 package com.ecomap.ukraine.activities;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.graphics.drawable.ColorDrawable;
@@ -471,4 +472,11 @@ public class MainActivity extends AppCompatActivity {
         setDate();
     }
 
+
+    public void openChooseProblemLocationActivity(View view) {
+
+       Intent mainIntent = new Intent(this, ChooseProblemLocationActivity.class);
+        startActivity(mainIntent);
+
+    }
 }
