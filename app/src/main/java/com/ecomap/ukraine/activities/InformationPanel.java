@@ -47,7 +47,6 @@ public class InformationPanel {
     private static final String ECOMAP_UKRAINE = "Ecomap Ukraine";
 
     private static final int STAR_NUMBER = 5;
-    private static final int DEFAULT_PHOTO_MARGIN = 25;
 
     private static final int ACTIVITY_ICON_WIDTH = 75;
     private static final int ACTIVITY_ICON_HEIGHT = 75;
@@ -407,33 +406,30 @@ public class InformationPanel {
      * @param details details of problem
      */
     private void addPhotos(final Details details) {
-        final Map<Photo, Bitmap> photos = details.getPhotos();
-
+        Map<Photo, Bitmap> photos = details.getPhotos();
         if (photos == null) {
             hidePhotosTitle();
             return;
         }
-
+        BitmapResizer bitmapResizer = new BitmapResizer(context);
         BasicContentLayout photoLayout = new BasicContentLayout(photoContainer, context);
+        final List<Bitmap> bitmaps = new ArrayList<>();
+
         for (Photo photo : photos.keySet()) {
             ImageView imagePhoto = new ImageView(context);
             Bitmap bitmap = photos.get(photo);
-            imagePhoto.setImageBitmap(resizeBitmap(bitmap, PHOTO_BOUNDS));
+            imagePhoto.setImageBitmap(bitmapResizer.resizeBitmap(bitmap, PHOTO_BOUNDS));
             imagePhoto.setAdjustViewBounds(true);
-
+            bitmaps.add(bitmap);
             imagePhoto.setOnClickListener(new View.OnClickListener() {
-
                 @Override
                 public void onClick(View view) {
-                    PhotoSlidePagerActivity.newInstance(photos);
+                    PhotoSlidePagerActivity.setContent(bitmaps);
                     Intent intent = new Intent(activity, PhotoSlidePagerActivity.class);
                     intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                     context.startActivity(intent);
-                }
-
-            });
-
-            photoLayout.addHorizontalBlock(imagePhoto,DEFAULT_PHOTO_MARGIN);
+                }});
+            photoLayout.addHorizontalBlock(imagePhoto);
         }
     }
 
@@ -444,21 +440,6 @@ public class InformationPanel {
         photosTitle.setTextSize(0.0f);
     }
 
-    private Bitmap resizeBitmap(Bitmap bitmap, int bounds) {
-        int width = bitmap.getWidth();
-        int height = bitmap.getHeight();
-        int bounding = dpToPx(bounds);
-        float yScale = ((float) bounding) / height;
 
-        Matrix matrix = new Matrix();
-        matrix.postScale(yScale, yScale);
-
-        return Bitmap.createBitmap(bitmap, 0, 0, width, height, matrix, true);
-    }
-
-    private int dpToPx(int dp) {
-        float density = context.getResources().getDisplayMetrics().density;
-        return Math.round((float) dp * density);
-    }
 
 }

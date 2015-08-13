@@ -9,7 +9,7 @@ import java.util.List;
 
 public class PhotoPagerAdapter  extends PagerAdapter {
 
-    List<View> pages = null;
+    private List<View> pages = null;
 
     public PhotoPagerAdapter(List<View> pages) {
         this.pages = pages;

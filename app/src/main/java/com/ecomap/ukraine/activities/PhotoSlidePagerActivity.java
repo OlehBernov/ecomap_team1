@@ -19,11 +19,10 @@ import java.util.Map;
 
 public class PhotoSlidePagerActivity extends FragmentActivity {
 
-    private static Map<Photo, Bitmap> photos;
+    private static List<Bitmap> photos;
 
-    public static PhotoSlidePagerActivity newInstance (Map<Photo, Bitmap> photos) {
+    public static void setContent(List<Bitmap> photos) {
         PhotoSlidePagerActivity.photos = photos;
-        return new PhotoSlidePagerActivity();
     }
 
     @Override
@@ -33,14 +32,11 @@ public class PhotoSlidePagerActivity extends FragmentActivity {
         LayoutInflater inflater = LayoutInflater.from(this);
         List<View> pages = new ArrayList<>();
 
-        for (Photo photo : photos.keySet()) {
+        for (Bitmap photo: photos) {
             View page = inflater.inflate(R.layout.fragment_photo_viewer, null);
 
             ImageView photoView = (ImageView) page.findViewById(R.id.imageView4);
-            photoView.setImageBitmap(photos.get(photo));
-
-            TextView photoDescription = (TextView) page.findViewById(R.id.photo_description);
-            photoDescription.setText(photo.getDescription());
+            photoView.setImageBitmap(photo);
 
             pages.add(page);
         }

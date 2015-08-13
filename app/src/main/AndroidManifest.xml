@@ -8,6 +8,9 @@
     <uses-permission android:name="com.google.android.providers.gsf.permission.READ_GSERVICES" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-feature android:name="android.hardware.camera"
+        android:required="true" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <application
         android:allowBackup="true"
@@ -72,7 +75,8 @@
             android:theme="@android:style/Theme.Translucent.NoTitleBar" />
         <activity
             android:name=".activities.PhotoSlidePagerActivity"
-            android:label="@string/title_activity_screen_slide_pager" >
+            android:label="@string/title_activity_screen_slide_pager"
+            android:screenOrientation="portrait">
         </activity>
     </application>
 

@@ -10,7 +10,7 @@ import android.widget.TextView;
 public class BasicContentLayout {
 
     private static final int DEFAULT_TOP_MARGIN = 0;
-    private static final int DEFAULT_LEFT_MARGIN = 0;
+    private static final int DEFAULT_LEFT_MARGIN = 25;
 
     private LinearLayout rootLayout;
     private Context context;
@@ -34,7 +34,7 @@ public class BasicContentLayout {
         numberOfBlocks++;
     }
 
-    public void addHorizontallBlock(final View newView) {
+    public void addHorizontalBlock(final View newView) {
         addHorizontalBlock(newView, DEFAULT_LEFT_MARGIN);
     }
 

@@ -19,17 +19,18 @@
         android:layout_centerVertical="true"
         android:layout_centerHorizontal="true" />
 
-   <TextView
+  <!--  <TextView
+        android:id="@+id/photo_description"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="fdsfd"
-        android:id="@+id/photo_description"
-       android:layout_marginLeft="17dp"
+        android:layout_alignLeft="@+id/imageView4"
+        android:layout_alignStart="@+id/imageView4"
+        android:layout_below="@+id/imageView4"
+        android:layout_marginLeft="17dp"
         android:layout_marginStart="17dp"
-       android:layout_marginTop="22dp"
-       android:layout_below="@+id/imageView4"
-       android:layout_alignLeft="@+id/imageView4"
-       android:layout_alignStart="@+id/imageView4" />
+        android:textColor="#d4d4d4"
+        android:layout_marginTop="22dp"
+        android:text=""
+        android:textAppearance="?android:attr/textAppearanceMedium" />-->
 
 </RelativeLayout>
