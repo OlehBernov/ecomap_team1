@@ -167,6 +167,10 @@ public class DataManager implements ProblemListenersNotifier,
         }
     }
 
+    public void refreshAllProblem () {
+        loadingClient.getAllProblems();
+    }
+
     /**
      * This method is used to made request for more information about
      * the problem.

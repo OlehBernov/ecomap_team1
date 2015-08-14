@@ -19,8 +19,13 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import com.ecomap.ukraine.R;
+import com.ecomap.ukraine.data.manager.DataManager;
+import com.ecomap.ukraine.data.manager.ProblemListener;
+import com.ecomap.ukraine.models.Details;
+import com.ecomap.ukraine.models.Problem;
 
 import java.io.File;
 import java.io.IOException;
@@ -33,7 +38,7 @@ import java.util.Locale;
 /**
  * Created by Andriy on 11.08.2015.
  */
-public class AddNewProblemDecriptionActivity extends AppCompatActivity {
+public class AddNewProblemDecriptionActivity extends AppCompatActivity  {
 
     private static final int CAMERA_PHOTO = 1;
     private static final int GALLERY_PHOTO = 2;
@@ -48,6 +53,8 @@ public class AddNewProblemDecriptionActivity extends AppCompatActivity {
 
     private Uri currentPhotoUri;
     private List<String> userPhotos;
+
+    //private DataManager dataManager;
 
     // Declaring Your View and Variables
 

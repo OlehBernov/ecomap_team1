@@ -477,6 +477,7 @@ public class MainActivity extends AppCompatActivity {
 
        Intent mainIntent = new Intent(this, ChooseProblemLocationActivity.class);
         startActivity(mainIntent);
+        finish();
 
     }
 }

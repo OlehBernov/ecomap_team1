@@ -36,7 +36,7 @@ public class ChooseProblemLocationActivity extends AppCompatActivity {
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                onBackPressed();
+                cancelButton(v);
 
             }
         });
@@ -59,6 +59,7 @@ public class ChooseProblemLocationActivity extends AppCompatActivity {
         mainIntent = new Intent(this, AddNewProblemDecriptionActivity.class);
 
         startActivity(mainIntent);
+        finish();
 
     }
 
@@ -71,7 +72,15 @@ public class ChooseProblemLocationActivity extends AppCompatActivity {
     }
 
     public void cancelButton (View view) {
-        onBackPressed();
+
+        Intent mainIntent = new Intent(this, MainActivity.class);
+        startActivity(mainIntent);
+        finish();
+    }
+@Override
+    public void onBackPressed() {
+    super.onBackPressed();
+    cancelButton(null);
     }
 
 }

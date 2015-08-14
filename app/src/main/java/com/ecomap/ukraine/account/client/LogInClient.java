@@ -54,6 +54,9 @@ public class LogInClient {
                     public void onResponse(String response) {
                         try {
                             User user = new JSONParser().parseUserInformation(response);
+                            //Log.d("USER_ID", String.valueOf(user.getId()));
+                            //Log.d("USER_NAME", String.valueOf(user.getName()));
+                           // Log.d("USER_SURNAME", String.valueOf(user.getSurname()));
                             logRequestReceiver.setLogInRequestResult(user);
                            logRequestReceiver.putLogInResultToPreferences(password, login);
                         } catch (JSONException e) {

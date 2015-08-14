@@ -150,6 +150,7 @@ public class LoginScreen extends AppCompatActivity implements LogInListener {
         String email = emailText.getText().toString();
         String password = passwordText.getText().toString();
 
+        accountManager.registerLogInListener(Tab1.getInstance());
         accountManager.registerLogInListener(this);
         accountManager.logInUser(password, email);
 
@@ -158,7 +159,6 @@ public class LoginScreen extends AppCompatActivity implements LogInListener {
 
     @Override
     public void setLogInResult(final User user) {
-        accountManager.removeLogInListener(this);
         logInButton.setEnabled(true);
         if (user != null) {
             mainIntent.putExtra("User", user);
@@ -187,7 +187,7 @@ public class LoginScreen extends AppCompatActivity implements LogInListener {
                     public void onCompleted(JSONObject jsonObject, GraphResponse graphResponse) {
                         try {
                             jsonObject.getString("id");
-                        } catch (JSONException e){
+                        } catch (JSONException e) {
                             Log.e("parsing", "invalid response from server", e);
                         }
                     }
@@ -207,6 +207,11 @@ public class LoginScreen extends AppCompatActivity implements LogInListener {
         InputMethodManager inputMethodManager
                 =(InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
         inputMethodManager.hideSoftInputFromWindow(view.getWindowToken(), 0);
+    }
+
+    public void onDestroy() {
+        super.onDestroy();
+        accountManager.removeLogInListener(this);
     }
 
 }

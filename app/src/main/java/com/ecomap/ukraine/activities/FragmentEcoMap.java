@@ -45,6 +45,7 @@ public class FragmentEcoMap extends android.support.v4.app.Fragment
     private static final float ON_MARKER_CLICK_ZOOM = 12;
     private ClusterManager<Problem> clusterManager;
     private static List<Problem> problems;
+    private static FragmentEcoMap instance = null;
 
     /**
      * Filter dataManager instance
@@ -64,17 +65,33 @@ public class FragmentEcoMap extends android.support.v4.app.Fragment
     private static Activity activity;
    static FragmentManager fragmentManager;
 
+
     public static FragmentEcoMap newInstance(final Activity activity, FragmentManager fragmentManager) {
         FragmentEcoMap.activity = activity;
         FragmentEcoMap.fragmentManager = fragmentManager;
         return new FragmentEcoMap();
     }
 
+
+   /* public static FragmentEcoMap getInstance(final Activity activity, FragmentManager fragmentManager) {
+        if (FragmentEcoMap.instance == null) {
+            FragmentEcoMap.instance = new FragmentEcoMap();
+        }
+        FragmentEcoMap.activity = activity;
+        FragmentEcoMap.fragmentManager = fragmentManager;
+
+        return FragmentEcoMap.instance;
+    }*/
+
     /**
      * Constructor
      */
-    public FragmentEcoMap() {
+    public FragmentEcoMap () {
+
     }
+
+
+
 
     /**
      * Called to have the fragment instantiate its user interface view.
