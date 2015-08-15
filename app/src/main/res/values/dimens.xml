@@ -6,9 +6,17 @@
     <dimen name="cards">5dp</dimen>
     <dimen name="corner_radius">0dp</dimen>
     <dimen name="card_bottom">25dp</dimen>
-    <dimen name="calendar_size">130dp</dimen>
+    <dimen name="calendar_size">50dp</dimen>
     <dimen name="slide_panel_items_margin">12dp</dimen>
     <dimen name="comment_text_size">7dp</dimen>
 
     <dimen name="slipe_panel_text_size">7dp</dimen>
+    <dimen name="edit_text_add_photo">75dp</dimen>
+    <dimen name="button_size">15dp</dimen>
+
+    <dimen name="description_left_padding">12dp</dimen>
+    <dimen name="description_right_padding">5dp</dimen>
+    <dimen name="description_top_padding">5dp</dimen>
+    <dimen name="description_bottom_padding">5dp</dimen>
+
 </resources>

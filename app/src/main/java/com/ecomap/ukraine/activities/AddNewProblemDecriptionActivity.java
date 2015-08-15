@@ -3,23 +3,34 @@ package com.ecomap.ukraine.activities;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
+import android.graphics.Matrix;
+import android.media.ExifInterface;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.support.annotation.NonNull;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Toast;
+import android.widget.RelativeLayout;
+import android.widget.TableLayout;
+import android.widget.TableRow;
 
 import com.ecomap.ukraine.R;
 import com.ecomap.ukraine.data.manager.DataManager;
@@ -27,6 +38,7 @@ import com.ecomap.ukraine.data.manager.ProblemListener;
 import com.ecomap.ukraine.models.Details;
 import com.ecomap.ukraine.models.Problem;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
@@ -42,17 +54,21 @@ public class AddNewProblemDecriptionActivity extends AppCompatActivity  {
 
     private static final int CAMERA_PHOTO = 1;
     private static final int GALLERY_PHOTO = 2;
-    private static final int PHOTO_BOUNDS = 300;
+    private static final int DEGREE_90 = 90;
 
     private static final String DATE_TEMPLATE = "MMdd_HHmmss";
     private static final String PHOTO_FORMAT = ".jpg";
     private static final String FILE_NAME_BEGINNING = "JPEG_";
+    private static final String DESCRIPTION_HINT = "Add description...";
 
     private static final String CAMERA_URI = "Camera Uri";
     private static final String NUMBER_OF_PHOTOS = "Number of photos";
+    private static final String DESCRIPTION = "Description";
 
     private Uri currentPhotoUri;
     private List<String> userPhotos;
+    private TableLayout photoDescriptionLayout;
+    private List<String> descriptions;
     private ArrayList<Bitmap> bitmapsPhoto;
 
     //private DataManager dataManager;
@@ -63,20 +79,26 @@ public class AddNewProblemDecriptionActivity extends AppCompatActivity  {
     ViewPager pager;
     ViewPagerAdapter adapter;
     SlidingTabLayout tabs;
-    CharSequence Titles[]={"Description","Photo"};
-    int Numboftabs =2;
+    CharSequence Titles[] = {"Description", "Photo"};
+    int Numboftabs = 2;
 
 
     public ArrayList<Bitmap> getBitmapsPhoto () {
         return bitmapsPhoto;
     }
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+
         setContentView(R.layout.add_problem_description);
         setupToolbar();
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
 
+
+        // Creating The Toolbar and setting it as the Toolbar for the activity
 
         toolbar = (Toolbar) findViewById(R.id.tool_bar);
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
@@ -90,7 +112,7 @@ public class AddNewProblemDecriptionActivity extends AppCompatActivity  {
 
 
         // Creating The ViewPagerAdapter and Passing Fragment Manager, Titles fot the Tabs and Number Of Tabs.
-        adapter =  new ViewPagerAdapter(getSupportFragmentManager(),Titles,Numboftabs);
+        adapter = new ViewPagerAdapter(getSupportFragmentManager(), Titles, Numboftabs);
 
         // Assigning ViewPager View and setting the adapter
         pager = (ViewPager) findViewById(R.id.pager);
@@ -110,9 +132,13 @@ public class AddNewProblemDecriptionActivity extends AppCompatActivity  {
 
         // Setting the ViewPager For the SlidingTabsLayout
         tabs.setViewPager(pager);
+
+        if (savedInstanceState != null) {
+            onSaveInstanceState(savedInstanceState);
+        }
+
+        Tab2.setContext(getApplicationContext());
     }
-
-
 
 
     @Override
@@ -177,10 +203,16 @@ public class AddNewProblemDecriptionActivity extends AppCompatActivity  {
                 outState.putString("" + i, userPhotos.get(i));
             }
         }
+        if (descriptions != null) {
+            outState.putInt(DESCRIPTION, descriptions.size());
+            for (int i = 0; i < descriptions.size(); i++) {
+                outState.putString("" + i, descriptions.get(i));
+            }
+        }
     }
 
     @Override
-    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+    protected void onRestoreInstanceState(@NonNull Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
         if (savedInstanceState.containsKey(CAMERA_URI)) {
             currentPhotoUri = Uri.parse(savedInstanceState.getString(CAMERA_URI));
@@ -194,13 +226,22 @@ public class AddNewProblemDecriptionActivity extends AppCompatActivity  {
                 }
             }
         }
+        if (descriptions == null && savedInstanceState.containsKey(DESCRIPTION)) {
+            int numberOfDescriptions = savedInstanceState.getInt(DESCRIPTION);
+            descriptions = new ArrayList<>();
+            for (int i = 0; i < numberOfDescriptions; i++) {
+                if (savedInstanceState.containsKey("" + i)) {
+                    descriptions.add(savedInstanceState.getString("" + i));
+                }
+            }
+        }
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if (isGalleryPhoto(requestCode, resultCode, data) ) {
+        if (isGalleryPhoto(requestCode, resultCode, data)) {
             processGalleryPhoto(data);
         } else if (isCameraPhoto(requestCode, resultCode)) {
             processCameraPhoto();
@@ -217,6 +258,8 @@ public class AddNewProblemDecriptionActivity extends AppCompatActivity  {
         toolbar.setClickable(true);
         setSupportActionBar(toolbar);
         final ActionBar ab = getSupportActionBar();
+
+        assert ab != null;
         ab.setDisplayHomeAsUpEnabled(true);
     }
 
@@ -241,63 +284,163 @@ public class AddNewProblemDecriptionActivity extends AppCompatActivity  {
 
         int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
         String photoPath = cursor.getString(columnIndex);
+        savePhoto(photoPath);
         cursor.close();
 
-        BitmapResizer bitmapResizer = new BitmapResizer(getApplicationContext());
-        Bitmap photo = bitmapResizer.scalePhoto(photoPath, PHOTO_BOUNDS);
-        addPhotoToView(new BitmapResizer(getApplicationContext()).resizeBitmap(photo, 150));
-        savePhoto(photoPath);
+        addPhotosToView();
         addPhotoToGallery(photoPath);
     }
 
     private void processCameraPhoto() {
-        BitmapResizer bitmapResizer = new BitmapResizer(getApplicationContext());
-        if (userPhotos != null) {
-            for (String userPhotoPath: userPhotos) {
-                Bitmap photo = bitmapResizer.scalePhoto(userPhotoPath, PHOTO_BOUNDS);
-                addPhotoToView(bitmapResizer.resizeBitmap(photo, PHOTO_BOUNDS / 2));
-            }
-        }
-
-        ImageView imageView = new ImageView(getApplicationContext());
-        imageView.setImageURI(currentPhotoUri);
         String photoPath = currentPhotoUri.getPath();
-        Bitmap photo = bitmapResizer.scalePhoto(photoPath, PHOTO_BOUNDS);
-        addPhotoToView(bitmapResizer.resizeBitmap(photo, PHOTO_BOUNDS / 2));
         savePhoto(photoPath);
+        addPhotosToView();
         addPhotoToGallery(photoPath);
     }
 
-    private void addPhotoToView(Bitmap photo) {
-        LinearLayout photoContainer = (LinearLayout) findViewById(R.id.photo_container);
-        BasicContentLayout photoLayout = new BasicContentLayout(photoContainer, getApplicationContext());
-        ImageView photoView = new ImageView(getApplicationContext());
-        photoView.setImageBitmap(photo);
-        photoView.setAdjustViewBounds(true);
-        photoView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                List<Bitmap> bitmaps = getBitmapsFromPath(userPhotos);
-                bitmapsPhoto = (ArrayList)bitmaps;
-                Tab1.getInstance(bitmapsPhoto);
-                PhotoSlidePagerActivity.setContent(bitmaps);
-                Intent intent = new Intent(AddNewProblemDecriptionActivity.this,
-                        PhotoSlidePagerActivity.class);
-                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                startActivity(intent);
-            }
-        });
-        photoLayout.addHorizontalBlock(photoView);
+    private boolean isActivityLayoutHaveChild() {
+        return photoDescriptionLayout != null && (photoDescriptionLayout.getChildCount() > 0);
     }
 
-    private List<Bitmap> getBitmapsFromPath(List<String> userPhotos) {
-        List<Bitmap> bitmaps = new ArrayList<>();
-        BitmapResizer bitmapResizer = new BitmapResizer(getApplicationContext());
-        for (String path: userPhotos) {
-            bitmaps.add(bitmapResizer.scalePhoto(path,
-                    getResources().getDisplayMetrics().widthPixels));
+    private void addPhotosToView() {
+        if (isActivityLayoutHaveChild()) {
+            photoDescriptionLayout.removeAllViews();
         }
-        return bitmaps;
+
+        photoDescriptionLayout = (TableLayout) findViewById(R.id.photo_descriptions);
+        for (int i = 0; i < userPhotos.size(); i++) {
+
+            Bitmap photoBitmap = changePhotoOrientation(userPhotos.get(i));
+            setDeleteButton(i);
+            TableRow activityRow = new TableRow(getApplicationContext());
+
+            activityRow.addView(buildUserPhoto(photoBitmap));
+            activityRow.addView(buildPhotoDescription(i));
+            photoDescriptionLayout.addView(activityRow);
+        }
+    }
+
+    private EditText buildPhotoDescription(int id) {
+        EditText photoDescription = new EditText(getApplicationContext());
+        photoDescription.setHint(DESCRIPTION_HINT);
+        photoDescription.setBackgroundResource(R.drawable.edit_text_description_style);
+        photoDescription.setGravity(Gravity.TOP);
+        photoDescription.setVerticalScrollBarEnabled(true);
+        photoDescription.setFocusableInTouchMode(true);
+        photoDescription.setHintTextColor(getResources().getColor(R.color.calendar_header));
+        photoDescription.setTextColor(getResources().getColor(R.color.abc_primary_text_disable_only_material_light));
+        photoDescription.setTextSize(getResources().getDimension(R.dimen.comment_text_size));
+        photoDescription.setLayoutParams(setPhotoDescriptionParams());
+        photoDescription.setPadding(
+                (int) getResources().getDimension(R.dimen.description_left_padding),
+                (int) getResources().getDimension(R.dimen.description_top_padding),
+                (int) getResources().getDimension(R.dimen.description_right_padding),
+                (int) getResources().getDimension(R.dimen.description_bottom_padding)
+        );
+        if (!descriptions.get(id).equals("")) {
+            photoDescription.setText(descriptions.get(id));
+        }
+
+        return photoDescription;
+    }
+
+    private TableRow.LayoutParams setPhotoDescriptionParams() {
+        TableRow.LayoutParams photoDescriptionParams = new TableRow.LayoutParams(TableRow.LayoutParams.MATCH_PARENT,
+                ViewGroup.LayoutParams.MATCH_PARENT, 1f);
+        photoDescriptionParams.leftMargin = (int) getResources().getDimension(R.dimen.slide_panel_items_margin);
+        photoDescriptionParams.gravity = Gravity.CENTER_HORIZONTAL;
+
+        return photoDescriptionParams;
+    }
+
+    private ImageView buildUserPhoto(final Bitmap photoBitmap) {
+        TableRow.LayoutParams imageParams =
+                new TableRow.LayoutParams(photoBitmap.getWidth(),
+                                         photoBitmap.getHeight());
+        ImageView photoView = new ImageView(getApplicationContext());
+        photoView.setImageBitmap(photoBitmap);
+        photoView.setLayoutParams(imageParams);
+        photoView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showFullSizePhoto(photoBitmap);
+            }
+        });
+
+        return photoView;
+    }
+
+    private void showFullSizePhoto(Bitmap photoBitmap) {
+        Intent intent = new Intent (this, UserPhotoFullScreen.class);
+        ByteArrayOutputStream blob = new ByteArrayOutputStream();
+        photoBitmap.compress(Bitmap.CompressFormat.PNG, 0, blob);
+        byte[] photoByteArray = blob.toByteArray();
+        intent.putExtra("photo", photoByteArray);
+        startActivity(intent);
+    }
+
+    private Bitmap changePhotoOrientation(String photoPath) {
+        BitmapResizer bitmapResizer =  new BitmapResizer(getApplicationContext());
+        int photoBounds = (int) getResources().getDimension(R.dimen.edit_text_add_photo);
+        Bitmap photoBitmap = bitmapResizer.scalePhoto(photoPath, photoBounds);
+        ExifInterface exifInterface;
+        try {
+            exifInterface = new ExifInterface(photoPath);
+        } catch (IOException e) {
+            Log.e("IOException", "change photo orientation");
+            return photoBitmap;
+        }
+
+        int orientation = exifInterface.getAttributeInt(ExifInterface.TAG_ORIENTATION,
+                                                        ExifInterface.ORIENTATION_NORMAL);
+        if (orientation == ExifInterface.ORIENTATION_ROTATE_90) {
+                Matrix matrix = new Matrix();
+                matrix.postRotate(DEGREE_90);
+                return Bitmap.createBitmap(photoBitmap, 0, 0, photoBitmap.getWidth(),
+                                           photoBitmap.getHeight(), matrix, true);
+        } else {
+            return photoBitmap;
+        }
+    }
+
+    private void setDeleteButton(int buttonId) {
+        ImageButton deleteButton = new ImageButton(getApplicationContext());
+        deleteButton.setLayoutParams(setDeleteButtonParams());
+        deleteButton.setId(buttonId);
+        deleteButton.setImageDrawable(ContextCompat.getDrawable(getApplicationContext(),
+                R.drawable.delete));
+        deleteButton.setBackgroundColor(getResources().getColor(R.color.white));
+        deleteButton.setLayoutParams(setDeleteButtonParams());
+        addListenerOnDeleteButton(deleteButton);
+
+        RelativeLayout buttonLayout = new RelativeLayout(getApplicationContext());
+        buttonLayout.addView(deleteButton);
+
+        photoDescriptionLayout.addView(buttonLayout);
+    }
+
+    private RelativeLayout.LayoutParams setDeleteButtonParams() {
+        RelativeLayout.LayoutParams buttonParams =
+                new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        buttonParams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
+
+        return buttonParams;
+    }
+
+    private void addListenerOnDeleteButton(ImageButton deleteButton) {
+        deleteButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                deleteBlock(photoDescriptionLayout.indexOfChild(v));
+            }
+        });
+    }
+
+    private void deleteBlock(int buttonId) {
+/*        Log.e("i", "" + buttonId);
+        photoDescriptionLayout.removeViews(buttonId, 2);
+        userPhotos.remove(buttonId);
+        descriptions.remove(buttonId);*/
     }
 
     private void savePhoto(String photoPath) {
@@ -305,6 +448,10 @@ public class AddNewProblemDecriptionActivity extends AppCompatActivity  {
             userPhotos = new ArrayList<>();
         }
         userPhotos.add(photoPath);
+        if (descriptions == null) {
+            descriptions = new ArrayList<>();
+        }
+        descriptions.add("");
     }
 
     private void addPhotoToGallery(String photoPath) {
@@ -321,6 +468,5 @@ public class AddNewProblemDecriptionActivity extends AppCompatActivity  {
         File storageDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
         return File.createTempFile(imageFileName, PHOTO_FORMAT, storageDir);
     }
-
 
 }

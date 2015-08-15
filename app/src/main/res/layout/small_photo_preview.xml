@@ -1,26 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
     android:id="@+id/small_photo_preview"
-    android:layout_height="match_parent">
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
 
-    <HorizontalScrollView
-        android:id="@+id/photo_scroll"
+    <GridView
+        android:id="@+id/small_photos_grid"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:paddingLeft="5dp"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:horizontalSpacing="5dp"
+        android:numColumns="auto_fit"
+        android:paddingBottom="5dp"
+        android:paddingLeft="10dp"
         android:paddingRight="10dp"
-        android:paddingTop="10dp"
-        android:scrollbars="none">
-
-        <LinearLayout
-            android:id="@+id/photo_container"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-        </LinearLayout>
-
-    </HorizontalScrollView>
+        android:paddingTop="5dp"
+        android:stretchMode="columnWidth"
+        android:verticalSpacing="5dp" />
 
 </LinearLayout>
+
+    <!--android:columnWidth="110dp"-->

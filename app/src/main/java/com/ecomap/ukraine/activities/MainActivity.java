@@ -279,12 +279,12 @@ public class MainActivity extends AppCompatActivity {
 
     private void setFilterOn(View view) {
         view.setBackgroundColor(getResources().getColor(R.color.filter_on));
-        ((Button) view).setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.filter_on, 0);
+        ((Button) view).setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.off, 0);
     }
 
     private void setFilterOff(View view) {
         view.setBackgroundColor(getResources().getColor(R.color.filter_off));
-        ((Button) view).setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.filter_off, 0);
+        ((Button) view).setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.on, 0);
     }
 
     private void setUserInformation(User user) {
@@ -433,10 +433,7 @@ public class MainActivity extends AppCompatActivity {
         setDateOnScreen(calendarDateFrom, calendarDateTo);
     }
     
-    /**
-     *
-     * @param filtersState
-     */
+
     private void setFiltersState(FilterState filtersState) {
         if (filtersState != null) {
             if (!filtersState.isShowProblemType1()) {

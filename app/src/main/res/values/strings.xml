@@ -62,5 +62,8 @@
         <item>Poaching</item>
         <item>Other issues</item>
     </string-array>
+    <string name="title_activity_photo_view">PhotoViewActivity</string>
+    <string name="title_activity_problem_photo_slide_pager">ProblemPhotoSlidePager</string>
+    <string name="title_activity_user_photo_full_screen">UserPhotoFullScreen</string>
 
 </resources>
