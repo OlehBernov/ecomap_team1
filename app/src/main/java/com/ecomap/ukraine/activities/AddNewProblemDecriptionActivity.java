@@ -469,4 +469,13 @@ public class AddNewProblemDecriptionActivity extends AppCompatActivity  {
         return File.createTempFile(imageFileName, PHOTO_FORMAT, storageDir);
     }
 
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        Intent Intent = new Intent(this, ChooseProblemLocationActivity.class);
+        startActivity(Intent);
+        finish();
+    }
+
 }

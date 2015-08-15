@@ -64,7 +64,6 @@ public class IconRenderer extends DefaultClusterRenderer<Problem> {
         BitmapDescriptor icon = BitmapDescriptorFactory.fromResource(this.getResourceIdForMarker(
                 problem.getProblemType()));
         markerOptions.icon(icon)
-                .title(problem.getTitle())
                 .anchor(0.5f, 1f);
         super.onBeforeClusterItemRendered(problem, markerOptions);
     }

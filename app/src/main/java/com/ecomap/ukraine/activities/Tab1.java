@@ -22,11 +22,15 @@ import com.ecomap.ukraine.account.manager.LogInListener;
 import com.ecomap.ukraine.addproblem.manager.AddProblemListener;
 import com.ecomap.ukraine.addproblem.manager.AddProblemManager;
 import com.ecomap.ukraine.data.manager.DataManager;
+import com.ecomap.ukraine.data.manager.ProblemListener;
+import com.ecomap.ukraine.models.Details;
+import com.ecomap.ukraine.models.Problem;
 import com.ecomap.ukraine.models.User;
 import com.ecomap.ukraine.validation.Validator;
 
 
 import java.util.ArrayList;
+import java.util.List;
 
 
 import butterknife.ButterKnife;
@@ -35,18 +39,18 @@ import butterknife.InjectView;
 /**
  * Created by Edwin on 15/02/2015.
  */
-public class Tab1 extends Fragment implements LogInListener, AddProblemListener {
+public class Tab1 extends Fragment implements LogInListener, AddProblemListener, ProblemListener {
 
     /**
      * Holds the Singleton global instance of Tab1.
      */
     private static Tab1 instance;
 
-    private static String USER_ID = "";
+    private  String USER_ID = "";
 
-    private static String USER_NAME = "";
+    private  String USER_NAME = "";
 
-    private static String USER_SURNAME = "";
+    private  String USER_SURNAME = "";
 
     private AddProblemManager addProblemManager;
 
@@ -84,6 +88,10 @@ public class Tab1 extends Fragment implements LogInListener, AddProblemListener 
 
     public Tab1 () {
      super();
+        this.USER_ID = "";
+        this.USER_NAME = "";
+        this.USER_SURNAME = "";
+
     }
 
     public void onDestroy() {
@@ -134,8 +142,8 @@ public class Tab1 extends Fragment implements LogInListener, AddProblemListener 
         String title = problemTitle.getText().toString();
         String description = problemDescription.getText().toString();
         String solution = problemSolution.getText().toString();
-        String latitude = String.valueOf(46.2);
-        String longitude = String.valueOf(31.47);
+        String latitude = String.valueOf(12);
+        String longitude = String.valueOf(12);
         String type = String.valueOf(spinner.getSelectedItemId() + 1);
         showProgresDialog();
         addProblemManager.addProblem(title, description, solution, latitude, longitude, type, USER_ID,
@@ -156,11 +164,9 @@ public class Tab1 extends Fragment implements LogInListener, AddProblemListener 
     public void setAddProblemResult(boolean result) {
 
         if(result == true) {
+            dataManager.registerProblemListener(this);
             dataManager.refreshAllProblem();
-            Toast.makeText(getActivity().getApplicationContext(), "Problem added sucessfully", Toast.LENGTH_LONG) .show();
-            Intent intent =new Intent(getActivity(), MainActivity.class);
-            startActivity(intent);
-            getActivity().finish();
+
         }
         else {
             Toast.makeText(getActivity().getApplicationContext(), "Connection error", Toast.LENGTH_LONG) .show();
@@ -177,6 +183,19 @@ public class Tab1 extends Fragment implements LogInListener, AddProblemListener 
         sendProblemButton.setEnabled(false);
     }
 
+    @Override
+    public void updateProblemDetails(final Details details) {
+
+    }
+
+    @Override
+    public void updateAllProblems(final List<Problem> problems) {
+        Toast.makeText(getActivity().getApplicationContext(), "Problem added sucessfully", Toast.LENGTH_LONG) .show();
+        Intent intent =new Intent(getActivity(), MainActivity.class);
+        startActivity(intent);
+        getActivity().finish();
+        dataManager.removeProblemListener(this);
+    }
 
 
 

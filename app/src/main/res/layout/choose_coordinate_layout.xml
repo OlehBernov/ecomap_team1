@@ -14,7 +14,8 @@
         android:id="@+id/map_container"
         android:layout_below="@id/tool_bar"
         android:layout_width="match_parent"
-        android:layout_height="500dp">
+        android:layout_height="match_parent"
+        android:layout_alignParentBottom="true">
     </FrameLayout>
 
 

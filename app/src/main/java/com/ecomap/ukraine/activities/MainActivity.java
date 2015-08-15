@@ -1,5 +1,8 @@
 package com.ecomap.ukraine.activities;
 
+import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
@@ -49,6 +52,8 @@ public class MainActivity extends AppCompatActivity {
      */
     private static final String FILTER = "Filter";
 
+
+
     /**
      * Name of map window.
      */
@@ -71,6 +76,13 @@ public class MainActivity extends AppCompatActivity {
     private static final String DEFAULT_DATE_TO = "31-12-2030";
 
     private static final String USER = "User";
+
+
+    final private String alertMessage =
+            "To append a problem you must first be authorized. Authorize?";
+
+    final static   String OK = "OK";
+    final static   String CANCEL = "Cancel";
 
     /**
      * Drawer toggle.
@@ -102,6 +114,8 @@ public class MainActivity extends AppCompatActivity {
     private User user;
 
     private Menu menu;
+
+    private Activity activity = this;
 
     /**
      * Filter manager instance
@@ -472,9 +486,47 @@ public class MainActivity extends AppCompatActivity {
 
     public void openChooseProblemLocationActivity(View view) {
 
-       Intent mainIntent = new Intent(this, ChooseProblemLocationActivity.class);
-        startActivity(mainIntent);
-        finish();
+        if(user == null) {
+            setNotAutorizeDialog();
+        }
+        else {
+            Intent mainIntent = new Intent(this, ChooseProblemLocationActivity.class);
+            startActivity(mainIntent);
+            finish();
+        }
+
+    }
+
+
+    public void setNotAutorizeDialog() {
+        final boolean result = false;
+        AlertDialog.Builder builder = new AlertDialog.Builder(activity);
+
+        builder.setTitle(R.string.Caution);
+        builder.setMessage(alertMessage);
+        builder.setCancelable(false);
+        builder.setIcon(R.drawable.ic_info_outline_black_24dp);
+        builder.setPositiveButton(OK,
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(final DialogInterface dialog,
+                                        final int id) {
+                        Intent mainIntent = new Intent(activity, LoginScreen.class);
+                        startActivity(mainIntent);
+                        finish();
+                    }
+                });
+        builder.setNegativeButton(CANCEL,
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(final DialogInterface dialog,
+                                        final int id) {
+                        dialog.cancel();
+
+                    }
+                });
+        AlertDialog alert = builder.create();
+        alert.show();
 
     }
 }

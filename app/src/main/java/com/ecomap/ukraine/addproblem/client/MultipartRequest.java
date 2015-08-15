@@ -57,7 +57,7 @@ public class MultipartRequest extends Request<String> {
         super(Method.POST, url, errorListener);
 
         mListener = listener;
-        if (mFiles != null) {
+        if (files != null) {
             mFiles = files;
         }
         this.params = params;

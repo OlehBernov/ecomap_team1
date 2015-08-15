@@ -77,6 +77,10 @@ public class AddProblemClient {
                         Log.e("JSONException", "JSONException in parsing json from new problem");
                     }
 
+
+                }
+                else {
+                    addProblemRequestReceiver.setAddProblemRequestResult(true);
                 }
             }
 

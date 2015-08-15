@@ -28,6 +28,7 @@ import com.google.android.gms.maps.UiSettings;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.maps.android.clustering.ClusterManager;
+import com.google.maps.android.clustering.view.DefaultClusterRenderer;
 
 import java.util.List;
 
@@ -45,7 +46,6 @@ public class FragmentEcoMap extends android.support.v4.app.Fragment
     private static final float ON_MARKER_CLICK_ZOOM = 12;
     private ClusterManager<Problem> clusterManager;
     private static List<Problem> problems;
-    private static FragmentEcoMap instance = null;
 
     /**
      * Filter dataManager instance
@@ -174,19 +174,25 @@ public class FragmentEcoMap extends android.support.v4.app.Fragment
      * @param problems list of problems
      */
     public void putAllProblemsOnMap(final List<Problem> problems, FilterState filterState) {
+        googleMap.clear();
+        if (filterState == null) {
+            filterState = filterManager.getFilterStateFromPreference();
+        }
+        List<Problem> filteredProblems = new Filter().filterProblem(problems, filterState);
+
         clusterManager = new ClusterManager<>(getActivity().getApplicationContext(), googleMap);
         googleMap.setOnCameraChangeListener(clusterManager);
         clusterManager.setOnClusterItemClickListener(this);
         googleMap.setOnMarkerClickListener(clusterManager);
-
-        if (filterState == null) {
-            filterState = filterManager.getFilterStateFromPreference();
-        }
-        googleMap.clear();
-        List<Problem> filteredProblems = new Filter().filterProblem(problems, filterState);
         clusterManager.addItems(filteredProblems);
+        
+        if(filteredProblems.size() != 0) {
+            clusterManager.setRenderer(new IconRenderer(getActivity(), googleMap, clusterManager));
+        }
+        else {
+            clusterManager.setRenderer(new DefaultClusterRenderer(getActivity(), googleMap, clusterManager));
+        }
 
-        clusterManager.setRenderer(new IconRenderer(getActivity(), googleMap, clusterManager));
     }
 
     /**

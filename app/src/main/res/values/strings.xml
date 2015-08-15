@@ -51,6 +51,7 @@
     <string name="problem_description">Problem description</string>
     <string name="problem_solution">Proposals to solve the problem</string>
     <string name="send_problem">SEND PROBLEM</string>
+    <string name="Caution">Caution</string>
 
 
     <string-array name="types">
