@@ -1,13 +1,16 @@
 package com.ecomap.ukraine.addproblem.manager;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 
 import com.ecomap.ukraine.account.client.LogInClient;
 import com.ecomap.ukraine.account.manager.LogInListener;
 import com.ecomap.ukraine.addproblem.client.AddProblemClient;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -60,15 +63,12 @@ public class AddProblemManager implements AddProblemRequestReceiver, AddProblemN
 
     public void addProblem (final String title, final String content, final String proposal,
                             final String latitude, final String longitude, final String type,
-                            final String userId, final String userName, final String userSurname) {
+                            final String userId, final String userName, final String userSurname,
+                            final ArrayList<Bitmap> bitmaps) {
         addProblemClient.addProblemDescription(title, content, proposal, latitude, longitude,
-                type, userId, userName, userSurname);
+                type, userId, userName, userSurname, bitmaps);
 
     }
 
-    public void addPhoto (final String userID, final String userName,
-                          final String userSurname , final String description, File file,
-                          String problemID) {
-        addProblemClient.addPhotoToProblem(userID, userName,userSurname, description, file, problemID);
-    }
+
 }

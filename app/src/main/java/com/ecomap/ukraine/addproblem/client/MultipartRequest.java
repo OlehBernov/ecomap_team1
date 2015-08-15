@@ -1,5 +1,6 @@
 package com.ecomap.ukraine.addproblem.client;
 
+import android.graphics.Bitmap;
 import android.util.Log;
 
 import java.io.ByteArrayOutputStream;
@@ -8,7 +9,9 @@ import java.io.File;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.nio.charset.Charset;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 
@@ -16,6 +19,7 @@ import org.apache.http.HttpEntity;
 import org.apache.http.entity.mime.HttpMultipartMode;
 import org.apache.http.entity.mime.MultipartEntity;
 import org.apache.http.entity.mime.MultipartEntityBuilder;
+import org.apache.http.entity.mime.content.ByteArrayBody;
 import org.apache.http.entity.mime.content.FileBody;
 import org.apache.http.entity.ContentType;
 
@@ -46,14 +50,16 @@ public class MultipartRequest extends Request<String> {
     private static final String FILE_PART_NAME = "file";
 
     private final Response.Listener<String> mListener;
-    private final File file;
+    private  ArrayList<Bitmap> mFiles = new ArrayList<>();
     private final HashMap<String, String> params;
 
-    public MultipartRequest(String url, Response.Listener<String> listener, Response.ErrorListener errorListener, File file, HashMap<String, String> params) {
+    public MultipartRequest(String url, Response.Listener<String> listener, Response.ErrorListener errorListener, ArrayList<Bitmap> files, HashMap<String, String> params) {
         super(Method.POST, url, errorListener);
 
         mListener = listener;
-        this.file = file;
+        if (mFiles != null) {
+            mFiles = files;
+        }
         this.params = params;
         buildMultipartEntity();
     }
@@ -70,9 +76,17 @@ public class MultipartRequest extends Request<String> {
 
 
 
+        if(mFiles!=null) {
+            int i = 0;
+            for (Bitmap image : mFiles) {
 
-        if(file != null) {
-            builder.addPart(FILE_PART_NAME, new FileBody(file, "image/jpeg"));
+        /*Compress bitmap*/
+                ByteArrayOutputStream bos = new ByteArrayOutputStream();
+                image.compress(Bitmap.CompressFormat.JPEG, 50, bos);
+
+                builder.addPart("file[" + i + "]", new ByteArrayBody(bos.toByteArray(), "image_" + i));
+                i++;
+            }
         }
         builder.setCharset(chars);
         try {
@@ -101,16 +115,7 @@ public class MultipartRequest extends Request<String> {
         }
         return bos.toByteArray();
 
-        /*try {
-            dataOutputStream.writeBytes(REQUEST_HEADER);
-            for (Map.Entry<String, String> entry : params.entrySet()) {
-                dataOutputStream.writeBytes(PARAM_TEMPLATE + entry.getKey() + "\"\n\n" + entry.getValue()+"\n");
-            }
-        }
-        catch (IOException e) {
 
-        }
-            return bos.toByteArray();*/
 
         }
 

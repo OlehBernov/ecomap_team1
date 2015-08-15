@@ -53,6 +53,7 @@ public class AddNewProblemDecriptionActivity extends AppCompatActivity  {
 
     private Uri currentPhotoUri;
     private List<String> userPhotos;
+    private ArrayList<Bitmap> bitmapsPhoto;
 
     //private DataManager dataManager;
 
@@ -65,6 +66,10 @@ public class AddNewProblemDecriptionActivity extends AppCompatActivity  {
     CharSequence Titles[]={"Description","Photo"};
     int Numboftabs =2;
 
+
+    public ArrayList<Bitmap> getBitmapsPhoto () {
+        return bitmapsPhoto;
+    }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -72,14 +77,13 @@ public class AddNewProblemDecriptionActivity extends AppCompatActivity  {
         setupToolbar();
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
 
-        // Creating The Toolbar and setting it as the Toolbar for the activity
 
         toolbar = (Toolbar) findViewById(R.id.tool_bar);
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 onBackPressed();
-                //System.exit(0);
+
 
             }
         });
@@ -127,7 +131,7 @@ public class AddNewProblemDecriptionActivity extends AppCompatActivity  {
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_confirm_problem) {
-            Tab1.getInstance().sendProblem();
+            Tab1.getInstance(getBitmapsPhoto()).sendProblem();
             return true;
         }
 
@@ -274,6 +278,8 @@ public class AddNewProblemDecriptionActivity extends AppCompatActivity  {
             @Override
             public void onClick(View view) {
                 List<Bitmap> bitmaps = getBitmapsFromPath(userPhotos);
+                bitmapsPhoto = (ArrayList)bitmaps;
+                Tab1.getInstance(bitmapsPhoto);
                 PhotoSlidePagerActivity.setContent(bitmaps);
                 Intent intent = new Intent(AddNewProblemDecriptionActivity.this,
                         PhotoSlidePagerActivity.class);
@@ -315,5 +321,6 @@ public class AddNewProblemDecriptionActivity extends AppCompatActivity  {
         File storageDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
         return File.createTempFile(imageFileName, PHOTO_FORMAT, storageDir);
     }
+
 
 }

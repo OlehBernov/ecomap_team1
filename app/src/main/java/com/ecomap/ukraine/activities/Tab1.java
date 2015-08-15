@@ -3,6 +3,7 @@ package com.ecomap.ukraine.activities;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -18,18 +19,15 @@ import android.widget.Toast;
 import com.ecomap.ukraine.R;
 import com.ecomap.ukraine.account.manager.AccountManager;
 import com.ecomap.ukraine.account.manager.LogInListener;
-import com.ecomap.ukraine.addproblem.client.AddProblemClient;
 import com.ecomap.ukraine.addproblem.manager.AddProblemListener;
 import com.ecomap.ukraine.addproblem.manager.AddProblemManager;
 import com.ecomap.ukraine.data.manager.DataManager;
-import com.ecomap.ukraine.data.manager.ProblemListener;
-import com.ecomap.ukraine.models.Details;
-import com.ecomap.ukraine.models.Problem;
 import com.ecomap.ukraine.models.User;
 import com.ecomap.ukraine.validation.Validator;
 
-import java.io.File;
-import java.util.List;
+
+import java.util.ArrayList;
+
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -56,8 +54,8 @@ public class Tab1 extends Fragment implements LogInListener, AddProblemListener 
 
     AccountManager accountManager;
 
-    //final ProgressDialog progressDialog = new ProgressDialog(getActivity().getApplicationContext(),
-         //   android.R.style.Theme_Holo_Light_Panel);
+    private static ArrayList<Bitmap> bitmapPhotos;
+
 
 
     @InjectView(R.id.problemTitle) EditText problemTitle;
@@ -75,10 +73,12 @@ public class Tab1 extends Fragment implements LogInListener, AddProblemListener 
         }
     };
 
-    public static Tab1 getInstance() {
+    public static Tab1 getInstance(ArrayList<Bitmap> bitmapPhotos) {
         if (instance == null) {
             instance = new Tab1();
         }
+        if(bitmapPhotos != null)
+        Tab1.bitmapPhotos = bitmapPhotos;
         return instance;
     }
 
@@ -90,6 +90,7 @@ public class Tab1 extends Fragment implements LogInListener, AddProblemListener 
         super.onDestroy();
         accountManager.removeLogInListener(this);
         addProblemManager.removeAddProblemListener(this);
+
     }
 
 
@@ -133,14 +134,14 @@ public class Tab1 extends Fragment implements LogInListener, AddProblemListener 
         String title = problemTitle.getText().toString();
         String description = problemDescription.getText().toString();
         String solution = problemSolution.getText().toString();
-        String latitude = String.valueOf(51.27);
-        String longitude = String.valueOf(30.222);
+        String latitude = String.valueOf(46.2);
+        String longitude = String.valueOf(31.47);
         String type = String.valueOf(spinner.getSelectedItemId() + 1);
         showProgresDialog();
         addProblemManager.addProblem(title, description, solution, latitude, longitude, type, USER_ID,
-                USER_NAME, USER_SURNAME);
-       /* File file = new File("D:\\ic_launcher.jpg");
-        addProblemManager.addPhoto("232", "Alexandr", "Supertramp", "Сміття", file, "450");*/
+                USER_NAME, USER_SURNAME, bitmapPhotos);
+        bitmapPhotos = null;
+
 
         }
 
