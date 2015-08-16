@@ -7,10 +7,13 @@ import android.support.v7.app.AppCompatActivity;
 import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewTreeObserver;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -29,6 +32,8 @@ public class SignupActivity extends AppCompatActivity implements LogInListener {
     private static final String CREATING_ACCOUNT = "Creating Account...";
     private static final String SIGN_UP_FAILED = "Sign Up failed";
 
+    private ScrollView scrollView;
+    private ScrollView background;
     private Intent mainIntent;
 
     private AccountManager accountManager;
@@ -60,6 +65,19 @@ public class SignupActivity extends AppCompatActivity implements LogInListener {
         emailText.setOnFocusChangeListener(focusChangeListener);
         passwordText.setOnFocusChangeListener(focusChangeListener);
         passwordConfirmText.setOnFocusChangeListener(focusChangeListener);
+
+        scrollView = (ScrollView) findViewById(R.id.scroll_view);
+        background = (ScrollView) findViewById(R.id.background_layout);
+        scrollView.setVerticalScrollBarEnabled(false);
+        background.setVerticalScrollBarEnabled(false);
+
+        scrollView.getViewTreeObserver()
+                .addOnScrollChangedListener(new ViewTreeObserver.OnScrollChangedListener() {
+            @Override
+            public void onScrollChanged() {
+                background.setScrollY(((int) (scrollView.getScrollY() * 0.5)));
+            }
+        });
 
         mainIntent = new Intent(this, MainActivity.class);
 

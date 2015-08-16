@@ -97,6 +97,5 @@ public class FragmentChooseCoordMap extends android.support.v4.app.Fragment {
         googleMap.setMyLocationEnabled(true);
         settings.setMyLocationButtonEnabled(true);
 
-
     }
 }
