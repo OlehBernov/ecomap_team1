@@ -4,6 +4,12 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
+import android.media.ExifInterface;
+import android.util.Log;
+
+import com.ecomap.ukraine.R;
+
+import java.io.IOException;
 
 
 public class BitmapResizer {
@@ -39,6 +45,30 @@ public class BitmapResizer {
         bmOptions.inSampleSize = scaleFactor;
 
         return BitmapFactory.decodeFile(photoPath, bmOptions);
+    }
+
+    public Bitmap changePhotoOrientation(String photoPath, int bounds) {
+        BitmapResizer bitmapResizer =  new BitmapResizer(context);
+        int photoBounds = bounds;
+        Bitmap photoBitmap = bitmapResizer.scalePhoto(photoPath, photoBounds);
+        ExifInterface exifInterface;
+        try {
+            exifInterface = new ExifInterface(photoPath);
+        } catch (IOException e) {
+            Log.e("IOException", "change photo orientation");
+            return photoBitmap;
+        }
+
+        int orientation = exifInterface.getAttributeInt(ExifInterface.TAG_ORIENTATION,
+                ExifInterface.ORIENTATION_NORMAL);
+        if (orientation == ExifInterface.ORIENTATION_ROTATE_90) {
+            Matrix matrix = new Matrix();
+            matrix.postRotate(90);
+            return Bitmap.createBitmap(photoBitmap, 0, 0, photoBitmap.getWidth(),
+                    photoBitmap.getHeight(), matrix, true);
+        } else {
+            return photoBitmap;
+        }
     }
 
     private int dpToPx(final int dp) {

@@ -75,11 +75,13 @@
             android:theme="@android:style/Theme.Translucent.NoTitleBar" />
         <activity
             android:name=".activities.ProblemPhotoSlidePager"
-            android:label="@string/title_activity_problem_photo_slide_pager" >
+            android:label="@string/title_activity_problem_photo_slide_pager"
+            android:screenOrientation="portrait">
         </activity>
         <activity
             android:name=".activities.UserPhotoFullScreen"
-            android:label="@string/title_activity_user_photo_full_screen" >
+            android:label="@string/title_activity_user_photo_full_screen"
+            android:screenOrientation="portrait">
         </activity>
     </application>
 

@@ -311,11 +311,10 @@ public class AddNewProblemDecriptionActivity extends AppCompatActivity  {
         photoDescriptionLayout = (TableLayout) findViewById(R.id.photo_descriptions);
         for (int i = 0; i < userPhotos.size(); i++) {
 
-            Bitmap photoBitmap = changePhotoOrientation(userPhotos.get(i));
             setDeleteButton(i);
             TableRow activityRow = new TableRow(getApplicationContext());
 
-            activityRow.addView(buildUserPhoto(photoBitmap));
+            activityRow.addView(buildUserPhoto(userPhotos.get(i)));
             activityRow.addView(buildPhotoDescription(i));
             photoDescriptionLayout.addView(activityRow);
         }
@@ -354,54 +353,30 @@ public class AddNewProblemDecriptionActivity extends AppCompatActivity  {
         return photoDescriptionParams;
     }
 
-    private ImageView buildUserPhoto(final Bitmap photoBitmap) {
+    private ImageView buildUserPhoto(final String photoPath) {
+        BitmapResizer bitmapResizer = new BitmapResizer(getApplicationContext());
+        int photoBounds = (int) getResources().getDimension(R.dimen.edit_text_add_photo);
+        Bitmap photoBitmap = bitmapResizer.changePhotoOrientation(photoPath, photoBounds);
         TableRow.LayoutParams imageParams =
                 new TableRow.LayoutParams(photoBitmap.getWidth(),
-                        photoBitmap.getHeight());
+                                          photoBitmap.getHeight());
         ImageView photoView = new ImageView(getApplicationContext());
         photoView.setImageBitmap(photoBitmap);
         photoView.setLayoutParams(imageParams);
         photoView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                showFullSizePhoto(photoBitmap);
+                showFullSizePhoto(photoPath);
             }
         });
 
         return photoView;
     }
 
-    private void showFullSizePhoto(Bitmap photoBitmap) {
+    private void showFullSizePhoto(String photoPath) {
         Intent intent = new Intent (this, UserPhotoFullScreen.class);
-        ByteArrayOutputStream blob = new ByteArrayOutputStream();
-        photoBitmap.compress(Bitmap.CompressFormat.PNG, 0, blob);
-        byte[] photoByteArray = blob.toByteArray();
-        intent.putExtra("photo", photoByteArray);
+        intent.putExtra("photo", photoPath);
         startActivity(intent);
-    }
-
-    private Bitmap changePhotoOrientation(String photoPath) {
-        BitmapResizer bitmapResizer =  new BitmapResizer(getApplicationContext());
-        int photoBounds = (int) getResources().getDimension(R.dimen.edit_text_add_photo);
-        Bitmap photoBitmap = bitmapResizer.scalePhoto(photoPath, photoBounds);
-        ExifInterface exifInterface;
-        try {
-            exifInterface = new ExifInterface(photoPath);
-        } catch (IOException e) {
-            Log.e("IOException", "change photo orientation");
-            return photoBitmap;
-        }
-
-        int orientation = exifInterface.getAttributeInt(ExifInterface.TAG_ORIENTATION,
-                ExifInterface.ORIENTATION_NORMAL);
-        if (orientation == ExifInterface.ORIENTATION_ROTATE_90) {
-            Matrix matrix = new Matrix();
-            matrix.postRotate(DEGREE_90);
-            return Bitmap.createBitmap(photoBitmap, 0, 0, photoBitmap.getWidth(),
-                    photoBitmap.getHeight(), matrix, true);
-        } else {
-            return photoBitmap;
-        }
     }
 
     private void setDeleteButton(int buttonId) {
@@ -411,7 +386,6 @@ public class AddNewProblemDecriptionActivity extends AppCompatActivity  {
         deleteButton.setImageDrawable(ContextCompat.getDrawable(getApplicationContext(),
                 R.drawable.delete));
         deleteButton.setBackgroundColor(getResources().getColor(R.color.white));
-     //   deleteButton.setLayoutParams(setDeleteButtonParams());
         addListenerOnDeleteButton(deleteButton);
 
         RelativeLayout buttonLayout = new RelativeLayout(getApplicationContext());
@@ -470,7 +444,6 @@ public class AddNewProblemDecriptionActivity extends AppCompatActivity  {
         File storageDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
         return File.createTempFile(imageFileName, PHOTO_FORMAT, storageDir);
     }
-
 
     @Override
     public void onBackPressed() {

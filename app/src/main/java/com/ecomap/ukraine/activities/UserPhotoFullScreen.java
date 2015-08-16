@@ -18,11 +18,10 @@ public class UserPhotoFullScreen extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_photo_full_screen);
         ImageView userPhoto = (ImageView) findViewById(R.id.user_photo);
-        byte[] photoByteArray = getIntent().getByteArrayExtra("photo");
-        Bitmap photoBitmap = BitmapFactory.decodeByteArray(photoByteArray, 0, photoByteArray.length);
+        String photoPath = getIntent().getStringExtra("photo");
         BitmapResizer bitmapResizer = new BitmapResizer(getApplicationContext());
         int screenWidth = getResources().getDisplayMetrics().widthPixels;
-        photoBitmap = bitmapResizer.resizeBitmap(photoBitmap, screenWidth);
+        Bitmap photoBitmap = bitmapResizer.changePhotoOrientation(photoPath, screenWidth);
         userPhoto.setImageBitmap(photoBitmap);
     }
 
