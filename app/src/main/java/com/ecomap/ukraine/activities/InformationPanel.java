@@ -375,7 +375,7 @@ public class InformationPanel {
                     return false;
                 }
                 if (scrollView.getScrollY() == 0 && dragingDown(event)) {
-                    slidingUpPanelLayout.onTouchEvent(event);
+                    slidingUpPanelLayout.onTouchEvent(remapToParentLayout(event));
                     return true;
                 }
                 return isScrollDisable;
@@ -390,6 +390,18 @@ public class InformationPanel {
                     return false;
                 }
             }
+
+            private MotionEvent remapToParentLayout(MotionEvent event) {
+                return MotionEvent.obtain(
+                        event.getDownTime(),
+                        event.getEventTime(),
+                        event.getAction(),
+                        event.getRawX(),
+                        event.getRawY(),
+                        event.getMetaState()
+                    );
+            }
+
         });
     }
 
