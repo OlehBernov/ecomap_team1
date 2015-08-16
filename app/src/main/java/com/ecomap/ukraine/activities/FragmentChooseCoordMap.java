@@ -1,6 +1,8 @@
 package com.ecomap.ukraine.activities;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,8 +15,12 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.MapsInitializer;
 import com.google.android.gms.maps.UiSettings;
+import com.google.android.gms.maps.model.BitmapDescriptor;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
+import com.google.android.gms.maps.model.MarkerOptions;
 
 /**
  * Created by Andriy on 11.08.2015.
@@ -23,6 +29,9 @@ public class FragmentChooseCoordMap extends android.support.v4.app.Fragment {
 
     private GoogleMap googleMap;
     private MapView mapView;
+
+    private boolean markerPlaced;
+    private LatLng markerPosition;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -36,7 +45,33 @@ public class FragmentChooseCoordMap extends android.support.v4.app.Fragment {
 
         MapsInitializer.initialize(getActivity().getApplicationContext());
         this.setUpMapIfNeeded();
+        googleMap.setOnMarkerDragListener(new GoogleMap.OnMarkerDragListener() {
+            @Override
+            public void onMarkerDragStart(Marker marker) {}
 
+            @Override
+            public void onMarkerDrag(Marker marker) {}
+
+            @Override
+            public void onMarkerDragEnd(Marker marker) {
+                markerPosition = marker.getPosition();
+            }
+        });
+        googleMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
+            @Override
+            public void onMapClick(LatLng latLng) {
+                if (markerPlaced) {
+                    googleMap.clear();
+                }
+                googleMap.addMarker(new MarkerOptions()
+                        .draggable(true).position(latLng)
+                        .icon(BitmapDescriptorFactory.fromResource(R.drawable.type0))
+                        .anchor(0.5F, 1));
+                markerPlaced = true;
+                markerPosition = latLng;
+
+            }
+        });
         return rootView;
     }
 

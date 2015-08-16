@@ -1,22 +1,32 @@
 package com.ecomap.ukraine.activities;
 
+import android.animation.ValueAnimator;
 import android.app.Activity;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.ColorStateList;
 import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.graphics.Matrix;
 import android.graphics.drawable.Drawable;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.content.res.ResourcesCompat;
+import android.support.v4.view.GravityCompat;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
 import android.view.Gravity;
+import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.animation.DecelerateInterpolator;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TableLayout;
 import android.widget.TableRow;
@@ -35,6 +45,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import butterknife.InjectView;
+
 public class InformationPanel {
 
     private static final float ANCHOR_POINT = 0.3f;
@@ -51,9 +63,16 @@ public class InformationPanel {
 
     private static final int ACTIVITY_ICON_WIDTH = 75;
     private static final int ACTIVITY_ICON_HEIGHT = 75;
+    private static final int PHOTO_BOUNDS = 150;
+    private static final float COLLAPSE_OFFSET = 0.9F;
+
+    private static float currentTitleAlpha = 1;
+
+    private FloatingActionButton fab;
 
     private SlidingUpPanelLayout slidingUpPanelLayout;
     private ScrollView scrollView;
+    private LinearLayout layout;
 
     private Problem problem;
     private Activity activity;
@@ -63,6 +82,7 @@ public class InformationPanel {
     private TextView problemStatus;
     private TextView userInformation;
     private TextView votesNumber;
+    EditText commentText;
 
     private TextView descriptionFiled;
     private TextView proposalFiled;
@@ -71,12 +91,13 @@ public class InformationPanel {
 
     private TextView titleView;
     private Toolbar toolbar;
-
     private Context context;
 
     private boolean isScrollDisable;
+    private float fabStartingPosition;
 
     private static int[] STARS_ID = {R.id.star1, R.id.star2, R.id.star3, R.id.star4, R.id.star5};
+    private float currentOffset;
 
     /**
      * Constructor
@@ -104,21 +125,119 @@ public class InformationPanel {
         proposalFiled = (TextView) activity.findViewById(R.id.proposal_field);
         activitiesLayout = (TableLayout) activity.findViewById(R.id.activities);
         addComment = (EditText) activity.findViewById(R.id.add_comment);
+        commentText = (EditText) activity.findViewById(R.id.add_comment);
 
         slidingUpPanelLayout.setAnchorPoint(ANCHOR_POINT);
         slidingUpPanelLayout.setPanelState(SlidingUpPanelLayout.PanelState.ANCHORED);
 
         titleView = (TextView) activity.findViewById(R.id.details_title);
         toolbar.setBackgroundColor(0xff004d40);
+        fab = (FloatingActionButton)activity.findViewById(R.id.fab2);
 
         slidingUpPanelLayout = (SlidingUpPanelLayout) activity.findViewById(R.id.sliding_layout);
         slidingUpPanelLayout.setPanelSlideListener(new SlidingUpPanelLayout.PanelSlideListener() {
+            public static final int TRANSPARENT_WHITE_COLOR = 0x00ffffff;
 
             @Override
             public void onPanelSlide(View view, float v) {
+                slidingUpPanelLayout.setCoveredFadeColor(TRANSPARENT_WHITE_COLOR);
                 rescaleText(v);
-                moveToolbar(v);
+                animateMenuIcon(v);
+                moveFab(v);
+//                hideFab();
+                if (v > slidingUpPanelLayout.getAnchorPoint()) {
+                    slidingUpPanelLayout.setCoveredFadeColor(0xff004d40);
+                    backgroundResolver(v);
+                }
+                if (v > COLLAPSE_OFFSET) {
+                    titleTransforming(v);
+                }
+//                isScrollDisable = (v != 1);
+                currentOffset = v;
             }
+
+
+            public void backgroundResolver(float v) {
+                float anchor = slidingUpPanelLayout.getAnchorPoint();
+                int alpha = (int) (255 * Math.max((COLLAPSE_OFFSET - v)
+                        / (COLLAPSE_OFFSET - anchor), 0));
+                alpha = Math.min(alpha, 255);
+                layout = (LinearLayout) activity.findViewById(R.id.sliding_linear_layout);
+                toolbar.getBackground().setAlpha(alpha);
+                layout.getBackground().setAlpha(alpha);
+            }
+
+            public void titleTransforming(float v) {
+                currentTitleAlpha = calculateAlpha(v);
+                changeTitleTransparency(currentTitleAlpha);
+                changeFilterIconTransparency(currentTitleAlpha);
+            }
+
+            private float calculateAlpha(float v) {
+                return Math.min((1 - v) / (1 - COLLAPSE_OFFSET), 1);
+            }
+
+            private void animateMenuIcon(float v) {
+                MainActivity mainActivity = (MainActivity) activity;
+                ActionBarDrawerToggle drawerToggle = mainActivity.drawerToggle;
+                drawerToggle.onDrawerSlide(null, 1 - calculateAlpha(v));
+                if (v == 1) {
+                    toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            activity.onBackPressed();
+                        }
+                    });
+                } else {
+                    final DrawerLayout drawerLayout = (DrawerLayout) activity.findViewById(R.id.drawer);
+                    toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            drawerLayout.openDrawer(GravityCompat.START);
+                        }
+                    });
+                }
+            }
+
+            private void changeTitleTransparency(float alpha) {
+                int alphaChanel = (int) (alpha * 255) * 0x01000000;
+                int newColorCode = TRANSPARENT_WHITE_COLOR | alphaChanel;
+                toolbar.setTitleTextColor(newColorCode);
+            }
+
+            private void changeFilterIconTransparency(float alpha) {
+                MenuItem item = toolbar.getMenu().findItem(R.id.action_find_location);
+                item.getIcon().setAlpha((int) (255 * alpha));
+            }
+
+            private void moveFab(float v) {
+                if (newFabPosition(v) != 0) {
+//                    fab.setImageAlpha();
+                    fab.setImageResource(R.drawable.ic_refresh_white_24dp);
+                    fab.setBackgroundTintList(ColorStateList.valueOf(0xff440044));
+                    fab.setTranslationY(newFabPosition(v));
+                } else if (v > COLLAPSE_OFFSET) {
+
+                } else {
+                    fab.setImageResource(R.drawable.ic_add_white_24dp);
+                    fab.setBackgroundTintList(ColorStateList.valueOf(0xff004d40));
+                }
+            }
+
+            private float newFabPosition(float v) {
+                float edgeY = convertToPixels(1 - v) + toolbar.getHeight();
+                float fabTranslationY = fab.getTranslationY();
+                float fabDefaultCenterY = fab.getY() + fab.getHeight() / 2 + fab.getPaddingTop() - fabTranslationY;
+                if (edgeY < fabDefaultCenterY) {
+                    return edgeY - fabDefaultCenterY;
+                }
+                return 0;
+            }
+
+            private float getFabCenterY() {
+                return fab.getY() + fab.getHeight() / 2;
+            }
+
 
             @Override
             public void onPanelCollapsed(View view) {
@@ -128,28 +247,37 @@ public class InformationPanel {
             }
 
             private void setToolbarInitialState() {
-                toolbar.setTitle(ECOMAP_UKRAINE);
                 toolbar.setBackgroundColor(0xff004d40);
+                if (currentTitleAlpha != 1) {
+                    ValueAnimator animator = ValueAnimator.ofFloat(currentTitleAlpha, 1);
+                    animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+                        @Override
+                        public void onAnimationUpdate(ValueAnimator animation) {
+                            float alpha = (Float) animation.getAnimatedValue();
+                            changeFilterIconTransparency(alpha);
+                            changeTitleTransparency(alpha);
+                            currentTitleAlpha = alpha;
+                        }
+                    });
+                    animator.setInterpolator(new DecelerateInterpolator(1));
+                    animator.start();
+                }
+                toolbar.getMenu().findItem(R.id.action_find_location).setEnabled(true);
             }
 
             @Override
             public void onPanelExpanded(View view) {
                 scrollView.setVerticalScrollBarEnabled(true);
                 isScrollDisable = false;
-                setToolbarTransparent();
             }
 
-            private void setToolbarTransparent() {
-                toolbar.setBackgroundColor(0x00000000);
-                toolbar.setTitle("");
-                toolbar.setTranslationY(0);
-            }
 
             @Override
             public void onPanelAnchored(View view) {
                 scrollView.setVerticalScrollBarEnabled(false);
                 slidingUpPanelLayout.setCoveredFadeColor(0x00000000);
                 scrollView.fullScroll(ScrollView.FOCUS_UP);
+                setToolbarInitialState();
                 isScrollDisable = true;
             }
 
@@ -181,6 +309,33 @@ public class InformationPanel {
                 int displayHeightInPixels = activity.getResources()
                         .getDisplayMetrics().heightPixels;
                 return (int) (value * displayHeightInPixels);
+            }
+        });
+
+        scrollView.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                String s = new String("new");
+                return false;
+            }
+        });
+
+        slidingUpPanelLayout.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                String s = new String("new");
+                return false;
+            }
+        });
+
+
+        commentText.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                v.findFocus();
+                InputMethodManager imm = (InputMethodManager)
+                        activity.getSystemService(Context.INPUT_METHOD_SERVICE);
+                imm.showSoftInput(v, InputMethodManager.SHOW_IMPLICIT);
             }
         });
 

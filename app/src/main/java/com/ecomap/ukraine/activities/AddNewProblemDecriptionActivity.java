@@ -105,8 +105,6 @@ public class AddNewProblemDecriptionActivity extends AppCompatActivity  {
             @Override
             public void onClick(View v) {
                 onBackPressed();
-
-
             }
         });
 
