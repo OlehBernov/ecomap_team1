@@ -60,6 +60,10 @@ public class Tab1 extends Fragment implements LogInListener, AddProblemListener,
 
     private static ArrayList<Bitmap> bitmapPhotos;
 
+    private  Intent intent;
+
+    private User user;
+
 
 
     @InjectView(R.id.problemTitle) EditText problemTitle;
@@ -91,6 +95,7 @@ public class Tab1 extends Fragment implements LogInListener, AddProblemListener,
         this.USER_ID = "";
         this.USER_NAME = "";
         this.USER_SURNAME = "";
+
 
     }
 
@@ -158,6 +163,8 @@ public class Tab1 extends Fragment implements LogInListener, AddProblemListener,
         USER_ID = String.valueOf(user.getId());
         USER_NAME = String.valueOf(user.getName());
         USER_SURNAME = String.valueOf(user.getSurname());
+        this.user = user;
+
     }
 
     @Override
@@ -191,7 +198,8 @@ public class Tab1 extends Fragment implements LogInListener, AddProblemListener,
     @Override
     public void updateAllProblems(final List<Problem> problems) {
         Toast.makeText(getActivity().getApplicationContext(), "Problem added sucessfully", Toast.LENGTH_LONG) .show();
-        Intent intent =new Intent(getActivity(), MainActivity.class);
+        intent = new Intent(getActivity(), MainActivity.class);
+        intent.putExtra("User", user);
         startActivity(intent);
         getActivity().finish();
         dataManager.removeProblemListener(this);
