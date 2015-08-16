@@ -1,6 +1,5 @@
 package com.ecomap.ukraine.activities;
 
-import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
 import android.app.Activity;
 
@@ -9,10 +8,8 @@ import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.graphics.Bitmap;
 import android.graphics.Color;
-import android.graphics.Matrix;
 import android.graphics.drawable.Drawable;
 import android.support.design.widget.FloatingActionButton;
-import android.support.v4.content.ContextCompat;
 import android.support.v4.content.res.ResourcesCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -24,7 +21,6 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.animation.DecelerateInterpolator;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -48,8 +44,6 @@ import com.squareup.picasso.Transformation;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-
-import butterknife.InjectView;
 
 public class InformationPanel {
 
@@ -256,7 +250,7 @@ public class InformationPanel {
                 fab.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        ((MainActivity)activity).animateButton(fab);
+                        ((MainActivity) activity).animateButton(fab);
                     }
                 });
                 fab.setTranslationY(0);
@@ -373,9 +367,28 @@ public class InformationPanel {
         scrollView.fullScroll(ScrollView.FOCUS_UP);
         scrollView.setVerticalScrollBarEnabled(false);
         scrollView.setOnTouchListener(new View.OnTouchListener() {
+            float previousY;
             @Override
             public boolean onTouch(View v, MotionEvent event) {
+                if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                    previousY = event.getY();
+                    return false;
+                }
+                if (scrollView.getScrollY() == 0 && dragingDown(event)) {
+                    slidingUpPanelLayout.onTouchEvent(event);
+                    return true;
+                }
                 return isScrollDisable;
+            }
+
+            private boolean dragingDown(MotionEvent event) {
+                if (previousY < event.getY()) {
+                    previousY = event.getY();
+                    return true;
+                } else {
+                    previousY = event.getY();
+                    return false;
+                }
             }
         });
     }

@@ -93,6 +93,9 @@ public class MainActivity extends AppCompatActivity {
     private static final String USER = "User";
 
 
+    private static final float ANCHOR_POINT = 0.3f;
+
+
     final private String alertMessage =
             "To append a problem you must first be authorized. Authorize?";
 
@@ -103,6 +106,8 @@ public class MainActivity extends AppCompatActivity {
      * Drawer toggle.
      */
     public ActionBarDrawerToggle drawerToggle;
+
+    public boolean problemAddingMenu;
 
     /**
      * Filter layout.
@@ -173,7 +178,7 @@ public class MainActivity extends AppCompatActivity {
         setUserInformation(user);
 
         slidingUpPanelLayout = (SlidingUpPanelLayout) findViewById(R.id.sliding_layout);
-        slidingUpPanelLayout.setAnchorPoint(0.5f);
+        slidingUpPanelLayout.setAnchorPoint(ANCHOR_POINT);
         slidingUpPanelLayout.setDragView(R.id.sliding_linear_layout);
 
         this.addMapFragment();
@@ -273,6 +278,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void animateButton(final FloatingActionButton fab) {
+        problemAddingMenu = true;
+        slidingUpPanelLayout.setPanelState(SlidingUpPanelLayout.PanelState.HIDDEN);
         Interpolator curveInterpolator = PathInterpolatorCompat.create(1, 0);
         AnimatorSet animator = new AnimatorSet();
         ObjectAnimator movementX
@@ -335,6 +342,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void reverseAnimateReavel(final View v) {
+        problemAddingMenu = false;
         final View myView = findViewById(R.id.ll_reveal);
 
         int cx = (int)((fab.getX() + fab.getHeight() / 2));

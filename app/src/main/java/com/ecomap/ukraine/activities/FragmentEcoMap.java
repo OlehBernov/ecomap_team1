@@ -232,11 +232,13 @@ public class FragmentEcoMap extends android.support.v4.app.Fragment
      */
     @Override
     public boolean onClusterItemClick(final Problem problem) {
-        informationPanel = new InformationPanel(activity, problem);
-        dataManager.getProblemDetail(problem.getProblemId());
-        moveCameraToProblem(problem);
-
-        return true;
+        if (!((MainActivity)activity).problemAddingMenu) {
+            informationPanel = new InformationPanel(activity, problem);
+            dataManager.getProblemDetail(problem.getProblemId());
+            moveCameraToProblem(problem);
+            return true;
+        }
+        return false;
     }
 
     /**
