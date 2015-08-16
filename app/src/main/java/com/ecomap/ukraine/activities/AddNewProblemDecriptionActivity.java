@@ -38,6 +38,7 @@ import com.ecomap.ukraine.data.manager.DataManager;
 import com.ecomap.ukraine.data.manager.ProblemListener;
 import com.ecomap.ukraine.models.Details;
 import com.ecomap.ukraine.models.Problem;
+import com.ecomap.ukraine.models.User;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -71,6 +72,8 @@ public class AddNewProblemDecriptionActivity extends AppCompatActivity  {
     private TableLayout photoDescriptionLayout;
     private List<String> descriptions;
 
+    private User user;
+
     //private DataManager dataManager;
 
     // Declaring Your View and Variables
@@ -95,6 +98,7 @@ public class AddNewProblemDecriptionActivity extends AppCompatActivity  {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        user = (User) getIntent().getSerializableExtra("User");
 
 
         setContentView(R.layout.add_problem_description);
@@ -317,6 +321,7 @@ public class AddNewProblemDecriptionActivity extends AppCompatActivity  {
             activityRow.addView(buildUserPhoto(photoBitmap));
             activityRow.addView(buildPhotoDescription(i));
             photoDescriptionLayout.addView(activityRow);
+            Tab1.getInstance(getBitmapsPhoto());
         }
     }
 
@@ -436,6 +441,15 @@ public class AddNewProblemDecriptionActivity extends AppCompatActivity  {
         String imageFileName = FILE_NAME_BEGINNING + timeStamp + "_";
         File storageDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
         return File.createTempFile(imageFileName, PHOTO_FORMAT, storageDir);
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        Intent mainIntent = new Intent(this, ChooseProblemLocationActivity.class);
+        mainIntent.putExtra("User", user);
+        startActivity(mainIntent);
+        finish();
     }
 
 }

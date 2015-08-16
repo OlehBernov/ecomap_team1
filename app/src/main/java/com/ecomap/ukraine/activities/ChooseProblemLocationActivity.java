@@ -30,7 +30,7 @@ public class ChooseProblemLocationActivity extends AppCompatActivity {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.choose_coordinate_layout);
-        user = (User) getIntent().getSerializableExtra("user");
+        user = (User) getIntent().getSerializableExtra("User");
 
         addMapFragment();
         setupToolbar();
@@ -61,7 +61,7 @@ public class ChooseProblemLocationActivity extends AppCompatActivity {
 
     public void openAddDescriptionActivity (View view) {
         mainIntent = new Intent(this, AddNewProblemDecriptionActivity.class);
-
+        mainIntent.putExtra("User", user);
         startActivity(mainIntent);
         finish();
 

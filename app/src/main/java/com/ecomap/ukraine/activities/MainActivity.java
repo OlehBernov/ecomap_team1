@@ -648,7 +648,7 @@ public class MainActivity extends AppCompatActivity {
         }
         else {
             Intent intent = new Intent(this, ChooseProblemLocationActivity.class);
-            intent.putExtra("user", user);
+            intent.putExtra("User", user);
             startActivity(intent);
             finish();
         }
