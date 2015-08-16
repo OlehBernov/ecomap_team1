@@ -12,7 +12,7 @@
     <color name="divider">#B6B6B6</color>
 
 
-    <style name="Add_problem_theme" parent="Base.ThemeOverlay.AppCompat.Dark">
+    <style name="Add_problem_theme" parent="Base.ThemeOverlay.AppCompat">
     </style>
 
 
@@ -23,7 +23,7 @@
     </style>
 
     <style name="Base.Theme.DesignDemo" parent="Theme.AppCompat.Light.NoActionBar">
-        <item name="android:windowBackground">@color/window_background</item>
+        <item name="android:windowBackground">@color/white</item>
 
     </style>
 
@@ -35,6 +35,7 @@
     </style>
 
     <style name="DrawerArrowStyle" parent="Widget.AppCompat.DrawerArrowToggle">
+        <item name="android:textColorSecondary">#ffffff</item>
         <item name="spinBars">true</item>
     </style>
 
@@ -58,8 +59,8 @@
 
         <item name="android:textColorHint">@color/secondary_text</item>
         <item name="colorAccent">@color/ColorPrimary</item>
-        <item name="android:editTextColor">@color/primary_text</item>
-        <item name="android:textColor">@color/primary_text</item>
+        <item name="android:editTextColor">@color/white</item>
+        <item name="android:textColor">@color/white</item>
         <item name="android:textColorPrimary">@color/white</item>
 
 

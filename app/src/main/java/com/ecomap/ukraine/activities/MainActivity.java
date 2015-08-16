@@ -1,5 +1,9 @@
 package com.ecomap.ukraine.activities;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
+import android.animation.AnimatorSet;
+import android.animation.ObjectAnimator;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -7,8 +11,10 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.graphics.drawable.ColorDrawable;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.GravityCompat;
+import android.support.v4.view.animation.PathInterpolatorCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.os.Bundle;
@@ -20,7 +26,10 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewPropertyAnimator;
 import android.view.WindowManager;
+import android.view.animation.AccelerateDecelerateInterpolator;
+import android.view.animation.Interpolator;
 import android.widget.Button;
 import android.widget.TextView;
 
@@ -43,6 +52,9 @@ import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
+
+import io.codetail.animation.SupportAnimator;
+import io.codetail.animation.ViewAnimationUtils;
 
 /**
  * Created by Andriy on 01.07.2015.
@@ -89,7 +101,7 @@ public class MainActivity extends AppCompatActivity {
     /**
      * Drawer toggle.
      */
-    private ActionBarDrawerToggle drawerToggle;
+    public ActionBarDrawerToggle drawerToggle;
 
     /**
      * Filter layout.
@@ -117,6 +129,8 @@ public class MainActivity extends AppCompatActivity {
 
     private Menu menu;
 
+    private FloatingActionButton fab;
+
     private Activity activity = this;
 
     /**
@@ -137,6 +151,16 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         dataManager = DataManager.getInstance(getApplicationContext());
 
+        fab = (FloatingActionButton)findViewById(R.id.fab2);
+
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+//                openChooseProblemLocationActivity(v);
+                animateButton(fab);
+            }
+
+        });
         filterManager = FilterManager.getInstance(this);
         setupToolbar();
         setUpDrawerLayout();
@@ -239,13 +263,138 @@ public class MainActivity extends AppCompatActivity {
             slidingUpPanelLayout.setPanelState(SlidingUpPanelLayout
                     .PanelState.ANCHORED);
         } else if (slidingUpPanelLayout.getPanelState()
-                == SlidingUpPanelLayout.PanelState.ANCHORED) {
+                != SlidingUpPanelLayout.PanelState.COLLAPSED ) {
             slidingUpPanelLayout.setPanelState(SlidingUpPanelLayout
                     .PanelState.HIDDEN);
         } else {
             super.onBackPressed();
         }
     }
+
+    private void animateButton(final FloatingActionButton fab) {
+        Interpolator curveInterpolator = PathInterpolatorCompat.create(1, 0);
+        AnimatorSet animator = new AnimatorSet();
+        ObjectAnimator movementX
+                = ObjectAnimator.ofFloat(fab, "x", fab.getX() - 120);
+        ObjectAnimator movementY
+                = ObjectAnimator.ofFloat(fab, "y", fab.getY() + 20);
+        movementX.setInterpolator(curveInterpolator);
+        animator.playTogether(movementX, movementY);
+        animator.setDuration(200);
+        animator.addListener(new AnimatorListenerAdapter() {
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                super.onAnimationEnd(animation);
+                animateReavel();
+                fab.animate().alpha(0).start();
+                fab.setVisibility(View.INVISIBLE);
+            }
+
+            @Override
+            public void onAnimationStart(Animator animation) {
+                super.onAnimationStart(animation);
+                fab.setClickable(false);
+            }
+        });
+        animator.start();
+    }
+
+    private void animateReavel() {
+        final View myView = findViewById(R.id.ll_reveal);
+        int cy = (myView.getTop() + myView.getBottom()) / 2;
+        int cx = 260 + fab.getHeight() / 2;
+
+        // get the final radius for the clipping circle
+        int finalRadius = Math.max(myView.getWidth(), myView.getHeight());
+
+        SupportAnimator animator =
+                ViewAnimationUtils.createCircularReveal(myView, cx, cy, 0, finalRadius);
+        animator.setInterpolator(new AccelerateDecelerateInterpolator());
+        animator.setDuration(200);
+        animator.addListener(new SupportAnimator.AnimatorListener() {
+            @Override
+            public void onAnimationStart() {
+                myView.setVisibility(View.VISIBLE);
+                myView.setClickable(true);
+            }
+
+            @Override
+            public void onAnimationEnd() {
+            }
+
+            @Override
+            public void onAnimationCancel() {}
+
+            @Override
+            public void onAnimationRepeat() {}
+        });
+        animator.start();
+    }
+
+    public void refresh(MenuItem item) {
+        DataManager.getInstance(this).refreshAllProblems();
+    }
+
+    public void reverseAnimateReavel(View v) {
+        final View myView = findViewById(R.id.ll_reveal);
+
+        int cy = (myView.getTop() + myView.getBottom()) / 2;
+        int cx = (int)fab.getX() + fab.getHeight() / 2;
+
+        // get the final radius for the clipping circle
+        int finalRadius = Math.max(myView.getWidth(), myView.getHeight());
+
+        SupportAnimator animator =
+                ViewAnimationUtils.createCircularReveal(myView, cx, cy, fab.getHeight(), finalRadius);
+        animator.setInterpolator(new AccelerateDecelerateInterpolator());
+        animator.setDuration(200);
+        SupportAnimator reversedAnimator = animator.reverse();
+        reversedAnimator.addListener(new SupportAnimator.AnimatorListener() {
+            @Override
+            public void onAnimationStart() {
+                fab.animate().alpha(1).setDuration(50).start();
+                myView.setClickable(false);
+
+            }
+
+            @Override
+            public void onAnimationEnd() {
+                fab.setVisibility(View.VISIBLE);
+                fab.animate().alpha(1).start();
+                myView.setVisibility(View.INVISIBLE);
+                showButton(fab);
+            }
+
+            @Override
+            public void onAnimationCancel() {}
+
+            @Override
+            public void onAnimationRepeat() {}
+        });
+        reversedAnimator.start();
+
+    }
+
+    private void showButton(final FloatingActionButton fab) {
+        Interpolator curveInterpolator = PathInterpolatorCompat.create(0, 1);
+        AnimatorSet animator = new AnimatorSet();
+        ObjectAnimator movementX
+                = ObjectAnimator.ofFloat(fab, "x", fab.getX() + 120);
+        ObjectAnimator movementY
+                = ObjectAnimator.ofFloat(fab, "y", fab.getY() - 20);
+        movementX.setInterpolator(curveInterpolator);
+        animator.playTogether(movementX, movementY);
+        animator.setDuration(200);
+        animator.addListener(new AnimatorListenerAdapter() {
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                super.onAnimationEnd(animation);
+                fab.setClickable(true);
+            }
+        });
+        animator.start();
+    }
+
 
     /**
      * Controls the position of the filter7 window on the screen.
@@ -349,7 +498,6 @@ public class MainActivity extends AppCompatActivity {
                 date.set(Calendar.YEAR, year);
                 date.set(Calendar.MONTH, monthOfYear);
                 date.set(Calendar.DAY_OF_MONTH, dayOfMonth);
-
                 calendarDateTo = date;
                 setDate();
 

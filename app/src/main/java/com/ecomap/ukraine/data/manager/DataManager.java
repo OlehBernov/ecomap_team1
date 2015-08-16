@@ -193,6 +193,18 @@ public class DataManager implements ProblemListenersNotifier,
         }
     }
 
+    public void refreshAllProblems() {
+        SharedPreferences settings = context.getSharedPreferences(TIME, 0);
+        SharedPreferences.Editor editor = settings.edit();
+        editor.putLong(TIME, 0);
+        editor.commit();
+        getAllProblems();
+    }
+
+    public void refeshCurrentProblem(int problemId) {
+
+    }
+
     /**
      * Saves time of the last database update
      * to the SharedPreferences.

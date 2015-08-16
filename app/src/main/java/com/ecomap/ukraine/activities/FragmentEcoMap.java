@@ -3,7 +3,11 @@ package com.ecomap.ukraine.activities;
 import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.location.Location;
+import android.location.LocationManager;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.FragmentManager;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -44,6 +48,7 @@ public class FragmentEcoMap extends android.support.v4.app.Fragment
     private static final LatLng INITIAL_POSITION = new LatLng(48.4, 31.2);
     private static final float INITIAL_ZOOM = 5;
     private static final float ON_MARKER_CLICK_ZOOM = 12;
+    private static final float ON_MY_POSITION_CLICK_ZOOM = 15;
     private ClusterManager<Problem> clusterManager;
     private static List<Problem> problems;
 
@@ -65,12 +70,13 @@ public class FragmentEcoMap extends android.support.v4.app.Fragment
     private static Activity activity;
    static FragmentManager fragmentManager;
 
-
     public static FragmentEcoMap newInstance(final Activity activity, FragmentManager fragmentManager) {
         FragmentEcoMap.activity = activity;
         FragmentEcoMap.fragmentManager = fragmentManager;
         return new FragmentEcoMap();
     }
+
+    private FloatingActionButton myPositionButton;
 
 
    /* public static FragmentEcoMap getInstance(final Activity activity, FragmentManager fragmentManager) {
@@ -86,12 +92,8 @@ public class FragmentEcoMap extends android.support.v4.app.Fragment
     /**
      * Constructor
      */
-    public FragmentEcoMap () {
-
+    public FragmentEcoMap() {
     }
-
-
-
 
     /**
      * Called to have the fragment instantiate its user interface view.
@@ -114,8 +116,36 @@ public class FragmentEcoMap extends android.support.v4.app.Fragment
         mapView.onCreate(savedInstanceState);
         mapView.onResume();
 
+        myPositionButton = (FloatingActionButton) activity.findViewById(R.id.fab1);
+        myPositionButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Location myLocation = getLocation();
+                if (myLocation != null) {
+                    moveCameraToMyLocation(myLocation);
+                }
+            }
+
+            @Nullable
+            private Location getLocation() {
+                Location myLocation = null;
+                LocationManager locationManager =
+                        (LocationManager) activity.getSystemService(Context.LOCATION_SERVICE);
+                List<String> providers = locationManager.getAllProviders();
+                for (String provider : providers) {
+                    Location location = locationManager.getLastKnownLocation(provider);
+                    if (location != null) {
+                        myLocation = location;
+                    }
+                }
+                return myLocation;
+            }
+        });
+
         filterManager = FilterManager.getInstance(getActivity());
         filterManager.registerFilterListener(this);
+
+        activity.getActionBar();
 
         MapsInitializer.initialize(getActivity().getApplicationContext());
         this.setUpMapIfNeeded();
@@ -254,6 +284,16 @@ public class FragmentEcoMap extends android.support.v4.app.Fragment
                 .Builder()
                 .target(new LatLng(problem.getPosition().latitude, problem.getPosition().longitude))
                 .zoom(ON_MARKER_CLICK_ZOOM)
+                .build();
+        CameraUpdate cameraUpdate = CameraUpdateFactory.newCameraPosition(cameraPosition);
+        googleMap.animateCamera(cameraUpdate);
+    }
+
+    private void moveCameraToMyLocation(Location myLocation) {
+        CameraPosition cameraPosition = new CameraPosition
+                .Builder()
+                .target(new LatLng(myLocation.getLatitude(), myLocation.getLongitude()))
+                .zoom(ON_MY_POSITION_CLICK_ZOOM)
                 .build();
         CameraUpdate cameraUpdate = CameraUpdateFactory.newCameraPosition(cameraPosition);
         googleMap.animateCamera(cameraUpdate);
