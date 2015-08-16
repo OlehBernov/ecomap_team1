@@ -185,7 +185,7 @@ public class FragmentEcoMap extends android.support.v4.app.Fragment
         clusterManager.setOnClusterItemClickListener(this);
         googleMap.setOnMarkerClickListener(clusterManager);
         clusterManager.addItems(filteredProblems);
-        
+
         if(filteredProblems.size() != 0) {
             clusterManager.setRenderer(new IconRenderer(getActivity(), googleMap, clusterManager));
         }

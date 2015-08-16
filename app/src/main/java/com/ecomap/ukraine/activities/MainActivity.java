@@ -113,7 +113,7 @@ public class MainActivity extends AppCompatActivity {
 
     private SlidingUpPanelLayout slidingUpPanelLayout;
 
-    private User user;
+    private  User user;
 
     private Menu menu;
 
@@ -142,7 +142,9 @@ public class MainActivity extends AppCompatActivity {
         setUpDrawerLayout();
         setupFilter();
 
-        user = (User) getIntent().getSerializableExtra(USER);
+        if(user == null) {
+            user = (User) getIntent().getSerializableExtra(USER);
+        }
         setUserInformation(user);
 
         slidingUpPanelLayout = (SlidingUpPanelLayout) findViewById(R.id.sliding_layout);
@@ -497,8 +499,9 @@ public class MainActivity extends AppCompatActivity {
             setNotAutorizeDialog();
         }
         else {
-            Intent mainIntent = new Intent(this, ChooseProblemLocationActivity.class);
-            startActivity(mainIntent);
+            Intent intent = new Intent(this, ChooseProblemLocationActivity.class);
+            intent.putExtra("user", user);
+            startActivity(intent);
             finish();
         }
 

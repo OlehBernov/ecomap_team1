@@ -12,6 +12,7 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.ecomap.ukraine.R;
+import com.ecomap.ukraine.models.User;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.SupportMapFragment;
 
@@ -22,12 +23,15 @@ public class ChooseProblemLocationActivity extends AppCompatActivity {
 
     private Intent mainIntent;
     Toolbar toolbar;
+    private User user;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.choose_coordinate_layout);
+        user = (User) getIntent().getSerializableExtra("user");
+
         addMapFragment();
         setupToolbar();
 
@@ -74,6 +78,7 @@ public class ChooseProblemLocationActivity extends AppCompatActivity {
     public void cancelButton (View view) {
 
         Intent mainIntent = new Intent(this, MainActivity.class);
+        mainIntent.putExtra("User", user);
         startActivity(mainIntent);
         finish();
     }
