@@ -34,6 +34,7 @@ import android.widget.TableRow;
 import android.widget.TextView;
 
 import com.ecomap.ukraine.R;
+import com.ecomap.ukraine.data.manager.DataManager;
 import com.ecomap.ukraine.models.Types.ActivityType;
 import com.ecomap.ukraine.models.Details;
 import com.ecomap.ukraine.models.Photo;
@@ -115,7 +116,7 @@ public class InformationPanel {
      * @param activity callback activity
      * @param problem  clicked problem
      */
-    public InformationPanel(final Activity activity, Problem problem) {
+    public InformationPanel(final Activity activity, final Problem problem) {
 
         this.context = activity.getApplicationContext();
         this.activity = activity;
@@ -240,11 +241,24 @@ public class InformationPanel {
             private void morphToRefreshButton() {
                 fab.setImageResource(R.drawable.ic_refresh_white_24dp);
                 fab.setBackgroundTintList(ColorStateList.valueOf(0xff440044));
+                fab.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        DataManager.getInstance(activity)
+                                .refreshProblemDetails(problem.getProblemId());
+                    }
+                });
             }
 
             private void morphToAddButton() {
                 fab.setImageResource(R.drawable.ic_add_white_24dp);
                 fab.setBackgroundTintList(ColorStateList.valueOf(0xff004d40));
+                fab.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        ((MainActivity)activity).animateButton(fab);
+                    }
+                });
                 fab.setTranslationY(0);
             }
 
@@ -281,6 +295,7 @@ public class InformationPanel {
 
             @Override
             public void onPanelExpanded(View view) {
+                toolbar.getMenu().findItem(R.id.action_find_location).setEnabled(false);
                 scrollView.setVerticalScrollBarEnabled(true);
                 isScrollDisable = false;
             }
