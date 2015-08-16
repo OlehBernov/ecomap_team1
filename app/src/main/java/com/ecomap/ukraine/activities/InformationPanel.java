@@ -1,5 +1,6 @@
 package com.ecomap.ukraine.activities;
 
+import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
 import android.app.Activity;
 
@@ -61,6 +62,9 @@ public class InformationPanel {
 
     private static final int STAR_NUMBER = 5;
 
+    private static final int ADD_PROBLEM_BUTTON = 1;
+    private static final int REFRESH_BUTTON = 2;
+
     private static final int ACTIVITY_ICON_WIDTH = 75;
     private static final int ACTIVITY_ICON_HEIGHT = 75;
     private static final int PHOTO_BOUNDS = 150;
@@ -92,6 +96,8 @@ public class InformationPanel {
     private TextView titleView;
     private Toolbar toolbar;
     private Context context;
+
+    private int fabState;
 
     private boolean isScrollDisable;
     private float fabStartingPosition;
@@ -143,7 +149,7 @@ public class InformationPanel {
                 slidingUpPanelLayout.setCoveredFadeColor(TRANSPARENT_WHITE_COLOR);
                 rescaleText(v);
                 animateMenuIcon(v);
-                moveFab(v);
+                newFabPosition(v);
 //                hideFab();
                 if (v > slidingUpPanelLayout.getAnchorPoint()) {
                     slidingUpPanelLayout.setCoveredFadeColor(0xff004d40);
@@ -210,28 +216,31 @@ public class InformationPanel {
                 item.getIcon().setAlpha((int) (255 * alpha));
             }
 
-            private void moveFab(float v) {
-                if (newFabPosition(v) != 0) {
-//                    fab.setImageAlpha();
-                    fab.setImageResource(R.drawable.ic_refresh_white_24dp);
-                    fab.setBackgroundTintList(ColorStateList.valueOf(0xff440044));
-                    fab.setTranslationY(newFabPosition(v));
-                } else if (v > COLLAPSE_OFFSET) {
 
+            private void newFabPosition(float v) {
+                float edgeY = convertToPixels(1 - v) + toolbar.getHeight();
+                float fabDefaultCenterY = fab.getY() + fab.getHeight() / 2 - fab.getTranslationY();
+                if (edgeY < fabDefaultCenterY) {
+                    if (fabState != REFRESH_BUTTON) {
+                        morphToRefreshButton();
+                    }
+                    fab.setTranslationY(edgeY - fabDefaultCenterY);
                 } else {
-                    fab.setImageResource(R.drawable.ic_add_white_24dp);
-                    fab.setBackgroundTintList(ColorStateList.valueOf(0xff004d40));
+                    if (fabState != ADD_PROBLEM_BUTTON) {
+                        morphToAddButton();
+                    }
                 }
             }
 
-            private float newFabPosition(float v) {
-                float edgeY = convertToPixels(1 - v) + toolbar.getHeight();
-                float fabTranslationY = fab.getTranslationY();
-                float fabDefaultCenterY = fab.getY() + fab.getHeight() / 2 + fab.getPaddingTop() - fabTranslationY;
-                if (edgeY < fabDefaultCenterY) {
-                    return edgeY - fabDefaultCenterY;
-                }
-                return 0;
+            private void morphToRefreshButton() {
+                fab.setImageResource(R.drawable.ic_refresh_white_24dp);
+                fab.setBackgroundTintList(ColorStateList.valueOf(0xff440044));
+            }
+
+            private void morphToAddButton() {
+                fab.setImageResource(R.drawable.ic_add_white_24dp);
+                fab.setBackgroundTintList(ColorStateList.valueOf(0xff004d40));
+                fab.setTranslationY(0);
             }
 
             private float getFabCenterY() {
@@ -306,9 +315,7 @@ public class InformationPanel {
             }
 
             private int convertToPixels(float value) {
-                int displayHeightInPixels = activity.getResources()
-                        .getDisplayMetrics().heightPixels;
-                return (int) (value * displayHeightInPixels);
+                return (int) (value * slidingUpPanelLayout.getHeight());
             }
         });
 

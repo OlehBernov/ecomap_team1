@@ -139,7 +139,7 @@
                             android:orientation="horizontal">
 
                             <Button
-                                android:id="@+id/button2"
+                                android:id="@+id/cancel_problem_adding"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginEnd="16dp"
@@ -149,14 +149,16 @@
                                 android:layout_centerVertical="true"
                                 android:textSize="18sp"
                                 android:background="@color/transparent"
-                                android:text=" PROBLEM"/>
+                                android:text="ADD PROBLEM"
+                                android:clickable="true"
+                                android:onClick="openChooseProblemLocationActivity" />
 
                             <Button
-                                android:id="@+id/button"
+                                android:id="@+id/add_problem_button"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_toLeftOf="@id/button2"
-                                android:layout_toStartOf="@id/button2"
+                                android:layout_toLeftOf="@id/cancel_problem_adding"
+                                android:layout_toStartOf="@id/cancel_problem_adding"
                                 android:layout_marginEnd="16dp"
                                 android:layout_marginRight="16dp"
                                 android:layout_centerVertical="true"
