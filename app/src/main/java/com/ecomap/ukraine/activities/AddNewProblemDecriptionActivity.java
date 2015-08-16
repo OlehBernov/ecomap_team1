@@ -11,6 +11,7 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
+import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
@@ -138,9 +139,9 @@ public class AddNewProblemDecriptionActivity extends AppCompatActivity  {
         // Setting the ViewPager For the SlidingTabsLayout
         tabs.setViewPager(pager);
 
-/*        if (savedInstanceState != null) {
-            onSaveInstanceState(savedInstanceState);
-        }*/
+        if (savedInstanceState != null) {
+            onRestoreInstanceState(savedInstanceState);
+        }
 
     }
 
@@ -311,14 +312,10 @@ public class AddNewProblemDecriptionActivity extends AppCompatActivity  {
 
         photoDescriptionLayout = (TableLayout) findViewById(R.id.photo_descriptions);
         for (int i = 0; i < userPhotos.size(); i++) {
-
-            BitmapResizer bitmapResizer = new BitmapResizer(getApplicationContext());
-            int photoSize = (int) getResources().getDimension(R.dimen.edit_text_add_photo);
-            Bitmap photoBitmap = bitmapResizer.changePhotoOrientation(userPhotos.get(i), photoSize);
             setDeleteButton(i);
             TableRow activityRow = new TableRow(getApplicationContext());
 
-            activityRow.addView(buildUserPhoto(photoBitmap));
+            activityRow.addView(buildUserPhoto(userPhotos.get(i)));
             activityRow.addView(buildPhotoDescription(i));
             photoDescriptionLayout.addView(activityRow);
             Tab1.getInstance(getBitmapsPhoto());
@@ -326,6 +323,7 @@ public class AddNewProblemDecriptionActivity extends AppCompatActivity  {
     }
 
     private EditText buildPhotoDescription(int id) {
+
         EditText photoDescription = new EditText(getApplicationContext());
         photoDescription.setHint(DESCRIPTION_HINT);
         photoDescription.setBackgroundResource(R.drawable.edit_text_description_style);
@@ -333,7 +331,7 @@ public class AddNewProblemDecriptionActivity extends AppCompatActivity  {
         photoDescription.setVerticalScrollBarEnabled(true);
         photoDescription.setFocusableInTouchMode(true);
         photoDescription.setHintTextColor(getResources().getColor(R.color.calendar_header));
-        photoDescription.setTextColor(getResources().getColor(R.color.abc_primary_text_disable_only_material_light));
+        photoDescription.setTextColor(getResources().getColor(R.color.primary_text));
         photoDescription.setTextSize(getResources().getDimension(R.dimen.comment_text_size));
         photoDescription.setLayoutParams(setPhotoDescriptionParams());
         photoDescription.setPadding(
@@ -359,7 +357,10 @@ public class AddNewProblemDecriptionActivity extends AppCompatActivity  {
         return photoDescriptionParams;
     }
 
-    private ImageView buildUserPhoto(final Bitmap photoBitmap) {
+    private ImageView buildUserPhoto(final String photoPath) {
+        BitmapResizer bitmapResizer = new BitmapResizer(getApplicationContext());
+        int photoSize = (int) getResources().getDimension(R.dimen.edit_text_add_photo);
+        Bitmap photoBitmap = bitmapResizer.changePhotoOrientation(photoPath, photoSize);
         TableRow.LayoutParams imageParams =
                 new TableRow.LayoutParams(photoBitmap.getWidth(),
                         photoBitmap.getHeight());
@@ -369,19 +370,16 @@ public class AddNewProblemDecriptionActivity extends AppCompatActivity  {
         photoView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                showFullSizePhoto(photoBitmap);
+                showFullSizePhoto(photoPath);
             }
         });
 
         return photoView;
     }
 
-    private void showFullSizePhoto(Bitmap photoBitmap) {
+    private void showFullSizePhoto(String photoPath) {
         Intent intent = new Intent (this, UserPhotoFullScreen.class);
-        ByteArrayOutputStream blob = new ByteArrayOutputStream();
-        photoBitmap.compress(Bitmap.CompressFormat.PNG, 0, blob);
-        byte[] photoByteArray = blob.toByteArray();
-        intent.putExtra("photo", photoByteArray);
+        intent.putExtra("photo", photoPath);
         startActivity(intent);
     }
 
