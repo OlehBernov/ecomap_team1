@@ -27,6 +27,8 @@ import android.widget.TextView;
 import com.codetroopers.betterpickers.calendardatepicker.CalendarDatePickerDialog;
 import com.ecomap.ukraine.R;
 import com.ecomap.ukraine.data.manager.DataManager;
+import com.ecomap.ukraine.filter.Filter;
+import com.ecomap.ukraine.filter.FilterContract;
 import com.ecomap.ukraine.filter.FilterManager;
 import com.ecomap.ukraine.filter.FilterState;
 import com.ecomap.ukraine.filter.FilterStateConverter;
@@ -38,7 +40,9 @@ import org.json.JSONException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.HashMap;
 import java.util.Locale;
+import java.util.Map;
 
 /**
  * Created by Andriy on 01.07.2015.
@@ -51,8 +55,6 @@ public class MainActivity extends AppCompatActivity {
      * Name of the filter window.
      */
     private static final String FILTER = "Filter";
-
-
 
     /**
      * Name of map window.
@@ -358,20 +360,27 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private FilterState buildFiltersState() {
-        boolean stateType1 = getFilterState(R.id.type1);
-        boolean stateType2 = getFilterState(R.id.type2);
-        boolean stateType3 = getFilterState(R.id.type3);
-        boolean stateType4 = getFilterState(R.id.type4);
-        boolean stateType5 = getFilterState(R.id.type5);
-        boolean stateType6 = getFilterState(R.id.type6);
-        boolean stateType7 = getFilterState(R.id.type7);
+        Map<String, Boolean> filterStateValues = new HashMap<>();
+        filterStateValues.put(FilterContract.FOREST_DESTRUCTION,
+                getFilterState(R.id.type1));
+        filterStateValues.put(FilterContract.RUBBISH_DUMP,
+                getFilterState(R.id.type2));
+        filterStateValues.put(FilterContract.ILLEGAL_BUILDING,
+                getFilterState(R.id.type3));
+        filterStateValues.put(FilterContract.WATER_POLLUTION,
+                getFilterState(R.id.type4));
+        filterStateValues.put(FilterContract.THREAD_TO_BIODIVERSITY,
+                getFilterState(R.id.type5));
+        filterStateValues.put(FilterContract.POACHING,
+                getFilterState(R.id.type6));
+        filterStateValues.put(FilterContract.OTHER,
+                getFilterState(R.id.type7));
+        filterStateValues.put(FilterContract.RESOLVED,
+                getFilterState(R.id.ButtonResolved));
+        filterStateValues.put(FilterContract.UNSOLVED,
+                getFilterState(R.id.ButtonUnsolved));
 
-        boolean stateResolved = getFilterState(R.id.ButtonResolved);
-        boolean stateUnsolved = getFilterState(R.id.ButtonUnsolved);
-
-        return new FilterState(stateType1, stateType2,
-                stateType3, stateType4, stateType5, stateType6, stateType7,
-                stateResolved, stateUnsolved, calendarDateFrom, calendarDateTo);
+        return new FilterState(filterStateValues, calendarDateFrom, calendarDateTo);
     }
 
     private boolean isFilterOff(ColorDrawable buttonColor) {
@@ -446,35 +455,34 @@ public class MainActivity extends AppCompatActivity {
 
         setDateOnScreen(calendarDateFrom, calendarDateTo);
     }
-    
 
     private void setFiltersState(FilterState filtersState) {
         if (filtersState != null) {
-            if (!filtersState.isShowProblemType1()) {
+            if (!filtersState.isFilterOff(FilterContract.FOREST_DESTRUCTION)) {
                 setFilterOn(findViewById(R.id.type1));
             }
-            if (!filtersState.isShowProblemType2()) {
+            if (!filtersState.isFilterOff(FilterContract.RUBBISH_DUMP)) {
                 setFilterOn(findViewById(R.id.type2));
             }
-            if (!filtersState.isShowProblemType3()) {
+            if (!filtersState.isFilterOff(FilterContract.ILLEGAL_BUILDING)) {
                 setFilterOn(findViewById(R.id.type3));
             }
-            if (!filtersState.isShowProblemType4()) {
+            if (!filtersState.isFilterOff(FilterContract.WATER_POLLUTION)) {
                 setFilterOn(findViewById(R.id.type4));
             }
-            if (!filtersState.isShowProblemType5()) {
+            if (!filtersState.isFilterOff(FilterContract.THREAD_TO_BIODIVERSITY)) {
                 setFilterOn(findViewById(R.id.type5));
             }
-            if (!filtersState.isShowProblemType6()) {
+            if (!filtersState.isFilterOff(FilterContract.POACHING)) {
                 setFilterOn(findViewById(R.id.type6));
             }
-            if (!filtersState.isShowProblemType7()) {
+            if (!filtersState.isFilterOff(FilterContract.OTHER)) {
                 setFilterOn(findViewById(R.id.type7));
             }
-            if (!filtersState.isShowResolvedProblem()) {
+            if (!filtersState.isFilterOff(FilterContract.RESOLVED)) {
                 setFilterOn(findViewById(R.id.ButtonResolved));
             }
-            if (!filtersState.isShowResolvedProblem()) {
+            if (!filtersState.isFilterOff(FilterContract.UNSOLVED)) {
                 setFilterOn(findViewById(R.id.ButtonUnsolved));
             }
             calendarDateFrom = filtersState.getDateFrom();
@@ -482,7 +490,6 @@ public class MainActivity extends AppCompatActivity {
         }
         setDate();
     }
-
 
     public void openChooseProblemLocationActivity(View view) {
 
@@ -529,4 +536,5 @@ public class MainActivity extends AppCompatActivity {
         alert.show();
 
     }
+
 }

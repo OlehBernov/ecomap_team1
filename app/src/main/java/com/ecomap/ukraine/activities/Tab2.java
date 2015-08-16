@@ -9,16 +9,12 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.LinearLayout;
 import android.widget.ScrollView;
-import android.widget.Spinner;
 
 import com.ecomap.ukraine.R;
 
 import butterknife.ButterKnife;
-import butterknife.InjectView;
+
 
 /**
  * Created by Edwin on 15/02/2015.
@@ -36,18 +32,21 @@ public class Tab2 extends Fragment {
         return instance;
     }
 
+
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
+                             @Nullable Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.tab_2,container,false);
         ButterKnife.inject(this, v);
+
         ScrollView scrollView = (ScrollView) v.findViewById(R.id.scrollView2);
-        scrollView.setOnTouchListener(new View.OnTouchListener() {
+     /*   scrollView.setOnTouchListener(new View.OnTouchListener() {
            @Override
            public boolean onTouch(View v, MotionEvent event) {
                hideKeyboard(v);
                return true;
            }
-       });
+       });*/
 
         return v;
     }

@@ -46,6 +46,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 /**
  * Created by Andriy on 11.08.2015.
@@ -134,7 +135,7 @@ public class AddNewProblemDecriptionActivity extends AppCompatActivity  {
         tabs.setViewPager(pager);
 
         if (savedInstanceState != null) {
-            onSaveInstanceState(savedInstanceState);
+            onRestoreInstanceState(savedInstanceState);
         }
 
         Tab2.setContext(getApplicationContext());
@@ -356,7 +357,7 @@ public class AddNewProblemDecriptionActivity extends AppCompatActivity  {
     private ImageView buildUserPhoto(final Bitmap photoBitmap) {
         TableRow.LayoutParams imageParams =
                 new TableRow.LayoutParams(photoBitmap.getWidth(),
-                                         photoBitmap.getHeight());
+                        photoBitmap.getHeight());
         ImageView photoView = new ImageView(getApplicationContext());
         photoView.setImageBitmap(photoBitmap);
         photoView.setLayoutParams(imageParams);
@@ -392,12 +393,12 @@ public class AddNewProblemDecriptionActivity extends AppCompatActivity  {
         }
 
         int orientation = exifInterface.getAttributeInt(ExifInterface.TAG_ORIENTATION,
-                                                        ExifInterface.ORIENTATION_NORMAL);
+                ExifInterface.ORIENTATION_NORMAL);
         if (orientation == ExifInterface.ORIENTATION_ROTATE_90) {
-                Matrix matrix = new Matrix();
-                matrix.postRotate(DEGREE_90);
-                return Bitmap.createBitmap(photoBitmap, 0, 0, photoBitmap.getWidth(),
-                                           photoBitmap.getHeight(), matrix, true);
+            Matrix matrix = new Matrix();
+            matrix.postRotate(DEGREE_90);
+            return Bitmap.createBitmap(photoBitmap, 0, 0, photoBitmap.getWidth(),
+                    photoBitmap.getHeight(), matrix, true);
         } else {
             return photoBitmap;
         }
@@ -410,7 +411,7 @@ public class AddNewProblemDecriptionActivity extends AppCompatActivity  {
         deleteButton.setImageDrawable(ContextCompat.getDrawable(getApplicationContext(),
                 R.drawable.delete));
         deleteButton.setBackgroundColor(getResources().getColor(R.color.white));
-        deleteButton.setLayoutParams(setDeleteButtonParams());
+     //   deleteButton.setLayoutParams(setDeleteButtonParams());
         addListenerOnDeleteButton(deleteButton);
 
         RelativeLayout buttonLayout = new RelativeLayout(getApplicationContext());
@@ -431,16 +432,17 @@ public class AddNewProblemDecriptionActivity extends AppCompatActivity  {
         deleteButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                deleteBlock(photoDescriptionLayout.indexOfChild(v));
+                deleteBlock(v.getId());
             }
         });
     }
 
     private void deleteBlock(int buttonId) {
-/*        Log.e("i", "" + buttonId);
-        photoDescriptionLayout.removeViews(buttonId, 2);
+        Log.e("i", "" + buttonId);
+        photoDescriptionLayout.removeViews(buttonId * 2, 2);
         userPhotos.remove(buttonId);
-        descriptions.remove(buttonId);*/
+        descriptions.remove(buttonId);
+        addPhotosToView();
     }
 
     private void savePhoto(String photoPath) {

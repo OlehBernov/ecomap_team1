@@ -2,6 +2,7 @@ package com.ecomap.ukraine.filter;
 
 import com.ecomap.ukraine.models.Problem;
 import com.ecomap.ukraine.models.Types.ProblemStatus;
+import com.ecomap.ukraine.models.Types.ProblemType;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -41,7 +42,7 @@ public class Filter {
     * @return
     */    
     private boolean filtration(final FilterState filterState, final Problem problem) {
-        if (filterState.isShowProblemType(problem.getProblemType())) {
+        if (filterState.isFilterOff(getFilterCriteria(problem.getProblemType()))) {
             if (showProblemBySolvedFilter(filterState, problem)) {
                 if (showActualProblem(filterState, problem)) {
                     return true;
@@ -49,6 +50,33 @@ public class Filter {
             }
         }
         return false;
+    }
+
+    /**
+     * Converts problem type to appropriate filter criteria.
+     *
+     * @param type problem type.
+     * @return appropriate filter criteria.
+     */
+    public String getFilterCriteria (final ProblemType type) {
+        switch (type) {
+            case FOREST_DESTRUCTION:
+                return FilterContract.FOREST_DESTRUCTION;
+            case RUBBISH_DUMP:
+                return FilterContract.RUBBISH_DUMP;
+            case ILLEGAL_BUILDING:
+                return FilterContract.ILLEGAL_BUILDING;
+            case WATER_POLLUTION:
+                return FilterContract.WATER_POLLUTION;
+            case THREAD_TO_BIODIVERSITY:
+                return FilterContract.THREAD_TO_BIODIVERSITY;
+            case POACHING:
+                return FilterContract.POACHING;
+            case OTHER:
+                return FilterContract.OTHER;
+            default:
+                return FilterContract.OTHER;
+        }
     }
 
     /**
@@ -69,7 +97,8 @@ public class Filter {
      * @return access to show problem
      */
     private  boolean showUnsolvedProblem(FilterState filterState, Problem problem) {
-        return (filterState.isShowUnsolvedProblem()) && (problem.getStatus().equals(ProblemStatus.UNSOLVED));
+        return (filterState.isFilterOff(FilterContract.UNSOLVED))
+                && (problem.getStatus().equals(ProblemStatus.UNSOLVED));
 
     }
 
@@ -80,7 +109,8 @@ public class Filter {
      * @return access to show problem
      */
     private  boolean showResolvedProblem(FilterState filterState, Problem problem) {
-        return (filterState.isShowResolvedProblem()) && (problem.getStatus().equals(ProblemStatus.RESOLVED));
+        return (filterState.isFilterOff(FilterContract.RESOLVED))
+                && (problem.getStatus().equals(ProblemStatus.RESOLVED));
     }
 
     /**

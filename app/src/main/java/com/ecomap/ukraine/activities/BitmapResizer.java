@@ -26,11 +26,6 @@ public class BitmapResizer {
         return Bitmap.createBitmap(bitmap, 0, 0, width, height, matrix, true);
     }
 
-    private int dpToPx(final int dp) {
-        float density = context.getResources().getDisplayMetrics().density;
-        return Math.round((float) dp * density);
-    }
-
     public Bitmap scalePhoto(final String photoPath, final int bounds) {
         BitmapFactory.Options bmOptions = new BitmapFactory.Options();
         bmOptions.inJustDecodeBounds = true;
@@ -44,6 +39,11 @@ public class BitmapResizer {
         bmOptions.inSampleSize = scaleFactor;
 
         return BitmapFactory.decodeFile(photoPath, bmOptions);
+    }
+
+    private int dpToPx(final int dp) {
+        float density = context.getResources().getDisplayMetrics().density;
+        return Math.round((float) dp * density);
     }
 
 }

@@ -9,6 +9,7 @@
     <dimen name="calendar_size">50dp</dimen>
     <dimen name="slide_panel_items_margin">12dp</dimen>
     <dimen name="comment_text_size">7dp</dimen>
+    <dimen name="small_photo_size">50dp</dimen>
 
     <dimen name="slipe_panel_text_size">7dp</dimen>
     <dimen name="edit_text_add_photo">75dp</dimen>

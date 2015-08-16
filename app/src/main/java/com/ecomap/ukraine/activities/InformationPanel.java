@@ -7,16 +7,16 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.content.res.ResourcesCompat;
 import android.support.v7.widget.Toolbar;
 import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.animation.DecelerateInterpolator;
-import android.widget.AdapterView;
 import android.widget.EditText;
-import android.widget.GridView;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TableLayout;
 import android.widget.TableRow;
@@ -30,6 +30,8 @@ import com.ecomap.ukraine.models.Problem;
 import com.ecomap.ukraine.models.ProblemActivity;
 import com.ecomap.ukraine.models.Types.ProblemStatus;
 import com.sothree.slidinguppanel.SlidingUpPanelLayout;
+import com.squareup.picasso.Picasso;
+import com.squareup.picasso.Transformation;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -46,6 +48,7 @@ public class InformationPanel {
     private static final String UNSOLVED = "unsolved";
     private static final String ECOMAP_UKRAINE = "Ecomap Ukraine";
     private static final String PHOTOS_PATH = "http://ecomap.org/photos/large/";
+    private static final String TRANSFORMATION = "transformation";
 
     private static final int STAR_NUMBER = 5;
 
@@ -68,6 +71,7 @@ public class InformationPanel {
     private TextView proposalFiled;
     private TableLayout activitiesLayout;
     private EditText addComment;
+    private LinearLayout photoContainer;
 
     private TextView titleView;
     private Toolbar toolbar;
@@ -104,6 +108,7 @@ public class InformationPanel {
         proposalFiled = (TextView) activity.findViewById(R.id.proposal_field);
         activitiesLayout = (TableLayout) activity.findViewById(R.id.activities);
         addComment = (EditText) activity.findViewById(R.id.add_comment);
+        photoContainer = (LinearLayout) activity.findViewById(R.id.small_photo_conteiner);
 
         slidingUpPanelLayout.setAnchorPoint(ANCHOR_POINT);
         slidingUpPanelLayout.setPanelState(SlidingUpPanelLayout.PanelState.ANCHORED);
@@ -353,7 +358,6 @@ public class InformationPanel {
             default:
                 return ResourcesCompat.getDrawable(context.getResources(), R.drawable.type1, null);
         }
-
     }
 
     /**
@@ -398,24 +402,61 @@ public class InformationPanel {
             hidePhotosTitle();
             return;
         }
-        final List<String> urls = new ArrayList<>();
-        for (Photo photo : photos.keySet()) {
-            urls.add(PHOTOS_PATH + photo.getLink());
+        if (isPhotoContainerHaveChild()) {
+            photoContainer.removeAllViews();
         }
-        ProblemPhotoAdapter gridViewAdapter = new ProblemPhotoAdapter(context, urls);
-        GridView gridView = (GridView) activity.findViewById(R.id.small_photos_grid);
-        gridView.setAdapter(gridViewAdapter);
-
-        gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-               openPhotoSlidePager(position, urls);
-            }
-        });
+        BasicContentLayout photoPreview = new BasicContentLayout(photoContainer, context);
+        final List<String> urls = new ArrayList<>();
+        final List<String> descriptions = new ArrayList<>();
+        int position = 0;
+        for (final Photo photo : photos.keySet()) {
+            urls.add(PHOTOS_PATH + photo.getLink());
+            descriptions.add(photo.getDescription());
+            ImageView photoView = new ImageView(context);
+            photoPreview.addHorizontalBlock(photoView);
+            photoView.setId(position++);
+            loadPhotoToView(photo, photoView);
+            photoView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    openPhotoSlidePager(v.getId(), urls, descriptions);
+                }
+            });
+        }
     }
 
-    private void openPhotoSlidePager(int position, List<String> urls) {
-        ProblemPhotoSlidePager.setContent(urls);
+    private void loadPhotoToView(Photo photo, ImageView photoView) {
+        Transformation transformation = new Transformation() {
+            @Override
+            public Bitmap transform(Bitmap source) {
+                BitmapResizer bitmapResizer = new BitmapResizer(context);
+                int photoSize = (int) context.getResources().getDimension(R.dimen.small_photo_size);
+                Bitmap resizedBitmap = bitmapResizer.resizeBitmap(source, photoSize);
+                if (resizedBitmap != source) {
+                    source.recycle();
+                }
+                return resizedBitmap;
+            }
+            @Override
+            public String key() {
+                return TRANSFORMATION;
+            }
+        };
+
+        Picasso.with(context)
+                .load(PHOTOS_PATH + photo.getLink())
+                .placeholder(R.drawable.placeholder)
+                .error(R.drawable.photo_error1)
+                .transform(transformation)
+                .into(photoView);
+    }
+
+    private boolean isPhotoContainerHaveChild() {
+        return photoContainer != null && (photoContainer.getChildCount() > 0);
+    }
+
+    private void openPhotoSlidePager(int position, List<String> urls, List<String> description) {
+        ProblemPhotoSlidePager.setContent(urls, description);
         Intent intent = new Intent(activity, ProblemPhotoSlidePager.class);
         intent.putExtra("position", position);
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
