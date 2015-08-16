@@ -46,7 +46,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
-import java.util.Map;
 
 /**
  * Created by Andriy on 11.08.2015.
@@ -106,11 +105,8 @@ public class AddNewProblemDecriptionActivity extends AppCompatActivity  {
             @Override
             public void onClick(View v) {
                 onBackPressed();
-
-
             }
         });
-
 
         // Creating The ViewPagerAdapter and Passing Fragment Manager, Titles fot the Tabs and Number Of Tabs.
         adapter = new ViewPagerAdapter(getSupportFragmentManager(), Titles, Numboftabs);
@@ -134,11 +130,10 @@ public class AddNewProblemDecriptionActivity extends AppCompatActivity  {
         // Setting the ViewPager For the SlidingTabsLayout
         tabs.setViewPager(pager);
 
-        if (savedInstanceState != null) {
-            onRestoreInstanceState(savedInstanceState);
-        }
+/*        if (savedInstanceState != null) {
+            onSaveInstanceState(savedInstanceState);
+        }*/
 
-        Tab2.setContext(getApplicationContext());
     }
 
 
@@ -289,14 +284,12 @@ public class AddNewProblemDecriptionActivity extends AppCompatActivity  {
         cursor.close();
 
         addPhotosToView();
-        addPhotoToGallery(photoPath);
     }
 
     private void processCameraPhoto() {
         String photoPath = currentPhotoUri.getPath();
         savePhoto(photoPath);
         addPhotosToView();
-        addPhotoToGallery(photoPath);
     }
 
     private boolean isActivityLayoutHaveChild() {
@@ -311,10 +304,13 @@ public class AddNewProblemDecriptionActivity extends AppCompatActivity  {
         photoDescriptionLayout = (TableLayout) findViewById(R.id.photo_descriptions);
         for (int i = 0; i < userPhotos.size(); i++) {
 
+            BitmapResizer bitmapResizer = new BitmapResizer(getApplicationContext());
+            int photoSize = (int) getResources().getDimension(R.dimen.edit_text_add_photo);
+            Bitmap photoBitmap = bitmapResizer.changePhotoOrientation(userPhotos.get(i), photoSize);
             setDeleteButton(i);
             TableRow activityRow = new TableRow(getApplicationContext());
 
-            activityRow.addView(buildUserPhoto(userPhotos.get(i)));
+            activityRow.addView(buildUserPhoto(photoBitmap));
             activityRow.addView(buildPhotoDescription(i));
             photoDescriptionLayout.addView(activityRow);
         }
@@ -337,6 +333,7 @@ public class AddNewProblemDecriptionActivity extends AppCompatActivity  {
                 (int) getResources().getDimension(R.dimen.description_right_padding),
                 (int) getResources().getDimension(R.dimen.description_bottom_padding)
         );
+        Tab2.getInstance(this).setOnFocusChangeListener(photoDescription);
         if (!descriptions.get(id).equals("")) {
             photoDescription.setText(descriptions.get(id));
         }
@@ -353,29 +350,29 @@ public class AddNewProblemDecriptionActivity extends AppCompatActivity  {
         return photoDescriptionParams;
     }
 
-    private ImageView buildUserPhoto(final String photoPath) {
-        BitmapResizer bitmapResizer = new BitmapResizer(getApplicationContext());
-        int photoBounds = (int) getResources().getDimension(R.dimen.edit_text_add_photo);
-        Bitmap photoBitmap = bitmapResizer.changePhotoOrientation(photoPath, photoBounds);
+    private ImageView buildUserPhoto(final Bitmap photoBitmap) {
         TableRow.LayoutParams imageParams =
                 new TableRow.LayoutParams(photoBitmap.getWidth(),
-                                          photoBitmap.getHeight());
+                        photoBitmap.getHeight());
         ImageView photoView = new ImageView(getApplicationContext());
         photoView.setImageBitmap(photoBitmap);
         photoView.setLayoutParams(imageParams);
         photoView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                showFullSizePhoto(photoPath);
+                showFullSizePhoto(photoBitmap);
             }
         });
 
         return photoView;
     }
 
-    private void showFullSizePhoto(String photoPath) {
+    private void showFullSizePhoto(Bitmap photoBitmap) {
         Intent intent = new Intent (this, UserPhotoFullScreen.class);
-        intent.putExtra("photo", photoPath);
+        ByteArrayOutputStream blob = new ByteArrayOutputStream();
+        photoBitmap.compress(Bitmap.CompressFormat.PNG, 0, blob);
+        byte[] photoByteArray = blob.toByteArray();
+        intent.putExtra("photo", photoByteArray);
         startActivity(intent);
     }
 
@@ -386,6 +383,7 @@ public class AddNewProblemDecriptionActivity extends AppCompatActivity  {
         deleteButton.setImageDrawable(ContextCompat.getDrawable(getApplicationContext(),
                 R.drawable.delete));
         deleteButton.setBackgroundColor(getResources().getColor(R.color.white));
+        deleteButton.setLayoutParams(setDeleteButtonParams());
         addListenerOnDeleteButton(deleteButton);
 
         RelativeLayout buttonLayout = new RelativeLayout(getApplicationContext());
@@ -412,10 +410,9 @@ public class AddNewProblemDecriptionActivity extends AppCompatActivity  {
     }
 
     private void deleteBlock(int buttonId) {
-        Log.e("i", "" + buttonId);
-        photoDescriptionLayout.removeViews(buttonId * 2, 2);
         userPhotos.remove(buttonId);
         descriptions.remove(buttonId);
+        photoDescriptionLayout.removeAllViews();
         addPhotosToView();
     }
 
@@ -430,27 +427,11 @@ public class AddNewProblemDecriptionActivity extends AppCompatActivity  {
         descriptions.add("");
     }
 
-    private void addPhotoToGallery(String photoPath) {
-        Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
-        File f = new File(photoPath);
-        Uri contentUri = Uri.fromFile(f);
-        mediaScanIntent.setData(contentUri);
-        this.sendBroadcast(mediaScanIntent);
-    }
-
     private File createImageFile() throws IOException {
         String timeStamp = new SimpleDateFormat(DATE_TEMPLATE, Locale.ENGLISH).format(new Date());
         String imageFileName = FILE_NAME_BEGINNING + timeStamp + "_";
         File storageDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
         return File.createTempFile(imageFileName, PHOTO_FORMAT, storageDir);
-    }
-
-    @Override
-    public void onBackPressed() {
-        super.onBackPressed();
-        Intent Intent = new Intent(this, ChooseProblemLocationActivity.class);
-        startActivity(Intent);
-        finish();
     }
 
 }

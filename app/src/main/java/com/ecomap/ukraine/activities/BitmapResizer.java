@@ -14,6 +14,8 @@ import java.io.IOException;
 
 public class BitmapResizer {
 
+    private static final int DEGREE_90 = 90;
+
     private Context context;
 
     public BitmapResizer(final Context context) {
@@ -49,8 +51,7 @@ public class BitmapResizer {
 
     public Bitmap changePhotoOrientation(String photoPath, int bounds) {
         BitmapResizer bitmapResizer =  new BitmapResizer(context);
-        int photoBounds = bounds;
-        Bitmap photoBitmap = bitmapResizer.scalePhoto(photoPath, photoBounds);
+        Bitmap photoBitmap = bitmapResizer.scalePhoto(photoPath, bounds);
         ExifInterface exifInterface;
         try {
             exifInterface = new ExifInterface(photoPath);
@@ -63,7 +64,7 @@ public class BitmapResizer {
                 ExifInterface.ORIENTATION_NORMAL);
         if (orientation == ExifInterface.ORIENTATION_ROTATE_90) {
             Matrix matrix = new Matrix();
-            matrix.postRotate(90);
+            matrix.postRotate(DEGREE_90);
             return Bitmap.createBitmap(photoBitmap, 0, 0, photoBitmap.getWidth(),
                     photoBitmap.getHeight(), matrix, true);
         } else {

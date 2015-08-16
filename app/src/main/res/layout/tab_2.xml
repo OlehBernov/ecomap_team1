@@ -1,70 +1,68 @@
 <?xml version="1.0" encoding="utf-8"?>
-
-
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/scrollView2"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:layout_alignParentLeft="true"
+    android:layout_alignParentStart="true"
+    android:fillViewport="true"
+    android:fitsSystemWindows="true"
     android:background="@color/white"
-    android:orientation="vertical">
+    android:paddingBottom="10dp">
 
-    <ScrollView
-        android:id="@+id/scrollView2"
+    <RelativeLayout xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:paddingBottom="10dp">
+        android:layout_height="match_parent"
+        android:clickable="true"
+        android:focusableInTouchMode="true"
+        tools:context="com.hmkcode.app.AddNewProblemDecriptionActivity">
 
-        <RelativeLayout xmlns:tools="http://schemas.android.com/tools"
+        <ImageView
+            android:id="@+id/photo_from_gallery"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignTop="@+id/photo_from_camera"
+            android:layout_marginEnd="64dp"
+            android:layout_marginRight="64dp"
+            android:layout_toLeftOf="@+id/photo_from_camera"
+            android:layout_toStartOf="@+id/photo_from_camera"
+            android:onClick="getPhotoFromGallery"
+            android:src="@drawable/add_photo" />
+
+        <ImageView
+            android:id="@+id/photo_from_camera"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginEnd="92dp"
+            android:layout_marginRight="92dp"
+            android:layout_marginTop="31dp"
+            android:onClick="getPhotoFromCamera"
+            android:src="@drawable/add_photo" />
+
+        <TableLayout
+            android:id="@+id/photo_descriptions"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            tools:context="com.hmkcode.app.AddNewProblemDecriptionActivity">
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_below="@+id/photo_from_gallery"
+            android:layout_gravity="right"
+            android:layout_marginTop="30dp"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:paddingTop="10dp">
 
-            <ImageView
-                android:id="@+id/photo_from_gallery"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignTop="@+id/photo_from_camera"
-                android:layout_marginEnd="64dp"
-                android:layout_marginRight="64dp"
-                android:layout_toLeftOf="@+id/photo_from_camera"
-                android:layout_toStartOf="@+id/photo_from_camera"
-                android:onClick="getPhotoFromGallery"
-                android:src="@drawable/add_photo" />
+        </TableLayout>
 
-            <ImageView
-                android:id="@+id/photo_from_camera"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentEnd="true"
-                android:layout_alignParentRight="true"
-                android:layout_alignParentTop="true"
-                android:layout_marginEnd="92dp"
-                android:layout_marginRight="92dp"
-                android:layout_marginTop="31dp"
-                android:onClick="getPhotoFromCamera"
-                android:src="@drawable/add_photo" />
+    </RelativeLayout>
 
-            <TableLayout
-                android:id="@+id/photo_descriptions"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentStart="true"
-                android:layout_below="@+id/photo_from_gallery"
-                android:layout_gravity="right"
-                android:layout_marginTop="30dp"
-                android:paddingLeft="10dp"
-                android:paddingRight="10dp"
-                android:paddingTop="10dp">
-
-            </TableLayout>
+</ScrollView>
 
 
-        </RelativeLayout>
 
-    </ScrollView>
 
-</LinearLayout>
 
