@@ -147,6 +147,7 @@
                                 android:layout_alignParentEnd="true"
                                 android:layout_alignParentRight="true"
                                 android:layout_centerVertical="true"
+                                android:textColor="@color/white"
                                 android:textSize="18sp"
                                 android:background="@color/transparent"
                                 android:text="ADD PROBLEM"
@@ -164,6 +165,7 @@
                                 android:layout_centerVertical="true"
                                 android:background="@color/transparent"
                                 android:text="CANCEL"
+                                android:textColor="@color/white"
                                 android:textSize="18sp"
                                 android:onClick="reverseAnimateReavel" />
 

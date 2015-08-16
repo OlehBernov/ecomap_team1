@@ -14,7 +14,9 @@
     <color name="card_view_background">#E0E0E0</color>
     <color name="ColorPrimary">#00897B</color>
     <color name="ColorPrimaryDark">#00695C</color>
-    <color name="tabsScrollColor">#004D40</color>
+
+    <color name="tabsScrollColor">#CC000000</color>
+
     <color name="add_problem_description_bg">#eceff1</color>
     <color name="transparent">#00000000</color>
     <!--<color name="white">#ffffff</color>-->

@@ -70,6 +70,7 @@ public class ChooseProblemLocationActivity extends AppCompatActivity {
         mainIntent = new Intent(this, AddNewProblemDecriptionActivity.class);
         mainIntent.putExtra("Lat", map.getMarkerPosition().latitude);
         mainIntent.putExtra("Lng", map.getMarkerPosition().longitude);
+        mainIntent.putExtra("User", user);
         startActivity(mainIntent);
         finish();
 

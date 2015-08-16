@@ -33,10 +33,10 @@ dependencies {
     compile 'com.facebook.android:facebook-android-sdk:4.0.0'
     compile 'com.code-troopers.betterpickers:library:2.0.0'
     compile 'com.jakewharton:butterknife:6.1.0'
-	compile 'com.pkmmte.view:circularimageview:1.1'
-	compile 'com.sothree.slidinguppanel:library:3.1.1'
+    compile 'com.pkmmte.view:circularimageview:1.1'
+    compile 'com.sothree.slidinguppanel:library:3.1.1'
     compile 'com.github.ozodrukh:CircularReveal:1.1.0@aar'
-	compile 'com.squareup.picasso:picasso:2.5.2'
+    compile 'com.squareup.picasso:picasso:2.5.2'
     compile 'com.android.support:support-v4:21.0.3'
     compile files('libs/httpmime-4.3.5.jar')
     compile 'org.apache.httpcomponents:httpcore:4.3-alpha1'

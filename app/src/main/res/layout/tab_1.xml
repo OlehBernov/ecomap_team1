@@ -1,117 +1,137 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-    android:background="@color/white"
-    android:fillViewport="true"
-    android:fitsSystemWindows="true">
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/toolbar_teal"
+    android:orientation="vertical"
+    app:layout_scrollFlags="scroll|exitUntilCollapsed">
 
-
-    <LinearLayout
+    <android.support.design.widget.CoordinatorLayout
+        android:id="@+id/background_layout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:clickable="true"
-        android:focusableInTouchMode="true"
-        android:orientation="vertical"
-        android:paddingLeft="24dp"
-        android:paddingRight="24dp"
-        android:paddingTop="10dp">
+        android:layout_height="match_parent">
 
-        <android.support.design.widget.TextInputLayout
-            android:id="@+id/til_problemTitle"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+    </android.support.design.widget.CoordinatorLayout>
 
-            <EditText
-                android:id="@+id/problemTitle"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:ems="10"
-                android:hint="@string/problem_title"
-                android:inputType="textMultiLine"
-                android:textColor="@color/primary_text" />
+    <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:background="@color/white"
+        android:fillViewport="true"
+        android:fitsSystemWindows="true"
+        app:layout_scrollFlags="scroll|exitUntilCollapsed">
 
-        </android.support.design.widget.TextInputLayout>
-
-        <android.support.design.widget.TextInputLayout
-            android:id="@+id/til_problemDescription"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            <EditText
-                android:id="@+id/problemDescription"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:ems="10"
-                android:hint="@string/problem_description"
-                android:inputType="textMultiLine"
-                android:textColor="@color/primary_text" />
-
-        </android.support.design.widget.TextInputLayout>
-
-        <android.support.design.widget.TextInputLayout
-            android:id="@+id/til_problemSolution"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            <EditText
-                android:id="@+id/problemSolution"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:ems="10"
-                android:hint="@string/problem_solution"
-                android:inputType="textMultiLine"
-                android:textColor="@color/primary_text" />
-
-        </android.support.design.widget.TextInputLayout>
-
-
-        <RelativeLayout
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginTop="20dp">
-
-
-            <TextView
-                android:id="@+id/textView3"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentStart="true"
-                android:layout_centerVertical="true"
-                android:gravity="left"
-                android:text="@string/add_problem_type"
-                android:textColor="@color/ColorPrimary"
-                android:textSize="15dp" />
-
+            android:clickable="true"
+            android:focusableInTouchMode="true"
+            android:orientation="vertical"
+            android:paddingLeft="24dp"
+            android:paddingRight="24dp"
+            android:paddingTop="10dp"
+            app:layout_collapseMode="parallax">
 
             <android.support.design.widget.TextInputLayout
-                android:id="@+id/til_problemtype"
-                android:layout_width="113dp"
-                android:layout_height="wrap_content"></android.support.design.widget.TextInputLayout>
+                android:id="@+id/til_problemTitle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
 
-            <Spinner
-                android:id="@+id/spinner"
-                style="@style/Widget.AppCompat.Spinner.Underlined"
-                android:layout_width="wrap_content"
+                <EditText
+                    android:id="@+id/problemTitle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:ems="10"
+                    android:hint="@string/problem_title"
+                    android:inputType="textMultiLine"
+                    android:textColor="@color/primary_text" />
+
+            </android.support.design.widget.TextInputLayout>
+
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/til_problemDescription"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <EditText
+                    android:id="@+id/problemDescription"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:ems="10"
+                    android:hint="@string/problem_description"
+                    android:inputType="textMultiLine"
+                    android:textColor="@color/primary_text" />
+
+            </android.support.design.widget.TextInputLayout>
+
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/til_problemSolution"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <EditText
+                    android:id="@+id/problemSolution"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:ems="10"
+                    android:hint="@string/problem_solution"
+                    android:inputType="textMultiLine"
+                    android:textColor="@color/primary_text" />
+
+            </android.support.design.widget.TextInputLayout>
+
+
+            <RelativeLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
-                android:layout_toEndOf="@+id/til_problemtype"
-                android:layout_toRightOf="@+id/til_problemtype"
-                android:entries="@array/types"
-                android:prompt="@string/add_problem_type"
-                android:spinnerMode="dialog" />
-        </RelativeLayout>
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="20dp">
 
-        <android.support.v7.widget.AppCompatButton
-            android:id="@+id/btn_send_problem"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_marginBottom="24dp"
-            android:layout_marginTop="24dp"
-            android:padding="12dp"
-            android:text="@string/send_problem" />
-    </LinearLayout>
-</ScrollView>
+
+                <TextView
+                    android:id="@+id/textView3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentStart="true"
+                    android:layout_centerVertical="true"
+                    android:gravity="left"
+                    android:text="@string/add_problem_type"
+                    android:textColor="@color/ColorPrimary"
+                    android:textSize="15dp" />
+
+
+                <android.support.design.widget.TextInputLayout
+                    android:id="@+id/til_problemtype"
+                    android:layout_width="113dp"
+                    android:layout_height="wrap_content">
+
+                </android.support.design.widget.TextInputLayout>
+
+                <Spinner
+                    android:id="@+id/spinner"
+                    style="@style/Widget.AppCompat.Spinner.Underlined"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_toEndOf="@+id/til_problemtype"
+                    android:layout_toRightOf="@+id/til_problemtype"
+                    android:entries="@array/types"
+                    android:prompt="@string/add_problem_type"
+                    android:spinnerMode="dialog" />
+            </RelativeLayout>
+
+            <android.support.v7.widget.AppCompatButton
+                android:id="@+id/btn_send_problem"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_marginBottom="24dp"
+                android:layout_marginTop="24dp"
+                android:padding="12dp"
+                android:text="@string/send_problem" />
+        </LinearLayout>
+    </ScrollView>
+</RelativeLayout>
