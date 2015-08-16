@@ -319,8 +319,7 @@ public class MainActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onAnimationEnd() {
-            }
+            public void onAnimationEnd() {}
 
             @Override
             public void onAnimationCancel() {}

@@ -10,6 +10,7 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.ecomap.ukraine.R;
 import com.ecomap.ukraine.models.User;
@@ -24,6 +25,7 @@ public class ChooseProblemLocationActivity extends AppCompatActivity {
     private Intent mainIntent;
     Toolbar toolbar;
     private User user;
+    private FragmentChooseCoordMap map;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,6 +33,7 @@ public class ChooseProblemLocationActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.choose_coordinate_layout);
         user = (User) getIntent().getSerializableExtra("user");
+        map = new FragmentChooseCoordMap();
 
         addMapFragment();
         setupToolbar();
@@ -54,14 +57,19 @@ public class ChooseProblemLocationActivity extends AppCompatActivity {
     private void addMapFragment() {
         FragmentManager fragmentManager = getSupportFragmentManager();
         fragmentManager.beginTransaction()
-                .replace(R.id.map_container, new FragmentChooseCoordMap())
+                .replace(R.id.map_container, map)
                 .commit();
     }
 
 
     public void openAddDescriptionActivity (View view) {
+        if (map.getMarkerPosition() == null) {
+            Toast.makeText(this, "Tap to place marker", Toast.LENGTH_SHORT).show();
+            return;
+        }
         mainIntent = new Intent(this, AddNewProblemDecriptionActivity.class);
-
+        mainIntent.putExtra("Lat", map.getMarkerPosition().latitude);
+        mainIntent.putExtra("Lng", map.getMarkerPosition().longitude);
         startActivity(mainIntent);
         finish();
 

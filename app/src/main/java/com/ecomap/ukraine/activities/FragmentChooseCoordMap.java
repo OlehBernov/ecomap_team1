@@ -60,14 +60,13 @@ public class FragmentChooseCoordMap extends android.support.v4.app.Fragment {
         googleMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
             @Override
             public void onMapClick(LatLng latLng) {
-                if (markerPlaced) {
+                if (latLng != null) {
                     googleMap.clear();
                 }
                 googleMap.addMarker(new MarkerOptions()
                         .draggable(true).position(latLng)
                         .icon(BitmapDescriptorFactory.fromResource(R.drawable.type0))
                         .anchor(0.5F, 1));
-                markerPlaced = true;
                 markerPosition = latLng;
 
             }
@@ -97,5 +96,9 @@ public class FragmentChooseCoordMap extends android.support.v4.app.Fragment {
         googleMap.setMyLocationEnabled(true);
         settings.setMyLocationButtonEnabled(true);
 
+    }
+
+    public LatLng getMarkerPosition() {
+        return markerPosition;
     }
 }

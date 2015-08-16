@@ -107,7 +107,6 @@ public class Tab1 extends Fragment implements LogInListener, AddProblemListener,
 
     }
 
-
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View v =inflater.inflate(R.layout.tab_1,container,false);
@@ -147,16 +146,15 @@ public class Tab1 extends Fragment implements LogInListener, AddProblemListener,
         addProblemManager.registerAddProblemListener(this);
         String title = problemTitle.getText().toString();
         String description = problemDescription.getText().toString();
+
         String solution = problemSolution.getText().toString();
-        String latitude = String.valueOf(12);
-        String longitude = String.valueOf(12);
+        String latitude = getActivity().getIntent().getDoubleExtra("Lat", 0) + "";
+        String longitude = getActivity().getIntent().getDoubleExtra("Lng", 0) + "";
         String type = String.valueOf(spinner.getSelectedItemId() + 1);
         showProgresDialog();
-        addProblemManager.addProblem(title, description, solution, latitude, longitude, type, USER_ID,
-                USER_NAME, USER_SURNAME, bitmapPhotos);
-        bitmapPhotos = null;
-
-
+//        addProblemManager.addProblem(title, description, solution, latitude, longitude, type, USER_ID,
+//                USER_NAME, USER_SURNAME, bitmapPhotos);
+//        bitmapPhotos = null;
         }
 
     @Override
