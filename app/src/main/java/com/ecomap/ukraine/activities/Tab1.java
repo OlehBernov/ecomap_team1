@@ -160,9 +160,9 @@ public class Tab1 extends Fragment implements LogInListener, AddProblemListener,
 
     @Override
    public void setLogInResult(final User user) {
-      /*  USER_ID = String.valueOf(user.getId());
+        USER_ID = String.valueOf(user.getId());
         USER_NAME = String.valueOf(user.getName());
-        USER_SURNAME = String.valueOf(user.getSurname());*/
+        USER_SURNAME = String.valueOf(user.getSurname());
         this.user = user;
 
     }
