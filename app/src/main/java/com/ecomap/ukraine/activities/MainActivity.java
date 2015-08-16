@@ -29,6 +29,7 @@ import android.view.ViewGroup;
 import android.view.ViewPropertyAnimator;
 import android.view.WindowManager;
 import android.view.animation.AccelerateDecelerateInterpolator;
+import android.view.animation.DecelerateInterpolator;
 import android.view.animation.Interpolator;
 import android.widget.Button;
 import android.widget.TextView;
@@ -271,13 +272,13 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private void animateButton(final FloatingActionButton fab) {
+    public void animateButton(final FloatingActionButton fab) {
         Interpolator curveInterpolator = PathInterpolatorCompat.create(1, 0);
         AnimatorSet animator = new AnimatorSet();
         ObjectAnimator movementX
-                = ObjectAnimator.ofFloat(fab, "x", fab.getX() - 120);
+                = ObjectAnimator.ofFloat(fab, "translationX", -150);
         ObjectAnimator movementY
-                = ObjectAnimator.ofFloat(fab, "y", fab.getY() + 20);
+                = ObjectAnimator.ofFloat(fab, "translationY", 35);
         movementX.setInterpolator(curveInterpolator);
         animator.playTogether(movementX, movementY);
         animator.setDuration(200);
@@ -286,8 +287,7 @@ public class MainActivity extends AppCompatActivity {
             public void onAnimationEnd(Animator animation) {
                 super.onAnimationEnd(animation);
                 animateReavel();
-                fab.animate().alpha(0).start();
-                fab.setVisibility(View.INVISIBLE);
+                fab.hide();
             }
 
             @Override
@@ -301,8 +301,9 @@ public class MainActivity extends AppCompatActivity {
 
     private void animateReavel() {
         final View myView = findViewById(R.id.ll_reveal);
-        int cy = (myView.getTop() + myView.getBottom()) / 2;
-        int cx = 260 + fab.getHeight() / 2;
+        int cx = (int)((fab.getX() + fab.getHeight() / 2));
+        int cy = (int) ((fab.getY() + fab.getHeight() / 2))
+                - (slidingUpPanelLayout.getHeight() - myView.getBottom());
 
         // get the final radius for the clipping circle
         int finalRadius = Math.max(myView.getWidth(), myView.getHeight());
@@ -315,7 +316,6 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onAnimationStart() {
                 myView.setVisibility(View.VISIBLE);
-                myView.setClickable(true);
             }
 
             @Override
@@ -335,32 +335,29 @@ public class MainActivity extends AppCompatActivity {
         DataManager.getInstance(this).refreshAllProblems();
     }
 
-    public void reverseAnimateReavel(View v) {
+    public void reverseAnimateReavel(final View v) {
         final View myView = findViewById(R.id.ll_reveal);
 
-        int cy = (myView.getTop() + myView.getBottom()) / 2;
-        int cx = (int)fab.getX() + fab.getHeight() / 2;
+        int cx = (int)((fab.getX() + fab.getHeight() / 2));
+        int cy = (int) ((fab.getY() + fab.getHeight() / 2))
+                - (slidingUpPanelLayout.getHeight() - myView.getBottom());
 
-        // get the final radius for the clipping circle
         int finalRadius = Math.max(myView.getWidth(), myView.getHeight());
 
         SupportAnimator animator =
-                ViewAnimationUtils.createCircularReveal(myView, cx, cy, fab.getHeight(), finalRadius);
+                ViewAnimationUtils.createCircularReveal(myView, cx, cy, 0, finalRadius);
         animator.setInterpolator(new AccelerateDecelerateInterpolator());
         animator.setDuration(200);
         SupportAnimator reversedAnimator = animator.reverse();
         reversedAnimator.addListener(new SupportAnimator.AnimatorListener() {
             @Override
             public void onAnimationStart() {
-                fab.animate().alpha(1).setDuration(50).start();
-                myView.setClickable(false);
-
+                fab.show();
             }
 
             @Override
             public void onAnimationEnd() {
                 fab.setVisibility(View.VISIBLE);
-                fab.animate().alpha(1).start();
                 myView.setVisibility(View.INVISIBLE);
                 showButton(fab);
             }
@@ -379,9 +376,9 @@ public class MainActivity extends AppCompatActivity {
         Interpolator curveInterpolator = PathInterpolatorCompat.create(0, 1);
         AnimatorSet animator = new AnimatorSet();
         ObjectAnimator movementX
-                = ObjectAnimator.ofFloat(fab, "x", fab.getX() + 120);
+                = ObjectAnimator.ofFloat(fab, "translationX", 0);
         ObjectAnimator movementY
-                = ObjectAnimator.ofFloat(fab, "y", fab.getY() - 20);
+                = ObjectAnimator.ofFloat(fab, "translationY", 0);
         movementX.setInterpolator(curveInterpolator);
         animator.playTogether(movementX, movementY);
         animator.setDuration(200);
