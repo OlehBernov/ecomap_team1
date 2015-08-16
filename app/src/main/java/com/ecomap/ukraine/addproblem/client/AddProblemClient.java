@@ -20,6 +20,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by Andriy on 12.08.2015.
@@ -48,7 +49,7 @@ public class AddProblemClient {
                                        final String latitude, final String longitude, final String type,
                                        final String userId, final String userName, final String userSurname,
                                        final ArrayList<Bitmap> bitmaps) {
-        HashMap<String, String> params = new HashMap<String, String>();
+        HashMap<String, String> params = new HashMap<>();
 
         params.put("title", title);
         params.put("content", content);

@@ -3,6 +3,7 @@ package com.ecomap.ukraine.activities;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
 import android.media.ExifInterface;
 import android.net.Uri;
@@ -69,7 +70,6 @@ public class AddNewProblemDecriptionActivity extends AppCompatActivity  {
     private List<String> userPhotos;
     private TableLayout photoDescriptionLayout;
     private List<String> descriptions;
-    private ArrayList<Bitmap> bitmapsPhoto;
 
     //private DataManager dataManager;
 
@@ -84,7 +84,11 @@ public class AddNewProblemDecriptionActivity extends AppCompatActivity  {
 
 
     public ArrayList<Bitmap> getBitmapsPhoto () {
-        return bitmapsPhoto;
+        ArrayList<Bitmap> photoBitmaps = new ArrayList<>();
+        for (int i = 0; i < userPhotos.size(); i++) {
+            photoBitmaps.add(BitmapFactory.decodeFile(userPhotos.get(i)));
+        }
+        return photoBitmaps;
     }
 
 
