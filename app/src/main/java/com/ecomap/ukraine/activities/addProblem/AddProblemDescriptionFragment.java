@@ -56,9 +56,9 @@ public class AddProblemDescriptionFragment extends Fragment implements LogInList
 
     private AddProblemManager addProblemManager;
 
-    DataManager dataManager;
+    private DataManager dataManager;
 
-    AccountManager accountManager;
+    private AccountManager accountManager;
 
     private static ArrayList<Bitmap> bitmapPhotos;
 
