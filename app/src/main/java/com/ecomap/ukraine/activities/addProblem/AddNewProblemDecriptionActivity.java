@@ -84,6 +84,7 @@ public class AddNewProblemDecriptionActivity extends AppCompatActivity  {
     }
 
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -135,7 +136,7 @@ public class AddNewProblemDecriptionActivity extends AppCompatActivity  {
         int id = item.getItemId();
 
         if (id == R.id.action_confirm_problem) {
-            AddProblemDescriptionFragment.getInstance(getBitmapsPhoto()).sendProblem();
+            AddProblemDescriptionFragment.getInstance(getBitmapsPhoto(), descriptions).sendProblem();
             return true;
         }
 
@@ -422,9 +423,6 @@ public class AddNewProblemDecriptionActivity extends AppCompatActivity  {
         finish();
     }
 
-    public void sendProblem(View v) {
-        AddProblemDescriptionFragment.getInstance(getBitmapsPhoto()).sendProblem();
-    }
 
     public void addPhoto(View v) {
         pager.setCurrentItem(ADD_PHOTO_ITEM);

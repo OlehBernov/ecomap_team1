@@ -54,7 +54,7 @@ public class FragmentEcoMap extends android.support.v4.app.Fragment
     private static final String LONGITUDE = "longitude";
     private static final String ZOOM = "zoom";
     private static Activity activity;
-    static FragmentManager fragmentManager;
+    private static FragmentManager fragmentManager;
 
     private MapView mapView;
     private GoogleMap googleMap;
@@ -206,7 +206,7 @@ public class FragmentEcoMap extends android.support.v4.app.Fragment
             clusterManager.setRenderer(new IconRenderer(getActivity(), googleMap, clusterManager));
         }
         else {
-            clusterManager.setRenderer(new DefaultClusterRenderer(getActivity(), googleMap, clusterManager));
+            clusterManager.setRenderer(new DefaultClusterRenderer<>(getActivity(), googleMap, clusterManager));
         }
 
     }

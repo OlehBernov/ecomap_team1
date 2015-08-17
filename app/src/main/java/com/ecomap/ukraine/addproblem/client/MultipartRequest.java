@@ -33,18 +33,20 @@ public class MultipartRequest extends Request<String> {
     private Charset chars = Charset.forName("UTF-8");
 
     private final Response.Listener<String> listener;
-    private  ArrayList<Bitmap> files = new ArrayList<>();
+    private  Bitmap file;
     private final HashMap<String, String> params;
+    private int counter = 0;
 
     public MultipartRequest(final String url, final Response.Listener<String> listener,
                             final Response.ErrorListener errorListener,
-                            final ArrayList<Bitmap> files, final HashMap<String, String> params) {
+                            final Bitmap file, final HashMap<String, String> params, int count) {
         super(Method.POST, url, errorListener);
 
         this.listener = listener;
-        if (files != null) {
-            this.files = files;
+        if (file != null) {
+            this.file = file;
         }
+        this.counter = count;
         this.params = params;
         buildMultipartEntity();
     }
@@ -57,14 +59,10 @@ public class MultipartRequest extends Request<String> {
     private void buildMultipartEntity() {
         builder.setMode(HttpMultipartMode.BROWSER_COMPATIBLE);
 
-        if (files != null) {
-            int i = 0;
-            for (Bitmap image : files) {
+        if (file != null) {
                 ByteArrayOutputStream bos = new ByteArrayOutputStream();
-                image.compress(Bitmap.CompressFormat.JPEG, 50, bos);
-                builder.addPart("file[" + i + "]", new ByteArrayBody(bos.toByteArray(), "image_" + i));
-                i++;
-            }
+                file.compress(Bitmap.CompressFormat.JPEG, 50, bos);
+                builder.addPart("file[" + counter + "]", new ByteArrayBody(bos.toByteArray(), "image_" + counter));
         }
         builder.setCharset(chars);
         try {
@@ -94,9 +92,7 @@ public class MultipartRequest extends Request<String> {
 
     }
 
-    /**
-     * copied from Android StringRequest class
-     */
+
     @Override
     protected Response<String> parseNetworkResponse(NetworkResponse response) {
         String parsed;

@@ -7,6 +7,7 @@ import com.ecomap.ukraine.addproblem.client.AddProblemClient;
 
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 
@@ -54,10 +55,10 @@ public class AddProblemManager implements AddProblemRequestReceiver, AddProblemN
     public void addProblem (final String title, final String content, final String proposal,
                             final String latitude, final String longitude, final String type,
                             final String userId, final String userName, final String userSurname,
-                            final ArrayList<Bitmap> bitmaps) {
+                            final ArrayList<Bitmap> bitmaps, final List<String> photoDescriptions) {
 
         addProblemClient.addProblemDescription(title, content, proposal, latitude, longitude,
-                                               type, userId, userName, userSurname, bitmaps);
+                type, userId, userName, userSurname, bitmaps, photoDescriptions);
     }
 
 }

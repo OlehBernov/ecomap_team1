@@ -96,6 +96,9 @@ public class Validator {
 
     public boolean addProblemValidation(final EditText problemTitle) {
 
+        if(problemTitle == null) {
+            return false;
+        }
         String title = problemTitle.getText().toString();
         if (title.isEmpty()) {
             problemTitle.setError(ValidationRequirements.Title_FIELD_EMPTY);

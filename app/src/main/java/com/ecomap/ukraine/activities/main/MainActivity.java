@@ -160,9 +160,7 @@ public class MainActivity extends AppCompatActivity {
         setUpDrawerLayout();
         setupFilter();
 
-        if(user == null) {
             user = (User) getIntent().getSerializableExtra(ExtraFieldNames.USER);
-        }
         setUserInformation(user);
 
         slidingUpPanelLayout = (SlidingUpPanelLayout) findViewById(R.id.sliding_layout);

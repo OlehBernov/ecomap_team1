@@ -62,6 +62,8 @@ public class AddProblemDescriptionFragment extends Fragment implements LogInList
 
     private static ArrayList<Bitmap> bitmapPhotos;
 
+    private static List<String> photoDescriptions;
+
     private User user;
 
 
@@ -80,12 +82,15 @@ public class AddProblemDescriptionFragment extends Fragment implements LogInList
         }
     };
 
-    public static AddProblemDescriptionFragment getInstance(ArrayList<Bitmap> bitmapPhotos) {
+    public static AddProblemDescriptionFragment getInstance(ArrayList<Bitmap> bitmapPhotos,
+        List<String> descriptions) {
         if (instance == null) {
             instance = new AddProblemDescriptionFragment();
         }
-        if(bitmapPhotos != null)
-        AddProblemDescriptionFragment.bitmapPhotos = bitmapPhotos;
+        if(bitmapPhotos != null) {
+            AddProblemDescriptionFragment.bitmapPhotos = bitmapPhotos;
+            AddProblemDescriptionFragment.photoDescriptions = descriptions;
+        }
         return instance;
     }
 
@@ -147,7 +152,7 @@ public class AddProblemDescriptionFragment extends Fragment implements LogInList
         String type = String.valueOf(spinner.getSelectedItemId() + 1);
         showProgresDialog();
         addProblemManager.addProblem(title, description, solution, latitude, longitude, type, USER_ID,
-               USER_NAME, USER_SURNAME, bitmapPhotos);
+               USER_NAME, USER_SURNAME, bitmapPhotos, photoDescriptions);
         bitmapPhotos = null;
         }
 
@@ -193,6 +198,7 @@ public class AddProblemDescriptionFragment extends Fragment implements LogInList
         startActivity(intent);
         getActivity().finish();
         dataManager.removeProblemListener(this);
+
     }
 
 
