@@ -62,8 +62,6 @@ public class AddProblemDescriptionFragment extends Fragment implements LogInList
 
     private static ArrayList<Bitmap> bitmapPhotos;
 
-    private  Intent intent;
-
     private User user;
 
 
@@ -190,7 +188,7 @@ public class AddProblemDescriptionFragment extends Fragment implements LogInList
     @Override
     public void updateAllProblems(final List<Problem> problems) {
         Toast.makeText(getActivity().getApplicationContext(), "Problem added sucessfully", Toast.LENGTH_LONG) .show();
-        intent = new Intent(getActivity(), MainActivity.class);
+        Intent intent = new Intent(getActivity(), MainActivity.class);
         intent.putExtra(ExtraFieldNames.USER, user);
         startActivity(intent);
         getActivity().finish();
