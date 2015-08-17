@@ -50,13 +50,12 @@ public class InformationPanel {
 
     private static final float ANCHOR_POINT = 0.3f;
 
-    private static final String DEFAULT_DESCRIPTION = "Description is missing";
-    private static final String DEFAULT_PROPOSAL = "Proposal is missing";
     private static final String ADD_COMMENT_HINT = "Add comment";
     private static final String RESOLVED = "resolved";
     private static final String UNSOLVED = "unsolved";
     private static final String TRANSFORMATION = "transformation";
     private static final String POSITION = "position";
+    private static final String WRONG_TEXT = "null";
 
     private static final int STAR_NUMBER = 5;
 
@@ -83,10 +82,10 @@ public class InformationPanel {
     private TextView problemStatus;
     private TextView userInformation;
     private TextView votesNumber;
-    EditText commentText;
+    private EditText commentText;
 
-    private TextView descriptionFiled;
-    private TextView proposalFiled;
+    private ExpandableTextView descriptionFiled;
+    private ExpandableTextView proposalFiled;
     private TableLayout activitiesLayout;
     private EditText addComment;
     private LinearLayout photoContainer;
@@ -125,8 +124,6 @@ public class InformationPanel {
         userInformation = (TextView) activity.findViewById(R.id.user);
         votesNumber = (TextView) activity.findViewById(R.id.number_of_likes);
 
-        descriptionFiled = (TextView) activity.findViewById(R.id.description_field);
-        proposalFiled = (TextView) activity.findViewById(R.id.proposal_field);
         activitiesLayout = (TableLayout) activity.findViewById(R.id.activities);
         addComment = (EditText) activity.findViewById(R.id.add_comment);
         commentText = (EditText) activity.findViewById(R.id.add_comment);
@@ -138,6 +135,9 @@ public class InformationPanel {
         titleView = (TextView) activity.findViewById(R.id.details_title);
         toolbar.setBackgroundColor(0xff004d40);
         fab = (FloatingActionButton)activity.findViewById(R.id.fab2);
+
+        descriptionFiled = (ExpandableTextView) activity.findViewById(R.id.description_field);
+        proposalFiled = (ExpandableTextView )activity.findViewById(R.id.proposal_field);
 
         slidingUpPanelLayout = (SlidingUpPanelLayout) activity.findViewById(R.id.sliding_layout);
         slidingUpPanelLayout.setPanelSlideListener(new SlidingUpPanelLayout.PanelSlideListener() {
@@ -410,9 +410,9 @@ public class InformationPanel {
             star.setBackgroundResource(R.drawable.ic_star_border_black_24dp);
         }
 
-        descriptionFiled.setText(DEFAULT_DESCRIPTION);
-        proposalFiled.setText(DEFAULT_PROPOSAL);
-        addComment.setText("");
+        descriptionFiled.setText(" ");
+        proposalFiled.setText(" ");
+        addComment.clearComposingText();
         addComment.setHint(ADD_COMMENT_HINT);
 
         if (isActivityLayoutHaveChild()) {
@@ -569,8 +569,18 @@ public class InformationPanel {
             ImageView star = (ImageView) activity.findViewById(STARS_ID[i]);
             star.setBackgroundResource(R.drawable.ic_star_black_48dp);
         }
-        descriptionFiled.setText(details.getContent());
-        proposalFiled.setText(details.getProposal());
+        String description = details.getContent();
+        if (isTextValid(description)) {
+            descriptionFiled.setText(description);
+        }
+        String proposal = details.getProposal();
+        if (isTextValid(proposal)) {
+            proposalFiled.setText(proposal);
+        }
+    }
+
+    private boolean isTextValid(String text) {
+        return !text.equals(WRONG_TEXT);
     }
 
     public void putBriefInformation() {

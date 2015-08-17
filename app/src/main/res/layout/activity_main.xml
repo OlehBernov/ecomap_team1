@@ -1,230 +1,228 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
-
-
-<android.support.v4.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/drawer"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <FrameLayout xmlns:tools="http://schemas.android.com/tools"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        tools:context="com.hmkcode.app.MainActivity">
 
-        <FrameLayout
+    <android.support.v4.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/drawer"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <FrameLayout xmlns:tools="http://schemas.android.com/tools"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_gravity="start|top"
-            android:orientation="vertical">
+            tools:context="com.hmkcode.app.MainActivity">
 
-            <android.support.v4.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                xmlns:app="http://schemas.android.com/apk/res-auto"
-                android:id="@+id/drawer2"
+            <FrameLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="match_parent"
+                android:layout_gravity="start|top"
+                android:orientation="vertical">
 
-                <com.sothree.slidinguppanel.SlidingUpPanelLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                    xmlns:sothree="http://schemas.android.com/apk/res-auto"
-                    android:id="@+id/sliding_layout"
+                <android.support.v4.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                    xmlns:app="http://schemas.android.com/apk/res-auto"
+                    android:id="@+id/drawer2"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:gravity="bottom"
-                    sothree:umanoPanelHeight="0dp"
-                    sothree:umanoParalaxOffset="200dp"
-                    sothree:umanoShadowHeight="0dp"
-                    sothree:umanoOverlay="true">
+                    android:layout_height="match_parent">
 
+                    <com.sothree.slidinguppanel.SlidingUpPanelLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                        xmlns:sothree="http://schemas.android.com/apk/res-auto"
+                        android:id="@+id/sliding_layout"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="bottom"
+                        sothree:umanoOverlay="true"
+                        sothree:umanoPanelHeight="0dp"
+                        sothree:umanoParalaxOffset="200dp"
+                        sothree:umanoShadowHeight="0dp">
+
+
+                        <FrameLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent">
+
+
+                            <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                                android:id="@+id/container"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent">
+
+                            </FrameLayout>
+
+
+                            <android.support.design.widget.FloatingActionButton
+                                android:id="@+id/fab1"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="bottom|right"
+                                android:layout_marginBottom="72dp"
+                                android:src="@drawable/ic_gps_fixed_black_24dp"
+                                app:backgroundTint="#FFFFFFFF"
+                                app:elevation="6dp"
+                                app:pressedTranslationZ="12dp" />
+
+                        </FrameLayout>
+
+                        <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                            android:id="@+id/sliding_linear_layout"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_alignParentBottom="true"
+                            android:layout_centerHorizontal="true"
+                            android:background="#60004d40"
+                            android:orientation="vertical">
+
+                            <RelativeLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="?attr/actionBarSize">
+
+                                <TextView
+                                    android:id="@+id/details_title"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_centerVertical="true"
+                                    android:gravity="center"
+                                    android:text="Details"
+                                    android:textColor="#ffffffff"
+                                    android:textSize="30sp"
+                                    android:transformPivotX="@dimen/activity_vertical_margin"
+                                    android:transformPivotY="16dp" />
+                            </RelativeLayout>
+
+                            <ScrollView
+                                android:id="@+id/panelScrollView"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:layout_gravity="right">
+
+                                <include
+                                    android:id="@+id/details_layout"
+                                    layout="@layout/details_layout"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content" />
+
+                            </ScrollView>
+
+                        </LinearLayout>
+
+                    </com.sothree.slidinguppanel.SlidingUpPanelLayout>
 
                     <FrameLayout
                         android:layout_width="match_parent"
                         android:layout_height="match_parent">
 
-
-                        <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                            android:id="@+id/container"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent">
-
-                        </FrameLayout>
-
-
                         <android.support.design.widget.FloatingActionButton
-                            android:id="@+id/fab1"
+                            android:id="@+id/fab2"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:src="@drawable/ic_gps_fixed_black_24dp"
                             android:layout_gravity="bottom|right"
-                            android:layout_marginBottom="72dp"
-                            app:backgroundTint="#FFFFFFFF"
+                            android:src="@drawable/ic_add_white_24dp"
+                            app:backgroundTint="#ff004d40"
+                            app:borderWidth="0dp"
                             app:elevation="6dp"
-                            app:pressedTranslationZ="12dp"/>
+                            app:pressedTranslationZ="12dp" />
+
+                        <io.codetail.widget.RevealLinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                            android:layout_width="match_parent"
+                            android:layout_height="?attr/actionBarSize"
+                            android:layout_gravity="bottom">
+
+                            <RelativeLayout
+                                android:id="@+id/ll_reveal"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:layout_gravity="center"
+                                android:background="#ff004d40"
+                                android:orientation="horizontal"
+                                android:visibility="invisible">
+
+                                <Button
+                                    android:id="@+id/cancel_problem_adding"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_alignParentEnd="true"
+                                    android:layout_alignParentRight="true"
+                                    android:layout_centerVertical="true"
+                                    android:layout_marginEnd="16dp"
+                                    android:layout_marginRight="16dp"
+                                    android:background="@color/transparent"
+                                    android:clickable="true"
+                                    android:onClick="openChooseProblemLocationActivity"
+                                    android:text="ADD PROBLEM"
+                                    android:textColor="@color/white"
+                                    android:textSize="18sp" />
+
+                                <Button
+                                    android:id="@+id/add_problem_button"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_centerVertical="true"
+                                    android:layout_marginEnd="16dp"
+                                    android:layout_marginRight="16dp"
+                                    android:layout_toLeftOf="@id/cancel_problem_adding"
+                                    android:layout_toStartOf="@id/cancel_problem_adding"
+                                    android:background="@color/transparent"
+                                    android:onClick="reverseAnimateReavel"
+                                    android:text="CANCEL"
+                                    android:textColor="@color/white"
+                                    android:textSize="18sp" />
+
+                            </RelativeLayout>
+
+                        </io.codetail.widget.RevealLinearLayout>
+
 
                     </FrameLayout>
 
-                    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                        android:id="@+id/sliding_linear_layout"
+
+                    <android.support.design.widget.NavigationView
+                        android:id="@+id/navigation2"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:layout_alignParentBottom="true"
-                        android:layout_centerHorizontal="true"
-                        android:background="#60004d40"
-                        android:orientation="vertical">
+                        android:layout_gravity="end"
+                        android:layout_marginLeft="-64dp"
+                        android:background="@color/navigation"
+                        app:itemIconTint="#333"
+                        app:itemTextColor="#333">
 
-                        <RelativeLayout
+                        <include
+                            layout="@layout/filter_content"
                             android:layout_width="match_parent"
-                            android:layout_height="?attr/actionBarSize">
-                            <TextView
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:id="@+id/details_title"
-                                android:transformPivotX="@dimen/activity_vertical_margin"
-                                android:transformPivotY="16dp"
-                                android:textSize="30sp"
-                                android:text="Details"
-                                android:textColor="#ffffffff"
-                                android:gravity="center"
-                                android:layout_centerVertical="true"/>
-                        </RelativeLayout>
+                            android:layout_height="wrap_content" />
 
-                        <ScrollView
-                            android:id="@+id/panelScrollView"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:layout_gravity="right">
+                    </android.support.design.widget.NavigationView>
 
-                            <include
-                                android:id="@+id/details_layout"
-                                layout="@layout/details_layout"
-                                android:layout_height="wrap_content"
-                                android:layout_width="match_parent"
-                                />
-
-                        </ScrollView>
-
-                    </LinearLayout>
-
-                </com.sothree.slidinguppanel.SlidingUpPanelLayout>
-
-                <FrameLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent">
-
-                    <android.support.design.widget.FloatingActionButton
-                        android:id="@+id/fab2"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:src="@drawable/ic_add_white_24dp"
-                        android:layout_gravity="bottom|right"
-                        app:backgroundTint="#ff004d40"
-                        app:borderWidth="0dp"
-                        app:elevation="6dp"
-                        app:pressedTranslationZ="12dp"/>
-
-                    <io.codetail.widget.RevealLinearLayout
-                        xmlns:android="http://schemas.android.com/apk/res/android"
-                        android:layout_gravity="bottom"
-                        android:layout_width="match_parent"
-                        android:layout_height="?attr/actionBarSize">
-                        <RelativeLayout
-                            android:id="@+id/ll_reveal"
-                            android:visibility="invisible"
-                            android:layout_gravity="center"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:background="#ff004d40"
-                            android:orientation="horizontal">
-
-                            <Button
-                                android:id="@+id/cancel_problem_adding"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginEnd="16dp"
-                                android:layout_marginRight="16dp"
-                                android:layout_alignParentEnd="true"
-                                android:layout_alignParentRight="true"
-                                android:layout_centerVertical="true"
-                                android:textColor="@color/white"
-                                android:textSize="18sp"
-                                android:background="@color/transparent"
-                                android:text="ADD PROBLEM"
-                                android:clickable="true"
-                                android:onClick="openChooseProblemLocationActivity" />
-
-                            <Button
-                                android:id="@+id/add_problem_button"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_toLeftOf="@id/cancel_problem_adding"
-                                android:layout_toStartOf="@id/cancel_problem_adding"
-                                android:layout_marginEnd="16dp"
-                                android:layout_marginRight="16dp"
-                                android:layout_centerVertical="true"
-                                android:background="@color/transparent"
-                                android:text="CANCEL"
-                                android:textColor="@color/white"
-                                android:textSize="18sp"
-                                android:onClick="reverseAnimateReavel" />
-
-                        </RelativeLayout>
-
-                    </io.codetail.widget.RevealLinearLayout>
+                </android.support.v4.widget.DrawerLayout>
 
 
+            </FrameLayout>
 
-                </FrameLayout>
 
+            <android.support.v7.widget.Toolbar
+                android:id="@+id/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                android:background="#ff004d40"
+                android:theme="@style/DrawerArrowStyle"
+                android:title="@string/app_name"
+                app:popupTheme="@style/AppTheme">
 
-                <android.support.design.widget.NavigationView
-                    android:id="@+id/navigation2"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_gravity="end"
-                    android:layout_marginLeft="-64dp"
-                    android:background="@color/navigation"
-                    app:itemIconTint="#333"
-                    app:itemTextColor="#333">
-
-                    <include
-                        layout="@layout/filter_content"
-                        android:layout_height="wrap_content"
-                        android:layout_width="match_parent"
-                        />
-
-                </android.support.design.widget.NavigationView>
-
-            </android.support.v4.widget.DrawerLayout>
-
+            </android.support.v7.widget.Toolbar>
 
         </FrameLayout>
 
-
-        <android.support.v7.widget.Toolbar
-            android:id="@+id/toolbar"
-            android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            android:background="#ff004d40"
-            android:theme="@style/DrawerArrowStyle"
-            app:popupTheme="@style/AppTheme"
-            android:title="@string/app_name">
-
-        </android.support.v7.widget.Toolbar>
-
-    </FrameLayout>
-
-    <android.support.design.widget.NavigationView
-        android:id="@+id/navigation"
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:layout_gravity="start"
-        android:background="#D9D9D9"
-        app:headerLayout="@layout/header"
-        app:itemIconTint="#333"
-        app:itemTextColor="#333"
-        app:menu="@menu/navigation_drawer_items" />
+        <android.support.design.widget.NavigationView
+            android:id="@+id/navigation"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_gravity="start"
+            android:background="#D9D9D9"
+            app:headerLayout="@layout/header"
+            app:itemIconTint="#333"
+            app:itemTextColor="#333"
+            app:menu="@menu/navigation_drawer_items" />
 
     </android.support.v4.widget.DrawerLayout>
 

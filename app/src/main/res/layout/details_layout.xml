@@ -5,7 +5,7 @@
     android:clickable="false"
     android:orientation="vertical">
 
-    <RelativeLayout xmlns:tools="http://schemas.android.com/tools"
+    <RelativeLayout
         android:id="@+id/slidingUpLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -28,7 +28,6 @@
             android:layout_height="30dp"
             android:layout_alignParentEnd="true"
             android:layout_alignParentRight="true"
-
             android:layout_below="@+id/markerIcon"
             android:layout_marginEnd="10dp"
             android:layout_marginLeft="10dp"
@@ -36,7 +35,6 @@
             android:layout_marginTop="20dp"
             android:background="#eeeeee"
             android:orientation="horizontal">
-
 
             <ImageView
                 android:id="@+id/star1"
@@ -156,7 +154,7 @@
                 android:layout_alignParentEnd="true"
                 android:layout_alignParentRight="true"
                 android:layout_below="@+id/im"
-                android:text="Знищення гніздівель ластівок, в районі Борисполя"
+                android:text="Title is missing."
                 android:textAppearance="?android:attr/textAppearanceSmall"
                 android:textColor="@color/abc_primary_text_disable_only_material_light"
                 android:textSize="15dp"
@@ -177,6 +175,7 @@
         android:clickable="false"
         android:orientation="vertical">
 
+
         <TextView
             android:id="@+id/description"
             android:layout_width="wrap_content"
@@ -190,17 +189,18 @@
             android:textSize="15dp"
             android:textStyle="bold" />
 
-        <TextView
+        <com.ecomap.ukraine.activities.problemDetails.ExpandableTextView
             android:id="@+id/description_field"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:paddingLeft="10dp"
             android:paddingRight="10dp"
-            android:paddingTop="10dp"
-            android:text="Description is missing"
+            android:paddingTop="5dp"
+            android:text="Description: "
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:textColor="@color/abc_primary_text_disable_only_material_light"
-            android:textSize="15dp" />
+            android:textSize="15sp"
+            android:textStyle="normal" />
 
         <TextView
             android:id="@+id/proposal"
@@ -209,23 +209,25 @@
             android:paddingLeft="10dp"
             android:paddingRight="10dp"
             android:paddingTop="10dp"
-            android:text="Proposal: "
+            android:text="Description is missing."
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:textColor="@color/abc_primary_text_disable_only_material_light"
-            android:textSize="15dp"
+            android:textSize="15sp"
             android:textStyle="bold" />
 
-        <TextView
+
+        <com.ecomap.ukraine.activities.problemDetails.ExpandableTextView
             android:id="@+id/proposal_field"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:paddingLeft="10dp"
             android:paddingRight="10dp"
             android:paddingTop="10dp"
-            android:text="Proposal is missing"
+            android:text="Proposal is missing."
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:textColor="@color/abc_primary_text_disable_only_material_light"
-            android:textSize="15dp" />
+            android:textSize="15sp"
+            android:textStyle="normal" />
 
         <TextView
             android:id="@+id/photo"
