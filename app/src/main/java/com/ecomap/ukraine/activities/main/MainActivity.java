@@ -1,4 +1,4 @@
-package com.ecomap.ukraine.activities;
+package com.ecomap.ukraine.activities.main;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
@@ -26,18 +26,17 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.ViewPropertyAnimator;
 import android.view.WindowManager;
 import android.view.animation.AccelerateDecelerateInterpolator;
-import android.view.animation.DecelerateInterpolator;
 import android.view.animation.Interpolator;
 import android.widget.Button;
 import android.widget.TextView;
 
 import com.codetroopers.betterpickers.calendardatepicker.CalendarDatePickerDialog;
 import com.ecomap.ukraine.R;
+import com.ecomap.ukraine.activities.Authorization.LoginScreen;
+import com.ecomap.ukraine.activities.addProblem.ChooseProblemLocationActivity;
 import com.ecomap.ukraine.data.manager.DataManager;
-import com.ecomap.ukraine.filter.Filter;
 import com.ecomap.ukraine.filter.FilterContract;
 import com.ecomap.ukraine.filter.FilterManager;
 import com.ecomap.ukraine.filter.FilterState;

@@ -1,4 +1,4 @@
-package com.ecomap.ukraine.activities;
+package com.ecomap.ukraine.activities.problemDetails;
 
 import android.animation.ValueAnimator;
 import android.app.Activity;
@@ -30,6 +30,9 @@ import android.widget.TableRow;
 import android.widget.TextView;
 
 import com.ecomap.ukraine.R;
+import com.ecomap.ukraine.activities.main.IconRenderer;
+import com.ecomap.ukraine.activities.main.MainActivity;
+import com.ecomap.ukraine.activities.addProblem.BitmapResizer;
 import com.ecomap.ukraine.data.manager.DataManager;
 import com.ecomap.ukraine.models.Types.ActivityType;
 import com.ecomap.ukraine.models.Details;

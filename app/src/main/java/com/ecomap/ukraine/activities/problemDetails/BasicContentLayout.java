@@ -1,4 +1,4 @@
-package com.ecomap.ukraine.activities;
+package com.ecomap.ukraine.activities.problemDetails;
 
 import android.content.Context;
 import android.view.View;

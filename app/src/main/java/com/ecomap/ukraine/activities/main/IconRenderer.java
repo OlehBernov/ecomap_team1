@@ -1,4 +1,4 @@
-package com.ecomap.ukraine.activities;
+package com.ecomap.ukraine.activities.main;
 
 import android.app.Activity;
 import android.graphics.Bitmap;

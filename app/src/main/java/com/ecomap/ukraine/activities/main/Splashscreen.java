@@ -1,4 +1,4 @@
-package com.ecomap.ukraine.activities;
+package com.ecomap.ukraine.activities.main;
 
 
 import android.app.Activity;
@@ -6,14 +6,12 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.View;
-import android.view.Window;
-import android.widget.TextView;
 
 import com.ecomap.ukraine.R;
+import com.ecomap.ukraine.activities.Authorization.LoginScreen;
 import com.ecomap.ukraine.data.manager.ProblemListener;
 import com.ecomap.ukraine.models.Details;
 import com.ecomap.ukraine.models.Problem;

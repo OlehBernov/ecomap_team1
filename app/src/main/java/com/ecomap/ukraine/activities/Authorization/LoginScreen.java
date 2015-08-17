@@ -1,4 +1,4 @@
-package com.ecomap.ukraine.activities;
+package com.ecomap.ukraine.activities.Authorization;
 
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -15,6 +15,8 @@ import android.widget.EditText;
 import com.ecomap.ukraine.R;
 import com.ecomap.ukraine.account.manager.AccountManager;
 import com.ecomap.ukraine.account.manager.LogInListener;
+import com.ecomap.ukraine.activities.main.MainActivity;
+import com.ecomap.ukraine.activities.addProblem.AddProblemDescriptionFragment;
 import com.ecomap.ukraine.models.User;
 import com.ecomap.ukraine.validation.Validator;
 import com.facebook.CallbackManager;
@@ -148,7 +150,7 @@ public class LoginScreen extends AppCompatActivity implements LogInListener {
         String email = emailText.getText().toString();
         String password = passwordText.getText().toString();
 
-        accountManager.registerLogInListener(Tab1.getInstance(null));
+        accountManager.registerLogInListener(AddProblemDescriptionFragment.getInstance(null));
         accountManager.registerLogInListener(this);
         accountManager.logInUser(password, email);
 

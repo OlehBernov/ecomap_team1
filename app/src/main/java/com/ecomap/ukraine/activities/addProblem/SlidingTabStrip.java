@@ -1,4 +1,4 @@
-package com.ecomap.ukraine.activities;
+package com.ecomap.ukraine.activities.addProblem;
 
 import android.content.Context;
 import android.graphics.Canvas;

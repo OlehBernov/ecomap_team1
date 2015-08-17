@@ -1,4 +1,4 @@
-package com.ecomap.ukraine.activities;
+package com.ecomap.ukraine.activities.addProblem;
 
 
 import android.support.v4.app.Fragment;
@@ -29,13 +29,14 @@ public class ViewPagerAdapter extends FragmentStatePagerAdapter {
 
         if(position == 0) // if the position is 0 we are returning the First tab
         {
-            Tab1 tab1 = Tab1.getInstance(null);
-            return tab1;
+            AddProblemDescriptionFragment addProblemDescriptionFragment =
+                    AddProblemDescriptionFragment.getInstance(null);
+            return addProblemDescriptionFragment;
         }
         else             // As we are having 2 tabs if the position is now 0 it must be 1 so we are returning second tab
         {
-            Tab2 tab2 = new Tab2();
-            return tab2;
+            AddPhotoFragment AddPhotoFragment = new AddPhotoFragment();
+            return AddPhotoFragment;
         }
 
     }

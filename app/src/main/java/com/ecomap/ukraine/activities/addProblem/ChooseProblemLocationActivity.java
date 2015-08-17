@@ -1,21 +1,16 @@
-package com.ecomap.ukraine.activities;
+package com.ecomap.ukraine.activities.addProblem;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.View;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.ecomap.ukraine.R;
+import com.ecomap.ukraine.activities.main.MainActivity;
 import com.ecomap.ukraine.models.User;
-import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.SupportMapFragment;
 
 /**
  * Created by Andriy on 11.08.2015.
@@ -32,7 +27,7 @@ public class ChooseProblemLocationActivity extends AppCompatActivity {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.choose_coordinate_layout);
-        user = (User) getIntent().getSerializableExtra("user");
+        user = (User) getIntent().getSerializableExtra("User");
         map = new FragmentChooseCoordMap();
 
         addMapFragment();

@@ -6,7 +6,6 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.util.Log;
 
-import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
@@ -14,7 +13,6 @@ import com.android.volley.toolbox.ImageRequest;
 import com.android.volley.toolbox.StringRequest;
 
 import com.ecomap.ukraine.R;
-import com.ecomap.ukraine.activities.BitmapResizer;
 import com.ecomap.ukraine.data.manager.ProblemRequestReceiver;
 import com.ecomap.ukraine.models.Details;
 import com.ecomap.ukraine.models.Photo;

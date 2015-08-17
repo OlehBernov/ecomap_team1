@@ -1,4 +1,4 @@
-package com.ecomap.ukraine.activities;
+package com.ecomap.ukraine.activities.main;
 
 import android.app.Activity;
 import android.content.Context;
@@ -12,9 +12,9 @@ import android.support.v4.app.FragmentManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageButton;
 
 import com.ecomap.ukraine.R;
+import com.ecomap.ukraine.activities.problemDetails.InformationPanel;
 import com.ecomap.ukraine.data.manager.DataManager;
 import com.ecomap.ukraine.data.manager.ProblemListener;
 import com.ecomap.ukraine.filter.Filter;

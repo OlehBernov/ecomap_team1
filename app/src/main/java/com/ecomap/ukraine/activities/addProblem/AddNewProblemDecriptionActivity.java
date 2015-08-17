@@ -1,18 +1,14 @@
-package com.ecomap.ukraine.activities;
+package com.ecomap.ukraine.activities.addProblem;
 
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Matrix;
-import android.media.ExifInterface;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
-import android.support.design.widget.TextInputLayout;
-import android.support.v4.app.FragmentManager;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
@@ -28,20 +24,13 @@ import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.Toast;
 import android.widget.RelativeLayout;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 
 import com.ecomap.ukraine.R;
-import com.ecomap.ukraine.data.manager.DataManager;
-import com.ecomap.ukraine.data.manager.ProblemListener;
-import com.ecomap.ukraine.models.Details;
-import com.ecomap.ukraine.models.Problem;
 import com.ecomap.ukraine.models.User;
 
-import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
@@ -58,6 +47,8 @@ public class AddNewProblemDecriptionActivity extends AppCompatActivity  {
     private static final int CAMERA_PHOTO = 1;
     private static final int GALLERY_PHOTO = 2;
     private static final int DEGREE_90 = 90;
+
+    private static final int ADD_PHOTO_ITEM = 1;
 
     private static final String DATE_TEMPLATE = "MMdd_HHmmss";
     private static final String PHOTO_FORMAT = ".jpg";
@@ -87,8 +78,11 @@ public class AddNewProblemDecriptionActivity extends AppCompatActivity  {
     int Numboftabs = 2;
 
 
-    public ArrayList<Bitmap> getBitmapsPhoto () {
+    public ArrayList<Bitmap> getBitmapsPhoto() {
         ArrayList<Bitmap> photoBitmaps = new ArrayList<>();
+        if (userPhotos == null) {
+            return null;
+        }
         for (int i = 0; i < userPhotos.size(); i++) {
             photoBitmaps.add(BitmapFactory.decodeFile(userPhotos.get(i)));
         }
@@ -162,7 +156,7 @@ public class AddNewProblemDecriptionActivity extends AppCompatActivity  {
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_confirm_problem) {
-            Tab1.getInstance(getBitmapsPhoto()).sendProblem();
+            AddProblemDescriptionFragment.getInstance(getBitmapsPhoto()).sendProblem();
             return true;
         }
 
@@ -318,7 +312,7 @@ public class AddNewProblemDecriptionActivity extends AppCompatActivity  {
             activityRow.addView(buildUserPhoto(userPhotos.get(i)));
             activityRow.addView(buildPhotoDescription(i));
             photoDescriptionLayout.addView(activityRow);
-            Tab1.getInstance(getBitmapsPhoto());
+            AddProblemDescriptionFragment.getInstance(getBitmapsPhoto());
         }
     }
 
@@ -340,7 +334,7 @@ public class AddNewProblemDecriptionActivity extends AppCompatActivity  {
                 (int) getResources().getDimension(R.dimen.description_right_padding),
                 (int) getResources().getDimension(R.dimen.description_bottom_padding)
         );
-        Tab2.getInstance(this).setOnFocusChangeListener(photoDescription);
+        AddPhotoFragment.getInstance(this).setOnFocusChangeListener(photoDescription);
         if (!descriptions.get(id).equals("")) {
             photoDescription.setText(descriptions.get(id));
         }
@@ -448,6 +442,16 @@ public class AddNewProblemDecriptionActivity extends AppCompatActivity  {
         mainIntent.putExtra("User", user);
         startActivity(mainIntent);
         finish();
+    }
+
+    public void sendProblem(View v) {
+        AddProblemDescriptionFragment.getInstance(getBitmapsPhoto()).sendProblem();
+    }
+
+    public void addPhoto(View v) {
+        pager.setCurrentItem(ADD_PHOTO_ITEM);
+
+
     }
 
 }

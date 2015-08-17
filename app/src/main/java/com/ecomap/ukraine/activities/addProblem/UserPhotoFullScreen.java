@@ -1,15 +1,12 @@
-package com.ecomap.ukraine.activities;
+package com.ecomap.ukraine.activities.addProblem;
 
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.widget.ImageView;
 
 import com.ecomap.ukraine.R;
+import com.ecomap.ukraine.activities.addProblem.BitmapResizer;
 
 public class UserPhotoFullScreen extends AppCompatActivity {
 

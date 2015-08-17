@@ -16,7 +16,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
 
-        <com.ecomap.ukraine.activities.SlidingTabLayout
+        <com.ecomap.ukraine.activities.addProblem.SlidingTabLayout
             android:id="@+id/tabs"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

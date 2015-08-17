@@ -1,4 +1,4 @@
-package com.ecomap.ukraine.activities;
+package com.ecomap.ukraine.activities.problemDetails;
 
 import android.os.Parcelable;
 import android.support.v4.view.PagerAdapter;
