@@ -206,7 +206,7 @@ public class FragmentEcoMap extends android.support.v4.app.Fragment
             clusterManager.setRenderer(new IconRenderer(getActivity(), googleMap, clusterManager));
         }
         else {
-            clusterManager.setRenderer(new DefaultClusterRenderer<>(getActivity(), googleMap, clusterManager));
+            clusterManager.setRenderer(new DefaultClusterRenderer(getActivity(), googleMap, clusterManager));
         }
 
     }

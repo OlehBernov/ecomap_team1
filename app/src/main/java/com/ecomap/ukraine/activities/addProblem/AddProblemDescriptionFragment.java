@@ -154,11 +154,10 @@ public class AddProblemDescriptionFragment extends Fragment implements LogInList
 
     @Override
    public void setLogInResult(final User user) {
+        this.user = user;
         USER_ID = String.valueOf(user.getId());
         USER_NAME = String.valueOf(user.getName());
         USER_SURNAME = String.valueOf(user.getSurname());
-        this.user = user;
-
     }
 
     @Override
