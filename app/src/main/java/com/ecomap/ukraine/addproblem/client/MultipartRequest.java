@@ -7,7 +7,6 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.nio.charset.Charset;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -56,24 +55,6 @@ public class MultipartRequest extends Request<String> {
         return params != null ? params : super.getHeaders();
     }
 
-    private void buildMultipartEntity() {
-        builder.setMode(HttpMultipartMode.BROWSER_COMPATIBLE);
-
-        if (file != null) {
-                ByteArrayOutputStream bos = new ByteArrayOutputStream();
-                file.compress(Bitmap.CompressFormat.JPEG, 50, bos);
-                builder.addPart("file[" + counter + "]", new ByteArrayBody(bos.toByteArray(), "image_" + counter));
-        }
-        builder.setCharset(chars);
-        try {
-            for (Map.Entry<String, String> entry : params.entrySet()) {
-                builder.addTextBody(entry.getKey(), entry.getValue(), ContentType.DEFAULT_BINARY);
-            }
-            httpEntity = builder.build();
-        } catch (Exception e) {
-            Log.e("EncodingException", "Exception");
-        }
-    }
 
     @Override
     public String getBodyContentType() {
@@ -107,5 +88,24 @@ public class MultipartRequest extends Request<String> {
     @Override
     protected void deliverResponse(String response) {
         listener.onResponse(response);
+    }
+
+    private void buildMultipartEntity() {
+        builder.setMode(HttpMultipartMode.BROWSER_COMPATIBLE);
+
+        if (file != null) {
+            ByteArrayOutputStream bos = new ByteArrayOutputStream();
+            file.compress(Bitmap.CompressFormat.JPEG, 50, bos);
+            builder.addPart("file[" + counter + "]", new ByteArrayBody(bos.toByteArray(), "image_" + counter));
+        }
+        builder.setCharset(chars);
+        try {
+            for (Map.Entry<String, String> entry : params.entrySet()) {
+                builder.addTextBody(entry.getKey(), entry.getValue(), ContentType.DEFAULT_BINARY);
+            }
+            httpEntity = builder.build();
+        } catch (Exception e) {
+            Log.e("EncodingException", "Exception");
+        }
     }
 }

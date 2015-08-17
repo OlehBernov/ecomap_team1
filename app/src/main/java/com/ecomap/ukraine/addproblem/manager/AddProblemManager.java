@@ -19,9 +19,6 @@ public class AddProblemManager implements AddProblemRequestReceiver, AddProblemN
 
     private AddProblemClient addProblemClient;
 
-    private AddProblemManager(final Context context) {
-        addProblemClient = new AddProblemClient(this, context);
-    }
 
     public static AddProblemManager getInstance(final Context context) {
         if (instance == null) {
@@ -59,6 +56,10 @@ public class AddProblemManager implements AddProblemRequestReceiver, AddProblemN
 
         addProblemClient.addProblemDescription(title, content, proposal, latitude, longitude,
                 type, userId, userName, userSurname, bitmaps, photoDescriptions);
+    }
+
+    private AddProblemManager(final Context context) {
+        addProblemClient = new AddProblemClient(this, context);
     }
 
 }
