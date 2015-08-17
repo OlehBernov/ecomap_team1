@@ -19,6 +19,7 @@ import android.widget.Toast;
 import com.ecomap.ukraine.R;
 import com.ecomap.ukraine.account.manager.AccountManager;
 import com.ecomap.ukraine.account.manager.LogInListener;
+import com.ecomap.ukraine.activities.ExtraFieldNames;
 import com.ecomap.ukraine.activities.main.MainActivity;
 import com.ecomap.ukraine.models.User;
 import com.ecomap.ukraine.validation.Validator;
@@ -145,7 +146,7 @@ public class SignupActivity extends AppCompatActivity implements LogInListener {
     public void setLogInResult(final User user) {
         accountManager.removeLogInListener(this);
         if (user != null) {
-            mainIntent.putExtra("User", user);
+            mainIntent.putExtra(ExtraFieldNames.USER, user);
             openMainActivity();
         } else {
             Log.e("Registration", "null");
