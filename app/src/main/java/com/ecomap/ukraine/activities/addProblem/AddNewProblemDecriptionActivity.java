@@ -332,6 +332,7 @@ public class AddNewProblemDecriptionActivity extends AppCompatActivity  {
         BitmapResizer bitmapResizer = new BitmapResizer(getApplicationContext());
         int photoSize = (int) getResources().getDimension(R.dimen.edit_text_add_photo);
         Bitmap photoBitmap = bitmapResizer.changePhotoOrientation(photoPath, photoSize);
+        Log.e("tag", photoPath);
         TableRow.LayoutParams imageParams =
                 new TableRow.LayoutParams(photoBitmap.getWidth(),
                         photoBitmap.getHeight());

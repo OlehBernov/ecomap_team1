@@ -20,6 +20,10 @@ public class FilterState {
     public boolean isFilterOff(final String filterType) {
         return state.get(filterType);
     }
+
+    public boolean isFilterOn(final String filterType) {
+        return !state.get(filterType);
+    }
     
     public Calendar getDateFrom() {
         return DateFrom;

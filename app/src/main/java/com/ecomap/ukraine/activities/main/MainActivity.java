@@ -10,7 +10,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
-import android.graphics.drawable.ColorDrawable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.GravityCompat;
@@ -29,7 +28,7 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.view.animation.AccelerateDecelerateInterpolator;
 import android.view.animation.Interpolator;
-import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.TextView;
 
 import com.codetroopers.betterpickers.calendardatepicker.CalendarDatePickerDialog;
@@ -68,11 +67,6 @@ public class MainActivity extends AppCompatActivity {
      * Name of the filter window.
      */
     private static final String FILTER = "Filter";
-
-    /**
-     * Name of map window.
-     */
-    private static final String ECOMAP = "Ecomap Ukraine";
 
     private static final String DATE_FROM_TAG = "Date from tag";
 
@@ -123,8 +117,6 @@ public class MainActivity extends AppCompatActivity {
 
     private Calendar calendarDateTo;
 
-    private DataManager dataManager;
-
     private SlidingUpPanelLayout slidingUpPanelLayout;
 
     private  User user;
@@ -151,7 +143,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        dataManager = DataManager.getInstance(getApplicationContext());
+        DataManager dataManager = DataManager.getInstance(getApplicationContext());
 
         fab = (FloatingActionButton)findViewById(R.id.fab2);
 
@@ -395,7 +387,6 @@ public class MainActivity extends AppCompatActivity {
         animator.start();
     }
 
-
     /**
      * Controls the position of the filter7 window on the screen.
      */
@@ -415,11 +406,11 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void switchCheckButtonState(View view) {
-        ColorDrawable buttonColor = (ColorDrawable) view.getBackground();
-        if (isFilterOff(buttonColor)) {
-            setFilterOn(view);
+        CheckBox checkBox = (CheckBox) view;
+        if (checkBox.isChecked()) {
+            checkBox.setChecked(true);
         } else {
-            setFilterOff(view);
+            checkBox.setChecked(false);
         }
         filterManager.getFilterState(buildFiltersState());
     }
@@ -445,13 +436,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void setFilterOn(View view) {
-        view.setBackgroundColor(getResources().getColor(R.color.filter_on));
-        ((Button) view).setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.off, 0);
-    }
-
-    private void setFilterOff(View view) {
-        view.setBackgroundColor(getResources().getColor(R.color.filter_off));
-        ((Button) view).setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.on, 0);
+        CheckBox checkBox = (CheckBox) view;
+        checkBox.setChecked(false);
     }
 
     private void setUserInformation(User user) {
@@ -477,15 +463,20 @@ public class MainActivity extends AppCompatActivity {
                 date.set(Calendar.MONTH, monthOfYear);
                 date.set(Calendar.DAY_OF_MONTH, dayOfMonth);
 
-                calendarDateFrom = date;
-                setDate();
-
-                filterManager.getFilterState(buildFiltersState());
+                if (isValidDates(date, calendarDateTo)) {
+                    calendarDateFrom = date;
+                    setDate();
+                    filterManager.getFilterState(buildFiltersState());
+                }
             }
         };
 
         dialogDateFrom = new CalendarDatePickerDialog();
         dialogDateFrom.setOnDateSetListener(dateFromListener);
+    }
+
+    private boolean isValidDates(Calendar dateFrom, Calendar dateTo) {
+        return dateTo.after(dateFrom);
     }
 
     private void createDateToPickerDialog() {
@@ -498,10 +489,12 @@ public class MainActivity extends AppCompatActivity {
                 date.set(Calendar.YEAR, year);
                 date.set(Calendar.MONTH, monthOfYear);
                 date.set(Calendar.DAY_OF_MONTH, dayOfMonth);
-                calendarDateTo = date;
-                setDate();
 
-                filterManager.getFilterState(buildFiltersState());
+                if (isValidDates(calendarDateFrom, date)) {
+                    calendarDateTo = date;
+                    setDate();
+                    filterManager.getFilterState(buildFiltersState());
+                }
             }
         };
 
@@ -512,30 +505,25 @@ public class MainActivity extends AppCompatActivity {
     private FilterState buildFiltersState() {
         Map<String, Boolean> filterStateValues = new HashMap<>();
         filterStateValues.put(FilterContract.FOREST_DESTRUCTION,
-                getFilterState(R.id.type1));
+                getFilterState(R.id.forestry_issues));
         filterStateValues.put(FilterContract.RUBBISH_DUMP,
-                getFilterState(R.id.type2));
+                getFilterState(R.id.rubbish_dump));
         filterStateValues.put(FilterContract.ILLEGAL_BUILDING,
-                getFilterState(R.id.type3));
+                getFilterState(R.id.illegal_building));
         filterStateValues.put(FilterContract.WATER_POLLUTION,
-                getFilterState(R.id.type4));
+                getFilterState(R.id.water_pollution));
         filterStateValues.put(FilterContract.THREAD_TO_BIODIVERSITY,
-                getFilterState(R.id.type5));
+                getFilterState(R.id.biodiversity));
         filterStateValues.put(FilterContract.POACHING,
-                getFilterState(R.id.type6));
+                getFilterState(R.id.poaching));
         filterStateValues.put(FilterContract.OTHER,
-                getFilterState(R.id.type7));
+                getFilterState(R.id.other));
         filterStateValues.put(FilterContract.RESOLVED,
                 getFilterState(R.id.ButtonResolved));
         filterStateValues.put(FilterContract.UNSOLVED,
                 getFilterState(R.id.ButtonUnsolved));
 
         return new FilterState(filterStateValues, calendarDateFrom, calendarDateTo);
-    }
-
-    private boolean isFilterOff(ColorDrawable buttonColor) {
-        return (buttonColor.getColor() ==
-                getResources().getColor(R.color.filter_off));
     }
 
     /**
@@ -555,6 +543,7 @@ public class MainActivity extends AppCompatActivity {
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         final ActionBar ab = getSupportActionBar();
+        assert ab != null;
         ab.setDisplayHomeAsUpEnabled(true);
     }
 
@@ -567,13 +556,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private boolean getFilterState(int id) {
-        Button button;
-        ColorDrawable buttonColor;
-
-        button = (Button) findViewById(id);
-        buttonColor = (ColorDrawable) button.getBackground();
-
-        return isFilterOff(buttonColor);
+        CheckBox checkBox = (CheckBox) findViewById(id);
+        return checkBox.isChecked();
     }
 
     /**
@@ -608,31 +592,31 @@ public class MainActivity extends AppCompatActivity {
 
     private void setFiltersState(FilterState filtersState) {
         if (filtersState != null) {
-            if (!filtersState.isFilterOff(FilterContract.FOREST_DESTRUCTION)) {
-                setFilterOn(findViewById(R.id.type1));
+            if (filtersState.isFilterOn(FilterContract.FOREST_DESTRUCTION)) {
+                setFilterOn(findViewById(R.id.forestry_issues));
             }
-            if (!filtersState.isFilterOff(FilterContract.RUBBISH_DUMP)) {
-                setFilterOn(findViewById(R.id.type2));
+            if (filtersState.isFilterOn(FilterContract.RUBBISH_DUMP)) {
+                setFilterOn(findViewById(R.id.rubbish_dump));
             }
-            if (!filtersState.isFilterOff(FilterContract.ILLEGAL_BUILDING)) {
-                setFilterOn(findViewById(R.id.type3));
+            if (filtersState.isFilterOn(FilterContract.ILLEGAL_BUILDING)) {
+                setFilterOn(findViewById(R.id.illegal_building));
             }
-            if (!filtersState.isFilterOff(FilterContract.WATER_POLLUTION)) {
-                setFilterOn(findViewById(R.id.type4));
+            if (filtersState.isFilterOn(FilterContract.WATER_POLLUTION)) {
+                setFilterOn(findViewById(R.id.water_pollution));
             }
-            if (!filtersState.isFilterOff(FilterContract.THREAD_TO_BIODIVERSITY)) {
-                setFilterOn(findViewById(R.id.type5));
+            if (filtersState.isFilterOn(FilterContract.THREAD_TO_BIODIVERSITY)) {
+                setFilterOn(findViewById(R.id.biodiversity));
             }
-            if (!filtersState.isFilterOff(FilterContract.POACHING)) {
-                setFilterOn(findViewById(R.id.type6));
+            if (filtersState.isFilterOn(FilterContract.POACHING)) {
+                setFilterOn(findViewById(R.id.poaching));
             }
-            if (!filtersState.isFilterOff(FilterContract.OTHER)) {
-                setFilterOn(findViewById(R.id.type7));
+            if (filtersState.isFilterOn(FilterContract.OTHER)) {
+                setFilterOn(findViewById(R.id.other));
             }
-            if (!filtersState.isFilterOff(FilterContract.RESOLVED)) {
+            if (filtersState.isFilterOn(FilterContract.RESOLVED)) {
                 setFilterOn(findViewById(R.id.ButtonResolved));
             }
-            if (!filtersState.isFilterOff(FilterContract.UNSOLVED)) {
+            if (filtersState.isFilterOn(FilterContract.UNSOLVED)) {
                 setFilterOn(findViewById(R.id.ButtonUnsolved));
             }
             calendarDateFrom = filtersState.getDateFrom();
@@ -642,7 +626,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void openChooseProblemLocationActivity(View view) {
-
         if(user == null) {
             setNotAutorizeDialog();
         }
@@ -652,11 +635,9 @@ public class MainActivity extends AppCompatActivity {
             startActivity(intent);
             finish();
         }
-
     }
 
     public void setNotAutorizeDialog() {
-        final boolean result = false;
         AlertDialog.Builder builder = new AlertDialog.Builder(activity);
 
         builder.setTitle(R.string.Caution);
@@ -684,7 +665,6 @@ public class MainActivity extends AppCompatActivity {
                 });
         AlertDialog alert = builder.create();
         alert.show();
-
     }
 
 }

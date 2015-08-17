@@ -1,13 +1,13 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:color="#BCBCBC"
+    android:background="@color/white"
     android:orientation="vertical">
 
     <ImageView
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
-        android:background="#ff004d40"/>
+        android:background="#ff004d40" />
 
     <ScrollView
         android:id="@+id/scrollView"
@@ -17,7 +17,6 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/white"
             android:orientation="vertical"
             android:weightSum="1">
 
@@ -27,24 +26,26 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_margin="@dimen/cards"
+
                 card_view:cardBackgroundColor="@color/card_view_background"
-                card_view:cardCornerRadius="@dimen/corner_radius">
+                card_view:cardCornerRadius="@dimen/corner_radius"
+                card_view:cardElevation="0dp">
 
                 <LinearLayout
+                    android:id="@+id/ibm"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="@dimen/card_margin"
                     android:orientation="vertical"
-                    android:weightSum="1"
-                    android:id="@+id/ibm">
+                    android:weightSum="1">
 
                     <TextView
                         android:id="@+id/textView4"
                         android:layout_width="54dp"
                         android:layout_height="wrap_content"
                         android:layout_margin="@dimen/card_margin"
-                        android:text="@string/date"
                         android:gravity="right"
+                        android:text="@string/date"
                         android:textAppearance="?android:attr/textAppearanceMedium"
                         android:textColor="@color/filter_button_text"
                         android:textSize="15sp"
@@ -61,39 +62,39 @@
                             android:id="@+id/date_from"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:layout_alignParentEnd="true"
+                            android:layout_alignParentRight="true"
+                            android:layout_centerVertical="true"
+                            android:clickable="true"
                             android:onClick="dateFromChoosing"
                             android:text="@string/default_filter_date_from"
-                            android:clickable="true"
                             android:textAppearance="?android:attr/textAppearanceMedium"
                             android:textColor="#ff5e5e5e"
-                            android:textSize="15sp"
-                            android:layout_alignParentRight="true"
-                            android:layout_alignParentEnd="true"
-                            android:layout_centerVertical="true" />
+                            android:textSize="15sp" />
 
                         <ImageView
+                            android:id="@+id/imageView3"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:id="@+id/imageView3"
-                            android:src="@drawable/new_calendar"
-                            android:layout_alignParentTop="true"
                             android:layout_alignParentLeft="true"
-                            android:layout_alignParentStart="true" />
+                            android:layout_alignParentStart="true"
+                            android:layout_alignParentTop="true"
+                            android:src="@drawable/new_calendar" />
 
                         <TextView
                             android:id="@+id/textView2"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:layout_alignTop="@+id/date_from"
+                            android:layout_marginLeft="16dp"
+                            android:layout_marginStart="16dp"
+                            android:layout_marginTop="10dp"
+                            android:layout_toEndOf="@+id/imageView3"
+                            android:layout_toRightOf="@+id/imageView3"
                             android:text="@string/date_from"
                             android:textAppearance="?android:attr/textAppearanceSmall"
                             android:textColor="@color/filter_button_text"
-                            android:textSize="15sp"
-                            android:layout_marginTop="10dp"
-                            android:layout_marginLeft="63dp"
-                            android:layout_marginStart="55dp"
-                            android:layout_alignTop="@+id/date_from"
-                            android:layout_toRightOf="@+id/imageView3"
-                            android:layout_toEndOf="@+id/imageView3" />
+                            android:textSize="15sp" />
 
                     </RelativeLayout>
 
@@ -108,38 +109,38 @@
                             android:id="@+id/textView7"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:layout_marginLeft="15dp"
+                            android:layout_marginStart="15dp"
+                            android:layout_marginTop="8dp"
+                            android:layout_toEndOf="@+id/imageView5"
+                            android:layout_toRightOf="@+id/imageView5"
                             android:text="@string/date_to"
                             android:textAppearance="?android:attr/textAppearanceSmall"
                             android:textColor="@color/filter_button_text"
-                            android:textSize="15sp"
-                            android:layout_marginLeft="64dp"
-                            android:layout_marginStart="64dp"
-                            android:layout_centerVertical="true"
-                            android:layout_toRightOf="@+id/imageView5"
-                            android:layout_toEndOf="@+id/imageView5" />
+                            android:textSize="15sp" />
 
                         <TextView
                             android:id="@+id/date_to"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:onClick="dateToChoosing"
+                            android:layout_alignParentEnd="true"
+                            android:layout_alignParentRight="true"
+                            android:layout_centerVertical="true"
                             android:clickable="true"
+                            android:onClick="dateToChoosing"
                             android:text="@string/default_filte_date_to"
                             android:textAppearance="?android:attr/textAppearanceMedium"
                             android:textColor="#ff5e5e5e"
-                            android:textSize="15sp"
-                            android:layout_centerVertical="true"
-                            android:layout_alignParentRight="true"
-                            android:layout_alignParentEnd="true" />
+                            android:textSize="15sp" />
 
                         <ImageView
+                            android:id="@+id/imageView5"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:id="@+id/imageView5"
-                            android:src="@drawable/new_calendar"
-                            android:layout_alignParentTop="true"
                             android:layout_alignParentLeft="true"
-                            android:layout_alignParentStart="true" />
+                            android:layout_alignParentStart="true"
+                            android:layout_alignParentTop="true"
+                            android:src="@drawable/new_calendar" />
 
                     </RelativeLayout>
 
@@ -155,7 +156,8 @@
                 android:layout_gravity="center"
                 android:layout_margin="@dimen/cards"
                 card_view:cardBackgroundColor="@color/card_view_background"
-                card_view:cardCornerRadius="@dimen/corner_radius">
+                card_view:cardCornerRadius="@dimen/corner_radius"
+                card_view:cardElevation="0dp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -186,30 +188,24 @@
                             android:id="@+id/imageView10"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:src="@drawable/star"
-                            android:layout_alignBottom="@+id/ButtonResolved" />
+                            android:src="@drawable/star" />
 
-                        <Button
+                        <CheckBox
                             android:id="@+id/ButtonResolved"
-                            android:layout_width="match_parent"
-                            android:layout_height="40dp"
-                            android:background="@color/filter_off"
-                            android:drawableRight="@drawable/on"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentEnd="true"
+                            android:layout_alignParentRight="true"
+                            android:layout_alignParentTop="true"
+                            android:layout_marginLeft="16dp"
+                            android:layout_marginStart="16dp"
+                            android:layout_toRightOf="@+id/imageView10"
+                            android:button="@null"
+                            android:checked="true"
+                            android:drawableRight="@drawable/check_button_style"
                             android:gravity="left|center_vertical"
                             android:onClick="switchCheckButtonState"
-                            android:paddingLeft="20sp"
-                            android:paddingRight="20sp"
-                            android:text="@string/resolved"
-                            android:textAllCaps="false"
-                            android:textColor="@color/filter_button_text"
-                            android:textSize="15sp"
-                            android:layout_marginLeft="38dp"
-                            android:layout_marginStart="38dp"
-                            android:layout_alignParentTop="true"
-                            android:layout_toRightOf="@+id/imageView10"
-                            android:layout_toEndOf="@+id/imageView10">
-
-                        </Button>
+                            android:text="@string/resolved" />
 
 
                     </RelativeLayout>
@@ -218,39 +214,33 @@
                         android:layout_width="323dp"
                         android:layout_height="match_parent"
                         android:layout_margin="@dimen/card_margin"
+                        android:paddingBottom="20sp"
                         android:paddingLeft="20sp"
-                        android:paddingRight="20sp"
-                        android:paddingBottom="20sp">
+                        android:paddingRight="20sp">
 
                         <ImageView
                             android:id="@+id/imageView11"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:src="@drawable/new_problem"
-                            android:layout_alignBottom="@+id/ButtonUnsolved" />
+                            android:src="@drawable/new_problem" />
 
-                        <Button
+                        <CheckBox
                             android:id="@+id/ButtonUnsolved"
-                            android:layout_width="match_parent"
-                            android:layout_height="40dp"
-                            android:background="@color/filter_off"
-                            android:drawableRight="@drawable/on"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentEnd="true"
+                            android:layout_alignParentRight="true"
+                            android:layout_alignParentTop="true"
+                            android:layout_marginLeft="16dp"
+                            android:layout_marginStart="16dp"
+                            android:layout_toEndOf="@+id/imageView11"
+                            android:layout_toRightOf="@+id/imageView11"
+                            android:button="@null"
+                            android:checked="true"
+                            android:drawableRight="@drawable/check_button_style"
                             android:gravity="left|center_vertical"
                             android:onClick="switchCheckButtonState"
-                            android:paddingLeft="20sp"
-                            android:paddingRight="20sp"
-                            android:text="@string/unsolved"
-                            android:textAllCaps="false"
-                            android:textColor="@color/filter_button_text"
-                            android:textSize="15sp"
-                            android:layout_alignParentTop="true"
-                            android:layout_toRightOf="@+id/imageView11"
-                            android:layout_toEndOf="@+id/imageView11"
-                            android:layout_marginLeft="38dp"
-                            android:layout_marginStart="38dp">
-
-
-                        </Button>
+                            android:text="@string/unsolved" />
 
                     </RelativeLayout>
                 </LinearLayout>
@@ -266,7 +256,8 @@
                 android:layout_gravity="center"
                 android:layout_margin="@dimen/cards"
                 card_view:cardBackgroundColor="@color/card_view_background"
-                card_view:cardCornerRadius="@dimen/corner_radius">
+                card_view:cardCornerRadius="@dimen/corner_radius"
+                card_view:cardElevation="0dp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -303,27 +294,23 @@
                             android:layout_height="40dp"
                             android:src="@drawable/problem1" />
 
-                        <Button
-                            android:id="@+id/type1"
-                            android:layout_width="match_parent"
-                            android:layout_height="40dp"
+                        <CheckBox
+                            android:id="@+id/forestry_issues"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentEnd="true"
+                            android:layout_alignParentRight="true"
                             android:layout_alignParentTop="true"
-                            android:layout_marginLeft="34dp"
-                            android:layout_marginStart="34dp"
+                            android:layout_marginLeft="16dp"
+                            android:layout_marginStart="16dp"
                             android:layout_toEndOf="@+id/imageView12"
                             android:layout_toRightOf="@+id/imageView12"
-                            android:background="@color/filter_off"
-                            android:drawableRight="@drawable/on"
+                            android:button="@null"
+                            android:checked="true"
+                            android:drawableRight="@drawable/check_button_style"
                             android:gravity="left|center_vertical"
                             android:onClick="switchCheckButtonState"
-                            android:paddingLeft="20sp"
-                            android:paddingRight="20sp"
-                            android:text="@string/deforestation"
-                            android:textAllCaps="false"
-                            android:textColor="@color/filter_button_text"
-                            android:textSize="15sp">
-
-                        </Button>
+                            android:text="@string/deforestation" />
 
                     </RelativeLayout>
 
@@ -340,27 +327,23 @@
                             android:layout_height="40dp"
                             android:src="@drawable/problem2" />
 
-                        <Button
-                            android:id="@+id/type2"
-                            android:layout_width="match_parent"
-                            android:layout_height="40dp"
-                            android:layout_alignParentTop="true"
-                            android:layout_marginLeft="34dp"
-                            android:layout_marginStart="34dp"
+                        <CheckBox
+                            android:id="@+id/rubbish_dump"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentEnd="true"
+                            android:layout_alignParentRight="true"
+                            android:layout_centerVertical="true"
+                            android:layout_marginLeft="16dp"
+                            android:layout_marginStart="16dp"
                             android:layout_toEndOf="@+id/imageView13"
                             android:layout_toRightOf="@+id/imageView13"
-                            android:background="@color/filter_off"
-                            android:drawableRight="@drawable/on"
+                            android:button="@null"
+                            android:checked="true"
+                            android:drawableRight="@drawable/check_button_style"
                             android:gravity="left|center_vertical"
                             android:onClick="switchCheckButtonState"
-                            android:paddingLeft="20sp"
-                            android:paddingRight="20sp"
-                            android:text="@string/rubish_dump"
-                            android:textAllCaps="false"
-                            android:textColor="@color/filter_button_text"
-                            android:textSize="15sp">
-
-                        </Button>
+                            android:text="@string/rubish_dump" />
 
                     </RelativeLayout>
 
@@ -377,27 +360,23 @@
                             android:layout_height="40dp"
                             android:src="@drawable/problem3" />
 
-                        <Button
-                            android:id="@+id/type3"
-                            android:layout_width="match_parent"
-                            android:layout_height="40dp"
-                            android:layout_alignParentTop="true"
-                            android:layout_marginLeft="34dp"
-                            android:layout_marginStart="34dp"
+                        <CheckBox
+                            android:id="@+id/water_pollution"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentBottom="true"
+                            android:layout_alignParentEnd="true"
+                            android:layout_alignParentRight="true"
+                            android:layout_marginLeft="16dp"
+                            android:layout_marginStart="16dp"
                             android:layout_toEndOf="@+id/imageView14"
                             android:layout_toRightOf="@+id/imageView14"
-                            android:background="@color/filter_off"
-                            android:drawableRight="@drawable/on"
+                            android:button="@null"
+                            android:checked="true"
+                            android:drawableRight="@drawable/check_button_style"
                             android:gravity="left|center_vertical"
                             android:onClick="switchCheckButtonState"
-                            android:paddingLeft="20sp"
-                            android:paddingRight="20sp"
-                            android:text="@string/illegal_building"
-                            android:textAllCaps="false"
-                            android:textColor="@color/filter_button_text"
-                            android:textSize="15sp">
-
-                        </Button>
+                            android:text="@string/water_pollution" />
 
                     </RelativeLayout>
 
@@ -414,27 +393,23 @@
                             android:layout_height="40dp"
                             android:src="@drawable/problem4" />
 
-                        <Button
-                            android:id="@+id/type4"
-                            android:layout_width="match_parent"
-                            android:layout_height="40dp"
-                            android:layout_alignParentTop="true"
-                            android:layout_marginLeft="34dp"
-                            android:layout_marginStart="34dp"
+                        <CheckBox
+                            android:id="@+id/illegal_building"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentBottom="true"
+                            android:layout_alignParentEnd="true"
+                            android:layout_alignParentRight="true"
+                            android:layout_marginLeft="16dp"
+                            android:layout_marginStart="16dp"
                             android:layout_toEndOf="@+id/imageView15"
                             android:layout_toRightOf="@+id/imageView15"
-                            android:background="@color/filter_off"
-                            android:drawableRight="@drawable/on"
+                            android:button="@null"
+                            android:checked="true"
+                            android:drawableRight="@drawable/check_button_style"
                             android:gravity="left|center_vertical"
                             android:onClick="switchCheckButtonState"
-                            android:paddingLeft="20sp"
-                            android:paddingRight="20sp"
-                            android:text="@string/water_pollution"
-                            android:textAllCaps="false"
-                            android:textColor="@color/filter_button_text"
-                            android:textSize="15sp">
-
-                        </Button>
+                            android:text="@string/illegal_building" />
 
                     </RelativeLayout>
 
@@ -451,27 +426,23 @@
                             android:layout_height="40dp"
                             android:src="@drawable/problem5" />
 
-                        <Button
-                            android:id="@+id/type5"
-                            android:layout_width="match_parent"
-                            android:layout_height="40dp"
-                            android:layout_alignParentTop="true"
-                            android:layout_marginLeft="34dp"
-                            android:layout_marginStart="34dp"
+                        <CheckBox
+                            android:id="@+id/biodiversity"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentBottom="true"
+                            android:layout_alignParentEnd="true"
+                            android:layout_alignParentRight="true"
+                            android:layout_marginLeft="16dp"
+                            android:layout_marginStart="16dp"
                             android:layout_toEndOf="@+id/imageView16"
                             android:layout_toRightOf="@+id/imageView16"
-                            android:background="@color/filter_off"
-                            android:drawableRight="@drawable/on"
+                            android:button="@null"
+                            android:checked="true"
+                            android:drawableRight="@drawable/check_button_style"
                             android:gravity="left|center_vertical"
                             android:onClick="switchCheckButtonState"
-                            android:paddingLeft="20sp"
-                            android:paddingRight="20sp"
-                            android:text="@string/biodiversity"
-                            android:textAllCaps="false"
-                            android:textColor="@color/filter_button_text"
-                            android:textSize="15sp">
-
-                        </Button>
+                            android:text="@string/biodiversity" />
 
                     </RelativeLayout>
 
@@ -488,27 +459,23 @@
                             android:layout_height="40dp"
                             android:src="@drawable/problem6" />
 
-                        <Button
-                            android:id="@+id/type6"
-                            android:layout_width="match_parent"
-                            android:layout_height="40dp"
+                        <CheckBox
+                            android:id="@+id/poaching"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentEnd="true"
+                            android:layout_alignParentRight="true"
                             android:layout_alignParentTop="true"
-                            android:layout_marginLeft="34dp"
-                            android:layout_marginStart="34dp"
+                            android:layout_marginLeft="16dp"
+                            android:layout_marginStart="16dp"
                             android:layout_toEndOf="@+id/imageView17"
                             android:layout_toRightOf="@+id/imageView17"
-                            android:background="@color/filter_off"
-                            android:drawableRight="@drawable/on"
+                            android:button="@null"
+                            android:checked="true"
+                            android:drawableRight="@drawable/check_button_style"
                             android:gravity="left|center_vertical"
                             android:onClick="switchCheckButtonState"
-                            android:paddingLeft="20sp"
-                            android:paddingRight="20sp"
-                            android:text="@string/poaching"
-                            android:textAllCaps="false"
-                            android:textColor="@color/filter_button_text"
-                            android:textSize="15sp">
-
-                        </Button>
+                            android:text="@string/poaching" />
 
                     </RelativeLayout>
 
@@ -516,6 +483,7 @@
                         android:layout_width="323dp"
                         android:layout_height="match_parent"
                         android:layout_margin="@dimen/card_margin"
+                        android:paddingBottom="5dp"
                         android:paddingLeft="20sp"
                         android:paddingRight="20sp">
 
@@ -525,28 +493,23 @@
                             android:layout_height="40dp"
                             android:src="@drawable/problem7" />
 
-                        <Button
-                            android:id="@+id/type7"
-                            android:layout_width="match_parent"
-                            android:layout_height="40dp"
+                        <CheckBox
+                            android:id="@+id/other"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentEnd="true"
+                            android:layout_alignParentRight="true"
                             android:layout_alignParentTop="true"
-                            android:layout_marginBottom="@dimen/card_bottom"
-                            android:layout_marginLeft="34dp"
-                            android:layout_marginStart="34dp"
+                            android:layout_marginLeft="16dp"
+                            android:layout_marginStart="16dp"
                             android:layout_toEndOf="@+id/imageView18"
                             android:layout_toRightOf="@+id/imageView18"
-                            android:background="@color/filter_off"
-                            android:drawableRight="@drawable/on"
+                            android:button="@null"
+                            android:checked="true"
+                            android:drawableRight="@drawable/check_button_style"
                             android:gravity="left|center_vertical"
                             android:onClick="switchCheckButtonState"
-                            android:paddingLeft="20sp"
-                            android:paddingRight="20sp"
-                            android:text="@string/other"
-                            android:textAllCaps="false"
-                            android:textColor="@color/filter_button_text"
-                            android:textSize="15sp">
-
-                        </Button>
+                            android:text="@string/other" />
 
                     </RelativeLayout>
 
