@@ -1,4 +1,4 @@
-package com.ecomap.ukraine.activities.addProblem;
+package com.ecomap.ukraine.activities;
 
 import android.content.Context;
 import android.graphics.Bitmap;

@@ -28,6 +28,8 @@ import android.widget.TableLayout;
 import android.widget.TableRow;
 
 import com.ecomap.ukraine.R;
+import com.ecomap.ukraine.activities.BitmapResizer;
+import com.ecomap.ukraine.activities.ExtraFieldNames;
 import com.ecomap.ukraine.models.User;
 
 import java.io.File;
@@ -51,13 +53,11 @@ public class AddNewProblemDecriptionActivity extends AppCompatActivity  {
     private static final String PHOTO_FORMAT = ".jpg";
     private static final String FILE_NAME_BEGINNING = "JPEG_";
     private static final String DESCRIPTION_HINT = "Add description...";
-    private static final String USER = "User";
     private static final String ADD_DESCRIPTION = "Add description";
 
     private static final String CAMERA_URI = "Camera Uri";
     private static final String NUMBER_OF_PHOTOS = "Number of photos";
     private static final String DESCRIPTION = "Description";
-    private static final String PHOTO = "photo";
 
     private Uri currentPhotoUri;
     private List<String> userPhotos;
@@ -87,7 +87,7 @@ public class AddNewProblemDecriptionActivity extends AppCompatActivity  {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        user = (User) getIntent().getSerializableExtra(USER);
+        user = (User) getIntent().getSerializableExtra(ExtraFieldNames.USER);
 
         setContentView(R.layout.add_problem_description);
         setupToolbar();
@@ -350,7 +350,7 @@ public class AddNewProblemDecriptionActivity extends AppCompatActivity  {
 
     private void showFullSizePhoto(String photoPath) {
         Intent intent = new Intent (this, UserPhotoFullScreen.class);
-        intent.putExtra(PHOTO, photoPath);
+        intent.putExtra(ExtraFieldNames.PHOTO, photoPath);
         startActivity(intent);
     }
 
@@ -416,7 +416,7 @@ public class AddNewProblemDecriptionActivity extends AppCompatActivity  {
     public void onBackPressed() {
         super.onBackPressed();
         Intent mainIntent = new Intent(this, ChooseProblemLocationActivity.class);
-        mainIntent.putExtra(USER, user);
+        mainIntent.putExtra(ExtraFieldNames.USER, user);
         startActivity(mainIntent);
         finish();
     }

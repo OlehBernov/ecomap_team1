@@ -19,6 +19,7 @@ import android.widget.Toast;
 import com.ecomap.ukraine.R;
 import com.ecomap.ukraine.account.manager.AccountManager;
 import com.ecomap.ukraine.account.manager.LogInListener;
+import com.ecomap.ukraine.activities.ExtraFieldNames;
 import com.ecomap.ukraine.activities.main.MainActivity;
 import com.ecomap.ukraine.addproblem.manager.AddProblemListener;
 import com.ecomap.ukraine.addproblem.manager.AddProblemManager;
@@ -143,8 +144,8 @@ public class AddProblemDescriptionFragment extends Fragment implements LogInList
         String description = problemDescription.getText().toString();
 
         String solution = problemSolution.getText().toString();
-        String latitude = getActivity().getIntent().getDoubleExtra("Lat", 0) + "";
-        String longitude = getActivity().getIntent().getDoubleExtra("Lng", 0) + "";
+        String latitude = getActivity().getIntent().getDoubleExtra(ExtraFieldNames.LAT, 0) + "";
+        String longitude = getActivity().getIntent().getDoubleExtra(ExtraFieldNames.LNG, 0) + "";
         String type = String.valueOf(spinner.getSelectedItemId() + 1);
         showProgresDialog();
         addProblemManager.addProblem(title, description, solution, latitude, longitude, type, USER_ID,
@@ -190,7 +191,7 @@ public class AddProblemDescriptionFragment extends Fragment implements LogInList
     public void updateAllProblems(final List<Problem> problems) {
         Toast.makeText(getActivity().getApplicationContext(), "Problem added sucessfully", Toast.LENGTH_LONG) .show();
         intent = new Intent(getActivity(), MainActivity.class);
-        intent.putExtra("User", user);
+        intent.putExtra(ExtraFieldNames.USER, user);
         startActivity(intent);
         getActivity().finish();
         dataManager.removeProblemListener(this);

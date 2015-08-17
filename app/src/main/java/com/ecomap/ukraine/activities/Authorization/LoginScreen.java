@@ -42,10 +42,6 @@ public class LoginScreen extends AppCompatActivity implements LogInListener {
 
     private AccountManager accountManager;
 
-    private LoginButton logInFacebookButton;
-
-    private SharedPreferences sharedPreferences;
-
     private CallbackManager callbackManager;
 
     private static final String TAG = "LoginActivity";
@@ -72,7 +68,8 @@ public class LoginScreen extends AppCompatActivity implements LogInListener {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         FacebookSdk.sdkInitialize(this);
-        sharedPreferences = this.getSharedPreferences(AccountManager.USER_INFO, MODE_PRIVATE);
+        SharedPreferences sharedPreferences =
+                this.getSharedPreferences(AccountManager.USER_INFO, MODE_PRIVATE);
 
         setContentView(R.layout.login_activity);
         mainIntent = new Intent(this, MainActivity.class);
@@ -91,7 +88,7 @@ public class LoginScreen extends AppCompatActivity implements LogInListener {
         });
 
         callbackManager = CallbackManager.Factory.create();
-        logInFacebookButton = (LoginButton)findViewById(R.id.facebook_button);
+        LoginButton logInFacebookButton = (LoginButton) findViewById(R.id.facebook_button);
         logInFacebookButton.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
             @Override
             public void onSuccess(LoginResult loginResult) {

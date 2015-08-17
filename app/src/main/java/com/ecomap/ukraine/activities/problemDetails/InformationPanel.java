@@ -32,7 +32,7 @@ import android.widget.TextView;
 import com.ecomap.ukraine.R;
 import com.ecomap.ukraine.activities.main.IconRenderer;
 import com.ecomap.ukraine.activities.main.MainActivity;
-import com.ecomap.ukraine.activities.addProblem.BitmapResizer;
+import com.ecomap.ukraine.activities.BitmapResizer;
 import com.ecomap.ukraine.data.manager.DataManager;
 import com.ecomap.ukraine.models.Types.ActivityType;
 import com.ecomap.ukraine.models.Details;
@@ -44,9 +44,7 @@ import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Transformation;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 public class InformationPanel {
 

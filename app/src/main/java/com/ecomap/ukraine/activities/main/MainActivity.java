@@ -35,6 +35,7 @@ import android.widget.TextView;
 import com.codetroopers.betterpickers.calendardatepicker.CalendarDatePickerDialog;
 import com.ecomap.ukraine.R;
 import com.ecomap.ukraine.activities.Authorization.LoginScreen;
+import com.ecomap.ukraine.activities.ExtraFieldNames;
 import com.ecomap.ukraine.activities.addProblem.ChooseProblemLocationActivity;
 import com.ecomap.ukraine.data.manager.DataManager;
 import com.ecomap.ukraine.filter.FilterContract;
@@ -88,8 +89,6 @@ public class MainActivity extends AppCompatActivity {
     private static final String DEFAULT_DATE_FROM = "01-01-1990";
 
     private static final String DEFAULT_DATE_TO = "31-12-2030";
-
-    private static final String USER = "User";
 
     private static final float ANCHOR_POINT = 0.3f;
 
@@ -170,7 +169,7 @@ public class MainActivity extends AppCompatActivity {
         setupFilter();
 
         if(user == null) {
-            user = (User) getIntent().getSerializableExtra(USER);
+            user = (User) getIntent().getSerializableExtra(ExtraFieldNames.USER);
         }
         setUserInformation(user);
 
@@ -649,13 +648,12 @@ public class MainActivity extends AppCompatActivity {
         }
         else {
             Intent intent = new Intent(this, ChooseProblemLocationActivity.class);
-            intent.putExtra(USER, user);
+            intent.putExtra(ExtraFieldNames.USER, user);
             startActivity(intent);
             finish();
         }
 
     }
-
 
     public void setNotAutorizeDialog() {
         final boolean result = false;

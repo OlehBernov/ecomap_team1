@@ -6,18 +6,17 @@ import android.support.v7.app.AppCompatActivity;
 import android.widget.ImageView;
 
 import com.ecomap.ukraine.R;
-import com.ecomap.ukraine.activities.addProblem.BitmapResizer;
+import com.ecomap.ukraine.activities.BitmapResizer;
+import com.ecomap.ukraine.activities.ExtraFieldNames;
 
 public class UserPhotoFullScreen extends AppCompatActivity {
-
-    private static final String PHOTO = "photo";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_photo_full_screen);
         ImageView userPhoto = (ImageView) findViewById(R.id.user_photo);
-        String photoPath = getIntent().getStringExtra(PHOTO);
+        String photoPath = getIntent().getStringExtra(ExtraFieldNames.PHOTO);
         BitmapResizer bitmapResizer = new BitmapResizer(getApplicationContext());
         int screenWidth = getResources().getDisplayMetrics().widthPixels;
         Bitmap photoBitmap = bitmapResizer.changePhotoOrientation(photoPath, screenWidth);

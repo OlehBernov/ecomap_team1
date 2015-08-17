@@ -9,13 +9,13 @@ import android.view.View;
 import android.widget.Toast;
 
 import com.ecomap.ukraine.R;
+import com.ecomap.ukraine.activities.ExtraFieldNames;
 import com.ecomap.ukraine.activities.main.MainActivity;
 import com.ecomap.ukraine.models.User;
 
 public class ChooseProblemLocationActivity extends AppCompatActivity {
 
-    private Intent mainIntent;
-    Toolbar toolbar;
+    private Toolbar toolbar;
     private User user;
     private FragmentChooseCoordMap map;
 
@@ -24,7 +24,7 @@ public class ChooseProblemLocationActivity extends AppCompatActivity {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.choose_coordinate_layout);
-        user = (User) getIntent().getSerializableExtra("User");
+        user = (User) getIntent().getSerializableExtra(ExtraFieldNames.USER);
         map = new FragmentChooseCoordMap();
 
         addMapFragment();
@@ -55,10 +55,10 @@ public class ChooseProblemLocationActivity extends AppCompatActivity {
             Toast.makeText(this, "Tap to place marker", Toast.LENGTH_SHORT).show();
             return;
         }
-        mainIntent = new Intent(this, AddNewProblemDecriptionActivity.class);
-        mainIntent.putExtra("Lat", map.getMarkerPosition().latitude);
-        mainIntent.putExtra("Lng", map.getMarkerPosition().longitude);
-        mainIntent.putExtra("User", user);
+        Intent mainIntent = new Intent(this, AddNewProblemDecriptionActivity.class);
+        mainIntent.putExtra(ExtraFieldNames.LAT, map.getMarkerPosition().latitude);
+        mainIntent.putExtra(ExtraFieldNames.LNG, map.getMarkerPosition().longitude);
+        mainIntent.putExtra(ExtraFieldNames.USER, user);
         startActivity(mainIntent);
         finish();
 
@@ -75,7 +75,7 @@ public class ChooseProblemLocationActivity extends AppCompatActivity {
     public void cancelButton(View view) {
 
         Intent mainIntent = new Intent(this, MainActivity.class);
-        mainIntent.putExtra("User", user);
+        mainIntent.putExtra(ExtraFieldNames.USER, user);
         startActivity(mainIntent);
         finish();
     }

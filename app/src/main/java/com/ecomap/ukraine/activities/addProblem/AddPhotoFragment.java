@@ -16,9 +16,6 @@ import com.ecomap.ukraine.R;
 import butterknife.ButterKnife;
 
 
-/**
- * Created by Edwin on 15/02/2015.
- */
 public class AddPhotoFragment extends Fragment {
 
     private static AddPhotoFragment instance;

@@ -9,6 +9,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.ecomap.ukraine.R;
+import com.ecomap.ukraine.activities.ExtraFieldNames;
 import com.ecomap.ukraine.models.Photo;
 import com.squareup.picasso.Picasso;
 
@@ -20,7 +21,6 @@ public class ProblemPhotoSlidePager extends FragmentActivity {
     private static List<Photo> photos;
 
     private final String EMPTY_DESCRIPTION = "null";
-    private final String POSITION = "position";
 
     public static void setContent(final List<Photo> photos) {
         ProblemPhotoSlidePager.photos = photos;
@@ -32,7 +32,7 @@ public class ProblemPhotoSlidePager extends FragmentActivity {
 
         LayoutInflater inflater = LayoutInflater.from(this);
         List<View> pages = new ArrayList<>();
-        int position = getIntent().getIntExtra(POSITION, 0);
+        int position = getIntent().getIntExtra(ExtraFieldNames.POSITION, 0);
 
         for (Photo photo: photos) {
             View page = inflater.inflate(R.layout.activity_problem_photo_slide_pager, null);
@@ -44,7 +44,7 @@ public class ProblemPhotoSlidePager extends FragmentActivity {
                     .into(photoView);
 
             String photoDescription = photo.getDescription();
-            if (photoDescription != EMPTY_DESCRIPTION) {
+            if (!photoDescription.equals(EMPTY_DESCRIPTION)) {
                 TextView photoDescriptionView = (TextView) page.findViewById(R.id.photo_description);
                 photoDescriptionView.setText(photoDescription);
             }
