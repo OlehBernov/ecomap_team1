@@ -36,4 +36,5 @@ interface ProblemListenersNotifier {
      * Send to listeners details of concrete problem.
      */
     void sendProblemDetails(final Details details);
+
 }

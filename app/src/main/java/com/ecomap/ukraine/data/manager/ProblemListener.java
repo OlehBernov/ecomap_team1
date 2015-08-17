@@ -24,4 +24,5 @@ public interface ProblemListener {
      * @param details details of concrete problem.
      */
     void updateProblemDetails(final Details details);
+
 }

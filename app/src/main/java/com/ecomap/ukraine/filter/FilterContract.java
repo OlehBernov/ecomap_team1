@@ -1,8 +1,6 @@
 package com.ecomap.ukraine.filter;
 
-/**
- *
- */
+
 public class FilterContract {
 
     public static final String FOREST_DESTRUCTION = "Forest destruction";

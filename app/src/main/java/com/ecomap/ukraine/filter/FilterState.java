@@ -10,7 +10,7 @@ public class FilterState {
     private Calendar DateFrom;
     private Calendar DateTo;
 
-    public FilterState(Map<String, Boolean> state, final Calendar DateFrom,
+    public FilterState(final Map<String, Boolean> state, final Calendar DateFrom,
                        final Calendar DateTo) {
         this.state = state;
         this.DateFrom = DateFrom;

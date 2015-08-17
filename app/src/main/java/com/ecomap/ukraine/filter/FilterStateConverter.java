@@ -8,6 +8,7 @@ import org.json.JSONObject;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
@@ -63,7 +64,7 @@ public class FilterStateConverter {
         try {
             dateFrom.setTime(dateFormat.parse(dateFromString));
         } catch (ParseException e) {
-
+            dateFrom.setTime(new Date(System.currentTimeMillis()));
             Log.e("parseException", "convertToFilterState from");
         }
 
@@ -72,7 +73,7 @@ public class FilterStateConverter {
         try {
             dateTo.setTime(dateFormat.parse(dateToString));
         } catch (ParseException e) {
-            //TODO
+            dateTo.setTime(new Date(System.currentTimeMillis()));
             Log.e("parseException", "convertToFilterState to");
         }
 
@@ -96,8 +97,6 @@ public class FilterStateConverter {
         filterStateValues.put(FilterContract.UNSOLVED,
                               filterStateJsonObject.getBoolean(FilterContract.UNSOLVED));
 
-        FilterState filterState = new FilterState(filterStateValues, dateFrom, dateTo);
-
-        return filterState;
+        return new FilterState(filterStateValues, dateFrom, dateTo);
     }
 }

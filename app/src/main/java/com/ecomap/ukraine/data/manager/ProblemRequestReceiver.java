@@ -2,7 +2,6 @@ package com.ecomap.ukraine.data.manager;
 
 import com.ecomap.ukraine.models.Details;
 import com.ecomap.ukraine.models.Problem;
-import com.ecomap.ukraine.models.User;
 
 import java.util.List;
 

@@ -10,12 +10,14 @@ import com.ecomap.ukraine.activities.addProblem.BitmapResizer;
 
 public class UserPhotoFullScreen extends AppCompatActivity {
 
+    private static final String PHOTO = "photo";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_photo_full_screen);
         ImageView userPhoto = (ImageView) findViewById(R.id.user_photo);
-        String photoPath = getIntent().getStringExtra("photo");
+        String photoPath = getIntent().getStringExtra(PHOTO);
         BitmapResizer bitmapResizer = new BitmapResizer(getApplicationContext());
         int screenWidth = getResources().getDisplayMetrics().widthPixels;
         Bitmap photoBitmap = bitmapResizer.changePhotoOrientation(photoPath, screenWidth);

@@ -3,7 +3,6 @@ package com.ecomap.ukraine.activities.addProblem;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -39,25 +38,26 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
-/**
- * Created by Andriy on 11.08.2015.
- */
+
 public class AddNewProblemDecriptionActivity extends AppCompatActivity  {
 
     private static final int CAMERA_PHOTO = 1;
     private static final int GALLERY_PHOTO = 2;
-    private static final int DEGREE_90 = 90;
 
     private static final int ADD_PHOTO_ITEM = 1;
+    private static final int NUMBER_OF_TUBS = 2;
 
     private static final String DATE_TEMPLATE = "MMdd_HHmmss";
     private static final String PHOTO_FORMAT = ".jpg";
     private static final String FILE_NAME_BEGINNING = "JPEG_";
     private static final String DESCRIPTION_HINT = "Add description...";
+    private static final String USER = "User";
+    private static final String ADD_DESCRIPTION = "Add description";
 
     private static final String CAMERA_URI = "Camera Uri";
     private static final String NUMBER_OF_PHOTOS = "Number of photos";
     private static final String DESCRIPTION = "Description";
+    private static final String PHOTO = "photo";
 
     private Uri currentPhotoUri;
     private List<String> userPhotos;
@@ -66,16 +66,9 @@ public class AddNewProblemDecriptionActivity extends AppCompatActivity  {
 
     private User user;
 
-    //private DataManager dataManager;
-
-    // Declaring Your View and Variables
-
-    Toolbar toolbar;
-    ViewPager pager;
-    ViewPagerAdapter adapter;
-    SlidingTabLayout tabs;
-    CharSequence Titles[] = {"Description", "Photo"};
-    int Numboftabs = 2;
+    private Toolbar toolbar;
+    private ViewPager pager;
+    private CharSequence Titles[] = {"Description", "Photo"};
 
 
     public ArrayList<Bitmap> getBitmapsPhoto() {
@@ -83,8 +76,9 @@ public class AddNewProblemDecriptionActivity extends AppCompatActivity  {
         if (userPhotos == null) {
             return null;
         }
-        for (int i = 0; i < userPhotos.size(); i++) {
-            photoBitmaps.add(BitmapFactory.decodeFile(userPhotos.get(i)));
+        BitmapResizer bitmapResizer = new BitmapResizer(getApplicationContext());
+        for (String userPhoto: userPhotos) {
+            photoBitmaps.add(bitmapResizer.scalePhoto(userPhoto, 300));
         }
         return photoBitmaps;
     }
@@ -93,15 +87,11 @@ public class AddNewProblemDecriptionActivity extends AppCompatActivity  {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        user = (User) getIntent().getSerializableExtra("User");
-
+        user = (User) getIntent().getSerializableExtra(USER);
 
         setContentView(R.layout.add_problem_description);
         setupToolbar();
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
-
-
-        // Creating The Toolbar and setting it as the Toolbar for the activity
 
         toolbar = (Toolbar) findViewById(R.id.tool_bar);
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
@@ -111,18 +101,14 @@ public class AddNewProblemDecriptionActivity extends AppCompatActivity  {
             }
         });
 
-        // Creating The ViewPagerAdapter and Passing Fragment Manager, Titles fot the Tabs and Number Of Tabs.
-        adapter = new ViewPagerAdapter(getSupportFragmentManager(), Titles, Numboftabs);
+        ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager(), Titles, NUMBER_OF_TUBS);
 
-        // Assigning ViewPager View and setting the adapter
         pager = (ViewPager) findViewById(R.id.pager);
         pager.setAdapter(adapter);
 
-        // Assiging the Sliding Tab Layout View
-        tabs = (SlidingTabLayout) findViewById(R.id.tabs);
-        tabs.setDistributeEvenly(true); // To make the Tabs Fixed set this true, This makes the tabs Space Evenly in Available width
+        SlidingTabLayout tabs = (SlidingTabLayout) findViewById(R.id.tabs);
+        tabs.setDistributeEvenly(true);
 
-        // Setting Custom Color for the Scroll bar indicator of the Tab View
         tabs.setCustomTabColorizer(new SlidingTabLayout.TabColorizer() {
             @Override
             public int getIndicatorColor(int position) {
@@ -130,7 +116,6 @@ public class AddNewProblemDecriptionActivity extends AppCompatActivity  {
             }
         });
 
-        // Setting the ViewPager For the SlidingTabsLayout
         tabs.setViewPager(pager);
 
         if (savedInstanceState != null) {
@@ -139,29 +124,22 @@ public class AddNewProblemDecriptionActivity extends AppCompatActivity  {
 
     }
 
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_add_problem, menu);
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
         if (id == R.id.action_confirm_problem) {
             AddProblemDescriptionFragment.getInstance(getBitmapsPhoto()).sendProblem();
             return true;
         }
 
         return super.onOptionsItemSelected(item);
-
     }
 
     public void getPhotoFromCamera(View view) {
@@ -252,7 +230,7 @@ public class AddNewProblemDecriptionActivity extends AppCompatActivity  {
      */
     private void setupToolbar() {
         toolbar = (Toolbar) findViewById(R.id.tool_bar);
-        toolbar.setTitle("Add description");
+        toolbar.setTitle(ADD_DESCRIPTION);
         toolbar.setNavigationIcon(R.drawable.ic_arrow_back_white_24dp);
         toolbar.setClickable(true);
         setSupportActionBar(toolbar);
@@ -312,7 +290,6 @@ public class AddNewProblemDecriptionActivity extends AppCompatActivity  {
             activityRow.addView(buildUserPhoto(userPhotos.get(i)));
             activityRow.addView(buildPhotoDescription(i));
             photoDescriptionLayout.addView(activityRow);
-            AddProblemDescriptionFragment.getInstance(getBitmapsPhoto());
         }
     }
 
@@ -373,7 +350,7 @@ public class AddNewProblemDecriptionActivity extends AppCompatActivity  {
 
     private void showFullSizePhoto(String photoPath) {
         Intent intent = new Intent (this, UserPhotoFullScreen.class);
-        intent.putExtra("photo", photoPath);
+        intent.putExtra(PHOTO, photoPath);
         startActivity(intent);
     }
 
@@ -439,7 +416,7 @@ public class AddNewProblemDecriptionActivity extends AppCompatActivity  {
     public void onBackPressed() {
         super.onBackPressed();
         Intent mainIntent = new Intent(this, ChooseProblemLocationActivity.class);
-        mainIntent.putExtra("User", user);
+        mainIntent.putExtra(USER, user);
         startActivity(mainIntent);
         finish();
     }
@@ -450,7 +427,6 @@ public class AddNewProblemDecriptionActivity extends AppCompatActivity  {
 
     public void addPhoto(View v) {
         pager.setCurrentItem(ADD_PHOTO_ITEM);
-
 
     }
 

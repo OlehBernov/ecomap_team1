@@ -98,11 +98,7 @@ public class LoadingClient {
                     public void onResponse(String response) {
                         try {
                             Details details = new JSONParser().parseDetailedProblem(response);
-                            if (isPhotosExist(details)) {
-                                getPhotos(details);
-                            } else {
-                                problemRequestReceiver.setProblemDetailsRequestResult(details);
-                            }
+                            problemRequestReceiver.setProblemDetailsRequestResult(details);
                         } catch (JSONException e) {
                             Log.e("exception", "JSONException in getProblemDetail");
                             problemRequestReceiver.setProblemDetailsRequestResult(null);
@@ -116,50 +112,6 @@ public class LoadingClient {
             }
         });
         RequestQueueWrapper.getInstance(context).addToRequestQueue(stringRequest);
-    }
-
-    private boolean isPhotosExist(final Details details) {
-        return details.getPhotos().size() > 0;
-    }
-
-    /**
-     * Adds Bitmap to corresponding photos in details object.
-     * @param details details that contains
-     */
-    private void getPhotos(final Details details) {
-        final Map<Photo, Bitmap> photos = details.photos;
-        for (final Photo photo : photos.keySet()) {
-            ImageRequest imageRequest = new ImageRequest(PHOTOS_URL + photo.getLink(),
-                new Response.Listener<Bitmap>() {
-                    @Override
-                    public void onResponse(Bitmap bitmap) {
-                        photos.put(photo, bitmap);
-                        if (allInitialized(photos)) {
-                           problemRequestReceiver.setProblemDetailsRequestResult(details);
-                        }
-                    }
-                }, 0, 0, null,
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError volleyError) {
-                        photos.put(photo, BitmapFactory.decodeResource(context.getResources(),
-                                R.drawable.photo_error1));
-                        if (allInitialized(photos)) {
-                            problemRequestReceiver.setProblemDetailsRequestResult(details);
-                        }
-                    }
-                });
-            RequestQueueWrapper.getInstance(context).addToRequestQueue(imageRequest);
-        }
-    }
-
-    private boolean allInitialized(final Map<Photo, Bitmap> photos) {
-        for (Photo photo : photos.keySet()) {
-            if (photos.get(photo) == null) {
-                return false;
-            }
-        }
-        return true;
     }
 
 }

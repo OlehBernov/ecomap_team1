@@ -5,11 +5,6 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.util.Log;
-
-import com.ecomap.ukraine.R;
 
 import com.ecomap.ukraine.models.Types.ActivityType;
 import com.ecomap.ukraine.models.Details;
@@ -19,14 +14,8 @@ import com.ecomap.ukraine.models.ProblemActivity;
 import com.ecomap.ukraine.models.Types.ProblemStatus;
 import com.ecomap.ukraine.models.Types.ProblemType;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * Exposes methods to work with inner database.
@@ -92,14 +81,8 @@ public class DBHelper extends SQLiteOpenHelper {
 
     private static final String DELETE_FROM = "DELETE FROM ";
 
-    /**
-     * Context of the application.
-     */
-    private Context context;
-
     public DBHelper(final Context context) {
         super(context, DB_NAME, null, DB_VERSION);
-        this.context = context;
     }
 
     @Override
@@ -208,7 +191,7 @@ public class DBHelper extends SQLiteOpenHelper {
             return null;
         }
 
-        Map<Photo, Bitmap> photos = getProblemPhotos(problemId);
+        List<Photo> photos = getProblemPhotos(problemId);
         List<ProblemActivity> problemActivities = getProblemActivities(problemId);
 
         String[] projection = {
@@ -261,7 +244,7 @@ public class DBHelper extends SQLiteOpenHelper {
             setProblemActivities(problemActivities);
         }
 
-        Map<Photo, Bitmap> photos = details.getPhotos();
+        List<Photo> photos = details.getPhotos();
         setPhotos(photos);
     }
 
@@ -270,15 +253,14 @@ public class DBHelper extends SQLiteOpenHelper {
      *
      * @param photos photos of a problem.
      */
-    private void setPhotos(final Map<Photo, Bitmap> photos) {
+    private void setPhotos(final List<Photo> photos) {
         if (photos == null) {
             return;
         }
         SQLiteDatabase db = this.getWritableDatabase();
 
         ContentValues values;
-        for (Photo photo: photos.keySet()) {
-            writeToFile(photos.get(photo), photo.getLink());
+        for (Photo photo: photos) {
 
             values = new ContentValues();
             values.put(DBContract.Photos.PROBLEM_ID, photo.getProblemId());
@@ -290,26 +272,6 @@ public class DBHelper extends SQLiteOpenHelper {
 
             db.insert(DBContract.Photos.TABLE_NAME, null, values);
             values.clear();
-        }
-    }
-
-    private void writeToFile(final Bitmap bitmap, final String name) {
-        FileOutputStream outputStream = null;
-        try {
-            String path = context.getFilesDir().getPath();
-            outputStream = new FileOutputStream(
-                    new File(path + "/" + name));
-            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, outputStream);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        } finally {
-            try {
-                if (outputStream != null) {
-                    outputStream.close();
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
         }
     }
 
@@ -347,7 +309,7 @@ public class DBHelper extends SQLiteOpenHelper {
      * @param problemId id of the required problem.
      * @return map of photos.
      */
-    private Map<Photo, Bitmap> getProblemPhotos(final int problemId) {
+    private List<Photo> getProblemPhotos(final int problemId) {
         if (problemId < 0) {
             return null;
         }
@@ -364,32 +326,12 @@ public class DBHelper extends SQLiteOpenHelper {
         Cursor cursor = db.query(DBContract.Photos.TABLE_NAME, projection, selection,
                                  selectionArgs, null, null, null);
 
-        Map<Photo, Bitmap> map = null;
+        List<Photo> photoList = null;
         if (cursor.moveToFirst()) {
-            map = buildPhotosMap(problemId, cursor);
+            photoList = buildPhotosList(problemId, cursor);
         }
 
-        return map;
-    }
-
-    private Bitmap getBitmapByName(final String fileName) {
-        FileInputStream inputStream = null;
-        try {
-            String path = context.getFilesDir().getPath();
-            inputStream = new FileInputStream(new File(path + "/" + fileName));
-            return BitmapFactory.decodeStream(inputStream);
-        } catch (Exception e) {
-            return BitmapFactory.decodeResource(context.getResources(),
-                    R.drawable.photo_error1);
-        } finally {
-            try {
-                if (inputStream != null) {
-                    inputStream.close();
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
+        return photoList;
     }
 
     /**
@@ -504,7 +446,7 @@ public class DBHelper extends SQLiteOpenHelper {
      */
     private Details buildProblemDetails(final int problemId, final Cursor cursor,
                                         final List<ProblemActivity> problemActivities,
-                                        final Map<Photo, Bitmap> photos) {
+                                        final List<Photo> photos) {
         Details details = new Details(
                 problemId,
                 cursor.getInt(cursor.getColumnIndex(DBContract.Details.SEVERITY)),
@@ -529,8 +471,8 @@ public class DBHelper extends SQLiteOpenHelper {
      * @param cursor contains query result.
      * @return map of photos.
      */
-    private Map<Photo, Bitmap> buildPhotosMap(final int problemId, final Cursor cursor) {
-        Map<Photo, Bitmap> photos = new HashMap<>();
+    private List<Photo> buildPhotosList(final int problemId, final Cursor cursor) {
+        List<Photo> photos = new ArrayList<>();
         for (int i = 0; i < cursor.getCount(); i++) {
             Photo photo = new Photo(
                     problemId,
@@ -540,8 +482,7 @@ public class DBHelper extends SQLiteOpenHelper {
                     cursor.getString(cursor.getColumnIndex(DBContract.Photos.LINK)),
                     cursor.getString(cursor.getColumnIndex(DBContract.Photos.PHOTO_DESCRIPTION))
             );
-            Bitmap image = getBitmapByName(photo.getLink());
-            photos.put(photo, image);
+            photos.add(photo);
             cursor.moveToNext();
         }
         cursor.close();

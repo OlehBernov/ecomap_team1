@@ -19,9 +19,7 @@ import org.json.JSONException;
 import java.util.HashMap;
 import java.util.Map;
 
-/**
- * Created by Alexander on 02.08.2015.
- */
+
 public class LogInClient {
 
     private static final String LOG_IN_URL = "http://ecomap.org/api/login/";
@@ -44,8 +42,9 @@ public class LogInClient {
 
     /**
      * Sends request to login user
-     * @param password acount password
-     * @param login  user login
+     *
+     * @param password account password
+     * @param login    user login
      */
     public void postLogIn(final String password, final String login) {
         StringRequest stringRequest = new StringRequest(Request.Method.POST, LOG_IN_URL,
@@ -54,11 +53,8 @@ public class LogInClient {
                     public void onResponse(String response) {
                         try {
                             User user = new JSONParser().parseUserInformation(response);
-                            //Log.d("USER_ID", String.valueOf(user.getId()));
-                            //Log.d("USER_NAME", String.valueOf(user.getName()));
-                           // Log.d("USER_SURNAME", String.valueOf(user.getSurname()));
                             logRequestReceiver.setLogInRequestResult(user);
-                           logRequestReceiver.putLogInResultToPreferences(password, login);
+                            logRequestReceiver.putLogInResultToPreferences(password, login);
                         } catch (JSONException e) {
                             Log.e("exception", "JSONException in LogInUser");
                             logRequestReceiver.setLogInRequestResult(null);
@@ -71,7 +67,7 @@ public class LogInClient {
             }
         }) {
             @Override
-            protected Map<String, String> getParams(){
+            protected Map<String, String> getParams() {
                 Map<String, String> params = new HashMap<>();
                 params.put(JSONFields.EMAIL, login);
                 params.put(JSONFields.PASSWORD, password);
@@ -130,8 +126,7 @@ public class LogInClient {
 
             @Override
             public Map<String, String> getHeaders() throws AuthFailureError {
-                Map<String, String> params = new HashMap<>();
-                return params;
+                return new HashMap<>();
             }
         };
 

@@ -1,14 +1,6 @@
 package com.ecomap.ukraine.account.convertion;
 
-/**
- * Created by Alexander on 06.08.2015.
- */
 public class JSONFields {
-
-    /**
-     * Photo description.
-     */
-    public static final String PHOTO_DESCRIPTION = "Description";
 
     public static final String USER_ID = "id";
 

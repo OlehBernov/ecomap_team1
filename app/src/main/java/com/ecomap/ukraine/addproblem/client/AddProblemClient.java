@@ -2,29 +2,19 @@ package com.ecomap.ukraine.addproblem.client;
 
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
 import android.util.Log;
 
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.ecomap.ukraine.R;
 import com.ecomap.ukraine.addproblem.convertion.JSONParser;
 import com.ecomap.ukraine.addproblem.manager.AddProblemRequestReceiver;
 import com.ecomap.ukraine.updating.serverclient.RequestQueueWrapper;
 
 import org.json.JSONException;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
-/**
- * Created by Andriy on 12.08.2015.
- */
 public class AddProblemClient {
 
     private static final String POST_PROBLEM_URL = "http://ecomap.org/api/problempost/";
@@ -40,7 +30,8 @@ public class AddProblemClient {
      * @param addProblemRequestReceiver receive request result
      * @param context appication context
      */
-    public AddProblemClient(final AddProblemRequestReceiver addProblemRequestReceiver, final Context context) {
+    public AddProblemClient(final AddProblemRequestReceiver addProblemRequestReceiver,
+                            final Context context) {
         this.addProblemRequestReceiver = addProblemRequestReceiver;
         this.context = context;
     }
@@ -61,8 +52,6 @@ public class AddProblemClient {
         params.put("userName",  userName);
         params.put("userSurname", userSurname);
 
-
-
         MultipartRequest multipartRequest = new MultipartRequest(POST_PROBLEM_URL, new Response.Listener<String>(){
 
             @Override
@@ -77,8 +66,6 @@ public class AddProblemClient {
                     catch (JSONException e) {
                         Log.e("JSONException", "JSONException in parsing json from new problem");
                     }
-
-
                 }
                 else {
                     addProblemRequestReceiver.setAddProblemRequestResult(true);
@@ -97,21 +84,19 @@ public class AddProblemClient {
 
         RequestQueueWrapper.getInstance(context).addToRequestQueue(multipartRequest);
 
-
     }
 
     public void addPhotoToProblem (final String userID, final String userName,
-                                   final String userSurname , final String description,
-                                   String problemID, ArrayList<Bitmap> photos){
+                                   final String userSurname, final String description,
+                                   final String problemID, final ArrayList<Bitmap> photos){
 
-        HashMap<String, String> params = new HashMap<String, String>();
+        HashMap<String, String> params = new HashMap<>();
         params.put("userId", userID);
         params.put("userName", userName);
         params.put("userSurname",  userSurname);
         params.put("description",  description);
 
 
-        ArrayList<Bitmap> mfiles = photos;
         MultipartRequest multipartRequest = new MultipartRequest(POST_PHOTO_URL + problemID + "/",
                 new Response.Listener<String>(){
 
@@ -128,12 +113,9 @@ public class AddProblemClient {
                 addProblemRequestReceiver.setAddProblemRequestResult(false);
             }
 
-        }, mfiles, params);
+        }, photos, params);
 
         RequestQueueWrapper.getInstance(context).addToRequestQueue(multipartRequest);
-
-
     }
-
 
 }

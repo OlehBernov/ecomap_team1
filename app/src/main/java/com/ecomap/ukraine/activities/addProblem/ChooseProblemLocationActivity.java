@@ -12,9 +12,6 @@ import com.ecomap.ukraine.R;
 import com.ecomap.ukraine.activities.main.MainActivity;
 import com.ecomap.ukraine.models.User;
 
-/**
- * Created by Andriy on 11.08.2015.
- */
 public class ChooseProblemLocationActivity extends AppCompatActivity {
 
     private Intent mainIntent;
@@ -33,7 +30,6 @@ public class ChooseProblemLocationActivity extends AppCompatActivity {
         addMapFragment();
         setupToolbar();
 
-
         toolbar = (Toolbar) findViewById(R.id.tool_bar);
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
@@ -42,9 +38,7 @@ public class ChooseProblemLocationActivity extends AppCompatActivity {
 
             }
         });
-
     }
-
 
     /**
      * Adds google map
@@ -56,8 +50,7 @@ public class ChooseProblemLocationActivity extends AppCompatActivity {
                 .commit();
     }
 
-
-    public void openAddDescriptionActivity (View view) {
+    public void openAddDescriptionActivity(View view) {
         if (map.getMarkerPosition() == null) {
             Toast.makeText(this, "Tap to place marker", Toast.LENGTH_SHORT).show();
             return;
@@ -79,17 +72,18 @@ public class ChooseProblemLocationActivity extends AppCompatActivity {
 
     }
 
-    public void cancelButton (View view) {
+    public void cancelButton(View view) {
 
         Intent mainIntent = new Intent(this, MainActivity.class);
         mainIntent.putExtra("User", user);
         startActivity(mainIntent);
         finish();
     }
-@Override
+
+    @Override
     public void onBackPressed() {
-    super.onBackPressed();
-    cancelButton(null);
+        super.onBackPressed();
+        cancelButton(null);
     }
 
 }

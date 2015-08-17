@@ -31,24 +31,24 @@
             android:value="@string/facebook_app_id" />
 
         <activity
-            android:name=".activities.AddNewProblemDecriptionActivity"
+            android:name=".activities.addProblem.AddNewProblemDecriptionActivity"
             android:label="@string/app_name"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustPan" >
         </activity>
         <activity
-            android:name=".activities.ChooseProblemLocationActivity"
+            android:name=".activities.addProblem.ChooseProblemLocationActivity"
             android:label="@string/app_name"
             android:screenOrientation="portrait" >
         </activity>
         <activity
-            android:name=".activities.LoginScreen"
+            android:name=".activities.Authorization.LoginScreen"
             android:label="@string/app_name"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustPan">
         </activity>
         <activity
-            android:name=".activities.Splashscreen"
+            android:name=".activities.main.Splashscreen"
             android:label="@string/app_name"
             android:noHistory="true"
             android:screenOrientation="portrait" >
@@ -61,13 +61,13 @@
 
         <!-- Main activity -->
         <activity
-            android:name=".activities.MainActivity"
+            android:name=".activities.main.MainActivity"
             android:windowSoftInputMode="stateAlwaysVisible"
             android:label="@string/app_name"
             android:screenOrientation="portrait" >
         </activity>
         <activity
-            android:name=".activities.SignupActivity"
+            android:name=".activities.Authorization.SignupActivity"
             android:label="@string/app_name"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustPan">
@@ -78,12 +78,12 @@
             android:label="@string/app_name"
             android:theme="@android:style/Theme.Translucent.NoTitleBar" />
         <activity
-            android:name=".activities.ProblemPhotoSlidePager"
+            android:name=".activities.problemDetails.ProblemPhotoSlidePager"
             android:label="@string/title_activity_problem_photo_slide_pager"
             android:screenOrientation="portrait">
         </activity>
         <activity
-            android:name=".activities.UserPhotoFullScreen"
+            android:name=".activities.addProblem.UserPhotoFullScreen"
             android:label="@string/title_activity_user_photo_full_screen"
             android:screenOrientation="portrait">
         </activity>

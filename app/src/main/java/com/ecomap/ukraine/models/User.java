@@ -2,9 +2,6 @@ package com.ecomap.ukraine.models;
 
 import java.io.Serializable;
 
-/**
- * TODO doc
- */
 public class User implements Serializable {
 
     private int id;

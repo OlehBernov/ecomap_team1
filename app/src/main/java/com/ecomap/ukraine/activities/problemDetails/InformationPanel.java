@@ -57,9 +57,8 @@ public class InformationPanel {
     private static final String ADD_COMMENT_HINT = "Add comment";
     private static final String RESOLVED = "resolved";
     private static final String UNSOLVED = "unsolved";
-    private static final String ECOMAP_UKRAINE = "Ecomap Ukraine";
-    private static final String PHOTOS_PATH = "http://ecomap.org/photos/large/";
     private static final String TRANSFORMATION = "transformation";
+    private static final String POSITION = "position";
 
     private static final int STAR_NUMBER = 5;
 
@@ -68,7 +67,6 @@ public class InformationPanel {
 
     private static final int ACTIVITY_ICON_WIDTH = 75;
     private static final int ACTIVITY_ICON_HEIGHT = 75;
-    private static final int PHOTO_BOUNDS = 150;
     private static final float COLLAPSE_OFFSET = 0.9F;
 
     private static float currentTitleAlpha = 1;
@@ -166,7 +164,7 @@ public class InformationPanel {
             }
 
 
-            public void backgroundResolver(float v) {
+            public void backgroundResolver(final float v) {
                 float anchor = slidingUpPanelLayout.getAnchorPoint();
                 int alpha = (int) (255 * Math.max((COLLAPSE_OFFSET - v)
                         / (COLLAPSE_OFFSET - anchor), 0));
@@ -176,17 +174,17 @@ public class InformationPanel {
                 layout.getBackground().setAlpha(alpha);
             }
 
-            public void titleTransforming(float v) {
+            public void titleTransforming(final float v) {
                 currentTitleAlpha = calculateAlpha(v);
                 changeTitleTransparency(currentTitleAlpha);
                 changeFilterIconTransparency(currentTitleAlpha);
             }
 
-            private float calculateAlpha(float v) {
+            private float calculateAlpha(final float v) {
                 return Math.min((1 - v) / (1 - COLLAPSE_OFFSET), 1);
             }
 
-            private void animateMenuIcon(float v) {
+            private void animateMenuIcon(final float v) {
                 MainActivity mainActivity = (MainActivity) activity;
                 ActionBarDrawerToggle drawerToggle = mainActivity.drawerToggle;
                 drawerToggle.onDrawerSlide(null, 1 - calculateAlpha(v));
@@ -208,19 +206,19 @@ public class InformationPanel {
                 }
             }
 
-            private void changeTitleTransparency(float alpha) {
+            private void changeTitleTransparency(final float alpha) {
                 int alphaChanel = (int) (alpha * 255) * 0x01000000;
                 int newColorCode = TRANSPARENT_WHITE_COLOR | alphaChanel;
                 toolbar.setTitleTextColor(newColorCode);
             }
 
-            private void changeFilterIconTransparency(float alpha) {
+            private void changeFilterIconTransparency(final float alpha) {
                 MenuItem item = toolbar.getMenu().findItem(R.id.action_find_location);
                 item.getIcon().setAlpha((int) (255 * alpha));
             }
 
 
-            private void newFabPosition(float v) {
+            private void newFabPosition(final float v) {
                 float edgeY = convertToPixels(1 - v) + toolbar.getHeight();
                 float fabDefaultCenterY = fab.getY() + fab.getHeight() / 2 - fab.getTranslationY();
                 if (edgeY < fabDefaultCenterY) {
@@ -339,7 +337,6 @@ public class InformationPanel {
         scrollView.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
-                String s = new String("new");
                 return false;
             }
         });
@@ -347,11 +344,9 @@ public class InformationPanel {
         slidingUpPanelLayout.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
-                String s = new String("new");
                 return false;
             }
         });
-
 
         commentText.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -431,7 +426,7 @@ public class InformationPanel {
         return activitiesLayout != null && (activitiesLayout.getChildCount() > 0);
     }
 
-    public void setProblemDetails(Details details) {
+    public void setProblemDetails(final Details details) {
         if (details == null) {
             return;
         }
@@ -458,7 +453,7 @@ public class InformationPanel {
      * @param problemActivity current problemActivity
      * @return information about post
      */
-    private String getPostInformation(ProblemActivity problemActivity) {
+    private String getPostInformation(final ProblemActivity problemActivity) {
         String userName = problemActivity.getFirstName();
         String day = problemActivity.getDate().substring(8, 10);
         String year = problemActivity.getDate().substring(0, 4);
@@ -488,7 +483,7 @@ public class InformationPanel {
      *
      * @param problemActivity current problemActivity
      */
-    private void setPostInformation(ProblemActivity problemActivity) {
+    private void setPostInformation(final ProblemActivity problemActivity) {
         TableRow activityRow = new TableRow(context);
         activityRow.addView(new ImageView(context));
         activityRow.setGravity(Gravity.LEFT);
@@ -505,7 +500,7 @@ public class InformationPanel {
      * @param problemActivity current problemActivity
      * @return icon
      */
-    private ImageView buildActivityIcon(ProblemActivity problemActivity) {
+    private ImageView buildActivityIcon(final ProblemActivity problemActivity) {
         TableRow.LayoutParams imageParams = new TableRow.LayoutParams(ACTIVITY_ICON_WIDTH, ACTIVITY_ICON_HEIGHT);
         imageParams.topMargin = (int) context.getResources().getDimension(R.dimen.slide_panel_items_margin);
         imageParams.bottomMargin = (int) context.getResources().getDimension(R.dimen.slide_panel_items_margin);
@@ -522,7 +517,7 @@ public class InformationPanel {
      * @param problemActivity current problemActivity
      * @return activity context
      */
-    private TextView buildActivityMessage(ProblemActivity problemActivity) {
+    private TextView buildActivityMessage(final ProblemActivity problemActivity) {
         TextView activityMessage = new TextView(context);
         TableRow.LayoutParams params =
                 new TableRow.LayoutParams(TableRow.LayoutParams.MATCH_PARENT,
@@ -546,16 +541,16 @@ public class InformationPanel {
      * @param activityType activityType
      * @return icon resource
      */
-    private Drawable getActivityIcon(ActivityType activityType) {
+    private Drawable getActivityIcon(final ActivityType activityType) {
         switch (activityType) {
             case CREATE:
                 return ResourcesCompat.getDrawable(context.getResources(), R.drawable.create, null);
             case UNKNOWN:
                 return ResourcesCompat.getDrawable(context.getResources(), R.drawable.type1, null);
             case LIKE:
-                return ResourcesCompat.getDrawable(context.getResources(), R.drawable.like4, null);
+                return ResourcesCompat.getDrawable(context.getResources(), R.drawable.like_iconq, null);
             case PHOTO:
-                return ResourcesCompat.getDrawable(context.getResources(), R.drawable.add_photo, null);
+                return ResourcesCompat.getDrawable(context.getResources(), R.drawable.add_photo_camera_36, null);
             case COMMENT:
                 return ResourcesCompat.getDrawable(context.getResources(), R.drawable.comment3, null);
             case UNKNOWN2:
@@ -570,7 +565,7 @@ public class InformationPanel {
      *
      * @param details details of problem
      */
-    private void putDetailsOnPanel(Details details) {
+    private void putDetailsOnPanel(final Details details) {
         this.votesNumber.setText(String.valueOf(details.getVotes()));
         for (int i = 0; i < details.getSeverity(); i++) {
             ImageView star = (ImageView) activity.findViewById(STARS_ID[i]);
@@ -586,7 +581,7 @@ public class InformationPanel {
         this.markerIcon.setImageResource(IconRenderer.getResourceIdForMarker(problem.getProblemType()));
     }
 
-    private void setProblemStatus(ProblemStatus problemStatus) {
+    private void setProblemStatus(final ProblemStatus problemStatus) {
         if (problemStatus.equals(ProblemStatus.UNSOLVED)) {
             this.problemStatus.setText(UNSOLVED);
             this.problemStatus.setTextColor(Color.RED);
@@ -602,7 +597,7 @@ public class InformationPanel {
      * @param details details of problem
      */
     private void addPhotos(final Details details) {
-        Map<Photo, Bitmap> photos = details.getPhotos();
+        final List<Photo> photos = details.getPhotos();
         if (photos == null) {
             hidePhotosTitle();
             return;
@@ -611,12 +606,8 @@ public class InformationPanel {
             photoContainer.removeAllViews();
         }
         BasicContentLayout photoPreview = new BasicContentLayout(photoContainer, context);
-        final List<String> urls = new ArrayList<>();
-        final List<String> descriptions = new ArrayList<>();
         int position = 0;
-        for (final Photo photo : photos.keySet()) {
-            urls.add(PHOTOS_PATH + photo.getLink());
-            descriptions.add(photo.getDescription());
+        for (final Photo photo : photos) {
             ImageView photoView = new ImageView(context);
             photoPreview.addHorizontalBlock(photoView);
             photoView.setId(position++);
@@ -624,13 +615,13 @@ public class InformationPanel {
             photoView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    openPhotoSlidePager(v.getId(), urls, descriptions);
+                    openPhotoSlidePager(v.getId(), photos);
                 }
             });
         }
     }
 
-    private void loadPhotoToView(Photo photo, ImageView photoView) {
+    private void loadPhotoToView(final Photo photo, final ImageView photoView) {
         Transformation transformation = new Transformation() {
             @Override
             public Bitmap transform(Bitmap source) {
@@ -649,7 +640,7 @@ public class InformationPanel {
         };
 
         Picasso.with(context)
-                .load(PHOTOS_PATH + photo.getLink())
+                .load(photo.getLink())
                 .placeholder(R.drawable.placeholder)
                 .error(R.drawable.photo_error1)
                 .transform(transformation)
@@ -660,10 +651,10 @@ public class InformationPanel {
         return photoContainer != null && (photoContainer.getChildCount() > 0);
     }
 
-    private void openPhotoSlidePager(int position, List<String> urls, List<String> description) {
-        ProblemPhotoSlidePager.setContent(urls, description);
+    private void openPhotoSlidePager(final int position, final List<Photo> photos) {
+        ProblemPhotoSlidePager.setContent(photos);
         Intent intent = new Intent(activity, ProblemPhotoSlidePager.class);
-        intent.putExtra("position", position);
+        intent.putExtra(POSITION, position);
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         context.startActivity(intent);
     }

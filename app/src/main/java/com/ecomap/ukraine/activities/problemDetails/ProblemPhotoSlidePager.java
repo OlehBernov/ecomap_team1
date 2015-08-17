@@ -9,6 +9,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.ecomap.ukraine.R;
+import com.ecomap.ukraine.models.Photo;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -16,12 +17,13 @@ import java.util.List;
 
 public class ProblemPhotoSlidePager extends FragmentActivity {
 
-    private static List<String> urls;
-    private static List<String> descriptions;
+    private static List<Photo> photos;
 
-    public static void setContent(List<String> urls, List<String> descriptions) {
-        ProblemPhotoSlidePager.urls = urls;
-        ProblemPhotoSlidePager.descriptions = descriptions;
+    private final String EMPTY_DESCRIPTION = "null";
+    private final String POSITION = "position";
+
+    public static void setContent(final List<Photo> photos) {
+        ProblemPhotoSlidePager.photos = photos;
     }
 
     @Override
@@ -30,18 +32,22 @@ public class ProblemPhotoSlidePager extends FragmentActivity {
 
         LayoutInflater inflater = LayoutInflater.from(this);
         List<View> pages = new ArrayList<>();
-        int position = getIntent().getIntExtra("position", 0);
+        int position = getIntent().getIntExtra(POSITION, 0);
 
-        for (int i = 0; i < urls.size(); i++) {
+        for (Photo photo: photos) {
             View page = inflater.inflate(R.layout.activity_problem_photo_slide_pager, null);
             ImageView photoView = (ImageView) page.findViewById(R.id.problem_photo);
             Picasso.with(getApplicationContext())
-                    .load(urls.get(i))
+                    .load(photo.getLink())
                     .placeholder(R.drawable.placeholder)
                     .error(R.drawable.photo_error1)
                     .into(photoView);
-            TextView photoDescription = (TextView) page.findViewById(R.id.photo_description);
-            photoDescription.setText(descriptions.get(i));
+
+            String photoDescription = photo.getDescription();
+            if (photoDescription != EMPTY_DESCRIPTION) {
+                TextView photoDescriptionView = (TextView) page.findViewById(R.id.photo_description);
+                photoDescriptionView.setText(photoDescription);
+            }
 
             pages.add(page);
         }

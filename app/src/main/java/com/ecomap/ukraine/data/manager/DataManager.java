@@ -197,7 +197,7 @@ public class DataManager implements ProblemListenersNotifier,
         SharedPreferences settings = context.getSharedPreferences(TIME, 0);
         SharedPreferences.Editor editor = settings.edit();
         editor.putLong(TIME, 0);
-        editor.commit();
+        editor.apply();
         getAllProblems();
     }
 
@@ -213,7 +213,7 @@ public class DataManager implements ProblemListenersNotifier,
         SharedPreferences settings = context.getSharedPreferences(TIME, 0);
         SharedPreferences.Editor editor = settings.edit();
         editor.putLong(TIME, System.currentTimeMillis());
-        editor.commit();
+        editor.apply();
     }
 
     /**

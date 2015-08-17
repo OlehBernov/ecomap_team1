@@ -96,16 +96,11 @@
                 android:id="@+id/btn_send_problem"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:layout_alignParentBottom="true"
-                android:layout_marginBottom="24dp"
-                android:layout_marginTop="24dp"
                 android:text="@string/send_problem"
-                android:layout_marginEnd="32dp"
-                android:layout_marginRight="32dp"
-                android:layout_marginStart="32dp"
-                android:layout_marginLeft="32dp"
                 android:onClick="sendProblem"
-                android:padding="12dp" />
+                android:padding="12dp"
+                android:layout_below="@+id/photo_descriptions"
+                android:layout_centerHorizontal="true" />
 
         </RelativeLayout>
 

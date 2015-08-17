@@ -1,8 +1,6 @@
 package com.ecomap.ukraine.filter;
 
-/**
- * Created by Andriy on 01.08.2015.
- */
+
 public interface FilterListener {
 
     /**

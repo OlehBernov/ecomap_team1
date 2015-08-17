@@ -29,20 +29,14 @@ import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.util.List;
 
-/**
- * Created by Andriy on 11.08.2015.
- */
+
 public class FragmentChooseCoordMap extends android.support.v4.app.Fragment {
 
     private GoogleMap googleMap;
     private MapView mapView;
-
-    private boolean markerPlaced;
     private LatLng markerPosition;
 
     private static final float ON_MY_POSITION_CLICK_ZOOM = 15;
-
-    private ImageButton myPositionButton;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -53,7 +47,7 @@ public class FragmentChooseCoordMap extends android.support.v4.app.Fragment {
         mapView.onCreate(savedInstanceState);
         mapView.onResume();
 
-        myPositionButton = (ImageButton) getActivity().findViewById(R.id.position_button);
+        ImageButton myPositionButton = (ImageButton) getActivity().findViewById(R.id.position_button);
         myPositionButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -78,7 +72,6 @@ public class FragmentChooseCoordMap extends android.support.v4.app.Fragment {
                 return myLocation;
             }
         });
-
 
         MapsInitializer.initialize(getActivity().getApplicationContext());
         this.setUpMapIfNeeded();
@@ -117,11 +110,10 @@ public class FragmentChooseCoordMap extends android.support.v4.app.Fragment {
             return rootView;
         }
 
-
-                /**
-                 * Sets up the map if it is possible to do so (i.e., the Google Play services APK is correctly
-                 * installed) and the map has not already been instantiated.
-                 */
+    /**
+     * Sets up the map if it is possible to do so (i.e., the Google Play services APK is correctly
+     * installed) and the map has not already been instantiated.
+     */
 
     private void setUpMapIfNeeded() {
         if (googleMap == null) {
@@ -131,7 +123,6 @@ public class FragmentChooseCoordMap extends android.support.v4.app.Fragment {
             }
         }
     }
-
 
     private void setUpMap() {
         googleMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);

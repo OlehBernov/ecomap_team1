@@ -33,7 +33,7 @@ public class IconRenderer extends DefaultClusterRenderer<Problem> {
      * @param map google map
      * @param clusterManager managed clusters
      */
-    public IconRenderer(Activity activity, GoogleMap map,
+    public IconRenderer(final Activity activity, final GoogleMap map,
                         ClusterManager<Problem> clusterManager) {
         super(activity.getApplicationContext(), map, clusterManager);
         this.activity = activity;
@@ -44,7 +44,7 @@ public class IconRenderer extends DefaultClusterRenderer<Problem> {
      * @param view view, which we want turn
      * @return generated bitmap
      */
-    public static Bitmap createDrawableFromView(View view) {
+    public static Bitmap createDrawableFromView(final View view) {
         view.setDrawingCacheEnabled(true);
         view.measure(View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED),
                 View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED));
@@ -61,7 +61,7 @@ public class IconRenderer extends DefaultClusterRenderer<Problem> {
      */
     @Override
     protected void onBeforeClusterItemRendered(Problem problem, MarkerOptions markerOptions) {
-        BitmapDescriptor icon = BitmapDescriptorFactory.fromResource(this.getResourceIdForMarker(
+        BitmapDescriptor icon = BitmapDescriptorFactory.fromResource(IconRenderer.getResourceIdForMarker(
                 problem.getProblemType()));
         markerOptions.icon(icon)
                 .anchor(0.5f, 1f);
@@ -88,7 +88,8 @@ public class IconRenderer extends DefaultClusterRenderer<Problem> {
      * Called before the marker for a Cluster is added to the map.
      * The default implementation draws a circle with a rough count of the number of items.
      */
-    protected void onBeforeClusterRendered(Cluster<Problem> cluster, MarkerOptions markerOptions) {
+    protected void onBeforeClusterRendered(final Cluster<Problem> cluster,
+                                           final MarkerOptions markerOptions) {
 
         int bucket = getBucket(cluster);
         BitmapDescriptor descriptor = icons.get(bucket);
@@ -111,7 +112,7 @@ public class IconRenderer extends DefaultClusterRenderer<Problem> {
      * @param problemType id of type
      * @return icon resourse
      */
-    public static int getResourceIdForMarker (ProblemType problemType) {
+    public static int getResourceIdForMarker (final ProblemType problemType) {
         int resId = 0;
         switch (problemType) {
             case FOREST_DESTRUCTION:
@@ -144,7 +145,7 @@ public class IconRenderer extends DefaultClusterRenderer<Problem> {
      * @param size Numbers of markers in cluster
      * @return icon resource
      */
-    private int getResourceIdForCluster (int size) {
+    private int getResourceIdForCluster (final int size) {
         int resId = 0;
         if(size < 10) resId = R.drawable.m1;
         else if (size < 50) resId = R.drawable.m2;

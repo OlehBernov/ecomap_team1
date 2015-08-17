@@ -1,8 +1,6 @@
 package com.ecomap.ukraine.models;
 
 
-import java.io.Serializable;
-
 /**
  * Class Photo represent information about photo of problem.
  * Created by Andriy on 17.07.2015.

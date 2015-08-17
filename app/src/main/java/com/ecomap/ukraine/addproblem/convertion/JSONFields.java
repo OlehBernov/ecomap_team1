@@ -1,7 +1,9 @@
 package com.ecomap.ukraine.addproblem.convertion;
 
-/**
- * Created by Andriy on 12.08.2015.
- */
-public class JSONFields {
+class JSONFields {
+
+    public static final String NULL_ARGUMENT = "Argument is null";
+    public static final String JSON = "json";
+    public static final String INSERT_ID = "insertId";
+
 }

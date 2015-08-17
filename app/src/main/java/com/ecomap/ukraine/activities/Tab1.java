@@ -21,6 +21,7 @@ import android.widget.Toast;
 import com.ecomap.ukraine.R;
 import com.ecomap.ukraine.account.manager.AccountManager;
 import com.ecomap.ukraine.account.manager.LogInListener;
+import com.ecomap.ukraine.activities.main.MainActivity;
 import com.ecomap.ukraine.addproblem.manager.AddProblemListener;
 import com.ecomap.ukraine.addproblem.manager.AddProblemManager;
 import com.ecomap.ukraine.data.manager.DataManager;
@@ -38,9 +39,7 @@ import java.util.List;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 
-/**
- * Created by Edwin on 15/02/2015.
- */
+
 public class Tab1 extends Fragment implements LogInListener, AddProblemListener, ProblemListener {
 
     /**

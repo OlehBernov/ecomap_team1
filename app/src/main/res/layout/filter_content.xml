@@ -14,8 +14,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-
-
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -44,15 +42,12 @@
                         android:id="@+id/textView4"
                         android:layout_width="54dp"
                         android:layout_height="wrap_content"
-                        android:layout_above="@+id/checkBox4"
-                        android:layout_alignParentLeft="true"
-                        android:layout_alignParentStart="true"
                         android:layout_margin="@dimen/card_margin"
-                        android:gravity="right"
                         android:text="@string/date"
+                        android:gravity="right"
                         android:textAppearance="?android:attr/textAppearanceMedium"
                         android:textColor="@color/filter_button_text"
-                        android:textSize="15dp"
+                        android:textSize="15sp"
                         android:textStyle="bold" />
 
                     <RelativeLayout
@@ -67,11 +62,11 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:onClick="dateFromChoosing"
-                            android:text="11.31.2014"
+                            android:text="@string/default_filter_date_from"
                             android:clickable="true"
                             android:textAppearance="?android:attr/textAppearanceMedium"
                             android:textColor="#ff5e5e5e"
-                            android:textSize="15dp"
+                            android:textSize="15sp"
                             android:layout_alignParentRight="true"
                             android:layout_alignParentEnd="true"
                             android:layout_centerVertical="true" />
@@ -92,7 +87,7 @@
                             android:text="@string/date_from"
                             android:textAppearance="?android:attr/textAppearanceSmall"
                             android:textColor="@color/filter_button_text"
-                            android:textSize="15dp"
+                            android:textSize="15sp"
                             android:layout_marginTop="10dp"
                             android:layout_marginLeft="63dp"
                             android:layout_marginStart="55dp"
@@ -116,7 +111,7 @@
                             android:text="@string/date_to"
                             android:textAppearance="?android:attr/textAppearanceSmall"
                             android:textColor="@color/filter_button_text"
-                            android:textSize="15dp"
+                            android:textSize="15sp"
                             android:layout_marginLeft="64dp"
                             android:layout_marginStart="64dp"
                             android:layout_centerVertical="true"
@@ -129,10 +124,10 @@
                             android:layout_height="wrap_content"
                             android:onClick="dateToChoosing"
                             android:clickable="true"
-                            android:text="11.11.2014"
+                            android:text="@string/default_filte_date_to"
                             android:textAppearance="?android:attr/textAppearanceMedium"
                             android:textColor="#ff5e5e5e"
-                            android:textSize="15dp"
+                            android:textSize="15sp"
                             android:layout_centerVertical="true"
                             android:layout_alignParentRight="true"
                             android:layout_alignParentEnd="true" />
@@ -172,15 +167,12 @@
                         android:id="@+id/textView3"
                         android:layout_width="60dp"
                         android:layout_height="wrap_content"
-                        android:layout_above="@+id/checkBox4"
-                        android:layout_alignParentLeft="true"
-                        android:layout_alignParentStart="true"
                         android:layout_margin="@dimen/card_margin"
                         android:gravity="right"
                         android:text="@string/status"
                         android:textAppearance="?android:attr/textAppearanceMedium"
                         android:textColor="@color/filter_button_text"
-                        android:textSize="15dp"
+                        android:textSize="15sp"
                         android:textStyle="bold" />
 
                     <RelativeLayout

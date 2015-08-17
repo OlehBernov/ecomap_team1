@@ -91,15 +91,13 @@ public class MainActivity extends AppCompatActivity {
 
     private static final String USER = "User";
 
-
     private static final float ANCHOR_POINT = 0.3f;
 
-
-    final private String alertMessage =
+    private static final String alertMessage =
             "To append a problem you must first be authorized. Authorize?";
 
-    final static   String OK = "OK";
-    final static   String CANCEL = "Cancel";
+    private static final String OK = "OK";
+    private static final String CANCEL = "Cancel";
 
     /**
      * Drawer toggle.
@@ -651,7 +649,7 @@ public class MainActivity extends AppCompatActivity {
         }
         else {
             Intent intent = new Intent(this, ChooseProblemLocationActivity.class);
-            intent.putExtra("User", user);
+            intent.putExtra(USER, user);
             startActivity(intent);
             finish();
         }

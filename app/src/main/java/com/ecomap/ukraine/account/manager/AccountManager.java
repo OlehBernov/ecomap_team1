@@ -2,8 +2,6 @@ package com.ecomap.ukraine.account.manager;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.view.View;
-import android.view.inputmethod.InputMethodManager;
 
 import com.ecomap.ukraine.account.client.LogInClient;
 import com.ecomap.ukraine.models.User;
@@ -11,9 +9,6 @@ import com.ecomap.ukraine.models.User;
 import java.util.HashSet;
 import java.util.Set;
 
-/**
- *
- */
 public class AccountManager implements LogInListenerNotifier,
                                        LogRequestReceiver {
 

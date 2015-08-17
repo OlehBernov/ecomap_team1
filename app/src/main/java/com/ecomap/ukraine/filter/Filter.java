@@ -35,12 +35,6 @@ public class Filter {
         }
     }
 
-    /**
-    * Filtration process
-    * @param filterState rules of filtration
-    * @param problem
-    * @return
-    */    
     private boolean filtration(final FilterState filterState, final Problem problem) {
         if (filterState.isFilterOff(getFilterCriteria(problem.getProblemType()))) {
             if (showProblemBySolvedFilter(filterState, problem)) {
@@ -85,8 +79,10 @@ public class Filter {
      * @param problem problem under filtration
      * @return access to show problem
      */
-    private boolean showProblemBySolvedFilter (FilterState filterState, Problem problem) {
-        return showResolvedProblem(filterState, problem) || showUnsolvedProblem(filterState, problem);
+    private boolean showProblemBySolvedFilter (final FilterState filterState,
+                                               final Problem problem) {
+        return showResolvedProblem(filterState, problem)
+                || showUnsolvedProblem(filterState, problem);
 
     }
 
@@ -96,7 +92,7 @@ public class Filter {
      * @param problem problem under filtration
      * @return access to show problem
      */
-    private  boolean showUnsolvedProblem(FilterState filterState, Problem problem) {
+    private  boolean showUnsolvedProblem(final FilterState filterState, final Problem problem) {
         return (filterState.isFilterOff(FilterContract.UNSOLVED))
                 && (problem.getStatus().equals(ProblemStatus.UNSOLVED));
 
@@ -108,7 +104,7 @@ public class Filter {
      * @param problem problem under filtration
      * @return access to show problem
      */
-    private  boolean showResolvedProblem(FilterState filterState, Problem problem) {
+    private  boolean showResolvedProblem(final FilterState filterState, final Problem problem) {
         return (filterState.isFilterOff(FilterContract.RESOLVED))
                 && (problem.getStatus().equals(ProblemStatus.RESOLVED));
     }
@@ -119,7 +115,7 @@ public class Filter {
      * @param problem problem under filtration
      * @return access to show problem
      */
-    private boolean showActualProblem (FilterState filterState, Problem problem) {
+    private boolean showActualProblem (final FilterState filterState, final Problem problem) {
         int day = Integer.parseInt(problem.getDate().substring(8, 10));
         int year = Integer.parseInt(problem.getDate().substring(0, 4));
         int month = Integer.parseInt(problem.getDate().substring(5, 7)) - 1;
