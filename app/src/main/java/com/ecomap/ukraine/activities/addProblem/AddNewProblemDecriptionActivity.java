@@ -234,7 +234,7 @@ public class AddNewProblemDecriptionActivity extends AppCompatActivity {
 
         assert ab != null;
         ab.setDisplayHomeAsUpEnabled(true);
-        
+
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

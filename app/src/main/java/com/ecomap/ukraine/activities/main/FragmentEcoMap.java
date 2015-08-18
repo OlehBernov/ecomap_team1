@@ -193,7 +193,6 @@ public class FragmentEcoMap extends android.support.v4.app.Fragment
             if (filterState == null) {
                 filterState = filterManager.getFilterStateFromPreference();
                 setupClusterManager(filterState);
-                clusterManager.setRenderer(new IconRenderer(getActivity(), googleMap, clusterManager));
             }
             if (!isRendering) {
             setupClusterManager(filterState);
