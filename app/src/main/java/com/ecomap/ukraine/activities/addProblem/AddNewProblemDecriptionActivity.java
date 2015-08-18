@@ -118,13 +118,7 @@ public class AddNewProblemDecriptionActivity extends AppCompatActivity {
         setupToolbar();
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
 
-        toolbar = (Toolbar) findViewById(R.id.tool_bar);
-        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onBackPressed();
-            }
-        });
+
 
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager(), Titles, NUMBER_OF_TUBS);
 
@@ -240,6 +234,13 @@ public class AddNewProblemDecriptionActivity extends AppCompatActivity {
 
         assert ab != null;
         ab.setDisplayHomeAsUpEnabled(true);
+        
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onBackPressed();
+            }
+        });
     }
 
     private boolean isCameraPhoto(int requestCode, int resultCode) {
