@@ -62,7 +62,7 @@ import io.codetail.animation.ViewAnimationUtils;
  * <p/>
  * Main activity, represent GUI and provides access to all functional
  */
-public class MainActivity extends AppCompatActivity implements FilterListener {
+public class MainActivity extends AppCompatActivity   {
 
     /**
      * Name of the filter window.
@@ -265,18 +265,16 @@ public class MainActivity extends AppCompatActivity implements FilterListener {
     public void showFilter(MenuItem item) {
         filterLayout = (DrawerLayout) findViewById(R.id.drawer2);
         if (!filterLayout.isDrawerOpen(GravityCompat.END)) {
-            filterManager.registerFilterListener(this);
             item.setIcon(R.drawable.filter_back);
             setDate();
             filterLayout.openDrawer(GravityCompat.END);
             previousTitle = toolbar.getTitle();
             toolbar.setTitle(FILTER);
         } else {
-            filterManager.getFilterState(buildFiltersState());
+            filterManager.getFilterState(buildFiltersState(), true);
             item.setIcon(R.drawable.filter8);
-            //filterLayout.closeDrawer(GravityCompat.END);
-            //toolbar.setTitle(previousTitle);
-            filterManager.removeFilterListener(this);
+            filterLayout.closeDrawer(GravityCompat.END);
+            toolbar.setTitle(previousTitle);
         }
     }
 
@@ -287,7 +285,8 @@ public class MainActivity extends AppCompatActivity implements FilterListener {
         } else {
             checkBox.setChecked(false);
         }
-        //filterManager.getFilterState(buildFiltersState());
+        filterManager.getFilterState(buildFiltersState(), false);
+
     }
 
     public void dateFromChoosing(View view) {
@@ -339,16 +338,9 @@ public class MainActivity extends AppCompatActivity implements FilterListener {
         alert.show();
     }
 
-    @Override
-    public void updateFilterState(final FilterState filterState) {
 
-    }
 
-    @Override
-    public void onFiltrationFinished() {
-        filterLayout.closeDrawer(GravityCompat.END);
-        toolbar.setTitle(previousTitle);
-    }
+
 
     /**
      * Initialize activity
@@ -531,13 +523,13 @@ public class MainActivity extends AppCompatActivity implements FilterListener {
                         date.set(Calendar.MONTH, monthOfYear);
                         date.set(Calendar.DAY_OF_MONTH, dayOfMonth);
 
-                        if (isValidDates(date, calendarDateTo)) {
-                            calendarDateFrom = date;
-                            setDate();
-                            filterManager.getFilterState(buildFiltersState());
-                        }
-                    }
-                };
+                if (isValidDates(date, calendarDateTo)) {
+                    calendarDateFrom = date;
+                    setDate();
+                    filterManager.getFilterState(buildFiltersState(), false);
+                }
+            }
+        };
 
         dialogDateFrom = new CalendarDatePickerDialog();
         dialogDateFrom.setOnDateSetListener(dateFromListener);
@@ -558,13 +550,13 @@ public class MainActivity extends AppCompatActivity implements FilterListener {
                         date.set(Calendar.MONTH, monthOfYear);
                         date.set(Calendar.DAY_OF_MONTH, dayOfMonth);
 
-                        if (isValidDates(calendarDateFrom, date)) {
-                            calendarDateTo = date;
-                            setDate();
-                            filterManager.getFilterState(buildFiltersState());
-                        }
-                    }
-                };
+                if (isValidDates(calendarDateFrom, date)) {
+                    calendarDateTo = date;
+                    setDate();
+                    filterManager.getFilterState(buildFiltersState(), false);
+                }
+            }
+        };
 
         dialogDateTo = new CalendarDatePickerDialog();
         dialogDateTo.setOnDateSetListener(dateToListener);
@@ -638,10 +630,7 @@ public class MainActivity extends AppCompatActivity implements FilterListener {
         setFiltersState(filterState);
     }
 
-    /*public void updateFilterState(final FilterState filterState) {
-        filterLayout.closeDrawer(GravityCompat.END);
-        toolbar.setTitle(previousTitle);
-    }*/
+
 
     private void setDate() {
         SimpleDateFormat dateFormat = new SimpleDateFormat(DATE_TEMPLATE, Locale.ENGLISH);

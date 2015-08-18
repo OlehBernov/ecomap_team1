@@ -57,6 +57,7 @@ public class FragmentEcoMap extends android.support.v4.app.Fragment
     private MapView mapView;
     private GoogleMap googleMap;
     private DataManager dataManager;
+    private ClusterManager<Problem> clusterManager;
 
     /**
      * Filter dataManager instance
@@ -159,7 +160,17 @@ public class FragmentEcoMap extends android.support.v4.app.Fragment
     @Override
     public void updateAllProblems(final List<Problem> problems) {
         FragmentEcoMap.problems = problems;
-        putAllProblemsOnMap(problems, null);
+        putAllProblemsOnMap(problems, null, true);
+    }
+
+    /**
+     * Update filter
+     *
+     * @param filterState state of filter
+     */
+    @Override
+    public void updateFilterState(final FilterState filterState, final boolean isRendering) {
+        putAllProblemsOnMap(problems, filterState, isRendering);
     }
 
     /**
@@ -173,49 +184,29 @@ public class FragmentEcoMap extends android.support.v4.app.Fragment
     }
 
     /**
-     * Update filter
-     *
-     * @param filterState state of filter
-     */
-    public void updateFilterState(final FilterState filterState) {
-        putAllProblemsOnMap(problems, filterState);
-    }
-
-    @Override
-    public void onFiltrationFinished() {
-
-    }
-
-    /**
      * Puts all problems on map
      *
      * @param problems list of problems
      */
-    public void putAllProblemsOnMap(final List<Problem> problems, FilterState filterState) {
+    public void putAllProblemsOnMap(final List<Problem> problems, FilterState filterState,  boolean isRendering) {
         googleMap.clear();
-        if (filterState == null) {
-            filterState = filterManager.getFilterStateFromPreference();
+            if (filterState == null) {
+                filterState = filterManager.getFilterStateFromPreference();
+                setupClusterManager(filterState);
+                clusterManager.setRenderer(new IconRenderer(getActivity(), googleMap, clusterManager));
+            }
+            if (!isRendering) {
+            setupClusterManager(filterState);
+
         }
-        List<Problem> filteredProblems = new Filter().filterProblem(problems, filterState);
+        if(isRendering) {
+            setupClusterManager(filterState);
+            clusterManager.setRenderer(new IconRenderer(getActivity(), googleMap, clusterManager));
+            //clusterManager.setRenderer(new DefaultClusterRenderer<Problem>(getActivity(), googleMap, clusterManager));
+        }
 
-        //  if(filteredProblems.size() != 0) {
-        ClusterManager<Problem> clusterManager =
-                new ClusterManager<>(getActivity().getApplicationContext(), googleMap);
-        googleMap.setOnCameraChangeListener(clusterManager);
-        clusterManager.setOnClusterItemClickListener(this);
-        googleMap.setOnMarkerClickListener(clusterManager);
-        clusterManager.addItems(filteredProblems);
 
-        clusterManager.setRenderer(new IconRenderer(getActivity(), googleMap, clusterManager));
 
-        //clusterManager.setRenderer(new DefaultClusterRenderer<>(getActivity(), googleMap, clusterManager));
-        //}
-        /*else {
-            googleMap.clear();
-            //clusterManager.setRenderer(new DefaultClusterRenderer<>(getActivity(), googleMap, clusterManager));
-        }*/
-
-        filterManager.onFiltrationSuccess();
     }
 
     /**
@@ -292,6 +283,16 @@ public class FragmentEcoMap extends android.support.v4.app.Fragment
                 .build();
         CameraUpdate cameraUpdate = CameraUpdateFactory.newCameraPosition(cameraPosition);
         googleMap.animateCamera(cameraUpdate);
+    }
+
+    private void setupClusterManager (final FilterState filterState){
+        List<Problem> filteredProblems = new Filter().filterProblem(problems, filterState);
+        clusterManager =
+                new ClusterManager<>(getActivity().getApplicationContext(), googleMap);
+        googleMap.setOnCameraChangeListener(clusterManager);
+        clusterManager.setOnClusterItemClickListener(this);
+        googleMap.setOnMarkerClickListener(clusterManager);
+        clusterManager.addItems(filteredProblems);
     }
 
 }

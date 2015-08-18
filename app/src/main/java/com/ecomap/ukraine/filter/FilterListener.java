@@ -8,8 +8,8 @@ public interface FilterListener {
      *
      * @param filterState state of filter
      */
-    void updateFilterState(final FilterState filterState);
+    void updateFilterState(final FilterState filterState, final boolean isRendering);
 
-    void onFiltrationFinished();
+
 
 }

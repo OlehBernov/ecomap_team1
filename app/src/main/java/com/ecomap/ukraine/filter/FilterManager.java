@@ -71,25 +71,22 @@ public class FilterManager implements FilterListenersNotifier {
      *
      * @param filterState this filterState sends to all listeners
      */
-    public void sendFilterState(final FilterState filterState) {
+    public void sendFilterState (final FilterState filterState, final boolean isRendering) {
         for (FilterListener listener : filterListeners) {
-            listener.updateFilterState(filterState);
+            listener.updateFilterState(filterState, isRendering);
         }
     }
 
-    public void onFiltrationSuccess() {
-        for (FilterListener listener : filterListeners) {
-            listener.onFiltrationFinished();
-        }
-    }
+   
+
 
     /**
      * This method use to get  filter state for filter manager
      *
      * @param filterState this filterState gets for filter manager
      */
-    public void getFilterState(final FilterState filterState) {
-        sendFilterState(filterState);
+        public void getFilterState (final FilterState filterState, final boolean isRendering) {
+            sendFilterState(filterState, isRendering);
 
     }
 

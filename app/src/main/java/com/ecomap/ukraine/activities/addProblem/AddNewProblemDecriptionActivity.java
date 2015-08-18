@@ -63,7 +63,7 @@ public class AddNewProblemDecriptionActivity extends AppCompatActivity {
     private User user;
     private Toolbar toolbar;
     private ViewPager pager;
-    private CharSequence Titles[] = {"Description", "Photo"};
+    private String Titles[] = getResources().getStringArray(R.array.tabs_in_posting_prpblem);
 
     public List<Bitmap> getBitmapsPhoto() {
         List<Bitmap> photoBitmaps = new ArrayList<>();

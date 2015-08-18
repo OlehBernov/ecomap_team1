@@ -136,7 +136,7 @@ public class AddProblemDescriptionFragment extends Fragment implements LogInList
 
     @Override
     public void onSuccessProblemPosting() {
-        successPosting();
+        successPosting(R.string.problem_added_sucessfully);
     }
 
 
@@ -148,15 +148,18 @@ public class AddProblemDescriptionFragment extends Fragment implements LogInList
 
     @Override
     public void onSuccessPhotoPosting() {
-        successPosting();
+        successPosting(R.string.problem_added_sucessfully);
     }
 
 
     @Override
     public void onFailedPhotoPosting() {
-        Toast.makeText(getActivity().getApplicationContext(), R.string.photo_post_error,
-                Toast.LENGTH_LONG).show();
+        successPosting(R.string.photo_post_error);
+
     }
+
+    @Override
+    public void updateProblemDetails(final Details details) {}
 
     @Override
     public void updateAllProblems(final List<Problem> problems) {
@@ -168,13 +171,8 @@ public class AddProblemDescriptionFragment extends Fragment implements LogInList
 
     }
 
-    @Override
-    public void updateProblemDetails(final Details details) {
-
-    }
-
-    public void successPosting() {
-        Toast.makeText(getActivity().getApplicationContext(), R.string.problem_added_sucessfully, Toast.LENGTH_LONG).show();
+    public void successPosting (final int idOfmessage) {
+        Toast.makeText(getActivity().getApplicationContext(), idOfmessage, Toast.LENGTH_LONG) .show();
         dataManager.registerProblemListener(this);
         dataManager.refreshAllProblem();
     }
