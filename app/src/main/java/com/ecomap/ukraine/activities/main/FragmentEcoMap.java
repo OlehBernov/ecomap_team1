@@ -188,22 +188,21 @@ public class FragmentEcoMap extends android.support.v4.app.Fragment
      *
      * @param problems list of problems
      */
-    public void putAllProblemsOnMap(final List<Problem> problems, FilterState filterState,  boolean isRendering) {
+    public void putAllProblemsOnMap(final List<Problem> problems, FilterState filterState, boolean isRendering) {
         googleMap.clear();
-            if (filterState == null) {
-                filterState = filterManager.getFilterStateFromPreference();
-                setupClusterManager(filterState);
-            }
-            if (!isRendering) {
+        if (filterState == null) {
+            filterState = filterManager.getFilterStateFromPreference();
+            setupClusterManager(filterState);
+        }
+        if (!isRendering) {
             setupClusterManager(filterState);
 
         }
-        if(isRendering) {
+        if (isRendering) {
             setupClusterManager(filterState);
             clusterManager.setRenderer(new IconRenderer(getActivity(), googleMap, clusterManager));
             //clusterManager.setRenderer(new DefaultClusterRenderer<Problem>(getActivity(), googleMap, clusterManager));
         }
-
 
 
     }
@@ -284,7 +283,7 @@ public class FragmentEcoMap extends android.support.v4.app.Fragment
         googleMap.animateCamera(cameraUpdate);
     }
 
-    private void setupClusterManager (final FilterState filterState){
+    private void setupClusterManager(final FilterState filterState) {
         List<Problem> filteredProblems = new Filter().filterProblem(problems, filterState);
         clusterManager =
                 new ClusterManager<>(getActivity().getApplicationContext(), googleMap);

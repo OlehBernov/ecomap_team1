@@ -62,7 +62,7 @@ import io.codetail.animation.ViewAnimationUtils;
  * <p/>
  * Main activity, represent GUI and provides access to all functional
  */
-public class MainActivity extends AppCompatActivity   {
+public class MainActivity extends AppCompatActivity {
 
     /**
      * Name of the filter window.
@@ -339,9 +339,6 @@ public class MainActivity extends AppCompatActivity   {
     }
 
 
-
-
-
     /**
      * Initialize activity
      *
@@ -523,13 +520,13 @@ public class MainActivity extends AppCompatActivity   {
                         date.set(Calendar.MONTH, monthOfYear);
                         date.set(Calendar.DAY_OF_MONTH, dayOfMonth);
 
-                if (isValidDates(date, calendarDateTo)) {
-                    calendarDateFrom = date;
-                    setDate();
-                    filterManager.getFilterState(buildFiltersState(), false);
-                }
-            }
-        };
+                        if (isValidDates(date, calendarDateTo)) {
+                            calendarDateFrom = date;
+                            setDate();
+                            filterManager.getFilterState(buildFiltersState(), false);
+                        }
+                    }
+                };
 
         dialogDateFrom = new CalendarDatePickerDialog();
         dialogDateFrom.setOnDateSetListener(dateFromListener);
@@ -550,13 +547,13 @@ public class MainActivity extends AppCompatActivity   {
                         date.set(Calendar.MONTH, monthOfYear);
                         date.set(Calendar.DAY_OF_MONTH, dayOfMonth);
 
-                if (isValidDates(calendarDateFrom, date)) {
-                    calendarDateTo = date;
-                    setDate();
-                    filterManager.getFilterState(buildFiltersState(), false);
-                }
-            }
-        };
+                        if (isValidDates(calendarDateFrom, date)) {
+                            calendarDateTo = date;
+                            setDate();
+                            filterManager.getFilterState(buildFiltersState(), false);
+                        }
+                    }
+                };
 
         dialogDateTo = new CalendarDatePickerDialog();
         dialogDateTo.setOnDateSetListener(dateToListener);
@@ -629,7 +626,6 @@ public class MainActivity extends AppCompatActivity   {
         FilterState filterState = filterManager.getFilterStateFromPreference();
         setFiltersState(filterState);
     }
-
 
 
     private void setDate() {

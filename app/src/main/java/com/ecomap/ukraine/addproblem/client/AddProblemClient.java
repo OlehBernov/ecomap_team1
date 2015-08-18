@@ -46,12 +46,12 @@ public class AddProblemClient {
 
         params.put(JSONFields.TITLE, title);
         params.put(JSONFields.CONTENT, content);
-        params.put(JSONFields.PROPOSAL,  proposal);
-        params.put(JSONFields.LATITUDE,  latitude);
-        params.put(JSONFields.LONGITUDE,  longitude);
-        params.put(JSONFields.PROBLEM_TYPE,  type);
-        params.put(JSONFields.USER_ID,  userId);
-        params.put(JSONFields.USER_NAME,  userName);
+        params.put(JSONFields.PROPOSAL, proposal);
+        params.put(JSONFields.LATITUDE, latitude);
+        params.put(JSONFields.LONGITUDE, longitude);
+        params.put(JSONFields.PROBLEM_TYPE, type);
+        params.put(JSONFields.USER_ID, userId);
+        params.put(JSONFields.USER_NAME, userName);
         params.put(JSONFields.USER_SURNAME, userSurname);
 
         MultipartRequest multipartRequest = new MultipartRequest(POST_PROBLEM_URL, new Response.Listener<String>() {
@@ -92,11 +92,11 @@ public class AddProblemClient {
                                   final String problemID, Bitmap photo, final int count, final int size) {
 
 
-            HashMap<String, String> params = new HashMap<>();
-            params.put(JSONFields.USER_ID, userID);
-            params.put(JSONFields.USER_NAME, userName);
-            params.put(JSONFields.USER_SURNAME, userSurname);
-            params.put(JSONFields.DESCRIPTION, description);
+        HashMap<String, String> params = new HashMap<>();
+        params.put(JSONFields.USER_ID, userID);
+        params.put(JSONFields.USER_NAME, userName);
+        params.put(JSONFields.USER_SURNAME, userSurname);
+        params.put(JSONFields.DESCRIPTION, description);
         MultipartRequest multipartRequest = new MultipartRequest(POST_PHOTO_URL + problemID + "/",
                 new Response.Listener<String>() {
 

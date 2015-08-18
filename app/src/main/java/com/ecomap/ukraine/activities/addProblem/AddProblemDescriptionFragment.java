@@ -159,7 +159,8 @@ public class AddProblemDescriptionFragment extends Fragment implements LogInList
     }
 
     @Override
-    public void updateProblemDetails(final Details details) {}
+    public void updateProblemDetails(final Details details) {
+    }
 
     @Override
     public void updateAllProblems(final List<Problem> problems) {
@@ -171,8 +172,8 @@ public class AddProblemDescriptionFragment extends Fragment implements LogInList
 
     }
 
-    public void successPosting (final int idOfmessage) {
-        Toast.makeText(getActivity().getApplicationContext(), idOfmessage, Toast.LENGTH_LONG) .show();
+    public void successPosting(final int idOfmessage) {
+        Toast.makeText(getActivity().getApplicationContext(), idOfmessage, Toast.LENGTH_LONG).show();
         dataManager.registerProblemListener(this);
         dataManager.refreshAllProblem();
     }

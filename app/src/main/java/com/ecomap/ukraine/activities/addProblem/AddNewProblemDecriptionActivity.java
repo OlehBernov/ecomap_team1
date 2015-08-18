@@ -119,7 +119,6 @@ public class AddNewProblemDecriptionActivity extends AppCompatActivity {
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
 
 
-
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager(), Titles, NUMBER_OF_TUBS);
 
         pager = (ViewPager) findViewById(R.id.pager);
