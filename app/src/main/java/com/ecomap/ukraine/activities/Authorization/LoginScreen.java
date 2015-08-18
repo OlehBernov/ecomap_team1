@@ -12,6 +12,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.ecomap.ukraine.R;
 import com.ecomap.ukraine.account.manager.AccountManager;
 import com.ecomap.ukraine.account.manager.LogInListener;
@@ -41,6 +42,9 @@ public class LoginScreen extends AppCompatActivity implements LogInListener {
 
     protected final String TAG = getClass().getSimpleName();
 
+    private static final String LOGIN_MESSAGE = "Please wait...";
+    private static final String LOGIN_TITLE = "Log in";
+
     View.OnFocusChangeListener focusChangeListener = new View.OnFocusChangeListener() {
         @Override
         public void onFocusChange(View v, boolean hasFocus) {
@@ -60,21 +64,21 @@ public class LoginScreen extends AppCompatActivity implements LogInListener {
     private CallbackManager callbackManager;
 
     public void login() {
-        Log.d(TAG, "login");
-
         boolean isLogInValid;
         isLogInValid = new Validator().logInValid(emailText, passwordText);
         if (!isLogInValid) {
             return;
         }
-
         logInButton.setEnabled(false);
 
-        final ProgressDialog progressDialog = new ProgressDialog(LoginScreen.this,
-                android.R.style.Theme_Holo_Light_Panel);
-        progressDialog.setIndeterminate(true);
-        progressDialog.setMessage("Log in...");
-        progressDialog.show();
+        new MaterialDialog.Builder(this)
+                .title(LOGIN_TITLE)
+                .content(LOGIN_MESSAGE)
+                .progress(true, 0)
+                .backgroundColorRes(R.color.log_in_dialog)
+                .contentColorRes(R.color.log_in_content)
+                .titleColorRes(R.color.log_in_title)
+                .show();
 
         String email = emailText.getText().toString();
         String password = passwordText.getText().toString();

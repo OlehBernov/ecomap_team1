@@ -15,6 +15,7 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.ecomap.ukraine.R;
 import com.ecomap.ukraine.account.manager.AccountManager;
 import com.ecomap.ukraine.account.manager.LogInListener;
@@ -30,6 +31,7 @@ public class SignupActivity extends AppCompatActivity implements LogInListener {
 
     private static final String CREATING_ACCOUNT = "Creating Account...";
     private static final String SIGN_UP_FAILED = "Sign Up failed";
+    private static final String SIGNUP_MESSAGE = "Please wait...";
     private final String TAG = getClass().getSimpleName();
     View.OnFocusChangeListener focusChangeListener = new View.OnFocusChangeListener() {
         @Override
@@ -110,11 +112,14 @@ public class SignupActivity extends AppCompatActivity implements LogInListener {
         }
 
         signUpButton.setEnabled(false);
-        final ProgressDialog progressDialog = new ProgressDialog(SignupActivity.this,
-                android.R.style.Theme_Holo_Light_Panel);
-        progressDialog.setIndeterminate(true);
-        progressDialog.setMessage(CREATING_ACCOUNT);
-        progressDialog.show();
+        new MaterialDialog.Builder(this)
+                .title(CREATING_ACCOUNT)
+                .content(SIGNUP_MESSAGE)
+                .progress(true, 0)
+                .backgroundColorRes(R.color.log_in_dialog)
+                .contentColorRes(R.color.log_in_content)
+                .titleColorRes(R.color.log_in_title)
+                .show();
 
         String name = nameText.getText().toString();
         String surname = surnameText.getText().toString();

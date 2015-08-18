@@ -31,6 +31,7 @@ import android.view.animation.Interpolator;
 import android.widget.CheckBox;
 import android.widget.TextView;
 
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.codetroopers.betterpickers.calendardatepicker.CalendarDatePickerDialog;
 import com.ecomap.ukraine.R;
 import com.ecomap.ukraine.activities.Authorization.LoginScreen;
@@ -87,7 +88,7 @@ public class MainActivity extends AppCompatActivity {
 
     private static final float ANCHOR_POINT = 0.3f;
 
-    private static final String alertMessage =
+    private static final String ALERT_MESSAGE =
             "To append a problem you must first be authorized. Authorize?";
 
     private static final String OK = "OK";
@@ -309,10 +310,37 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void setNotAutorizeDialog() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(activity);
+        new MaterialDialog.Builder(this)
+                .title(R.string.Caution)
+                .content(ALERT_MESSAGE)
+                .backgroundColorRes(R.color.log_in_dialog)
+                .contentColorRes(R.color.log_in_content)
+                .negativeColorRes(R.color.log_in_content)
+                .titleColorRes(R.color.log_in_title)
+                .cancelable(false)
+                .positiveText(OK)
+                .negativeText(CANCEL).callback(
+                new MaterialDialog.ButtonCallback() {
+                    @Override
+                    public void onPositive(MaterialDialog dialog) {
+                        super.onPositive(dialog);
+                        Intent mainIntent = new Intent(activity, LoginScreen.class);
+                        startActivity(mainIntent);
+                        finish();
+                    }
+
+                    @Override
+                    public void onNegative(MaterialDialog dialog) {
+                        super.onNegative(dialog);
+                        dialog.cancel();
+                    }
+                })
+                .show();
+
+        /*AlertDialog.Builder builder = new AlertDialog.Builder(activity);
 
         builder.setTitle(R.string.Caution);
-        builder.setMessage(alertMessage);
+        builder.setMessage(ALERT_MESSAGE);
         builder.setCancelable(false);
         builder.setIcon(R.drawable.ic_info_outline_black_24dp);
         builder.setPositiveButton(OK,
@@ -335,7 +363,7 @@ public class MainActivity extends AppCompatActivity {
                     }
                 });
         AlertDialog alert = builder.create();
-        alert.show();
+        alert.show();*/
     }
 
 

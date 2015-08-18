@@ -80,8 +80,6 @@ public class LogInClient {
                 params.put(JSONFields.PASSWORD, password);
                 return params;
             }
-
-
         };
 
         RequestQueueWrapper.getInstance(context).addToRequestQueue(stringRequest);
