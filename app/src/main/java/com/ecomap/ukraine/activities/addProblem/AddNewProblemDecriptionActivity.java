@@ -1,8 +1,6 @@
 package com.ecomap.ukraine.activities.addProblem;
 
-import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.net.Uri;
@@ -45,6 +43,8 @@ import java.util.Locale;
 
 public class AddNewProblemDecriptionActivity extends AppCompatActivity  {
 
+    protected final String TAG = getClass().getSimpleName();
+
     private static final int CAMERA_PHOTO = 1;
     private static final int GALLERY_PHOTO = 2;
 
@@ -58,40 +58,40 @@ public class AddNewProblemDecriptionActivity extends AppCompatActivity  {
     private static final String ADD_DESCRIPTION = "Add description";
 
     private static final String CAMERA_URI = "Camera Uri";
-    private static final String NUMBER_OF_PHOTOS = "Number of photos";
+    private static final String USER_PHOTOS = "Number of photos";
     private static final String DESCRIPTION = "Description";
 
     private Uri currentPhotoUri;
-    private String currentPhotoPath;
-    private List<String> userPhotos;
+    private List<Uri> userPhotos;
     private TableLayout photoDescriptionLayout;
     private List<String> descriptions;
-
     private User user;
-
     private Toolbar toolbar;
     private ViewPager pager;
     private CharSequence Titles[] = {"Description", "Photo"};
 
-
-    public List<Bitmap> getBitmapsPhoto() {
-        List<Bitmap> photoBitmaps = new ArrayList<>();
-        if (userPhotos == null) {
-            return null;
-        }
-        BitmapResizer bitmapResizer = new BitmapResizer(getApplicationContext());
-        for (String userPhoto: userPhotos) {
-            photoBitmaps.add(bitmapResizer.scalePhoto(userPhoto, 300));
-        }
-        return photoBitmaps;
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_add_problem, menu);
+        return true;
     }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
 
+        if (id == R.id.action_confirm_problem) {
+            AddProblemDescriptionFragment.getInstance(getBitmapsPhoto(), descriptions).sendProblem();
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Log.e("OnCreate", "in");
+
         user = (User) getIntent().getSerializableExtra(ExtraFieldNames.USER);
 
         setContentView(R.layout.add_problem_description);
@@ -125,21 +125,78 @@ public class AddNewProblemDecriptionActivity extends AppCompatActivity  {
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_add_problem, menu);
-        return true;
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        if (currentPhotoUri != null) {
+            outState.putString(CAMERA_URI, currentPhotoUri.toString());
+        }
+        if (userPhotos != null) {
+            ArrayList<String> userPhotoArrayList = new ArrayList<>();
+            for (int i = 0; i < userPhotos.size(); i++) {
+                userPhotoArrayList.add(userPhotos.get(i).toString());
+            }
+            outState.putStringArrayList(USER_PHOTOS, userPhotoArrayList);
+        }
+        if (descriptions != null) {
+            outState.putStringArrayList(DESCRIPTION, new ArrayList<>(descriptions));
+        }
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
-
-        if (id == R.id.action_confirm_problem) {
-            AddProblemDescriptionFragment.getInstance(getBitmapsPhoto(), descriptions).sendProblem();
-            return true;
+    protected void onRestoreInstanceState(@NonNull Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        if (savedInstanceState.containsKey(CAMERA_URI)) {
+            currentPhotoUri = Uri.parse(savedInstanceState.getString(CAMERA_URI));
         }
+        if (isPhotosSaved(savedInstanceState)) {
+            userPhotos = new ArrayList<>();
+            ArrayList<String> userPhotoArrayList = savedInstanceState.getStringArrayList(USER_PHOTOS);
+            for (int i = 0; i < userPhotoArrayList.size(); i++) {
+                userPhotos.add(Uri.parse(userPhotoArrayList.get(i)));
+            }
+        }
+        if (isDescriptionsSaved(savedInstanceState)) {
+            descriptions = new ArrayList<>();
+            descriptions = savedInstanceState.getStringArrayList(DESCRIPTION);
+            addPhotosToView();
+        }
+    }
 
-        return super.onOptionsItemSelected(item);
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (isGalleryPhoto(requestCode, resultCode, data)) {
+            processGalleryPhoto(data);
+        } else if (isCameraPhoto(requestCode, resultCode)) {
+            processCameraPhoto();
+        }
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        Intent mainIntent = new Intent(this, ChooseProblemLocationActivity.class);
+        mainIntent.putExtra(ExtraFieldNames.USER, user);
+        startActivity(mainIntent);
+        finish();
+    }
+
+    public List<Bitmap> getBitmapsPhoto() {
+        List<Bitmap> photoBitmaps = new ArrayList<>();
+        if (userPhotos == null) {
+            return null;
+        }
+        BitmapResizer bitmapResizer = new BitmapResizer(getApplicationContext());
+        int userPhotoSize = (int) getResources().getDimension(R.dimen.edit_text_add_photo);
+        for (Uri userPhoto: userPhotos) {
+            String userPhotoPath = userPhoto.getPath();
+            photoBitmaps.add(bitmapResizer.scalePhoto(userPhotoPath, userPhotoSize));
+        }
+        return photoBitmaps;
+    }
+
+    public void addPhoto(View v) {
+        pager.setCurrentItem(ADD_PHOTO_ITEM);
     }
 
     public void getPhotoFromCamera(View view) {
@@ -149,11 +206,9 @@ public class AddNewProblemDecriptionActivity extends AppCompatActivity  {
             try {
                 photoFile = createImageFile();
             } catch (IOException e) {
-                Log.e("camera", "file error");
+                Log.e(TAG, "Camera photo file error");
             }
-
             currentPhotoUri = Uri.fromFile(photoFile);
-         //   currentPhotoPath = currentPhotoUri.getPath();
             if (photoFile != null) {
                 takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT,
                         currentPhotoUri);
@@ -168,75 +223,13 @@ public class AddNewProblemDecriptionActivity extends AppCompatActivity  {
 
         startActivityForResult(galleryIntent, GALLERY_PHOTO);
     }
-String TIME = "fd";
-    @Override
-    protected void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-        if (currentPhotoUri != null) {
-            Log.e("onSave", currentPhotoUri.getPath());
 
-            SharedPreferences settings = getSharedPreferences(TIME, 0);
-            SharedPreferences.Editor editor = settings.edit();
-            editor.putString(TIME, currentPhotoUri.toString());
-            editor.commit();
-
-            outState.putString(CAMERA_URI, currentPhotoUri.toString());
-        }
-        if (userPhotos != null) {
-            outState.putInt(NUMBER_OF_PHOTOS, userPhotos.size());
-            for (int i = 0; i < userPhotos.size(); i++) {
-                outState.putString("" + i, userPhotos.get(i));
-            }
-        }
-        if (descriptions != null) {
-            outState.putInt(DESCRIPTION, descriptions.size());
-            for (int i = 0; i < descriptions.size(); i++) {
-                outState.putString("" + i, descriptions.get(i));
-            }
-        }
+    private boolean isDescriptionsSaved(Bundle savedInstanceState) {
+        return (descriptions == null) && savedInstanceState.containsKey(DESCRIPTION);
     }
 
-    @Override
-    protected void onRestoreInstanceState(@NonNull Bundle savedInstanceState) {
-        super.onRestoreInstanceState(savedInstanceState);
-        if (savedInstanceState.containsKey(CAMERA_URI)) {
-            currentPhotoUri = Uri.parse(savedInstanceState.getString(CAMERA_URI));
-            Log.e("onRestore", currentPhotoUri.toString());
-         //   currentPhotoPath = savedInstanceState.getString(CAMERA_URI);
-        }
-        if (userPhotos == null && savedInstanceState.containsKey(NUMBER_OF_PHOTOS)) {
-            int numberOfPhotos = savedInstanceState.getInt(NUMBER_OF_PHOTOS);
-            userPhotos = new ArrayList<>();
-            for (int i = 0; i < numberOfPhotos; i++) {
-                if (savedInstanceState.containsKey("" + i)) {
-                    userPhotos.add(savedInstanceState.getString("" + i));
-                }
-            }
-        }
-        if (descriptions == null && savedInstanceState.containsKey(DESCRIPTION)) {
-            int numberOfDescriptions = savedInstanceState.getInt(DESCRIPTION);
-            descriptions = new ArrayList<>();
-            for (int i = 0; i < numberOfDescriptions; i++) {
-                if (savedInstanceState.containsKey("" + i)) {
-                    descriptions.add(savedInstanceState.getString("" + i));
-                }
-            }
-        }
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-
-        Log.e("onActivityResult", "on");
-        SharedPreferences settings = getSharedPreferences(TIME, Context.MODE_PRIVATE);
-currentPhotoUri = Uri.parse(settings.getString(TIME, "lol"));
-        Log.e("onActivityResult", settings.getString(TIME, "lol"));
-        if (isGalleryPhoto(requestCode, resultCode, data)) {
-            processGalleryPhoto(data);
-        } else if (isCameraPhoto(requestCode, resultCode)) {
-            processCameraPhoto();
-        }
+    private boolean isPhotosSaved(Bundle savedInstanceState) {
+        return (userPhotos == null) && savedInstanceState.containsKey(USER_PHOTOS);
     }
 
     /**
@@ -282,8 +275,9 @@ currentPhotoUri = Uri.parse(settings.getString(TIME, "lol"));
     }
 
     private void processCameraPhoto() {
-       String photoPath = currentPhotoUri.getPath();
+        String photoPath = currentPhotoUri.getPath();
         savePhoto(photoPath);
+
         addPhotosToView();
     }
 
@@ -300,15 +294,13 @@ currentPhotoUri = Uri.parse(settings.getString(TIME, "lol"));
         for (int i = 0; i < userPhotos.size(); i++) {
             setDeleteButton(i);
             TableRow activityRow = new TableRow(getApplicationContext());
-
-            activityRow.addView(buildUserPhoto(userPhotos.get(i)));
+            activityRow.addView(buildUserPhoto(userPhotos.get(i).getPath()));
             activityRow.addView(buildPhotoDescription(i));
             photoDescriptionLayout.addView(activityRow);
         }
     }
 
     private EditText buildPhotoDescription(int id) {
-
         EditText photoDescription = new EditText(getApplicationContext());
         photoDescription.setHint(DESCRIPTION_HINT);
         photoDescription.setBackgroundResource(R.drawable.edit_text_description_style);
@@ -345,8 +337,8 @@ currentPhotoUri = Uri.parse(settings.getString(TIME, "lol"));
     private ImageView buildUserPhoto(final String photoPath) {
         BitmapResizer bitmapResizer = new BitmapResizer(getApplicationContext());
         int photoSize = (int) getResources().getDimension(R.dimen.edit_text_add_photo);
-        Bitmap photoBitmap = bitmapResizer.changePhotoOrientation(photoPath, photoSize);
 
+        Bitmap photoBitmap = bitmapResizer.changePhotoOrientation(photoPath, photoSize);
         TableRow.LayoutParams imageParams =
                 new TableRow.LayoutParams(photoBitmap.getWidth(),
                         photoBitmap.getHeight());
@@ -387,7 +379,8 @@ currentPhotoUri = Uri.parse(settings.getString(TIME, "lol"));
 
     private RelativeLayout.LayoutParams setDeleteButtonParams() {
         RelativeLayout.LayoutParams buttonParams =
-                new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,
+                                                ViewGroup.LayoutParams.WRAP_CONTENT);
         buttonParams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
 
         return buttonParams;
@@ -413,7 +406,7 @@ currentPhotoUri = Uri.parse(settings.getString(TIME, "lol"));
         if (userPhotos == null) {
             userPhotos = new ArrayList<>();
         }
-        userPhotos.add(photoPath);
+        userPhotos.add(Uri.fromFile(new File(photoPath)));
         if (descriptions == null) {
             descriptions = new ArrayList<>();
         }
@@ -424,25 +417,7 @@ currentPhotoUri = Uri.parse(settings.getString(TIME, "lol"));
         String timeStamp = new SimpleDateFormat(DATE_TEMPLATE, Locale.ENGLISH).format(new Date());
         String imageFileName = FILE_NAME_BEGINNING + timeStamp + "_";
         File storageDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
-
-        File photoFile = new File (storageDir, imageFileName + PHOTO_FORMAT);
-        currentPhotoPath = "file:" + photoFile.getAbsolutePath();
-        return photoFile;
-    }
-
-    @Override
-    public void onBackPressed() {
-        super.onBackPressed();
-        Intent mainIntent = new Intent(this, ChooseProblemLocationActivity.class);
-        mainIntent.putExtra(ExtraFieldNames.USER, user);
-        startActivity(mainIntent);
-        finish();
-    }
-
-
-    public void addPhoto(View v) {
-        pager.setCurrentItem(ADD_PHOTO_ITEM);
-
+        return new File (storageDir, imageFileName + PHOTO_FORMAT);
     }
 
 }
