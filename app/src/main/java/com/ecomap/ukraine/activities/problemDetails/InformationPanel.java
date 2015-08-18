@@ -16,6 +16,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
 import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
@@ -40,6 +41,7 @@ import com.ecomap.ukraine.models.Photo;
 import com.ecomap.ukraine.models.Problem;
 import com.ecomap.ukraine.models.ProblemActivity;
 import com.ecomap.ukraine.models.Types.ProblemStatus;
+import com.ms.square.android.expandabletextview.ExpandableTextView;
 import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Transformation;
@@ -137,7 +139,7 @@ public class InformationPanel {
         fab = (FloatingActionButton)activity.findViewById(R.id.fab2);
 
         descriptionFiled = (ExpandableTextView) activity.findViewById(R.id.description_field);
-        proposalFiled = (ExpandableTextView )activity.findViewById(R.id.proposal_field);
+        proposalFiled = (ExpandableTextView) activity.findViewById(R.id.proposal_field);
 
         slidingUpPanelLayout = (SlidingUpPanelLayout) activity.findViewById(R.id.sliding_layout);
         slidingUpPanelLayout.setPanelSlideListener(new SlidingUpPanelLayout.PanelSlideListener() {

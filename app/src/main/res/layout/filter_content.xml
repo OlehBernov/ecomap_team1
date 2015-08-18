@@ -358,7 +358,7 @@
                             android:id="@+id/imageView14"
                             android:layout_width="40dp"
                             android:layout_height="40dp"
-                            android:src="@drawable/problem3" />
+                            android:src="@drawable/problem4" />
 
                         <CheckBox
                             android:id="@+id/water_pollution"
@@ -391,7 +391,7 @@
                             android:id="@+id/imageView15"
                             android:layout_width="40dp"
                             android:layout_height="40dp"
-                            android:src="@drawable/problem4" />
+                            android:src="@drawable/problem3" />
 
                         <CheckBox
                             android:id="@+id/illegal_building"
