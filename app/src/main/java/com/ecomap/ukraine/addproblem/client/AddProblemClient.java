@@ -104,7 +104,7 @@ public class AddProblemClient {
                     public void onResponse(String response) {
                         Log.d("response", response);
                         if (count == size) {
-                            addProblemRequestReceiver.onSuccesProblemPosting();
+                            addProblemRequestReceiver.onSuccesPhotoPosting();
                         }
                     }
                 }, new Response.ErrorListener() {
@@ -113,7 +113,7 @@ public class AddProblemClient {
             public void onErrorResponse(VolleyError error) {
                 Log.e("Volley Request Error", error.getLocalizedMessage());
                 if (count == size) {
-                    addProblemRequestReceiver.onFailedProblemPosting();
+                    addProblemRequestReceiver.onFailedPhotoPosting();
                 }
             }
 
