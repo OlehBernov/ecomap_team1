@@ -8,9 +8,9 @@ import com.ecomap.ukraine.models.Details;
 import com.ecomap.ukraine.models.Problem;
 import com.ecomap.ukraine.updating.serverclient.LoadingClient;
 
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 /**
  * Coordinates the work of the database, data loading client and activities.
@@ -37,7 +37,7 @@ public class DataManager implements ProblemListenersNotifier,
     /**
      * Set of problem listeners.
      */
-    private Set<ProblemListener> problemListeners = new HashSet<>();
+    private Collection<ProblemListener> problemListeners = new HashSet<>();
 
     /**
      * Holds the reference to LoadingClient used by DataManager.
@@ -146,30 +146,6 @@ public class DataManager implements ProblemListenersNotifier,
     }
 
     /**
-     * This method is used to made request for all problems.
-     * Initiates the updateAllProblems of brief information of the problem in the database,
-     * if it is missing or obsolete.
-     */
-    public void getAllProblems() {
-        SharedPreferences settings = context.getSharedPreferences(TIME, Context.MODE_PRIVATE);
-        long lastUpdateTime = settings.getLong(TIME, 0);
-        if (isUpdateTime(lastUpdateTime)) {
-            loadingClient.getAllProblems();
-        } else {
-            List<Problem> problems = dbHelper.getAllProblems();
-            if (problems == null) {
-                loadingClient.getAllProblems();
-            } else {
-                sendAllProblems(problems);
-            }
-        }
-    }
-
-    public void refreshAllProblem() {
-        loadingClient.getAllProblems();
-    }
-
-    /**
      * This method is used to made request for more information about
      * the problem.
      * Initiates the updateAllProblems of detailed information of the problem
@@ -191,18 +167,6 @@ public class DataManager implements ProblemListenersNotifier,
         }
     }
 
-    public void refreshAllProblems() {
-        SharedPreferences settings = context.getSharedPreferences(TIME, 0);
-        SharedPreferences.Editor editor = settings.edit();
-        editor.putLong(TIME, 0);
-        editor.apply();
-        getAllProblems();
-    }
-
-    public void refreshProblemDetails(int problemId) {
-        loadingClient.getProblemDetail(problemId);
-    }
-
     /**
      * Saves time of the last database update
      * to the SharedPreferences.
@@ -215,6 +179,26 @@ public class DataManager implements ProblemListenersNotifier,
     }
 
     /**
+     * This method is used to made request for all problems.
+     * Initiates the updateAllProblems of brief information of the problem in the database,
+     * if it is missing or obsolete.
+     */
+    public void getAllProblems() {
+        SharedPreferences settings = context.getSharedPreferences(TIME, Context.MODE_PRIVATE);
+        long lastUpdateTime = settings.getLong(TIME, 0);
+        if (isUpdateTime(lastUpdateTime)) {
+            loadingClient.getAllProblems();
+        } else {
+            List<Problem> problems = dbHelper.getAllProblems();
+            if (problems == null) {
+                loadingClient.getAllProblems();
+            } else {
+                sendAllProblems(problems);
+            }
+        }
+    }
+
+    /**
      * Checks the need to update.
      *
      * @param lastUpdateTime time of the last database update.
@@ -222,6 +206,22 @@ public class DataManager implements ProblemListenersNotifier,
      */
     private boolean isUpdateTime(final long lastUpdateTime) {
         return (System.currentTimeMillis() - lastUpdateTime) >= UPDATE_PERIOD;
+    }
+
+    public void refreshAllProblem() {
+        loadingClient.getAllProblems();
+    }
+
+    public void refreshAllProblems() {
+        SharedPreferences settings = context.getSharedPreferences(TIME, 0);
+        SharedPreferences.Editor editor = settings.edit();
+        editor.putLong(TIME, 0);
+        editor.apply();
+        getAllProblems();
+    }
+
+    public void refreshProblemDetails(int problemId) {
+        loadingClient.getProblemDetail(problemId);
     }
 
 }

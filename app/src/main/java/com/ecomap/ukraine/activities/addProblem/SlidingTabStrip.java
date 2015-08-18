@@ -58,7 +58,7 @@ class SlidingTabStrip extends LinearLayout {
     protected void onDraw(Canvas canvas) {
         final int height = getHeight();
         final int childCount = getChildCount();
-        final SlidingTabLayout.TabColorizer tabColorizer = mCustomTabColorizer != null
+        final SlidingTabLayout.TabColorizer tabColorizer = (mCustomTabColorizer != null)
                 ? mCustomTabColorizer
                 : mDefaultTabColorizer;
 
@@ -69,7 +69,7 @@ class SlidingTabStrip extends LinearLayout {
             int right = selectedTitle.getRight();
             int color = tabColorizer.getIndicatorColor(mSelectedPosition);
 
-            if (mSelectionOffset > 0f && mSelectedPosition < (getChildCount() - 1)) {
+            if ((mSelectionOffset > 0f) && (mSelectedPosition < (getChildCount() - 1))) {
                 int nextColor = tabColorizer.getIndicatorColor(mSelectedPosition + 1);
                 if (color != nextColor) {
                     color = blendColors(nextColor, color, mSelectionOffset);
@@ -77,10 +77,10 @@ class SlidingTabStrip extends LinearLayout {
 
                 // Draw the selection partway between the tabs
                 View nextTitle = getChildAt(mSelectedPosition + 1);
-                left = (int) (mSelectionOffset * nextTitle.getLeft() +
-                        (1.0f - mSelectionOffset) * left);
-                right = (int) (mSelectionOffset * nextTitle.getRight() +
-                        (1.0f - mSelectionOffset) * right);
+                left = (int) ((mSelectionOffset * nextTitle.getLeft()) +
+                        ((1.0f - mSelectionOffset) * left));
+                right = (int) ((mSelectionOffset * nextTitle.getRight()) +
+                        ((1.0f - mSelectionOffset) * right));
             }
 
             mSelectedIndicatorPaint.setColor(color);

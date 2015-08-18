@@ -69,7 +69,7 @@ public class FragmentChooseCoordMap extends android.support.v4.app.Fragment {
         });
 
         MapsInitializer.initialize(getActivity().getApplicationContext());
-        this.setUpMapIfNeeded();
+        setUpMapIfNeeded();
         googleMap.setOnMarkerDragListener(new GoogleMap.OnMarkerDragListener()
 
         {
@@ -105,6 +105,16 @@ public class FragmentChooseCoordMap extends android.support.v4.app.Fragment {
         return rootView;
     }
 
+    private void moveCameraToMyLocation(Location myLocation) {
+        CameraPosition cameraPosition = new CameraPosition
+                .Builder()
+                .target(new LatLng(myLocation.getLatitude(), myLocation.getLongitude()))
+                .zoom(ON_MY_POSITION_CLICK_ZOOM)
+                .build();
+        CameraUpdate cameraUpdate = CameraUpdateFactory.newCameraPosition(cameraPosition);
+        googleMap.animateCamera(cameraUpdate);
+    }
+
     /**
      * Sets up the map if it is possible to do so (i.e., the Google Play services APK is correctly
      * installed) and the map has not already been instantiated.
@@ -130,15 +140,5 @@ public class FragmentChooseCoordMap extends android.support.v4.app.Fragment {
 
     public LatLng getMarkerPosition() {
         return markerPosition;
-    }
-
-    private void moveCameraToMyLocation(Location myLocation) {
-        CameraPosition cameraPosition = new CameraPosition
-                .Builder()
-                .target(new LatLng(myLocation.getLatitude(), myLocation.getLongitude()))
-                .zoom(ON_MY_POSITION_CLICK_ZOOM)
-                .build();
-        CameraUpdate cameraUpdate = CameraUpdateFactory.newCameraPosition(cameraPosition);
-        googleMap.animateCamera(cameraUpdate);
     }
 }

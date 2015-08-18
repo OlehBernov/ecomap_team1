@@ -29,6 +29,7 @@ import android.view.WindowManager;
 import android.view.animation.AccelerateDecelerateInterpolator;
 import android.view.animation.Interpolator;
 import android.widget.CheckBox;
+import android.widget.Checkable;
 import android.widget.TextView;
 
 import com.codetroopers.betterpickers.calendardatepicker.CalendarDatePickerDialog;
@@ -62,7 +63,7 @@ import io.codetail.animation.ViewAnimationUtils;
  * <p/>
  * Main activity, represent GUI and provides access to all functional
  */
-public class MainActivity extends AppCompatActivity   {
+public class MainActivity extends AppCompatActivity implements FilterListener {
 
     /**
      * Name of the filter window.
@@ -92,6 +93,7 @@ public class MainActivity extends AppCompatActivity   {
 
     private static final String OK = "OK";
     private static final String CANCEL = "Cancel";
+    public static final int INT = -150;
 
     /**
      * Drawer toggle.
@@ -135,214 +137,6 @@ public class MainActivity extends AppCompatActivity   {
     private CharSequence previousTitle;
 
     /**
-     * Inflate the menu, this adds items to the action bar if it is present.
-     *
-     * @param menu activity menu
-     * @return result of action
-     */
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_main, menu);
-        this.menu = menu;
-        return true;
-    }
-
-    /**
-     * Handle action bar items.
-     *
-     * @param item menu item.
-     */
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        if (drawerToggle.onOptionsItemSelected(item)) {
-            if (!filterLayout.isDrawerOpen(GravityCompat.END)) {
-
-            }
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
-
-    public void logOut(MenuItem item) {
-        //TODO
-    }
-
-    @Override
-    public void onBackPressed() {
-        if (filterLayout.isDrawerOpen(GravityCompat.END)) {
-            menu.findItem(R.id.action_find_location)
-                    .setIcon(R.drawable.filter8);
-            filterLayout.closeDrawer(GravityCompat.END);
-            toolbar.setTitle(previousTitle);
-        } else if (isInformationalPanelExpanded()) {
-            slidingUpPanelLayout.setPanelState(SlidingUpPanelLayout
-                    .PanelState.ANCHORED);
-        } else if (isInformationalPanelCollapsed()) {
-            slidingUpPanelLayout.setPanelState(SlidingUpPanelLayout
-                    .PanelState.HIDDEN);
-        } else {
-            super.onBackPressed();
-        }
-    }
-
-    public void animateButton(final FloatingActionButton fab) {
-        problemAddingMenu = true;
-        slidingUpPanelLayout.setPanelState(SlidingUpPanelLayout.PanelState.HIDDEN);
-        Interpolator curveInterpolator = PathInterpolatorCompat.create(1, 0);
-        AnimatorSet animator = new AnimatorSet();
-        ObjectAnimator movementX
-                = ObjectAnimator.ofFloat(fab, "translationX", -150);
-        ObjectAnimator movementY
-                = ObjectAnimator.ofFloat(fab, "translationY", 35);
-        movementX.setInterpolator(curveInterpolator);
-        animator.playTogether(movementX, movementY);
-        animator.setDuration(200);
-        animator.addListener(new AnimatorListenerAdapter() {
-            @Override
-            public void onAnimationEnd(Animator animation) {
-                super.onAnimationEnd(animation);
-                animateReavel();
-                fab.hide();
-            }
-
-            @Override
-            public void onAnimationStart(Animator animation) {
-                super.onAnimationStart(animation);
-                fab.setClickable(false);
-            }
-        });
-        animator.start();
-    }
-
-    public void refresh(MenuItem item) {
-        DataManager.getInstance(this).refreshAllProblems();
-    }
-
-    public void reverseAnimateReavel(final View v) {
-        problemAddingMenu = false;
-        final View myView = findViewById(R.id.ll_reveal);
-
-        int cx = (int) ((fab.getX() + fab.getHeight() / 2));
-        int cy = (int) ((fab.getY() + fab.getHeight() / 2)) -
-                (slidingUpPanelLayout.getHeight() - myView.getBottom());
-
-        int finalRadius = Math.max(myView.getWidth(), myView.getHeight());
-
-        SupportAnimator animator =
-                ViewAnimationUtils.createCircularReveal(myView, cx, cy, 0, finalRadius);
-        animator.setInterpolator(new AccelerateDecelerateInterpolator());
-        animator.setDuration(200);
-        SupportAnimator reversedAnimator = animator.reverse();
-        reversedAnimator.addListener(new SupportAnimator.AnimatorListener() {
-            @Override
-            public void onAnimationStart() {
-                fab.show();
-            }
-
-            @Override
-            public void onAnimationEnd() {
-                fab.setVisibility(View.VISIBLE);
-                myView.setVisibility(View.INVISIBLE);
-                showButton(fab);
-            }
-
-            @Override
-            public void onAnimationCancel() {
-            }
-
-            @Override
-            public void onAnimationRepeat() {
-            }
-        });
-        reversedAnimator.start();
-
-    }
-
-    /**
-     * Controls the position of the filter7 window on the screen.
-     */
-    public void showFilter(MenuItem item) {
-        filterLayout = (DrawerLayout) findViewById(R.id.drawer2);
-        if (!filterLayout.isDrawerOpen(GravityCompat.END)) {
-            item.setIcon(R.drawable.filter_back);
-            setDate();
-            filterLayout.openDrawer(GravityCompat.END);
-            previousTitle = toolbar.getTitle();
-            toolbar.setTitle(FILTER);
-        } else {
-            filterManager.getFilterState(buildFiltersState(), true);
-            item.setIcon(R.drawable.filter8);
-            filterLayout.closeDrawer(GravityCompat.END);
-            toolbar.setTitle(previousTitle);
-        }
-    }
-
-    public void switchCheckButtonState(View view) {
-        CheckBox checkBox = (CheckBox) view;
-        if (checkBox.isChecked()) {
-            checkBox.setChecked(true);
-        } else {
-            checkBox.setChecked(false);
-        }
-        filterManager.getFilterState(buildFiltersState(), false);
-
-    }
-
-    public void dateFromChoosing(View view) {
-        dialogDateFrom.show(getSupportFragmentManager(), DATE_FROM_TAG);
-    }
-
-    public void dateToChoosing(View view) {
-        dialogDateTo.show(getSupportFragmentManager(), DATE_TO_TAG);
-    }
-
-    public void openChooseProblemLocationActivity(View view) {
-        if (user == null) {
-            setNotAutorizeDialog();
-        } else {
-            Intent intent = new Intent(this, ChooseProblemLocationActivity.class);
-            intent.putExtra(ExtraFieldNames.USER, user);
-            startActivity(intent);
-            finish();
-        }
-    }
-
-    public void setNotAutorizeDialog() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(activity);
-
-        builder.setTitle(R.string.Caution);
-        builder.setMessage(alertMessage);
-        builder.setCancelable(false);
-        builder.setIcon(R.drawable.ic_info_outline_black_24dp);
-        builder.setPositiveButton(OK,
-                new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(final DialogInterface dialog,
-                                        final int id) {
-                        Intent mainIntent = new Intent(activity, LoginScreen.class);
-                        startActivity(mainIntent);
-                        finish();
-                    }
-                });
-        builder.setNegativeButton(CANCEL,
-                new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(final DialogInterface dialog,
-                                        final int id) {
-                        dialog.cancel();
-
-                    }
-                });
-        AlertDialog alert = builder.create();
-        alert.show();
-    }
-
-
-
-
-
-    /**
      * Initialize activity
      *
      * @param savedInstanceState Contains the data it most recently
@@ -352,13 +146,14 @@ public class MainActivity extends AppCompatActivity   {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        DataManager dataManager = DataManager.getInstance(getApplicationContext());
 
         fab = (FloatingActionButton) findViewById(R.id.fab2);
 
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//               openChooseProblemLocationActivity(v);
+//                openChooseProblemLocationActivity(v);
                 animateButton(fab);
             }
 
@@ -375,7 +170,7 @@ public class MainActivity extends AppCompatActivity   {
         slidingUpPanelLayout.setAnchorPoint(ANCHOR_POINT);
         slidingUpPanelLayout.setDragView(R.id.sliding_linear_layout);
 
-        this.addMapFragment();
+        addMapFragment();
 
         createDateFromPickerDialog();
         createDateToPickerDialog();
@@ -420,22 +215,125 @@ public class MainActivity extends AppCompatActivity   {
         editor.apply();
     }
 
-    private boolean isInformationalPanelCollapsed() {
-        return slidingUpPanelLayout.getPanelState()
-                != SlidingUpPanelLayout.PanelState.COLLAPSED;
+    private FilterState buildFiltersState() {
+        Map<String, Boolean> filterStateValues = new HashMap<>();
+        filterStateValues.put(FilterContract.FOREST_DESTRUCTION,
+                getFilterState(R.id.forestry_issues));
+        filterStateValues.put(FilterContract.RUBBISH_DUMP,
+                getFilterState(R.id.rubbish_dump));
+        filterStateValues.put(FilterContract.ILLEGAL_BUILDING,
+                getFilterState(R.id.illegal_building));
+        filterStateValues.put(FilterContract.WATER_POLLUTION,
+                getFilterState(R.id.water_pollution));
+        filterStateValues.put(FilterContract.THREAD_TO_BIODIVERSITY,
+                getFilterState(R.id.biodiversity));
+        filterStateValues.put(FilterContract.POACHING,
+                getFilterState(R.id.poaching));
+        filterStateValues.put(FilterContract.OTHER,
+                getFilterState(R.id.other));
+        filterStateValues.put(FilterContract.RESOLVED,
+                getFilterState(R.id.ButtonResolved));
+        filterStateValues.put(FilterContract.UNSOLVED,
+                getFilterState(R.id.ButtonUnsolved));
+
+        return new FilterState(filterStateValues, calendarDateFrom, calendarDateTo);
     }
 
-    private boolean isInformationalPanelExpanded() {
-        return slidingUpPanelLayout.getPanelState()
-                == SlidingUpPanelLayout.PanelState.EXPANDED;
+    private boolean getFilterState(int id) {
+        Checkable checkBox = (CheckBox) findViewById(id);
+        return checkBox.isChecked();
+    }
+
+    /**
+     * Inflate the menu, this adds items to the action bar if it is present.
+     *
+     * @param menu activity menu
+     * @return result of action
+     */
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_main, menu);
+        this.menu = menu;
+        return true;
+    }
+
+    /**
+     * Handle action bar items.
+     *
+     * @param item menu item.
+     */
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (drawerToggle.onOptionsItemSelected(item)) {
+            if (!filterLayout.isDrawerOpen(GravityCompat.END)) {
+
+            }
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
+    public void logOut(MenuItem item) {
+        //TODO
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (filterLayout.isDrawerOpen(GravityCompat.END)) {
+            menu.findItem(R.id.action_find_location)
+                    .setIcon(R.drawable.filter8);
+            filterLayout.closeDrawer(GravityCompat.END);
+            toolbar.setTitle(previousTitle);
+        } else if (slidingUpPanelLayout.getPanelState()
+                == SlidingUpPanelLayout.PanelState.EXPANDED) {
+            slidingUpPanelLayout.setPanelState(SlidingUpPanelLayout
+                    .PanelState.ANCHORED);
+        } else if (slidingUpPanelLayout.getPanelState()
+                != SlidingUpPanelLayout.PanelState.COLLAPSED) {
+            slidingUpPanelLayout.setPanelState(SlidingUpPanelLayout
+                    .PanelState.HIDDEN);
+        } else {
+            super.onBackPressed();
+        }
+    }
+
+    public void animateButton(final FloatingActionButton fab) {
+        problemAddingMenu = true;
+        slidingUpPanelLayout.setPanelState(SlidingUpPanelLayout.PanelState.HIDDEN);
+        Interpolator curveInterpolator = PathInterpolatorCompat.create(1, 0);
+        AnimatorSet animator = new AnimatorSet();
+        ObjectAnimator movementX
+                = ObjectAnimator.ofFloat(fab, "translationX", INT);
+        ObjectAnimator movementY
+                = ObjectAnimator.ofFloat(fab, "translationY", 35);
+        movementX.setInterpolator(curveInterpolator);
+        animator.playTogether(movementX, movementY);
+        animator.setDuration(200);
+        animator.addListener(new AnimatorListenerAdapter() {
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                super.onAnimationEnd(animation);
+                animateReavel();
+                fab.hide();
+            }
+
+            @Override
+            public void onAnimationStart(Animator animation) {
+                super.onAnimationStart(animation);
+                fab.setClickable(false);
+            }
+        });
+        animator.start();
     }
 
     private void animateReavel() {
         final View myView = findViewById(R.id.ll_reveal);
-        int cx = (int) ((fab.getX() + fab.getHeight() / 2));
-        int cy = (int) ((fab.getY() + fab.getHeight() / 2))
+        int cx = (int) (fab.getX() + (fab.getHeight() / 2));
+        int cy = (int) (fab.getY() + (fab.getHeight() / 2))
                 - (slidingUpPanelLayout.getHeight() - myView.getBottom());
 
+        // get the final radius for the clipping circle
         int finalRadius = Math.max(myView.getWidth(), myView.getHeight());
 
         SupportAnimator animator =
@@ -463,6 +361,50 @@ public class MainActivity extends AppCompatActivity   {
         animator.start();
     }
 
+    public void refresh(MenuItem item) {
+        DataManager.getInstance(this).refreshAllProblems();
+    }
+
+    public void reverseAnimateReavel(final View v) {
+        problemAddingMenu = false;
+        final View myView = findViewById(R.id.ll_reveal);
+
+        int cx = (int) (fab.getX() + (fab.getHeight() / 2));
+        int cy = (int) (fab.getY() + (fab.getHeight() / 2))
+                - (slidingUpPanelLayout.getHeight() - myView.getBottom());
+
+        int finalRadius = Math.max(myView.getWidth(), myView.getHeight());
+
+        SupportAnimator animator =
+                ViewAnimationUtils.createCircularReveal(myView, cx, cy, 0, finalRadius);
+        animator.setInterpolator(new AccelerateDecelerateInterpolator());
+        animator.setDuration(200);
+        SupportAnimator reversedAnimator = animator.reverse();
+        reversedAnimator.addListener(new SupportAnimator.AnimatorListener() {
+            @Override
+            public void onAnimationStart() {
+                fab.show();
+            }
+
+            @Override
+            public void onAnimationEnd() {
+                fab.setVisibility(View.VISIBLE);
+                myView.setVisibility(View.INVISIBLE);
+                showButton(fab);
+            }
+
+            @Override
+            public void onAnimationCancel() {
+            }
+
+            @Override
+            public void onAnimationRepeat() {
+            }
+        });
+        reversedAnimator.start();
+
+    }
+
     private void showButton(final FloatingActionButton fab) {
         Interpolator curveInterpolator = PathInterpolatorCompat.create(0, 1);
         AnimatorSet animator = new AnimatorSet();
@@ -483,6 +425,47 @@ public class MainActivity extends AppCompatActivity   {
         animator.start();
     }
 
+    /**
+     * Controls the position of the filter7 window on the screen.
+     */
+    public void showFilter(MenuItem item) {
+        filterLayout = (DrawerLayout) findViewById(R.id.drawer2);
+        if (!filterLayout.isDrawerOpen(GravityCompat.END)) {
+            filterManager.registerFilterListener(this);
+            item.setIcon(R.drawable.filter_back);
+            setDate();
+            filterLayout.openDrawer(GravityCompat.END);
+            previousTitle = toolbar.getTitle();
+            toolbar.setTitle(FILTER);
+        } else {
+            filterManager.getFilterState(buildFiltersState());
+            item.setIcon(R.drawable.filter8);
+            //filterLayout.closeDrawer(GravityCompat.END);
+            //toolbar.setTitle(previousTitle);
+            filterManager.removeFilterListener(this);
+        }
+    }
+
+    private void setDate() {
+        SimpleDateFormat dateFormat = new SimpleDateFormat(DATE_TEMPLATE, Locale.ENGLISH);
+        try {
+            if (calendarDateFrom == null) {
+                calendarDateFrom = Calendar.getInstance();
+                calendarDateFrom.setTime(dateFormat.parse(DEFAULT_DATE_FROM));
+            }
+            if (calendarDateTo == null) {
+                calendarDateTo = Calendar.getInstance();
+                calendarDateTo.setTime(dateFormat.parse(DEFAULT_DATE_TO));
+            }
+        } catch (ParseException e) {
+            //TODO
+            Log.e("parseException", "setDate to");
+            return;
+        }
+
+        setDateOnScreen(calendarDateFrom, calendarDateTo);
+    }
+
     private void setDateOnScreen(Calendar dateFrom, Calendar dateTo) {
         SimpleDateFormat dateFormat = new SimpleDateFormat(DATE_TEMPLATE, Locale.ENGLISH);
 
@@ -495,8 +478,27 @@ public class MainActivity extends AppCompatActivity   {
         dateToView.setText(formattedDate);
     }
 
+    public void switchCheckButtonState(View view) {
+        Checkable checkBox = (CheckBox) view;
+        if (checkBox.isChecked()) {
+            checkBox.setChecked(true);
+        } else {
+            checkBox.setChecked(false);
+        }
+        //filterManager.getFilterState(buildFiltersState());
+
+    }
+
+    public void dateFromChoosing(View view) {
+        dialogDateFrom.show(getSupportFragmentManager(), DATE_FROM_TAG);
+    }
+
+    public void dateToChoosing(View view) {
+        dialogDateTo.show(getSupportFragmentManager(), DATE_TO_TAG);
+    }
+
     private void setFilterOn(View view) {
-        CheckBox checkBox = (CheckBox) view;
+        Checkable checkBox = (CheckBox) view;
         checkBox.setChecked(false);
     }
 
@@ -523,13 +525,13 @@ public class MainActivity extends AppCompatActivity   {
                         date.set(Calendar.MONTH, monthOfYear);
                         date.set(Calendar.DAY_OF_MONTH, dayOfMonth);
 
-                if (isValidDates(date, calendarDateTo)) {
-                    calendarDateFrom = date;
-                    setDate();
-                    filterManager.getFilterState(buildFiltersState(), false);
-                }
-            }
-        };
+                        if (isValidDates(date, calendarDateTo)) {
+                            calendarDateFrom = date;
+                            setDate();
+                            filterManager.getFilterState(buildFiltersState());
+                        }
+                    }
+                };
 
         dialogDateFrom = new CalendarDatePickerDialog();
         dialogDateFrom.setOnDateSetListener(dateFromListener);
@@ -550,40 +552,16 @@ public class MainActivity extends AppCompatActivity   {
                         date.set(Calendar.MONTH, monthOfYear);
                         date.set(Calendar.DAY_OF_MONTH, dayOfMonth);
 
-                if (isValidDates(calendarDateFrom, date)) {
-                    calendarDateTo = date;
-                    setDate();
-                    filterManager.getFilterState(buildFiltersState(), false);
-                }
-            }
-        };
+                        if (isValidDates(calendarDateFrom, date)) {
+                            calendarDateTo = date;
+                            setDate();
+                            filterManager.getFilterState(buildFiltersState());
+                        }
+                    }
+                };
 
         dialogDateTo = new CalendarDatePickerDialog();
         dialogDateTo.setOnDateSetListener(dateToListener);
-    }
-
-    private FilterState buildFiltersState() {
-        Map<String, Boolean> filterStateValues = new HashMap<>();
-        filterStateValues.put(FilterContract.FOREST_DESTRUCTION,
-                getFilterState(R.id.forestry_issues));
-        filterStateValues.put(FilterContract.RUBBISH_DUMP,
-                getFilterState(R.id.rubbish_dump));
-        filterStateValues.put(FilterContract.ILLEGAL_BUILDING,
-                getFilterState(R.id.illegal_building));
-        filterStateValues.put(FilterContract.WATER_POLLUTION,
-                getFilterState(R.id.water_pollution));
-        filterStateValues.put(FilterContract.THREAD_TO_BIODIVERSITY,
-                getFilterState(R.id.biodiversity));
-        filterStateValues.put(FilterContract.POACHING,
-                getFilterState(R.id.poaching));
-        filterStateValues.put(FilterContract.OTHER,
-                getFilterState(R.id.other));
-        filterStateValues.put(FilterContract.RESOLVED,
-                getFilterState(R.id.ButtonResolved));
-        filterStateValues.put(FilterContract.UNSOLVED,
-                getFilterState(R.id.ButtonUnsolved));
-
-        return new FilterState(filterStateValues, calendarDateFrom, calendarDateTo);
     }
 
     /**
@@ -615,11 +593,6 @@ public class MainActivity extends AppCompatActivity   {
                 R.string.drawer_close);
     }
 
-    private boolean getFilterState(int id) {
-        CheckBox checkBox = (CheckBox) findViewById(id);
-        return checkBox.isChecked();
-    }
-
     /**
      * Adds google map
      */
@@ -628,28 +601,6 @@ public class MainActivity extends AppCompatActivity   {
         filterLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
         FilterState filterState = filterManager.getFilterStateFromPreference();
         setFiltersState(filterState);
-    }
-
-
-
-    private void setDate() {
-        SimpleDateFormat dateFormat = new SimpleDateFormat(DATE_TEMPLATE, Locale.ENGLISH);
-        try {
-            if (calendarDateFrom == null) {
-                calendarDateFrom = Calendar.getInstance();
-                calendarDateFrom.setTime(dateFormat.parse(DEFAULT_DATE_FROM));
-            }
-            if (calendarDateTo == null) {
-                calendarDateTo = Calendar.getInstance();
-                calendarDateTo.setTime(dateFormat.parse(DEFAULT_DATE_TO));
-            }
-        } catch (ParseException e) {
-            //TODO
-            Log.e("parseException", "setDate to");
-            return;
-        }
-
-        setDateOnScreen(calendarDateFrom, calendarDateTo);
     }
 
     private void setFiltersState(FilterState filtersState) {
@@ -685,6 +636,64 @@ public class MainActivity extends AppCompatActivity   {
             calendarDateTo = filtersState.getDateTo();
         }
         setDate();
+    }
+
+    public void openChooseProblemLocationActivity(View view) {
+        if (user == null) {
+            setNotAutorizeDialog();
+        } else {
+            Intent intent = new Intent(this, ChooseProblemLocationActivity.class);
+            intent.putExtra(ExtraFieldNames.USER, user);
+            startActivity(intent);
+            finish();
+        }
+    }
+
+    public void setNotAutorizeDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(activity);
+
+        builder.setTitle(R.string.Caution);
+        builder.setMessage(alertMessage);
+        builder.setCancelable(false);
+        builder.setIcon(R.drawable.ic_info_outline_black_24dp);
+        builder.setPositiveButton(OK,
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(final DialogInterface dialog,
+                                        final int id) {
+                        Intent mainIntent = new Intent(activity, LoginScreen.class);
+                        startActivity(mainIntent);
+                        finish();
+                    }
+                });
+        builder.setNegativeButton(CANCEL,
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(final DialogInterface dialog,
+                                        final int id) {
+                        dialog.cancel();
+
+                    }
+                });
+        AlertDialog alert = builder.create();
+        alert.show();
+    }
+
+    /*public void updateFilterState(final FilterState filterState) {
+        filterLayout.closeDrawer(GravityCompat.END);
+        toolbar.setTitle(previousTitle);
+    }*/
+
+    @Override
+    public void updateFilterState(final FilterState filterState) {
+
+    }
+
+    @Override
+    public void onFiltrationFinished() {
+
+        filterLayout.closeDrawer(GravityCompat.END);
+        toolbar.setTitle(previousTitle);
     }
 
 }

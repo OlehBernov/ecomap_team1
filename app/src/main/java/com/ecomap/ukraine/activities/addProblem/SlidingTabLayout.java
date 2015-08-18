@@ -115,43 +115,6 @@ public class SlidingTabLayout extends HorizontalScrollView {
         }
     }
 
-    public void setContentDescription(int i, String desc) {
-        mContentDescriptions.put(i, desc);
-    }
-
-    /**
-     * Create a default view to be used for tabs. This is called if a custom tab view is not set via
-     * {@link #setCustomTabView(int, int)}.
-     */
-    protected TextView createDefaultTabView(Context context) {
-        TextView textView = new TextView(context);
-        textView.setGravity(Gravity.CENTER);
-        textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, TAB_VIEW_TEXT_SIZE_SP);
-        textView.setTypeface(Typeface.DEFAULT_BOLD);
-        textView.setLayoutParams(new LinearLayout.LayoutParams(
-                ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-
-        TypedValue outValue = new TypedValue();
-        getContext().getTheme().resolveAttribute(android.R.attr.selectableItemBackground,
-                outValue, true);
-        textView.setBackgroundResource(outValue.resourceId);
-        textView.setAllCaps(true);
-
-        int padding = (int) (TAB_VIEW_PADDING_DIPS * getResources().getDisplayMetrics().density);
-        textView.setPadding(padding, padding, padding, padding);
-
-        return textView;
-    }
-
-    @Override
-    protected void onAttachedToWindow() {
-        super.onAttachedToWindow();
-
-        if (mViewPager != null) {
-            scrollToTab(mViewPager.getCurrentItem(), 0);
-        }
-    }
-
     private void populateTabStrip() {
         final PagerAdapter adapter = mViewPager.getAdapter();
         final View.OnClickListener tabClickListener = new TabClickListener();
@@ -171,7 +134,7 @@ public class SlidingTabLayout extends HorizontalScrollView {
                 tabView = createDefaultTabView(getContext());
             }
 
-            if (tabTitleView == null && TextView.class.isInstance(tabView)) {
+            if ((tabTitleView == null) && TextView.class.isInstance(tabView)) {
                 tabTitleView = (TextView) tabView;
             }
 
@@ -198,9 +161,46 @@ public class SlidingTabLayout extends HorizontalScrollView {
         }
     }
 
+    /**
+     * Create a default view to be used for tabs. This is called if a custom tab view is not set via
+     * {@link #setCustomTabView(int, int)}.
+     */
+    protected TextView createDefaultTabView(Context context) {
+        TextView textView = new TextView(context);
+        textView.setGravity(Gravity.CENTER);
+        textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, TAB_VIEW_TEXT_SIZE_SP);
+        textView.setTypeface(Typeface.DEFAULT_BOLD);
+        textView.setLayoutParams(new LinearLayout.LayoutParams(
+                ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+
+        TypedValue outValue = new TypedValue();
+        getContext().getTheme().resolveAttribute(android.R.attr.selectableItemBackground,
+                outValue, true);
+        textView.setBackgroundResource(outValue.resourceId);
+        textView.setAllCaps(true);
+
+        int padding = (int) (TAB_VIEW_PADDING_DIPS * getResources().getDisplayMetrics().density);
+        textView.setPadding(padding, padding, padding, padding);
+
+        return textView;
+    }
+
+    public void setContentDescription(int i, String desc) {
+        mContentDescriptions.put(i, desc);
+    }
+
+    @Override
+    protected void onAttachedToWindow() {
+        super.onAttachedToWindow();
+
+        if (mViewPager != null) {
+            scrollToTab(mViewPager.getCurrentItem(), 0);
+        }
+    }
+
     private void scrollToTab(int tabIndex, int positionOffset) {
         final int tabStripChildCount = mTabStrip.getChildCount();
-        if (tabStripChildCount == 0 || tabIndex < 0 || tabIndex >= tabStripChildCount) {
+        if ((tabStripChildCount == 0) || (tabIndex < 0) || (tabIndex >= tabStripChildCount)) {
             return;
         }
 
@@ -208,7 +208,7 @@ public class SlidingTabLayout extends HorizontalScrollView {
         if (selectedChild != null) {
             int targetScrollX = selectedChild.getLeft() + positionOffset;
 
-            if (tabIndex > 0 || positionOffset > 0) {
+            if ((tabIndex > 0) || (positionOffset > 0)) {
                 // If we're not at the first child and are mid-scroll, make sure we obey the offset
                 targetScrollX -= mTitleOffset;
             }
@@ -226,6 +226,7 @@ public class SlidingTabLayout extends HorizontalScrollView {
         int getIndicatorColor(int position);
 
     }
+
 
     private class InternalViewPagerListener implements ViewPager.OnPageChangeListener {
         private int mScrollState;
@@ -275,6 +276,7 @@ public class SlidingTabLayout extends HorizontalScrollView {
         }
 
     }
+
 
     private class TabClickListener implements View.OnClickListener {
         @Override

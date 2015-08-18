@@ -24,7 +24,7 @@ import fr.castorflex.android.smoothprogressbar.SmoothProgressBar;
 /**
  * Activity which represent loading data from server
  */
-public class SplashScreen extends Activity implements ProblemListener {
+public class Splashscreen extends Activity implements ProblemListener {
 
     /**
      * Failure loading message
@@ -51,6 +51,10 @@ public class SplashScreen extends Activity implements ProblemListener {
     private DataManager manager;
 
     /**
+     * Context of activity
+     */
+    private Context context;
+    /**
      * MainActivity intent
      */
     private Intent intent;
@@ -70,6 +74,28 @@ public class SplashScreen extends Activity implements ProblemListener {
     private SmoothProgressBar smoothProgressBar;
 
     /**
+     * Initialize activity
+     *
+     * @param savedInstanceState Contains the data it most recently
+     *                           supplied in onSaveInstanceState(Bundle)
+     */
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.splashscreen);
+
+        smoothProgressBar = (SmoothProgressBar) findViewById(R.id.progress_bar);
+
+        startLoading = System.currentTimeMillis();
+        context = getApplicationContext();
+        intent = new Intent(this, LoginScreen.class);
+
+        manager = DataManager.getInstance(context);
+        manager.registerProblemListener(this);
+        manager.getAllProblems();
+    }
+
+    /**
      * Opens Main Activity.
      *
      * @param problems list of all problems.
@@ -83,7 +109,7 @@ public class SplashScreen extends Activity implements ProblemListener {
                 new Handler().postDelayed(new Runnable() {
                     @Override
                     public void run() {
-                        manager.removeProblemListener(SplashScreen.this);
+                        manager.removeProblemListener(Splashscreen.this);
                         startActivity(intent);
                     }
                 }, Math.max(loadingTime(endLoading), 0));
@@ -98,29 +124,6 @@ public class SplashScreen extends Activity implements ProblemListener {
 
     }
 
-    /**
-     * Initialize activity
-     *
-     * @param savedInstanceState Contains the data it most recently
-     *                           supplied in onSaveInstanceState(Bundle)
-     */
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.splashscreen);
-
-        smoothProgressBar = (SmoothProgressBar) findViewById(R.id.progress_bar);
-
-        startLoading = System.currentTimeMillis();
-
-        Context context = this.getApplicationContext();
-        intent = new Intent(this, LoginScreen.class);
-
-        manager = DataManager.getInstance(context);
-        manager.registerProblemListener(this);
-        manager.getAllProblems();
-    }
-
     private long loadingTime(final long endLoading) {
         return MINIMAL_DELAY - (endLoading - startLoading);
     }
@@ -133,8 +136,8 @@ public class SplashScreen extends Activity implements ProblemListener {
 
         AlertDialog.Builder builder = new AlertDialog.Builder(this, android.R.style.Theme_Holo_Light_Panel);
         builder.setCancelable(false);
-        builder.setMessage(SplashScreen.FAILURE_OF_LOADING);
-        builder.setPositiveButton(SplashScreen.RETRY,
+        builder.setMessage(Splashscreen.FAILURE_OF_LOADING);
+        builder.setPositiveButton(Splashscreen.RETRY,
                 new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(final DialogInterface dialog,
@@ -143,7 +146,7 @@ public class SplashScreen extends Activity implements ProblemListener {
                         manager.getAllProblems();
                     }
                 });
-        builder.setNegativeButton(SplashScreen.CANCEL,
+        builder.setNegativeButton(Splashscreen.CANCEL,
                 new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(final DialogInterface dialog,
