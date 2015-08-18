@@ -15,7 +15,6 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
 
-
 import com.ecomap.ukraine.R;
 import com.ecomap.ukraine.account.manager.AccountManager;
 import com.ecomap.ukraine.account.manager.LogInListener;
@@ -30,10 +29,7 @@ import com.ecomap.ukraine.models.Problem;
 import com.ecomap.ukraine.models.User;
 import com.ecomap.ukraine.validation.Validator;
 
-
-import java.util.ArrayList;
 import java.util.List;
-
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -47,60 +43,44 @@ public class AddProblemDescriptionFragment extends Fragment implements LogInList
      * Holds the Singleton global instance of AddProblemDescriptionFragment.
      */
     private static AddProblemDescriptionFragment instance;
-
-
-    private AddProblemManager addProblemManager;
-
-    private DataManager dataManager;
-
-    private AccountManager accountManager;
-
     private static List<Bitmap> bitmapPhotos;
-
     private static List<String> photoDescriptions;
-
-    private User user;
-
-
-
-    @InjectView(R.id.problemTitle) EditText problemTitle;
-    @InjectView(R.id.problemDescription) EditText problemDescription;
-    @InjectView(R.id.problemSolution) EditText problemSolution;
-    @InjectView(R.id.spinner) Spinner spinner;
-
+    @InjectView(R.id.problemTitle)
+    EditText problemTitle;
+    @InjectView(R.id.problemDescription)
+    EditText problemDescription;
+    @InjectView(R.id.problemSolution)
+    EditText problemSolution;
+    @InjectView(R.id.spinner)
+    Spinner spinner;
     View.OnFocusChangeListener focusChangeListener = new View.OnFocusChangeListener() {
         @Override
         public void onFocusChange(View v, boolean hasFocus) {
-            if(!hasFocus) {
+            if (!hasFocus) {
                 hideKeyboard(v);
             }
         }
     };
+    private AddProblemManager addProblemManager;
+    private DataManager dataManager;
+    private AccountManager accountManager;
+    private User user;
 
     public static AddProblemDescriptionFragment getInstance(List<Bitmap> bitmapPhotos,
-        List<String> descriptions) {
+                                                            List<String> descriptions) {
         if (instance == null) {
             instance = new AddProblemDescriptionFragment();
         }
-        if(bitmapPhotos != null) {
+        if (bitmapPhotos != null) {
             AddProblemDescriptionFragment.bitmapPhotos = bitmapPhotos;
             AddProblemDescriptionFragment.photoDescriptions = descriptions;
         }
         return instance;
     }
 
-
-
-    public void onDestroy() {
-        super.onDestroy();
-        accountManager.removeLogInListener(this);
-        addProblemManager.removeAddProblemListener(this);
-
-    }
-
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View v =inflater.inflate(R.layout.tab_1,container,false);
+        View v = inflater.inflate(R.layout.tab_1, container, false);
 
         addProblemManager = AddProblemManager.getInstance(getActivity().getApplicationContext());
         accountManager = AccountManager.getInstance(getActivity().getApplicationContext());
@@ -111,15 +91,19 @@ public class AddProblemDescriptionFragment extends Fragment implements LogInList
         problemDescription.setOnFocusChangeListener(focusChangeListener);
         problemSolution.setOnFocusChangeListener(focusChangeListener);
 
-
         return v;
     }
 
+    public void onDestroy() {
+        super.onDestroy();
+        accountManager.removeLogInListener(this);
+        addProblemManager.removeAddProblemListener(this);
 
+    }
 
     public void hideKeyboard(View view) {
         InputMethodManager inputMethodManager
-                =(InputMethodManager)getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+                = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
         inputMethodManager.hideSoftInputFromWindow(view.getWindowToken(), 0);
     }
 
@@ -127,7 +111,7 @@ public class AddProblemDescriptionFragment extends Fragment implements LogInList
         boolean isProblemValid;
         isProblemValid = new Validator().addProblemValidation(problemTitle);
         if (!isProblemValid) {
-//            Toast.makeText(getActivity().getApplicationContext(), "Input problem data", Toast.LENGTH_LONG) .show();
+            Toast.makeText(getActivity().getApplicationContext(), "Input problem data", Toast.LENGTH_LONG).show();
             return;
         }
         addProblemManager.registerAddProblemListener(this);
@@ -142,16 +126,16 @@ public class AddProblemDescriptionFragment extends Fragment implements LogInList
         addProblemManager.addProblem(title, description, solution, latitude, longitude, type, String.valueOf(user.getId()),
                 String.valueOf(user.getName()), String.valueOf(user.getSurname()), bitmapPhotos, photoDescriptions);
         bitmapPhotos = null;
-        }
+    }
 
     @Override
-   public void setLogInResult(final User user) {
+    public void setLogInResult(final User user) {
         this.user = user;
     }
 
 
     @Override
-    public void onSuccesProblemPosting() {
+    public void onSuccessProblemPosting() {
         successPosting();
     }
 
@@ -159,25 +143,19 @@ public class AddProblemDescriptionFragment extends Fragment implements LogInList
     @Override
     public void onFailedProblemPosting() {
         Toast.makeText(getActivity().getApplicationContext(), R.string.problem_post_error,
-                Toast.LENGTH_LONG) .show();
+                Toast.LENGTH_LONG).show();
     }
 
     @Override
-    public void onSuccesPhotoPosting() {
-       successPosting();
+    public void onSuccessPhotoPosting() {
+        successPosting();
     }
 
 
     @Override
     public void onFailedPhotoPosting() {
         Toast.makeText(getActivity().getApplicationContext(), R.string.photo_post_error,
-                Toast.LENGTH_LONG) .show();
-    }
-
-
-    @Override
-    public void updateProblemDetails(final Details details) {
-
+                Toast.LENGTH_LONG).show();
     }
 
     @Override
@@ -190,8 +168,13 @@ public class AddProblemDescriptionFragment extends Fragment implements LogInList
 
     }
 
-    public void successPosting () {
-        Toast.makeText(getActivity().getApplicationContext(), R.string.problem_added_sucessfully, Toast.LENGTH_LONG) .show();
+    @Override
+    public void updateProblemDetails(final Details details) {
+
+    }
+
+    public void successPosting() {
+        Toast.makeText(getActivity().getApplicationContext(), R.string.problem_added_sucessfully, Toast.LENGTH_LONG).show();
         dataManager.registerProblemListener(this);
         dataManager.refreshAllProblem();
     }
@@ -203,9 +186,6 @@ public class AddProblemDescriptionFragment extends Fragment implements LogInList
         progressDialog.setMessage("Posting...");
         progressDialog.show();
     }
-
-
-
 
 
 }

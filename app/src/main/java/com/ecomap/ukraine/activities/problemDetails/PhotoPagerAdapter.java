@@ -7,7 +7,7 @@ import android.view.ViewGroup;
 
 import java.util.List;
 
-public class PhotoPagerAdapter  extends PagerAdapter {
+public class PhotoPagerAdapter extends PagerAdapter {
 
     private List<View> pages = null;
 
@@ -16,42 +16,42 @@ public class PhotoPagerAdapter  extends PagerAdapter {
     }
 
     @Override
-    public Object instantiateItem(ViewGroup collection, int position){
+    public int getCount() {
+        return pages.size();
+    }
+
+    @Override
+    public void startUpdate(ViewGroup arg0) {
+    }
+
+    @Override
+    public Object instantiateItem(ViewGroup collection, int position) {
         View v = pages.get(position);
         collection.addView(v, 0);
         return v;
     }
 
     @Override
-    public void destroyItem(ViewGroup collection, int position, Object view){
+    public void destroyItem(ViewGroup collection, int position, Object view) {
         collection.removeView((View) view);
     }
 
     @Override
-    public int getCount(){
-        return pages.size();
+    public void finishUpdate(ViewGroup arg0) {
     }
 
     @Override
-    public boolean isViewFromObject(View view, Object object){
+    public boolean isViewFromObject(View view, Object object) {
         return view.equals(object);
     }
 
     @Override
-    public void finishUpdate(ViewGroup arg0){
-    }
-
-    @Override
-    public void restoreState(Parcelable arg0, ClassLoader arg1){
-    }
-
-    @Override
-    public Parcelable saveState(){
+    public Parcelable saveState() {
         return null;
     }
 
     @Override
-    public void startUpdate(ViewGroup arg0){
+    public void restoreState(Parcelable arg0, ClassLoader arg1) {
     }
 
 }

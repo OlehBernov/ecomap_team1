@@ -66,7 +66,7 @@ public class RequestQueueWrapper {
      * Adds request to request queue.
      *
      * @param request request.
-     * @param <T> request type.
+     * @param <T>     request type.
      */
     public <T> void addToRequestQueue(final Request<T> request) {
         getRequestQueue().add(request);

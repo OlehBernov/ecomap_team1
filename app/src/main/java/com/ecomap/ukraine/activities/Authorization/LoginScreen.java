@@ -16,8 +16,8 @@ import com.ecomap.ukraine.R;
 import com.ecomap.ukraine.account.manager.AccountManager;
 import com.ecomap.ukraine.account.manager.LogInListener;
 import com.ecomap.ukraine.activities.ExtraFieldNames;
-import com.ecomap.ukraine.activities.main.MainActivity;
 import com.ecomap.ukraine.activities.addProblem.AddProblemDescriptionFragment;
+import com.ecomap.ukraine.activities.main.MainActivity;
 import com.ecomap.ukraine.models.User;
 import com.ecomap.ukraine.validation.Validator;
 import com.facebook.CallbackManager;
@@ -39,29 +39,77 @@ import butterknife.InjectView;
 
 public class LoginScreen extends AppCompatActivity implements LogInListener {
 
-    private Intent mainIntent;
-
-    private AccountManager accountManager;
-
-    private CallbackManager callbackManager;
-
-    private static final String TAG = "LoginActivity";
+    protected final String TAG = getClass().getSimpleName();
 
     View.OnFocusChangeListener focusChangeListener = new View.OnFocusChangeListener() {
         @Override
         public void onFocusChange(View v, boolean hasFocus) {
-            if(!hasFocus) {
+            if (!hasFocus) {
                 hideKeyboard(v);
             }
         }
     };
+    @InjectView(R.id.input_email_log)
+    EditText emailText;
+    @InjectView(R.id.input_password_log)
+    EditText passwordText;
+    @InjectView(R.id.btn_log_in)
+    Button logInButton;
+    private Intent mainIntent;
+    private AccountManager accountManager;
+    private CallbackManager callbackManager;
 
-    @InjectView(R.id.input_email_log) EditText emailText;
-    @InjectView(R.id.input_password_log) EditText passwordText;
-    @InjectView(R.id.btn_log_in) Button logInButton;
+    public void login() {
+        Log.d(TAG, "login");
+
+        boolean isLogInValid;
+        isLogInValid = new Validator().logInValid(emailText, passwordText);
+        if (!isLogInValid) {
+            return;
+        }
+
+        logInButton.setEnabled(false);
+
+        final ProgressDialog progressDialog = new ProgressDialog(LoginScreen.this,
+                android.R.style.Theme_Holo_Light_Panel);
+        progressDialog.setIndeterminate(true);
+        progressDialog.setMessage("Log in...");
+        progressDialog.show();
+
+        String email = emailText.getText().toString();
+        String password = passwordText.getText().toString();
+
+        accountManager.registerLogInListener(AddProblemDescriptionFragment.getInstance(null, null));
+        accountManager.registerLogInListener(this);
+        accountManager.logInUser(password, email);
+    }
+
+    @Override
+    public void setLogInResult(final User user) {
+        logInButton.setEnabled(true);
+        if (user != null) {
+            mainIntent.putExtra(ExtraFieldNames.USER, user);
+            openMainActivity();
+        } else {
+            Log.e(TAG, "null");
+        }
+    }
+
+    @Override
+    public void onActivityResult(final int requestCode, final int resultCode, final Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        callbackManager.onActivityResult(requestCode, resultCode, data);
+    }
+
+    public void hideKeyboard(View view) {
+        InputMethodManager inputMethodManager
+                = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+        inputMethodManager.hideSoftInputFromWindow(view.getWindowToken(), 0);
+    }
 
     /**
      * Initialize activity
+     *
      * @param savedInstanceState Contains the data it most recently
      *                           supplied in onSaveInstanceState(Bundle)
      */
@@ -98,15 +146,15 @@ public class LoginScreen extends AppCompatActivity implements LogInListener {
 
             @Override
             public void onCancel() {
-                Log.e("login", "facebook login canceled");
+                Log.e(TAG, "facebook login canceled");
             }
 
             @Override
             public void onError(FacebookException e) {
-                Log.e("login", "facebook login error", e);
+                Log.e(TAG, "facebook login error", e);
             }
         });
-        accountManager = accountManager.getInstance(getApplicationContext());
+        accountManager = AccountManager.getInstance(getApplicationContext());
 
         View skip = findViewById(R.id.skip_button);
         skip.setOnClickListener(new View.OnClickListener() {
@@ -128,54 +176,14 @@ public class LoginScreen extends AppCompatActivity implements LogInListener {
         );
     }
 
-    public void login() {
-        Log.d(TAG, "login");
-
-        boolean isLogInValid;
-        isLogInValid = new Validator().logInValid(emailText, passwordText);
-        if (!isLogInValid) {
-            return;
-        }
-
-        logInButton.setEnabled(false);
-
-        final ProgressDialog progressDialog = new ProgressDialog(LoginScreen.this,
-                android.R.style.Theme_Holo_Light_Panel);
-        progressDialog.setIndeterminate(true);
-        progressDialog.setMessage("Log in...");
-        progressDialog.show();
-
-        String email = emailText.getText().toString();
-        String password = passwordText.getText().toString();
-
-        accountManager.registerLogInListener(AddProblemDescriptionFragment.getInstance(null, null));
-        accountManager.registerLogInListener(this);
-        accountManager.logInUser(password, email);
-
-    }
-
-
-    @Override
-    public void setLogInResult(final User user) {
-        logInButton.setEnabled(true);
-        if (user != null) {
-            mainIntent.putExtra(ExtraFieldNames.USER, user);
-            openMainActivity();
-        } else {
-            Log.e("log in", "null");
-        }
+    public void onDestroy() {
+        super.onDestroy();
+        accountManager.removeLogInListener(this);
     }
 
     private void openMainActivity() {
         startActivity(mainIntent);
-
         finish();
-    }
-
-    @Override
-    public void onActivityResult(final int requestCode, final int resultCode, final Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        callbackManager.onActivityResult(requestCode, resultCode, data);
     }
 
     private void facebookLogIn(final LoginResult loginResult) {
@@ -199,17 +207,6 @@ public class LoginScreen extends AppCompatActivity implements LogInListener {
     private long generatePassword(final String id) {
         long input = Long.getLong(id);
         return new Random(input + 1).nextLong();
-    }
-
-    public void hideKeyboard(View view) {
-        InputMethodManager inputMethodManager
-                =(InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
-        inputMethodManager.hideSoftInputFromWindow(view.getWindowToken(), 0);
-    }
-
-    public void onDestroy() {
-        super.onDestroy();
-        accountManager.removeLogInListener(this);
     }
 
 }

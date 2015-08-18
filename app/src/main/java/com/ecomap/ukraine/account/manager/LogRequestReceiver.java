@@ -4,8 +4,8 @@ import com.ecomap.ukraine.models.User;
 
 public interface LogRequestReceiver {
 
-    void setLogInRequestResult(final User user);
+    void setLogInRequestResult(User user);
 
-    void putLogInResultToPreferences (final String password, final String login);
+    void putLogInResultToPreferences (String password, String login);
 
 }

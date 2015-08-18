@@ -3,21 +3,6 @@ package com.ecomap.ukraine.addproblem.client;
 import android.graphics.Bitmap;
 import android.util.Log;
 
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.UnsupportedEncodingException;
-import java.nio.charset.Charset;
-import java.util.HashMap;
-import java.util.Map;
-
-
-import org.apache.http.HttpEntity;
-import org.apache.http.entity.mime.HttpMultipartMode;
-import org.apache.http.entity.mime.MultipartEntityBuilder;
-import org.apache.http.entity.mime.content.ByteArrayBody;
-import org.apache.http.entity.ContentType;
-
-
 import com.android.volley.AuthFailureError;
 import com.android.volley.NetworkResponse;
 import com.android.volley.Request;
@@ -25,15 +10,27 @@ import com.android.volley.Response;
 import com.android.volley.VolleyLog;
 import com.android.volley.toolbox.HttpHeaderParser;
 
+import org.apache.http.HttpEntity;
+import org.apache.http.entity.ContentType;
+import org.apache.http.entity.mime.HttpMultipartMode;
+import org.apache.http.entity.mime.MultipartEntityBuilder;
+import org.apache.http.entity.mime.content.ByteArrayBody;
+
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.nio.charset.Charset;
+import java.util.HashMap;
+import java.util.Map;
+
 public class MultipartRequest extends Request<String> {
 
+    private final Response.Listener<String> listener;
+    private final HashMap<String, String> params;
     private HttpEntity httpEntity;
     private MultipartEntityBuilder builder = MultipartEntityBuilder.create();
     private Charset chars = Charset.forName("UTF-8");
-
-    private final Response.Listener<String> listener;
-    private  Bitmap file;
-    private final HashMap<String, String> params;
+    private Bitmap file;
     private int counter = 0;
 
     public MultipartRequest(final String url, final Response.Listener<String> listener,
@@ -55,7 +52,6 @@ public class MultipartRequest extends Request<String> {
         return params != null ? params : super.getHeaders();
     }
 
-
     @Override
     public String getBodyContentType() {
         return httpEntity.getContentType().getValue();
@@ -72,7 +68,6 @@ public class MultipartRequest extends Request<String> {
         return bos.toByteArray();
 
     }
-
 
     @Override
     protected Response<String> parseNetworkResponse(NetworkResponse response) {

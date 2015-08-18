@@ -12,7 +12,6 @@ import com.ecomap.ukraine.updating.serverclient.RequestQueueWrapper;
 
 import org.json.JSONException;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -28,8 +27,9 @@ public class AddProblemClient {
 
     /**
      * Constructor
+     *
      * @param addProblemRequestReceiver receive request result
-     * @param context appication context
+     * @param context                   appication context
      */
     public AddProblemClient(final AddProblemRequestReceiver addProblemRequestReceiver,
                             final Context context) {
@@ -37,44 +37,42 @@ public class AddProblemClient {
         this.context = context;
     }
 
-    public void addProblemDescription (final String title, final String content, final String proposal,
-     final String latitude, final String longitude, final String type, final String userId,
-     final String userName, final String userSurname, final List<Bitmap> bitmaps,
-     final List<String> photoDescriptions) {
+    public void addProblemDescription(final String title, final String content, final String proposal,
+                                      final String latitude, final String longitude, final String type, final String userId,
+                                      final String userName, final String userSurname, final List<Bitmap> bitmaps,
+                                      final List<String> photoDescriptions) {
         HashMap<String, String> params = new HashMap<>();
 
         params.put("title", title);
         params.put("content", content);
-        params.put("proposal",  proposal);
-        params.put("latitude",  latitude);
-        params.put("longitude",  longitude);
-        params.put("type",  type);
-        params.put("userId",  userId);
-        params.put("userName",  userName);
+        params.put("proposal", proposal);
+        params.put("latitude", latitude);
+        params.put("longitude", longitude);
+        params.put("type", type);
+        params.put("userId", userId);
+        params.put("userName", userName);
         params.put("userSurname", userSurname);
 
-        MultipartRequest multipartRequest = new MultipartRequest(POST_PROBLEM_URL, new Response.Listener<String>(){
+        MultipartRequest multipartRequest = new MultipartRequest(POST_PROBLEM_URL, new Response.Listener<String>() {
 
             @Override
             public void onResponse(String response) {
                 Log.d("response", response);
-                if(bitmaps != null) {
+                if (bitmaps != null) {
                     try {
                         JSONParser jsonParser = new JSONParser();
                         String addedProblemID = jsonParser.parseAddedProblemInformation(response);
                         addPhotosToProblem(userId, userName, userSurname,
                                 photoDescriptions, addedProblemID, bitmaps);
-                    }
-                    catch (JSONException e) {
+                    } catch (JSONException e) {
                         Log.e("JSONException", "JSONException in parsing json from new problem");
                     }
-                }
-                else {
+                } else {
                     addProblemRequestReceiver.onSuccesProblemPosting();
                 }
             }
 
-        }, new Response.ErrorListener(){
+        }, new Response.ErrorListener() {
 
             @Override
             public void onErrorResponse(VolleyError error) {
@@ -88,40 +86,39 @@ public class AddProblemClient {
 
     }
 
-    public void addPhotoToProblem (final String userID, final String userName,
-                                   final String userSurname, final String description,
-                                   final String problemID, Bitmap photo, final int count, final int size){
+    public void addPhotoToProblem(final String userID, final String userName,
+                                  final String userSurname, final String description,
+                                  final String problemID, Bitmap photo, final int count, final int size) {
 
+        HashMap<String, String> params = new HashMap<>();
+        params.put("userId", userID);
+        params.put("userName", userName);
+        params.put("userSurname", userSurname);
+        params.put("description", description);
 
-            HashMap<String, String> params = new HashMap<>();
-            params.put("userId", userID);
-            params.put("userName", userName);
-            params.put("userSurname", userSurname);
-            params.put("description", description);
+        MultipartRequest multipartRequest = new MultipartRequest(POST_PHOTO_URL + problemID + "/",
+                new Response.Listener<String>() {
 
-            MultipartRequest multipartRequest = new MultipartRequest(POST_PHOTO_URL + problemID + "/",
-                    new Response.Listener<String>() {
-
-                        @Override
-                        public void onResponse(String response) {
-                            Log.d("response", response);
-                            if(count == size) {
-                                addProblemRequestReceiver.onSuccesProblemPosting();
-                            }
+                    @Override
+                    public void onResponse(String response) {
+                        Log.d("response", response);
+                        if (count == size) {
+                            addProblemRequestReceiver.onSuccesProblemPosting();
                         }
-                    }, new Response.ErrorListener() {
-
-                @Override
-                public void onErrorResponse(VolleyError error) {
-                    Log.e("Volley Request Error", error.getLocalizedMessage());
-                    if(count == size) {
-                        addProblemRequestReceiver.onFailedProblemPosting();
                     }
+                }, new Response.ErrorListener() {
+
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.e("Volley Request Error", error.getLocalizedMessage());
+                if (count == size) {
+                    addProblemRequestReceiver.onFailedProblemPosting();
                 }
+            }
 
-            }, photo, params, count);
+        }, photo, params, count);
 
-            RequestQueueWrapper.getInstance(context).addToRequestQueue(multipartRequest);
+        RequestQueueWrapper.getInstance(context).addToRequestQueue(multipartRequest);
     }
 
     public void addPhotosToProblem(final String userID, final String userName,
@@ -129,8 +126,8 @@ public class AddProblemClient {
                                    final String problemID, final List<Bitmap> photos) {
         final int size = photos.size();
         for (int i = 1; i <= descriptions.size(); i++) {
-            addPhotoToProblem(userID, userName, userSurname, descriptions.get(i-1),
-                    problemID, photos.get(i-1), i, size);
+            addPhotoToProblem(userID, userName, userSurname, descriptions.get(i - 1),
+                    problemID, photos.get(i - 1), i, size);
         }
     }
 

@@ -10,7 +10,6 @@ public interface FilterListener {
      */
     void updateFilterState(final FilterState filterState);
 
-    void onFiltrationFinished ();
-
+    void onFiltrationFinished();
 
 }

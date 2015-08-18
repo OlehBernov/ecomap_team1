@@ -39,7 +39,7 @@ public class BitmapResizer {
         int photoW = bmOptions.outWidth;
         int photoH = bmOptions.outHeight;
 
-        int scaleFactor = Math.min(photoW/ bounds, photoH/ bounds);
+        int scaleFactor = Math.min(photoW / bounds, photoH / bounds);
 
         bmOptions.inJustDecodeBounds = false;
         bmOptions.inSampleSize = scaleFactor;
@@ -48,7 +48,7 @@ public class BitmapResizer {
     }
 
     public Bitmap changePhotoOrientation(String photoPath, int bounds) {
-        BitmapResizer bitmapResizer =  new BitmapResizer(context);
+        BitmapResizer bitmapResizer = new BitmapResizer(context);
         Bitmap photoBitmap = bitmapResizer.scalePhoto(photoPath, bounds);
         ExifInterface exifInterface;
         try {

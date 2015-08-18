@@ -32,8 +32,9 @@ public class LogInClient {
 
     /**
      * Constructor
+     *
      * @param logRequestReceiver receive request result
-     * @param context appication context
+     * @param context            appication context
      */
     public LogInClient(final LogRequestReceiver logRequestReceiver, final Context context) {
         this.logRequestReceiver = logRequestReceiver;
@@ -67,6 +68,12 @@ public class LogInClient {
             }
         }) {
             @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> params = new HashMap<>();
+                return params;
+            }
+
+            @Override
             protected Map<String, String> getParams() {
                 Map<String, String> params = new HashMap<>();
                 params.put(JSONFields.EMAIL, login);
@@ -74,11 +81,7 @@ public class LogInClient {
                 return params;
             }
 
-            @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
-                Map<String, String> params = new HashMap<>();
-                return params;
-            }
+
         };
 
         RequestQueueWrapper.getInstance(context).addToRequestQueue(stringRequest);
@@ -86,15 +89,14 @@ public class LogInClient {
 
 
     /**
-     *
      * @param firstname user firstname
-     * @param lastname user surname
-     * @param email user email
+     * @param lastname  user surname
+     * @param email     user email
      * @param password  acount password
      */
 
-    public void postRegistration (final String firstname, final String lastname,
-                                  final String email, final String password) {
+    public void postRegistration(final String firstname, final String lastname,
+                                 final String email, final String password) {
         StringRequest stringRequest = new StringRequest(Request.Method.POST, REGISTRATION_URL,
                 new Response.Listener<String>() {
                     @Override
@@ -107,7 +109,8 @@ public class LogInClient {
                             Log.e("exception", "JSONException in Registration");
                             logRequestReceiver.setLogInRequestResult(null);
                         }
-                    } }, new Response.ErrorListener() {
+                    }
+                }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError volleyError) {
                 logRequestReceiver.setLogInRequestResult(null);
@@ -115,7 +118,7 @@ public class LogInClient {
             }
         }) {
             @Override
-            protected Map<String, String> getParams(){
+            protected Map<String, String> getParams() {
                 Map<String, String> params = new HashMap<>();
                 params.put(JSONFields.FIRST_NAME, firstname);
                 params.put(JSONFields.LAST_NAME, lastname);

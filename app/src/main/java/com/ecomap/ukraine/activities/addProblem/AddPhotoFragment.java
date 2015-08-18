@@ -20,15 +20,6 @@ public class AddPhotoFragment extends Fragment {
 
     private static AddPhotoFragment instance;
     private static Activity activity;
-
-    public static AddPhotoFragment getInstance(Activity activity) {
-        if (instance == null) {
-            instance = new AddPhotoFragment();
-            AddPhotoFragment.activity = activity;
-        }
-        return instance;
-    }
-
     View.OnFocusChangeListener focusChangeListener = new View.OnFocusChangeListener() {
         @Override
         public void onFocusChange(View v, boolean hasFocus) {
@@ -37,6 +28,14 @@ public class AddPhotoFragment extends Fragment {
             }
         }
     };
+
+    public static AddPhotoFragment getInstance(Activity activity) {
+        if (instance == null) {
+            instance = new AddPhotoFragment();
+            AddPhotoFragment.activity = activity;
+        }
+        return instance;
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,

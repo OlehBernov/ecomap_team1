@@ -1,13 +1,11 @@
 package com.ecomap.ukraine.data.manager;
 
 import android.content.Context;
-
 import android.content.SharedPreferences;
 
 import com.ecomap.ukraine.database.DBHelper;
 import com.ecomap.ukraine.models.Details;
 import com.ecomap.ukraine.models.Problem;
-
 import com.ecomap.ukraine.updating.serverclient.LoadingClient;
 
 import java.util.HashSet;
@@ -19,7 +17,7 @@ import java.util.Set;
  * Provides updates of the database.
  */
 public class DataManager implements ProblemListenersNotifier,
-                                    ProblemRequestReceiver {
+        ProblemRequestReceiver {
 
     /**
      * The name of the preference to retrieve.
@@ -95,6 +93,26 @@ public class DataManager implements ProblemListenersNotifier,
     }
 
     /**
+     * Send to listeners list of all problems.
+     */
+    @Override
+    public void sendAllProblems(final List<Problem> problems) {
+        for (ProblemListener listener : problemListeners) {
+            listener.updateAllProblems(problems);
+        }
+    }
+
+    /**
+     * Send to listeners details of concrete problem.
+     */
+    @Override
+    public void sendProblemDetails(final Details details) {
+        for (ProblemListener listener : problemListeners) {
+            listener.updateProblemDetails(details);
+        }
+    }
+
+    /**
      * Receives server response to the request of all problems,
      * and put it into database.
      *
@@ -128,26 +146,6 @@ public class DataManager implements ProblemListenersNotifier,
     }
 
     /**
-     * Send to listeners list of all problems.
-     */
-    @Override
-    public void sendAllProblems(final List<Problem> problems) {
-        for (ProblemListener listener: problemListeners) {
-            listener.updateAllProblems(problems);
-        }
-    }
-
-    /**
-     * Send to listeners details of concrete problem.
-     */
-    @Override
-    public void sendProblemDetails(final Details details) {
-        for (ProblemListener listener: problemListeners) {
-            listener.updateProblemDetails(details);
-        }
-    }
-
-    /**
      * This method is used to made request for all problems.
      * Initiates the updateAllProblems of brief information of the problem in the database,
      * if it is missing or obsolete.
@@ -167,7 +165,7 @@ public class DataManager implements ProblemListenersNotifier,
         }
     }
 
-    public void refreshAllProblem () {
+    public void refreshAllProblem() {
         loadingClient.getAllProblems();
     }
 

@@ -10,15 +10,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 public class AccountManager implements LogInListenerNotifier,
-                                       LogRequestReceiver {
-
-    private static AccountManager instance;
-
-    private Set<LogInListener> logInListeners = new HashSet<>();
-
-    private LogInClient logInClient;
-
-    private Context context;
+        LogRequestReceiver {
 
     /**
      * The name of the preference to retrieve.
@@ -26,7 +18,11 @@ public class AccountManager implements LogInListenerNotifier,
     public static final String USER_INFO = "USER_INFO";
     public static final String LOGIN = "LOGIN";
     public static final String PASSWORD = "PASSWORD";
-    
+    private static AccountManager instance;
+    private Set<LogInListener> logInListeners = new HashSet<>();
+    private LogInClient logInClient;
+    private Context context;
+
     private AccountManager(final Context context) {
         this.context = context;
         logInClient = new LogInClient(this, context);
@@ -45,6 +41,14 @@ public class AccountManager implements LogInListenerNotifier,
     }
 
     @Override
+    public void putLogInResultToPreferences(final String password, final String login) {
+        SharedPreferences.Editor editor = context.getSharedPreferences(USER_INFO, Context.MODE_PRIVATE).edit();
+        editor.putString(LOGIN, login);
+        editor.putString(PASSWORD, password);
+        editor.apply();
+    }
+
+    @Override
     public void registerLogInListener(final LogInListener listener) {
         logInListeners.add(listener);
     }
@@ -56,7 +60,7 @@ public class AccountManager implements LogInListenerNotifier,
 
     @Override
     public void sendLogInResult(final User user) {
-        for (LogInListener listener: logInListeners) {
+        for (LogInListener listener : logInListeners) {
             listener.setLogInResult(user);
         }
     }
@@ -65,16 +69,8 @@ public class AccountManager implements LogInListenerNotifier,
         logInClient.postLogIn(password, login);
     }
 
-    public void registerUser (final String firstname, final String lastname,
-                              final String email, final String password) {
+    public void registerUser(final String firstname, final String lastname,
+                             final String email, final String password) {
         logInClient.postRegistration(firstname, lastname, email, password);
-    }
-
-    @Override
-    public void putLogInResultToPreferences (final String password, final String login) {
-        SharedPreferences.Editor editor = context.getSharedPreferences(USER_INFO, Context.MODE_PRIVATE).edit();
-        editor.putString(LOGIN, login);
-        editor.putString(PASSWORD, password);
-        editor.apply();
     }
 }

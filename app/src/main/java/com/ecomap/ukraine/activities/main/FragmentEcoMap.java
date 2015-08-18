@@ -32,20 +32,17 @@ import com.google.android.gms.maps.UiSettings;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.maps.android.clustering.ClusterManager;
-import com.google.maps.android.clustering.view.DefaultClusterRenderer;
 
 import java.util.List;
 
 public class FragmentEcoMap extends android.support.v4.app.Fragment
         implements ProblemListener, FilterListener,
-                   ClusterManager.OnClusterItemClickListener<Problem> {
+        ClusterManager.OnClusterItemClickListener<Problem> {
 
     private static final LatLng INITIAL_POSITION = new LatLng(48.4, 31.2);
     private static final float INITIAL_ZOOM = 5;
     private static final float ON_MARKER_CLICK_ZOOM = 12;
     private static final float ON_MY_POSITION_CLICK_ZOOM = 15;
-    private static List<Problem> problems;
-
     /**
      * The name of the preference to retrieve.
      */
@@ -53,6 +50,7 @@ public class FragmentEcoMap extends android.support.v4.app.Fragment
     private static final String LATITUDE = "latitude";
     private static final String LONGITUDE = "longitude";
     private static final String ZOOM = "zoom";
+    private static List<Problem> problems;
     private static Activity activity;
     private static FragmentManager fragmentManager;
 
@@ -66,16 +64,16 @@ public class FragmentEcoMap extends android.support.v4.app.Fragment
     private FilterManager filterManager;
     private InformationPanel informationPanel;
 
-    public static FragmentEcoMap newInstance(final Activity activity, FragmentManager fragmentManager) {
-        FragmentEcoMap.activity = activity;
-        FragmentEcoMap.fragmentManager = fragmentManager;
-        return new FragmentEcoMap();
-    }
-
     /**
      * Constructor
      */
     public FragmentEcoMap() {
+    }
+
+    public static FragmentEcoMap newInstance(final Activity activity, FragmentManager fragmentManager) {
+        FragmentEcoMap.activity = activity;
+        FragmentEcoMap.fragmentManager = fragmentManager;
+        return new FragmentEcoMap();
     }
 
     /**
@@ -145,8 +143,8 @@ public class FragmentEcoMap extends android.support.v4.app.Fragment
         dataManager.removeProblemListener(this);
         filterManager.removeFilterListener(this);
         SharedPreferences.Editor editor = getActivity()
-                                          .getSharedPreferences(FragmentEcoMap.POSITION,
-                                                  Context.MODE_PRIVATE).edit();
+                .getSharedPreferences(FragmentEcoMap.POSITION,
+                        Context.MODE_PRIVATE).edit();
         editor.putFloat(LATITUDE, (float) googleMap.getCameraPosition().target.latitude);
         editor.putFloat(LONGITUDE, (float) googleMap.getCameraPosition().target.longitude);
         editor.putFloat(ZOOM, googleMap.getCameraPosition().zoom);
@@ -165,6 +163,16 @@ public class FragmentEcoMap extends android.support.v4.app.Fragment
     }
 
     /**
+     * Get list of all details.
+     *
+     * @param details details of concrete problem.
+     */
+    @Override
+    public void updateProblemDetails(final Details details) {
+        informationPanel.setProblemDetails(details);
+    }
+
+    /**
      * Update filter
      *
      * @param filterState state of filter
@@ -173,14 +181,9 @@ public class FragmentEcoMap extends android.support.v4.app.Fragment
         putAllProblemsOnMap(problems, filterState);
     }
 
-    /**
-     * Get list of all details.
-     *
-     * @param details details of concrete problem.
-     */
     @Override
-    public void updateProblemDetails(final Details details) {
-        informationPanel.setProblemDetails(details);
+    public void onFiltrationFinished() {
+
     }
 
     /**
@@ -195,15 +198,15 @@ public class FragmentEcoMap extends android.support.v4.app.Fragment
         }
         List<Problem> filteredProblems = new Filter().filterProblem(problems, filterState);
 
-      //  if(filteredProblems.size() != 0) {
+        //  if(filteredProblems.size() != 0) {
         ClusterManager<Problem> clusterManager =
                 new ClusterManager<>(getActivity().getApplicationContext(), googleMap);
         googleMap.setOnCameraChangeListener(clusterManager);
         clusterManager.setOnClusterItemClickListener(this);
-            googleMap.setOnMarkerClickListener(clusterManager);
-            clusterManager.addItems(filteredProblems);
+        googleMap.setOnMarkerClickListener(clusterManager);
+        clusterManager.addItems(filteredProblems);
 
-            clusterManager.setRenderer(new IconRenderer(getActivity(), googleMap, clusterManager));
+        clusterManager.setRenderer(new IconRenderer(getActivity(), googleMap, clusterManager));
 
         //clusterManager.setRenderer(new DefaultClusterRenderer<>(getActivity(), googleMap, clusterManager));
         //}
@@ -213,17 +216,17 @@ public class FragmentEcoMap extends android.support.v4.app.Fragment
         }*/
 
         filterManager.onFiltrationSuccess();
-
     }
 
     /**
      * Action after click on Marker
+     *
      * @param problem clicked marker
      * @return result of action
      */
     @Override
     public boolean onClusterItemClick(final Problem problem) {
-        if (!((MainActivity)activity).problemAddingMenu) {
+        if (!((MainActivity) activity).problemAddingMenu) {
             informationPanel = new InformationPanel(activity, problem);
             dataManager.getProblemDetail(problem.getProblemId());
             moveCameraToProblem(problem);
@@ -271,7 +274,6 @@ public class FragmentEcoMap extends android.support.v4.app.Fragment
         googleMap.moveCamera(cameraUpdate);
     }
 
-
     private void moveCameraToProblem(final Problem problem) {
         CameraPosition cameraPosition = new CameraPosition
                 .Builder()
@@ -292,8 +294,4 @@ public class FragmentEcoMap extends android.support.v4.app.Fragment
         googleMap.animateCamera(cameraUpdate);
     }
 
-    @Override
-    public void onFiltrationFinished () {
-
-    }
 }

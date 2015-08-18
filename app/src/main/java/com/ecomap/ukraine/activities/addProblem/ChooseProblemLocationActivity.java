@@ -21,7 +21,6 @@ public class ChooseProblemLocationActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-
         super.onCreate(savedInstanceState);
         setContentView(R.layout.choose_coordinate_layout);
         user = (User) getIntent().getSerializableExtra(ExtraFieldNames.USER);
@@ -69,11 +68,9 @@ public class ChooseProblemLocationActivity extends AppCompatActivity {
         toolbar.setTitle("Choose problem location");
         toolbar.setNavigationIcon(R.drawable.ic_arrow_back_white_24dp);
         toolbar.setClickable(true);
-
     }
 
     public void cancelButton(View view) {
-
         Intent mainIntent = new Intent(this, MainActivity.class);
         mainIntent.putExtra(ExtraFieldNames.USER, user);
         startActivity(mainIntent);

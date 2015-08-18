@@ -24,7 +24,7 @@ public class FilterState {
     public boolean isFilterOn(final String filterType) {
         return !state.get(filterType);
     }
-    
+
     public Calendar getDateFrom() {
         return DateFrom;
     }

@@ -1,11 +1,10 @@
 package com.ecomap.ukraine.activities.Authorization;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
-
-import android.app.ProgressDialog;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewTreeObserver;
@@ -25,36 +24,39 @@ import com.ecomap.ukraine.models.User;
 import com.ecomap.ukraine.validation.Validator;
 
 import butterknife.ButterKnife;
-        import butterknife.InjectView;
+import butterknife.InjectView;
 
 public class SignupActivity extends AppCompatActivity implements LogInListener {
 
-    private static final String TAG = "SignUp Activity";
     private static final String CREATING_ACCOUNT = "Creating Account...";
     private static final String SIGN_UP_FAILED = "Sign Up failed";
-
-    private ScrollView scrollView;
-    private ScrollView background;
-    private Intent mainIntent;
-
-    private AccountManager accountManager;
-
+    private final String TAG = getClass().getSimpleName();
     View.OnFocusChangeListener focusChangeListener = new View.OnFocusChangeListener() {
         @Override
         public void onFocusChange(View v, boolean hasFocus) {
-            if(!hasFocus) {
+            if (!hasFocus) {
                 hideKeyboard(v);
             }
         }
     };
-
-    @InjectView(R.id.input_name) EditText nameText;
-    @InjectView(R.id.input_surname) EditText surnameText;
-    @InjectView(R.id.input_email) EditText emailText;
-    @InjectView(R.id.input_password) EditText passwordText;
-    @InjectView(R.id.input_password_confirmation) EditText passwordConfirmText;
-    @InjectView(R.id.btn_signup) Button signUpButton;
-    @InjectView(R.id.link_login_p2) TextView loginLink;
+    @InjectView(R.id.input_name)
+    EditText nameText;
+    @InjectView(R.id.input_surname)
+    EditText surnameText;
+    @InjectView(R.id.input_email)
+    EditText emailText;
+    @InjectView(R.id.input_password)
+    EditText passwordText;
+    @InjectView(R.id.input_password_confirmation)
+    EditText passwordConfirmText;
+    @InjectView(R.id.btn_signup)
+    Button signUpButton;
+    @InjectView(R.id.link_login_p2)
+    TextView loginLink;
+    private ScrollView scrollView;
+    private ScrollView background;
+    private Intent mainIntent;
+    private AccountManager accountManager;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -74,11 +76,11 @@ public class SignupActivity extends AppCompatActivity implements LogInListener {
 
         scrollView.getViewTreeObserver()
                 .addOnScrollChangedListener(new ViewTreeObserver.OnScrollChangedListener() {
-            @Override
-            public void onScrollChanged() {
-                background.setScrollY(((int) (scrollView.getScrollY() * 0.5)));
-            }
-        });
+                    @Override
+                    public void onScrollChanged() {
+                        background.setScrollY(((int) (scrollView.getScrollY() * 0.5)));
+                    }
+                });
 
         mainIntent = new Intent(this, MainActivity.class);
 
@@ -100,8 +102,6 @@ public class SignupActivity extends AppCompatActivity implements LogInListener {
     }
 
     public void signUp() {
-        Log.d(TAG, "SignUp");
-
         boolean isRegistrationValid;
         isRegistrationValid = new Validator().registrationValidation(nameText, surnameText, emailText,
                 passwordText, passwordConfirmText);
@@ -121,7 +121,7 @@ public class SignupActivity extends AppCompatActivity implements LogInListener {
         String email = emailText.getText().toString();
         String password = passwordText.getText().toString();
 
-		accountManager.registerLogInListener(this);
+        accountManager.registerLogInListener(this);
         accountManager.registerUser(name, surname, email, password);
     }
 
@@ -138,7 +138,7 @@ public class SignupActivity extends AppCompatActivity implements LogInListener {
 
     public void hideKeyboard(View view) {
         InputMethodManager inputMethodManager
-                =(InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+                = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
         inputMethodManager.hideSoftInputFromWindow(view.getWindowToken(), 0);
     }
 
@@ -149,7 +149,7 @@ public class SignupActivity extends AppCompatActivity implements LogInListener {
             mainIntent.putExtra(ExtraFieldNames.USER, user);
             openMainActivity();
         } else {
-            Log.e("Registration", "null");
+            Log.e(TAG, "Registration null");
         }
     }
 

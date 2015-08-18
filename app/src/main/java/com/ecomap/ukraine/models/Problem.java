@@ -40,7 +40,29 @@ public class Problem implements ClusterItem {
     /**
      * position of the problem
      */
-     private LatLng position;
+    private LatLng position;
+
+    /**
+     * Constructor of class
+     *
+     * @param problemId   id of current problem
+     * @param statusId    represend status of current problem resolved (1) or not resolved (0)
+     * @param problemType represend type of current problem
+     * @param title       contains title of current problem
+     * @param date        contains adding date of current problem
+     * @param latitude    contains latitude of coordinate current problem
+     * @param longitude   contains longitude of coordinate current problem
+     */
+
+    public Problem(int problemId, ProblemStatus statusId, ProblemType problemType,
+                   String title, String date, double latitude, double longitude) {
+        this.problemId = problemId;
+        this.statusId = statusId;
+        this.problemType = problemType;
+        this.title = title;
+        this.date = date;
+        this.position = new LatLng(latitude, longitude);
+    }
 
     /**
      * provides access to problemId
@@ -83,27 +105,6 @@ public class Problem implements ClusterItem {
     @Override
     public LatLng getPosition() {
         return position;
-    }
-
-    /**
-     * Constructor of class
-     * @param problemId id of current problem
-     * @param statusId  represend status of current problem resolved (1) or not resolved (0)
-     * @param problemType represend type of current problem
-     * @param title contains title of current problem
-     * @param date contains adding date of current problem
-     * @param latitude contains latitude of coordinate current problem
-     * @param longitude contains longitude of coordinate current problem
-     */
-
-    public Problem(int problemId, ProblemStatus statusId, ProblemType  problemType,
-                   String title, String date, double latitude, double longitude) {
-        this.problemId = problemId;
-        this.statusId = statusId;
-        this.problemType = problemType;
-        this.title = title;
-        this.date = date;
-        this.position = new LatLng(latitude, longitude);
     }
 
 }

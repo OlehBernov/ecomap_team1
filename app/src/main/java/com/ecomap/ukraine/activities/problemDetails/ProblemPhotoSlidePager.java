@@ -1,8 +1,8 @@
 package com.ecomap.ukraine.activities.problemDetails;
 
+import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
-import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
@@ -34,7 +34,7 @@ public class ProblemPhotoSlidePager extends FragmentActivity {
         List<View> pages = new ArrayList<>();
         int position = getIntent().getIntExtra(ExtraFieldNames.POSITION, 0);
 
-        for (Photo photo: photos) {
+        for (Photo photo : photos) {
             View page = inflater.inflate(R.layout.activity_problem_photo_slide_pager, null);
             ImageView photoView = (ImageView) page.findViewById(R.id.problem_photo);
             Picasso.with(getApplicationContext())
@@ -48,7 +48,6 @@ public class ProblemPhotoSlidePager extends FragmentActivity {
                 TextView photoDescriptionView = (TextView) page.findViewById(R.id.photo_description);
                 photoDescriptionView.setText(photoDescription);
             }
-
             pages.add(page);
         }
 

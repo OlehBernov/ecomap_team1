@@ -4,5 +4,5 @@ import com.ecomap.ukraine.models.User;
 
 public interface LogInListener {
 
-    void setLogInResult(final User user);
+    void setLogInResult(User user);
 }

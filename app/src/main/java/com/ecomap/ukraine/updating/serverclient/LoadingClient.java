@@ -2,26 +2,17 @@ package com.ecomap.ukraine.updating.serverclient;
 
 
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.util.Log;
 
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.ImageRequest;
 import com.android.volley.toolbox.StringRequest;
-
-import com.ecomap.ukraine.R;
 import com.ecomap.ukraine.data.manager.ProblemRequestReceiver;
 import com.ecomap.ukraine.models.Details;
-import com.ecomap.ukraine.models.Photo;
-
 import com.ecomap.ukraine.updating.convertion.JSONParser;
 
 import org.json.JSONException;
-
-import java.util.Map;
 
 /**
  * Performs loading data from server.
@@ -33,8 +24,6 @@ public class LoadingClient {
      * information about all problems.
      */
     private static final String ALL_PROBLEMS_URL = "http://ecomap.org/api/problems/";
-
-    private static final String PHOTOS_URL = "http://ecomap.org/photos/large/";
 
     /**
      * Application context.
@@ -49,8 +38,8 @@ public class LoadingClient {
     /**
      * Constructor of LoadingClient.
      *
-     * @param problemRequestReceiver  request receiver.
-     * @param context application context.
+     * @param problemRequestReceiver request receiver.
+     * @param context                application context.
      */
     public LoadingClient(final ProblemRequestReceiver problemRequestReceiver,
                          final Context context) {
@@ -88,7 +77,7 @@ public class LoadingClient {
      * Sends a request to download detailed information
      * about concrete problem.
      *
-     *  @param problemId id of concrete problem
+     * @param problemId id of concrete problem
      */
     public void getProblemDetail(final int problemId) {
         StringRequest stringRequest = new StringRequest(Request.Method.GET, ALL_PROBLEMS_URL

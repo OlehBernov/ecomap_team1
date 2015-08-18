@@ -21,12 +21,10 @@ class SlidingTabStrip extends LinearLayout {
 
     private final int mSelectedIndicatorThickness;
     private final Paint mSelectedIndicatorPaint;
-
+    private final SimpleTabColorizer mDefaultTabColorizer;
     private int mSelectedPosition;
     private float mSelectionOffset;
-
     private SlidingTabLayout.TabColorizer mCustomTabColorizer;
-    private final SimpleTabColorizer mDefaultTabColorizer;
 
     SlidingTabStrip(Context context) {
         this(context, null);
@@ -40,7 +38,7 @@ class SlidingTabStrip extends LinearLayout {
 
         TypedValue outValue = new TypedValue();
         context.getTheme().resolveAttribute(android.R.attr.colorForeground, outValue, true);
-        final int themeForegroundColor =  outValue.data;
+        final int themeForegroundColor = outValue.data;
 
         int mDefaultBottomBorderColor = setColorAlpha(themeForegroundColor,
                 DEFAULT_BOTTOM_BORDER_COLOR_ALPHA);
@@ -54,24 +52,6 @@ class SlidingTabStrip extends LinearLayout {
 
         mSelectedIndicatorThickness = (int) (SELECTED_INDICATOR_THICKNESS_DIPS * density);
         mSelectedIndicatorPaint = new Paint();
-    }
-
-    void setCustomTabColorizer(SlidingTabLayout.TabColorizer customTabColorizer) {
-        mCustomTabColorizer = customTabColorizer;
-        invalidate();
-    }
-
-    void setSelectedIndicatorColors(int... colors) {
-        // Make sure that the custom colorizer is removed
-        mCustomTabColorizer = null;
-        mDefaultTabColorizer.setIndicatorColors(colors);
-        invalidate();
-    }
-
-    void onViewPagerPageChanged(int position, float positionOffset) {
-        mSelectedPosition = position;
-        mSelectionOffset = positionOffset;
-        invalidate();
     }
 
     @Override
@@ -145,5 +125,23 @@ class SlidingTabStrip extends LinearLayout {
         void setIndicatorColors(int... colors) {
             mIndicatorColors = colors;
         }
+    }
+
+    void setCustomTabColorizer(SlidingTabLayout.TabColorizer customTabColorizer) {
+        mCustomTabColorizer = customTabColorizer;
+        invalidate();
+    }
+
+    void setSelectedIndicatorColors(int... colors) {
+        // Make sure that the custom colorizer is removed
+        mCustomTabColorizer = null;
+        mDefaultTabColorizer.setIndicatorColors(colors);
+        invalidate();
+    }
+
+    void onViewPagerPageChanged(int position, float positionOffset) {
+        mSelectedPosition = position;
+        mSelectionOffset = positionOffset;
+        invalidate();
     }
 }

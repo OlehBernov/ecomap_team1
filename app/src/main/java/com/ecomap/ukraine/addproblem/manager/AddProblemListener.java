@@ -3,12 +3,11 @@ package com.ecomap.ukraine.addproblem.manager;
 
 public interface AddProblemListener {
 
-
-    void onSuccesProblemPosting();
+    void onSuccessProblemPosting();
 
     void onFailedProblemPosting();
 
-    void onSuccesPhotoPosting();
+    void onSuccessPhotoPosting();
 
     void onFailedPhotoPosting();
 

@@ -10,13 +10,13 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
+import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.view.animation.PathInterpolatorCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
-import android.os.Bundle;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -62,7 +62,7 @@ import io.codetail.animation.ViewAnimationUtils;
  * <p/>
  * Main activity, represent GUI and provides access to all functional
  */
-public class MainActivity extends AppCompatActivity implements FilterListener  {
+public class MainActivity extends AppCompatActivity implements FilterListener {
 
     /**
      * Name of the filter window.
@@ -120,7 +120,7 @@ public class MainActivity extends AppCompatActivity implements FilterListener  {
 
     private SlidingUpPanelLayout slidingUpPanelLayout;
 
-    private  User user;
+    private User user;
 
     private Menu menu;
 
@@ -135,56 +135,16 @@ public class MainActivity extends AppCompatActivity implements FilterListener  {
     private CharSequence previousTitle;
 
     /**
-     * Initialize activity
+     * Inflate the menu, this adds items to the action bar if it is present.
      *
-     * @param savedInstanceState Contains the data it most recently
-     *                           supplied in onSaveInstanceState(Bundle)
+     * @param menu activity menu
+     * @return result of action
      */
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-        DataManager dataManager = DataManager.getInstance(getApplicationContext());
-
-        fab = (FloatingActionButton)findViewById(R.id.fab2);
-
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-//                openChooseProblemLocationActivity(v);
-                animateButton(fab);
-            }
-
-        });
-        filterManager = FilterManager.getInstance(this);
-        setupToolbar();
-        setUpDrawerLayout();
-        setupFilter();
-
-            user = (User) getIntent().getSerializableExtra(ExtraFieldNames.USER);
-        setUserInformation(user);
-
-        slidingUpPanelLayout = (SlidingUpPanelLayout) findViewById(R.id.sliding_layout);
-        slidingUpPanelLayout.setAnchorPoint(ANCHOR_POINT);
-        slidingUpPanelLayout.setDragView(R.id.sliding_linear_layout);
-
-        this.addMapFragment();
-
-        createDateFromPickerDialog();
-        createDateToPickerDialog();
-
-        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
-    }
-
-    /**
-     * Sync the toggle state after change application configuration.
-     *
-     * @param newConfig new application configuration.
-     */
-    @Override
-    public void onConfigurationChanged(Configuration newConfig) {
-        super.onConfigurationChanged(newConfig);
-        drawerToggle.onConfigurationChanged(newConfig);
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_main, menu);
+        this.menu = menu;
+        return true;
     }
 
     /**
@@ -204,45 +164,6 @@ public class MainActivity extends AppCompatActivity implements FilterListener  {
         return super.onOptionsItemSelected(item);
     }
 
-    /**
-     * Inflate the menu, this adds items to the action bar if it is present.
-     *
-     * @param menu activity menu
-     * @return result of action
-     */
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_main, menu);
-        this.menu = menu;
-        return true;
-    }
-
-    /**
-     * Sync the toggle state after onRestoreInstanceState has occurred.
-     *
-     * @param savedInstanceState saved application state.
-     */
-    @Override
-    protected void onPostCreate(Bundle savedInstanceState) {
-        super.onPostCreate(savedInstanceState);
-        drawerToggle.syncState();
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-
-        SharedPreferences settings = getApplicationContext().getSharedPreferences(FILTERS_STATE, 0);
-        SharedPreferences.Editor editor = settings.edit();
-        FilterState filterState = buildFiltersState();
-        try {
-            editor.putString(FILTERS_STATE, new FilterStateConverter().convertToJson(filterState));
-        } catch (JSONException e) {
-            Log.e("JSONException", "onDestroy");
-        }
-        editor.apply();
-    }
-
     public void logOut(MenuItem item) {
         //TODO
     }
@@ -254,12 +175,10 @@ public class MainActivity extends AppCompatActivity implements FilterListener  {
                     .setIcon(R.drawable.filter8);
             filterLayout.closeDrawer(GravityCompat.END);
             toolbar.setTitle(previousTitle);
-        } else if (slidingUpPanelLayout.getPanelState()
-                == SlidingUpPanelLayout.PanelState.EXPANDED) {
+        } else if (isInformationalPanelExpanded()) {
             slidingUpPanelLayout.setPanelState(SlidingUpPanelLayout
                     .PanelState.ANCHORED);
-        } else if (slidingUpPanelLayout.getPanelState()
-                != SlidingUpPanelLayout.PanelState.COLLAPSED ) {
+        } else if (isInformationalPanelCollapsed()) {
             slidingUpPanelLayout.setPanelState(SlidingUpPanelLayout
                     .PanelState.HIDDEN);
         } else {
@@ -296,37 +215,6 @@ public class MainActivity extends AppCompatActivity implements FilterListener  {
         animator.start();
     }
 
-    private void animateReavel() {
-        final View myView = findViewById(R.id.ll_reveal);
-        int cx = (int)((fab.getX() + fab.getHeight() / 2));
-        int cy = (int) ((fab.getY() + fab.getHeight() / 2))
-                - (slidingUpPanelLayout.getHeight() - myView.getBottom());
-
-        // get the final radius for the clipping circle
-        int finalRadius = Math.max(myView.getWidth(), myView.getHeight());
-
-        SupportAnimator animator =
-                ViewAnimationUtils.createCircularReveal(myView, cx, cy, 0, finalRadius);
-        animator.setInterpolator(new AccelerateDecelerateInterpolator());
-        animator.setDuration(200);
-        animator.addListener(new SupportAnimator.AnimatorListener() {
-            @Override
-            public void onAnimationStart() {
-                myView.setVisibility(View.VISIBLE);
-            }
-
-            @Override
-            public void onAnimationEnd() {}
-
-            @Override
-            public void onAnimationCancel() {}
-
-            @Override
-            public void onAnimationRepeat() {}
-        });
-        animator.start();
-    }
-
     public void refresh(MenuItem item) {
         DataManager.getInstance(this).refreshAllProblems();
     }
@@ -335,9 +223,9 @@ public class MainActivity extends AppCompatActivity implements FilterListener  {
         problemAddingMenu = false;
         final View myView = findViewById(R.id.ll_reveal);
 
-        int cx = (int)((fab.getX() + fab.getHeight() / 2));
-        int cy = (int) ((fab.getY() + fab.getHeight() / 2))
-                - (slidingUpPanelLayout.getHeight() - myView.getBottom());
+        int cx = (int) ((fab.getX() + fab.getHeight() / 2));
+        int cy = (int) ((fab.getY() + fab.getHeight() / 2)) -
+                (slidingUpPanelLayout.getHeight() - myView.getBottom());
 
         int finalRadius = Math.max(myView.getWidth(), myView.getHeight());
 
@@ -360,33 +248,15 @@ public class MainActivity extends AppCompatActivity implements FilterListener  {
             }
 
             @Override
-            public void onAnimationCancel() {}
+            public void onAnimationCancel() {
+            }
 
             @Override
-            public void onAnimationRepeat() {}
+            public void onAnimationRepeat() {
+            }
         });
         reversedAnimator.start();
 
-    }
-
-    private void showButton(final FloatingActionButton fab) {
-        Interpolator curveInterpolator = PathInterpolatorCompat.create(0, 1);
-        AnimatorSet animator = new AnimatorSet();
-        ObjectAnimator movementX
-                = ObjectAnimator.ofFloat(fab, "translationX", 0);
-        ObjectAnimator movementY
-                = ObjectAnimator.ofFloat(fab, "translationY", 0);
-        movementX.setInterpolator(curveInterpolator);
-        animator.playTogether(movementX, movementY);
-        animator.setDuration(200);
-        animator.addListener(new AnimatorListenerAdapter() {
-            @Override
-            public void onAnimationEnd(Animator animation) {
-                super.onAnimationEnd(animation);
-                fab.setClickable(true);
-            }
-        });
-        animator.start();
     }
 
     /**
@@ -418,7 +288,6 @@ public class MainActivity extends AppCompatActivity implements FilterListener  {
             checkBox.setChecked(false);
         }
         //filterManager.getFilterState(buildFiltersState());
-
     }
 
     public void dateFromChoosing(View view) {
@@ -427,6 +296,199 @@ public class MainActivity extends AppCompatActivity implements FilterListener  {
 
     public void dateToChoosing(View view) {
         dialogDateTo.show(getSupportFragmentManager(), DATE_TO_TAG);
+    }
+
+    public void openChooseProblemLocationActivity(View view) {
+        if (user == null) {
+            setNotAutorizeDialog();
+        } else {
+            Intent intent = new Intent(this, ChooseProblemLocationActivity.class);
+            intent.putExtra(ExtraFieldNames.USER, user);
+            startActivity(intent);
+            finish();
+        }
+    }
+
+    public void setNotAutorizeDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(activity);
+
+        builder.setTitle(R.string.Caution);
+        builder.setMessage(alertMessage);
+        builder.setCancelable(false);
+        builder.setIcon(R.drawable.ic_info_outline_black_24dp);
+        builder.setPositiveButton(OK,
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(final DialogInterface dialog,
+                                        final int id) {
+                        Intent mainIntent = new Intent(activity, LoginScreen.class);
+                        startActivity(mainIntent);
+                        finish();
+                    }
+                });
+        builder.setNegativeButton(CANCEL,
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(final DialogInterface dialog,
+                                        final int id) {
+                        dialog.cancel();
+
+                    }
+                });
+        AlertDialog alert = builder.create();
+        alert.show();
+    }
+
+    @Override
+    public void updateFilterState(final FilterState filterState) {
+
+    }
+
+    @Override
+    public void onFiltrationFinished() {
+        filterLayout.closeDrawer(GravityCompat.END);
+        toolbar.setTitle(previousTitle);
+    }
+
+    /**
+     * Initialize activity
+     *
+     * @param savedInstanceState Contains the data it most recently
+     *                           supplied in onSaveInstanceState(Bundle)
+     */
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+
+        fab = (FloatingActionButton) findViewById(R.id.fab2);
+
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+//               openChooseProblemLocationActivity(v);
+                animateButton(fab);
+            }
+
+        });
+        filterManager = FilterManager.getInstance(this);
+        setupToolbar();
+        setUpDrawerLayout();
+        setupFilter();
+
+        user = (User) getIntent().getSerializableExtra(ExtraFieldNames.USER);
+        setUserInformation(user);
+
+        slidingUpPanelLayout = (SlidingUpPanelLayout) findViewById(R.id.sliding_layout);
+        slidingUpPanelLayout.setAnchorPoint(ANCHOR_POINT);
+        slidingUpPanelLayout.setDragView(R.id.sliding_linear_layout);
+
+        this.addMapFragment();
+
+        createDateFromPickerDialog();
+        createDateToPickerDialog();
+
+        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
+    }
+
+    /**
+     * Sync the toggle state after onRestoreInstanceState has occurred.
+     *
+     * @param savedInstanceState saved application state.
+     */
+    @Override
+    protected void onPostCreate(Bundle savedInstanceState) {
+        super.onPostCreate(savedInstanceState);
+        drawerToggle.syncState();
+    }
+
+    /**
+     * Sync the toggle state after change application configuration.
+     *
+     * @param newConfig new application configuration.
+     */
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        drawerToggle.onConfigurationChanged(newConfig);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+
+        SharedPreferences settings = getApplicationContext().getSharedPreferences(FILTERS_STATE, 0);
+        SharedPreferences.Editor editor = settings.edit();
+        FilterState filterState = buildFiltersState();
+        try {
+            editor.putString(FILTERS_STATE, new FilterStateConverter().convertToJson(filterState));
+        } catch (JSONException e) {
+            Log.e("JSONException", "onDestroy");
+        }
+        editor.apply();
+    }
+
+    private boolean isInformationalPanelCollapsed() {
+        return slidingUpPanelLayout.getPanelState()
+                != SlidingUpPanelLayout.PanelState.COLLAPSED;
+    }
+
+    private boolean isInformationalPanelExpanded() {
+        return slidingUpPanelLayout.getPanelState()
+                == SlidingUpPanelLayout.PanelState.EXPANDED;
+    }
+
+    private void animateReavel() {
+        final View myView = findViewById(R.id.ll_reveal);
+        int cx = (int) ((fab.getX() + fab.getHeight() / 2));
+        int cy = (int) ((fab.getY() + fab.getHeight() / 2))
+                - (slidingUpPanelLayout.getHeight() - myView.getBottom());
+
+        int finalRadius = Math.max(myView.getWidth(), myView.getHeight());
+
+        SupportAnimator animator =
+                ViewAnimationUtils.createCircularReveal(myView, cx, cy, 0, finalRadius);
+        animator.setInterpolator(new AccelerateDecelerateInterpolator());
+        animator.setDuration(200);
+        animator.addListener(new SupportAnimator.AnimatorListener() {
+            @Override
+            public void onAnimationStart() {
+                myView.setVisibility(View.VISIBLE);
+            }
+
+            @Override
+            public void onAnimationEnd() {
+            }
+
+            @Override
+            public void onAnimationCancel() {
+            }
+
+            @Override
+            public void onAnimationRepeat() {
+            }
+        });
+        animator.start();
+    }
+
+    private void showButton(final FloatingActionButton fab) {
+        Interpolator curveInterpolator = PathInterpolatorCompat.create(0, 1);
+        AnimatorSet animator = new AnimatorSet();
+        ObjectAnimator movementX
+                = ObjectAnimator.ofFloat(fab, "translationX", 0);
+        ObjectAnimator movementY
+                = ObjectAnimator.ofFloat(fab, "translationY", 0);
+        movementX.setInterpolator(curveInterpolator);
+        animator.playTogether(movementX, movementY);
+        animator.setDuration(200);
+        animator.addListener(new AnimatorListenerAdapter() {
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                super.onAnimationEnd(animation);
+                fab.setClickable(true);
+            }
+        });
+        animator.start();
     }
 
     private void setDateOnScreen(Calendar dateFrom, Calendar dateTo) {
@@ -461,21 +523,21 @@ public class MainActivity extends AppCompatActivity implements FilterListener  {
     private void createDateFromPickerDialog() {
         CalendarDatePickerDialog.OnDateSetListener dateFromListener =
                 new CalendarDatePickerDialog.OnDateSetListener() {
-            @Override
-            public void onDateSet(CalendarDatePickerDialog dialog, int year,
-                                  int monthOfYear, int dayOfMonth) {
-                Calendar date = Calendar.getInstance();
-                date.set(Calendar.YEAR, year);
-                date.set(Calendar.MONTH, monthOfYear);
-                date.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+                    @Override
+                    public void onDateSet(CalendarDatePickerDialog dialog, int year,
+                                          int monthOfYear, int dayOfMonth) {
+                        Calendar date = Calendar.getInstance();
+                        date.set(Calendar.YEAR, year);
+                        date.set(Calendar.MONTH, monthOfYear);
+                        date.set(Calendar.DAY_OF_MONTH, dayOfMonth);
 
-                if (isValidDates(date, calendarDateTo)) {
-                    calendarDateFrom = date;
-                    setDate();
-                    filterManager.getFilterState(buildFiltersState());
-                }
-            }
-        };
+                        if (isValidDates(date, calendarDateTo)) {
+                            calendarDateFrom = date;
+                            setDate();
+                            filterManager.getFilterState(buildFiltersState());
+                        }
+                    }
+                };
 
         dialogDateFrom = new CalendarDatePickerDialog();
         dialogDateFrom.setOnDateSetListener(dateFromListener);
@@ -488,21 +550,21 @@ public class MainActivity extends AppCompatActivity implements FilterListener  {
     private void createDateToPickerDialog() {
         CalendarDatePickerDialog.OnDateSetListener dateToListener =
                 new CalendarDatePickerDialog.OnDateSetListener() {
-            @Override
-            public void onDateSet(CalendarDatePickerDialog dialog, int year,
-                                  int monthOfYear, int dayOfMonth) {
-                Calendar date = Calendar.getInstance();
-                date.set(Calendar.YEAR, year);
-                date.set(Calendar.MONTH, monthOfYear);
-                date.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+                    @Override
+                    public void onDateSet(CalendarDatePickerDialog dialog, int year,
+                                          int monthOfYear, int dayOfMonth) {
+                        Calendar date = Calendar.getInstance();
+                        date.set(Calendar.YEAR, year);
+                        date.set(Calendar.MONTH, monthOfYear);
+                        date.set(Calendar.DAY_OF_MONTH, dayOfMonth);
 
-                if (isValidDates(calendarDateFrom, date)) {
-                    calendarDateTo = date;
-                    setDate();
-                    filterManager.getFilterState(buildFiltersState());
-                }
-            }
-        };
+                        if (isValidDates(calendarDateFrom, date)) {
+                            calendarDateTo = date;
+                            setDate();
+                            filterManager.getFilterState(buildFiltersState());
+                        }
+                    }
+                };
 
         dialogDateTo = new CalendarDatePickerDialog();
         dialogDateTo.setOnDateSetListener(dateToListener);
@@ -576,6 +638,11 @@ public class MainActivity extends AppCompatActivity implements FilterListener  {
         setFiltersState(filterState);
     }
 
+    /*public void updateFilterState(final FilterState filterState) {
+        filterLayout.closeDrawer(GravityCompat.END);
+        toolbar.setTitle(previousTitle);
+    }*/
+
     private void setDate() {
         SimpleDateFormat dateFormat = new SimpleDateFormat(DATE_TEMPLATE, Locale.ENGLISH);
         try {
@@ -629,64 +696,6 @@ public class MainActivity extends AppCompatActivity implements FilterListener  {
             calendarDateTo = filtersState.getDateTo();
         }
         setDate();
-    }
-
-    public void openChooseProblemLocationActivity(View view) {
-        if(user == null) {
-            setNotAutorizeDialog();
-        }
-        else {
-            Intent intent = new Intent(this, ChooseProblemLocationActivity.class);
-            intent.putExtra(ExtraFieldNames.USER, user);
-            startActivity(intent);
-            finish();
-        }
-    }
-
-    public void setNotAutorizeDialog() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(activity);
-
-        builder.setTitle(R.string.Caution);
-        builder.setMessage(alertMessage);
-        builder.setCancelable(false);
-        builder.setIcon(R.drawable.ic_info_outline_black_24dp);
-        builder.setPositiveButton(OK,
-                new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(final DialogInterface dialog,
-                                        final int id) {
-                        Intent mainIntent = new Intent(activity, LoginScreen.class);
-                        startActivity(mainIntent);
-                        finish();
-                    }
-                });
-        builder.setNegativeButton(CANCEL,
-                new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(final DialogInterface dialog,
-                                        final int id) {
-                        dialog.cancel();
-
-                    }
-                });
-        AlertDialog alert = builder.create();
-        alert.show();
-    }
-
-    /*public void updateFilterState(final FilterState filterState) {
-        filterLayout.closeDrawer(GravityCompat.END);
-        toolbar.setTitle(previousTitle);
-    }*/
-
-    @Override
-    public void onFiltrationFinished () {
-
-        filterLayout.closeDrawer(GravityCompat.END);
-        toolbar.setTitle(previousTitle);
-    }
-    @Override
-    public void updateFilterState(final FilterState filterState) {
-
     }
 
 }

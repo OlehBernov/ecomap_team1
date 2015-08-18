@@ -2,7 +2,6 @@ package com.ecomap.ukraine.activities.problemDetails;
 
 import android.animation.ValueAnimator;
 import android.app.Activity;
-
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.ColorStateList;
@@ -16,7 +15,6 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
 import android.view.Gravity;
-import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
@@ -31,15 +29,15 @@ import android.widget.TableRow;
 import android.widget.TextView;
 
 import com.ecomap.ukraine.R;
+import com.ecomap.ukraine.activities.BitmapResizer;
 import com.ecomap.ukraine.activities.main.IconRenderer;
 import com.ecomap.ukraine.activities.main.MainActivity;
-import com.ecomap.ukraine.activities.BitmapResizer;
 import com.ecomap.ukraine.data.manager.DataManager;
-import com.ecomap.ukraine.models.Types.ActivityType;
 import com.ecomap.ukraine.models.Details;
 import com.ecomap.ukraine.models.Photo;
 import com.ecomap.ukraine.models.Problem;
 import com.ecomap.ukraine.models.ProblemActivity;
+import com.ecomap.ukraine.models.Types.ActivityType;
 import com.ecomap.ukraine.models.Types.ProblemStatus;
 import com.ms.square.android.expandabletextview.ExpandableTextView;
 import com.sothree.slidinguppanel.SlidingUpPanelLayout;
@@ -69,39 +67,30 @@ public class InformationPanel {
     private static final float COLLAPSE_OFFSET = 0.9F;
 
     private static float currentTitleAlpha = 1;
-
+    private static int[] STARS_ID = {R.id.star1, R.id.star2, R.id.star3, R.id.star4, R.id.star5};
     private FloatingActionButton fab;
-
     private SlidingUpPanelLayout slidingUpPanelLayout;
     private ScrollView scrollView;
     private LinearLayout layout;
-
     private Problem problem;
     private Activity activity;
-
     private ImageView markerIcon;
     private TextView problemTitle;
     private TextView problemStatus;
     private TextView userInformation;
     private TextView votesNumber;
     private EditText commentText;
-
     private ExpandableTextView descriptionFiled;
     private ExpandableTextView proposalFiled;
     private TableLayout activitiesLayout;
     private EditText addComment;
     private LinearLayout photoContainer;
-
     private TextView titleView;
     private Toolbar toolbar;
     private Context context;
-
     private int fabState;
-
     private boolean isScrollDisable;
     private float fabStartingPosition;
-
-    private static int[] STARS_ID = {R.id.star1, R.id.star2, R.id.star3, R.id.star4, R.id.star5};
     private float currentOffset;
 
     /**
@@ -136,7 +125,7 @@ public class InformationPanel {
 
         titleView = (TextView) activity.findViewById(R.id.details_title);
         toolbar.setBackgroundColor(0xff004d40);
-        fab = (FloatingActionButton)activity.findViewById(R.id.fab2);
+        fab = (FloatingActionButton) activity.findViewById(R.id.fab2);
 
         descriptionFiled = (ExpandableTextView) activity.findViewById(R.id.description_field);
         proposalFiled = (ExpandableTextView) activity.findViewById(R.id.proposal_field);
@@ -163,6 +152,32 @@ public class InformationPanel {
                 currentOffset = v;
             }
 
+            @Override
+            public void onPanelCollapsed(View view) {
+                setToolbarInitialState();
+                toolbar.animate().translationY(0)
+                        .setInterpolator(new DecelerateInterpolator(2)).start();
+            }
+
+            @Override
+            public void onPanelExpanded(View view) {
+                toolbar.getMenu().findItem(R.id.action_find_location).setEnabled(false);
+                scrollView.setVerticalScrollBarEnabled(true);
+                isScrollDisable = false;
+            }
+
+            @Override
+            public void onPanelAnchored(View view) {
+                scrollView.setVerticalScrollBarEnabled(false);
+                slidingUpPanelLayout.setCoveredFadeColor(0x00000000);
+                scrollView.fullScroll(ScrollView.FOCUS_UP);
+                setToolbarInitialState();
+                isScrollDisable = true;
+            }
+
+            @Override
+            public void onPanelHidden(View view) {
+            }
 
             public void backgroundResolver(final float v) {
                 float anchor = slidingUpPanelLayout.getAnchorPoint();
@@ -217,7 +232,6 @@ public class InformationPanel {
                 item.getIcon().setAlpha((int) (255 * alpha));
             }
 
-
             private void newFabPosition(final float v) {
                 float edgeY = convertToPixels(1 - v) + toolbar.getHeight();
                 float fabDefaultCenterY = fab.getY() + fab.getHeight() / 2 - fab.getTranslationY();
@@ -261,14 +275,6 @@ public class InformationPanel {
                 return fab.getY() + fab.getHeight() / 2;
             }
 
-
-            @Override
-            public void onPanelCollapsed(View view) {
-                setToolbarInitialState();
-                toolbar.animate().translationY(0)
-                        .setInterpolator(new DecelerateInterpolator(2)).start();
-            }
-
             private void setToolbarInitialState() {
                 toolbar.setBackgroundColor(0xff004d40);
                 if (currentTitleAlpha != 1) {
@@ -286,27 +292,6 @@ public class InformationPanel {
                     animator.start();
                 }
                 toolbar.getMenu().findItem(R.id.action_find_location).setEnabled(true);
-            }
-
-            @Override
-            public void onPanelExpanded(View view) {
-                toolbar.getMenu().findItem(R.id.action_find_location).setEnabled(false);
-                scrollView.setVerticalScrollBarEnabled(true);
-                isScrollDisable = false;
-            }
-
-
-            @Override
-            public void onPanelAnchored(View view) {
-                scrollView.setVerticalScrollBarEnabled(false);
-                slidingUpPanelLayout.setCoveredFadeColor(0x00000000);
-                scrollView.fullScroll(ScrollView.FOCUS_UP);
-                setToolbarInitialState();
-                isScrollDisable = true;
-            }
-
-            @Override
-            public void onPanelHidden(View view) {
             }
 
             private void rescaleText(float v) {
@@ -366,18 +351,6 @@ public class InformationPanel {
         scrollView.setVerticalScrollBarEnabled(false);
         scrollView.setOnTouchListener(new View.OnTouchListener() {
             float previousY;
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                if (event.getAction() == MotionEvent.ACTION_DOWN) {
-                    previousY = event.getY();
-                    return false;
-                }
-                if (scrollView.getScrollY() == 0 && dragingDown(event)) {
-                    slidingUpPanelLayout.onTouchEvent(remapToParentLayout(event));
-                    return true;
-                }
-                return isScrollDisable;
-            }
 
             private boolean dragingDown(MotionEvent event) {
                 if (previousY < event.getY()) {
@@ -397,10 +370,47 @@ public class InformationPanel {
                         event.getRawX(),
                         event.getRawY(),
                         event.getMetaState()
-                    );
+                );
+            }            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                    previousY = event.getY();
+                    return false;
+                }
+                if (scrollView.getScrollY() == 0 && dragingDown(event)) {
+                    slidingUpPanelLayout.onTouchEvent(remapToParentLayout(event));
+                    return true;
+                }
+                return isScrollDisable;
             }
-
         });
+    }
+
+    public void setProblemDetails(final Details details) {
+        if (details == null) {
+            return;
+        }
+
+        clearDetailsPanel();
+        putDetailsOnPanel(details);
+
+        if (details.getProblemActivities() != null) {
+            for (ProblemActivity problemActivity : details.getProblemActivities()) {
+                if ((problemActivity.getActivityType() == ActivityType.CREATE) &&
+                        (problemActivity.getProblemId() == problem.getProblemId())) {
+                    userInformation.setText(getPostInformation(problemActivity));
+                    break;
+                }
+            }
+            addActivitiesInfo(details);
+        }
+        addPhotos(details);
+    }
+
+    public void putBriefInformation() {
+        problemTitle.setText(problem.getTitle());
+        this.setProblemStatus(problem.getStatus());
+        this.markerIcon.setImageResource(IconRenderer.getResourceIdForMarker(problem.getProblemType()));
     }
 
     /**
@@ -424,27 +434,6 @@ public class InformationPanel {
 
     private boolean isActivityLayoutHaveChild() {
         return activitiesLayout != null && (activitiesLayout.getChildCount() > 0);
-    }
-
-    public void setProblemDetails(final Details details) {
-        if (details == null) {
-            return;
-        }
-
-        clearDetailsPanel();
-        putDetailsOnPanel(details);
-
-        if (details.getProblemActivities() != null) {
-            for (ProblemActivity problemActivity : details.getProblemActivities()) {
-                if ((problemActivity.getActivityType() == ActivityType.CREATE) &&
-                        (problemActivity.getProblemId() == problem.getProblemId())) {
-                    userInformation.setText(getPostInformation(problemActivity));
-                    break;
-                }
-            }
-            addActivitiesInfo(details);
-        }
-        addPhotos(details);
     }
 
     /**
@@ -486,10 +475,10 @@ public class InformationPanel {
     private void setPostInformation(final ProblemActivity problemActivity) {
         TableRow activityRow = new TableRow(context);
         activityRow.addView(new ImageView(context));
-        activityRow.setGravity(Gravity.LEFT);
+        activityRow.setGravity(Gravity.START);
         TextView postInformation = new TextView(context);
         postInformation.setText(getPostInformation(problemActivity));
-        postInformation.setGravity(Gravity.LEFT);
+        postInformation.setGravity(Gravity.START);
         activityRow.addView(postInformation);
         activitiesLayout.addView(activityRow);
     }
@@ -585,12 +574,6 @@ public class InformationPanel {
         return !text.equals(WRONG_TEXT);
     }
 
-    public void putBriefInformation() {
-        problemTitle.setText(problem.getTitle());
-        this.setProblemStatus(problem.getStatus());
-        this.markerIcon.setImageResource(IconRenderer.getResourceIdForMarker(problem.getProblemType()));
-    }
-
     private void setProblemStatus(final ProblemStatus problemStatus) {
         if (problemStatus.equals(ProblemStatus.UNSOLVED)) {
             this.problemStatus.setText(UNSOLVED);
@@ -643,6 +626,7 @@ public class InformationPanel {
                 }
                 return resizedBitmap;
             }
+
             @Override
             public String key() {
                 return TRANSFORMATION;

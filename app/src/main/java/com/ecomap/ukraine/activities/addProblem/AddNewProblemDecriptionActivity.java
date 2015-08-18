@@ -41,26 +41,21 @@ import java.util.List;
 import java.util.Locale;
 
 
-public class AddNewProblemDecriptionActivity extends AppCompatActivity  {
-
-    protected final String TAG = getClass().getSimpleName();
+public class AddNewProblemDecriptionActivity extends AppCompatActivity {
 
     private static final int CAMERA_PHOTO = 1;
     private static final int GALLERY_PHOTO = 2;
-
     private static final int ADD_PHOTO_ITEM = 1;
     private static final int NUMBER_OF_TUBS = 2;
-
     private static final String DATE_TEMPLATE = "MMdd_HHmmss";
     private static final String PHOTO_FORMAT = ".jpg";
     private static final String FILE_NAME_BEGINNING = "JPEG_";
     private static final String DESCRIPTION_HINT = "Add description...";
     private static final String ADD_DESCRIPTION = "Add description";
-
     private static final String CAMERA_URI = "Camera Uri";
     private static final String USER_PHOTOS = "Number of photos";
     private static final String DESCRIPTION = "Description";
-
+    protected final String TAG = getClass().getSimpleName();
     private Uri currentPhotoUri;
     private List<Uri> userPhotos;
     private TableLayout photoDescriptionLayout;
@@ -70,22 +65,47 @@ public class AddNewProblemDecriptionActivity extends AppCompatActivity  {
     private ViewPager pager;
     private CharSequence Titles[] = {"Description", "Photo"};
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_add_problem, menu);
-        return true;
+    public List<Bitmap> getBitmapsPhoto() {
+        List<Bitmap> photoBitmaps = new ArrayList<>();
+        if (userPhotos == null) {
+            return null;
+        }
+        BitmapResizer bitmapResizer = new BitmapResizer(getApplicationContext());
+        int userPhotoSize = (int) getResources().getDimension(R.dimen.edit_text_add_photo);
+        for (Uri userPhoto : userPhotos) {
+            String userPhotoPath = userPhoto.getPath();
+            photoBitmaps.add(bitmapResizer.scalePhoto(userPhotoPath, userPhotoSize));
+        }
+        return photoBitmaps;
     }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
+    public void addPhoto(View v) {
+        pager.setCurrentItem(ADD_PHOTO_ITEM);
+    }
 
-        if (id == R.id.action_confirm_problem) {
-            AddProblemDescriptionFragment.getInstance(getBitmapsPhoto(), descriptions).sendProblem();
-            return true;
+    public void getPhotoFromCamera(View view) {
+        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
+            File photoFile = null;
+            try {
+                photoFile = createImageFile();
+            } catch (IOException e) {
+                Log.e(TAG, "Camera photo file error");
+            }
+            currentPhotoUri = Uri.fromFile(photoFile);
+            if (photoFile != null) {
+                takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT,
+                        currentPhotoUri);
+                startActivityForResult(takePictureIntent, CAMERA_PHOTO);
+            }
         }
+    }
 
-        return super.onOptionsItemSelected(item);
+    public void getPhotoFromGallery(View view) {
+        Intent galleryIntent = new Intent(
+                Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+
+        startActivityForResult(galleryIntent, GALLERY_PHOTO);
     }
 
     @Override
@@ -125,24 +145,6 @@ public class AddNewProblemDecriptionActivity extends AppCompatActivity  {
     }
 
     @Override
-    protected void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-        if (currentPhotoUri != null) {
-            outState.putString(CAMERA_URI, currentPhotoUri.toString());
-        }
-        if (userPhotos != null) {
-            ArrayList<String> userPhotoArrayList = new ArrayList<>();
-            for (int i = 0; i < userPhotos.size(); i++) {
-                userPhotoArrayList.add(userPhotos.get(i).toString());
-            }
-            outState.putStringArrayList(USER_PHOTOS, userPhotoArrayList);
-        }
-        if (descriptions != null) {
-            outState.putStringArrayList(DESCRIPTION, new ArrayList<>(descriptions));
-        }
-    }
-
-    @Override
     protected void onRestoreInstanceState(@NonNull Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
         if (savedInstanceState.containsKey(CAMERA_URI)) {
@@ -160,6 +162,24 @@ public class AddNewProblemDecriptionActivity extends AppCompatActivity  {
             descriptions = savedInstanceState.getStringArrayList(DESCRIPTION);
             addPhotosToView();
         }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_add_problem, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+
+        if (id == R.id.action_confirm_problem) {
+            AddProblemDescriptionFragment.getInstance(getBitmapsPhoto(), descriptions).sendProblem();
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 
     @Override
@@ -181,47 +201,22 @@ public class AddNewProblemDecriptionActivity extends AppCompatActivity  {
         finish();
     }
 
-    public List<Bitmap> getBitmapsPhoto() {
-        List<Bitmap> photoBitmaps = new ArrayList<>();
-        if (userPhotos == null) {
-            return null;
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        if (currentPhotoUri != null) {
+            outState.putString(CAMERA_URI, currentPhotoUri.toString());
         }
-        BitmapResizer bitmapResizer = new BitmapResizer(getApplicationContext());
-        int userPhotoSize = (int) getResources().getDimension(R.dimen.edit_text_add_photo);
-        for (Uri userPhoto: userPhotos) {
-            String userPhotoPath = userPhoto.getPath();
-            photoBitmaps.add(bitmapResizer.scalePhoto(userPhotoPath, userPhotoSize));
-        }
-        return photoBitmaps;
-    }
-
-    public void addPhoto(View v) {
-        pager.setCurrentItem(ADD_PHOTO_ITEM);
-    }
-
-    public void getPhotoFromCamera(View view) {
-        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
-            File photoFile = null;
-            try {
-                photoFile = createImageFile();
-            } catch (IOException e) {
-                Log.e(TAG, "Camera photo file error");
+        if (userPhotos != null) {
+            ArrayList<String> userPhotoArrayList = new ArrayList<>();
+            for (int i = 0; i < userPhotos.size(); i++) {
+                userPhotoArrayList.add(userPhotos.get(i).toString());
             }
-            currentPhotoUri = Uri.fromFile(photoFile);
-            if (photoFile != null) {
-                takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT,
-                        currentPhotoUri);
-                startActivityForResult(takePictureIntent, CAMERA_PHOTO);
-            }
+            outState.putStringArrayList(USER_PHOTOS, userPhotoArrayList);
         }
-    }
-
-    public void getPhotoFromGallery(View view) {
-        Intent galleryIntent = new Intent(
-                Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-
-        startActivityForResult(galleryIntent, GALLERY_PHOTO);
+        if (descriptions != null) {
+            outState.putStringArrayList(DESCRIPTION, new ArrayList<>(descriptions));
+        }
     }
 
     private boolean isDescriptionsSaved(Bundle savedInstanceState) {
@@ -356,7 +351,7 @@ public class AddNewProblemDecriptionActivity extends AppCompatActivity  {
     }
 
     private void showFullSizePhoto(String photoPath) {
-        Intent intent = new Intent (this, UserPhotoFullScreen.class);
+        Intent intent = new Intent(this, UserPhotoFullScreen.class);
         intent.putExtra(ExtraFieldNames.PHOTO, photoPath);
         startActivity(intent);
     }
@@ -380,7 +375,7 @@ public class AddNewProblemDecriptionActivity extends AppCompatActivity  {
     private RelativeLayout.LayoutParams setDeleteButtonParams() {
         RelativeLayout.LayoutParams buttonParams =
                 new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,
-                                                ViewGroup.LayoutParams.WRAP_CONTENT);
+                        ViewGroup.LayoutParams.WRAP_CONTENT);
         buttonParams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
 
         return buttonParams;
@@ -417,7 +412,7 @@ public class AddNewProblemDecriptionActivity extends AppCompatActivity  {
         String timeStamp = new SimpleDateFormat(DATE_TEMPLATE, Locale.ENGLISH).format(new Date());
         String imageFileName = FILE_NAME_BEGINNING + timeStamp + "_";
         File storageDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
-        return new File (storageDir, imageFileName + PHOTO_FORMAT);
+        return new File(storageDir, imageFileName + PHOTO_FORMAT);
     }
 
 }

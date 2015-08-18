@@ -15,7 +15,7 @@ public class JSONFields {
     /**
      * Problems id.
      */
-    public static final String PROBLEMS_ID = "Problems_Id" ;
+    public static final String PROBLEMS_ID = "Problems_Id";
 
     /**
      * Status of problem.

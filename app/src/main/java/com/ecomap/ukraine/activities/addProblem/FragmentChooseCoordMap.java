@@ -1,13 +1,10 @@
 package com.ecomap.ukraine.activities.addProblem;
 
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.design.widget.FloatingActionButton;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,7 +17,6 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.MapsInitializer;
 import com.google.android.gms.maps.UiSettings;
-import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
@@ -32,11 +28,10 @@ import java.util.List;
 
 public class FragmentChooseCoordMap extends android.support.v4.app.Fragment {
 
+    private static final float ON_MY_POSITION_CLICK_ZOOM = 15;
     private GoogleMap googleMap;
     private MapView mapView;
     private LatLng markerPosition;
-
-    private static final float ON_MY_POSITION_CLICK_ZOOM = 15;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -77,25 +72,25 @@ public class FragmentChooseCoordMap extends android.support.v4.app.Fragment {
         this.setUpMapIfNeeded();
         googleMap.setOnMarkerDragListener(new GoogleMap.OnMarkerDragListener()
 
-            {
-                @Override
-                public void onMarkerDragStart (Marker marker){
+        {
+            @Override
+            public void onMarkerDragStart(Marker marker) {
             }
 
-                @Override
-                public void onMarkerDrag (Marker marker){
+            @Override
+            public void onMarkerDrag(Marker marker) {
             }
 
-                @Override
-                public void onMarkerDragEnd (Marker marker){
+            @Override
+            public void onMarkerDragEnd(Marker marker) {
                 markerPosition = marker.getPosition();
             }
-            });
-            googleMap.setOnMapClickListener(new GoogleMap.OnMapClickListener()
+        });
+        googleMap.setOnMapClickListener(new GoogleMap.OnMapClickListener()
 
-            {
-                @Override
-                public void onMapClick (LatLng latLng){
+        {
+            @Override
+            public void onMapClick(LatLng latLng) {
                 if (latLng != null) {
                     googleMap.clear();
                 }
@@ -106,9 +101,9 @@ public class FragmentChooseCoordMap extends android.support.v4.app.Fragment {
                 markerPosition = latLng;
 
             }
-            });
-            return rootView;
-        }
+        });
+        return rootView;
+    }
 
     /**
      * Sets up the map if it is possible to do so (i.e., the Google Play services APK is correctly

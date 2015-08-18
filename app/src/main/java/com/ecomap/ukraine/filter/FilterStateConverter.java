@@ -22,23 +22,23 @@ public class FilterStateConverter {
 
         JSONObject filterStateJson = new JSONObject();
         filterStateJson.put(FilterContract.FOREST_DESTRUCTION,
-                            filterState.isFilterOff(FilterContract.FOREST_DESTRUCTION));
+                filterState.isFilterOff(FilterContract.FOREST_DESTRUCTION));
         filterStateJson.put(FilterContract.RUBBISH_DUMP,
-                            filterState.isFilterOff(FilterContract.RUBBISH_DUMP));
+                filterState.isFilterOff(FilterContract.RUBBISH_DUMP));
         filterStateJson.put(FilterContract.ILLEGAL_BUILDING,
-                            filterState.isFilterOff(FilterContract.ILLEGAL_BUILDING));
+                filterState.isFilterOff(FilterContract.ILLEGAL_BUILDING));
         filterStateJson.put(FilterContract.WATER_POLLUTION,
-                            filterState.isFilterOff(FilterContract.WATER_POLLUTION));
+                filterState.isFilterOff(FilterContract.WATER_POLLUTION));
         filterStateJson.put(FilterContract.THREAD_TO_BIODIVERSITY,
-                            filterState.isFilterOff(FilterContract.THREAD_TO_BIODIVERSITY));
+                filterState.isFilterOff(FilterContract.THREAD_TO_BIODIVERSITY));
         filterStateJson.put(FilterContract.POACHING,
-                            filterState.isFilterOff(FilterContract.POACHING));
+                filterState.isFilterOff(FilterContract.POACHING));
         filterStateJson.put(FilterContract.OTHER,
-                            filterState.isFilterOff(FilterContract.OTHER));
+                filterState.isFilterOff(FilterContract.OTHER));
         filterStateJson.put(FilterContract.RESOLVED,
-                            filterState.isFilterOff(FilterContract.RESOLVED));
+                filterState.isFilterOff(FilterContract.RESOLVED));
         filterStateJson.put(FilterContract.UNSOLVED,
-                            filterState.isFilterOff(FilterContract.UNSOLVED));
+                filterState.isFilterOff(FilterContract.UNSOLVED));
 
         SimpleDateFormat dateFormat = new SimpleDateFormat(DATE_TEMPLATE, Locale.ENGLISH);
 
@@ -79,24 +79,25 @@ public class FilterStateConverter {
 
         Map<String, Boolean> filterStateValues = new HashMap<>();
         filterStateValues.put(FilterContract.FOREST_DESTRUCTION,
-                              filterStateJsonObject.getBoolean(FilterContract.FOREST_DESTRUCTION));
+                filterStateJsonObject.getBoolean(FilterContract.FOREST_DESTRUCTION));
         filterStateValues.put(FilterContract.RUBBISH_DUMP,
-                              filterStateJsonObject.getBoolean(FilterContract.RUBBISH_DUMP));
+                filterStateJsonObject.getBoolean(FilterContract.RUBBISH_DUMP));
         filterStateValues.put(FilterContract.ILLEGAL_BUILDING,
-                              filterStateJsonObject.getBoolean(FilterContract.ILLEGAL_BUILDING));
+                filterStateJsonObject.getBoolean(FilterContract.ILLEGAL_BUILDING));
         filterStateValues.put(FilterContract.WATER_POLLUTION,
-                              filterStateJsonObject.getBoolean(FilterContract.WATER_POLLUTION));
+                filterStateJsonObject.getBoolean(FilterContract.WATER_POLLUTION));
         filterStateValues.put(FilterContract.THREAD_TO_BIODIVERSITY,
-                              filterStateJsonObject.getBoolean(FilterContract.THREAD_TO_BIODIVERSITY));
+                filterStateJsonObject.getBoolean(FilterContract.THREAD_TO_BIODIVERSITY));
         filterStateValues.put(FilterContract.POACHING,
-                              filterStateJsonObject.getBoolean(FilterContract.POACHING));
+                filterStateJsonObject.getBoolean(FilterContract.POACHING));
         filterStateValues.put(FilterContract.OTHER,
-                              filterStateJsonObject.getBoolean(FilterContract.OTHER));
+                filterStateJsonObject.getBoolean(FilterContract.OTHER));
         filterStateValues.put(FilterContract.RESOLVED,
-                              filterStateJsonObject.getBoolean(FilterContract.RESOLVED));
+                filterStateJsonObject.getBoolean(FilterContract.RESOLVED));
         filterStateValues.put(FilterContract.UNSOLVED,
-                              filterStateJsonObject.getBoolean(FilterContract.UNSOLVED));
+                filterStateJsonObject.getBoolean(FilterContract.UNSOLVED));
 
         return new FilterState(filterStateValues, dateFrom, dateTo);
     }
+
 }

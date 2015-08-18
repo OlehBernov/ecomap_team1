@@ -5,8 +5,6 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.util.Log;
 
-import com.ecomap.ukraine.activities.main.MainActivity;
-
 import org.json.JSONException;
 
 import java.util.HashSet;
@@ -23,26 +21,14 @@ public class FilterManager implements FilterListenersNotifier {
      * Holds the Singleton global instance of FilterManager.
      */
     private static FilterManager instance;
-
-    /**
-     * Activity which callback filter-manager
-     */
-    private Activity activity;
-
     /**
      * Set of problem listeners.
      */
     public Set<FilterListener> filterListeners = new HashSet<>();
-
     /**
-     * Adds the specified listener to the set of filterListeners. If it is already
-     * registered, it is not added a second time.
-     *
-     * @param listener the FilterListener to add.
+     * Activity which callback filter-manager
      */
-    public void registerFilterListener(final FilterListener listener) {
-        filterListeners.add(listener);
-    }
+    private Activity activity;
 
     /**
      * Filter manager constructor.
@@ -57,9 +43,18 @@ public class FilterManager implements FilterListenersNotifier {
     public static FilterManager getInstance(final Activity activity) {
         if (instance == null) {
             instance = new FilterManager(activity);
-
         }
         return instance;
+    }
+
+    /**
+     * Adds the specified listener to the set of filterListeners. If it is already
+     * registered, it is not added a second time.
+     *
+     * @param listener the FilterListener to add.
+     */
+    public void registerFilterListener(final FilterListener listener) {
+        filterListeners.add(listener);
     }
 
     /**
@@ -73,15 +68,16 @@ public class FilterManager implements FilterListenersNotifier {
 
     /**
      * This method use to send to listeners filter state
+     *
      * @param filterState this filterState sends to all listeners
      */
-    public void sendFilterState (final FilterState filterState) {
+    public void sendFilterState(final FilterState filterState) {
         for (FilterListener listener : filterListeners) {
             listener.updateFilterState(filterState);
         }
     }
 
-    public void onFiltrationSuccess () {
+    public void onFiltrationSuccess() {
         for (FilterListener listener : filterListeners) {
             listener.onFiltrationFinished();
         }
@@ -89,18 +85,20 @@ public class FilterManager implements FilterListenersNotifier {
 
     /**
      * This method use to get  filter state for filter manager
+     *
      * @param filterState this filterState gets for filter manager
      */
-        public void getFilterState (final FilterState filterState) {
-            sendFilterState(filterState);
+    public void getFilterState(final FilterState filterState) {
+        sendFilterState(filterState);
 
     }
 
     /**
      * Gets filter state form SharedPreferences
+     *
      * @return filter state
      */
-    public FilterState getFilterStateFromPreference () {
+    public FilterState getFilterStateFromPreference() {
         SharedPreferences settings = activity.getApplicationContext()
                 .getSharedPreferences(FILTERS_STATE, Context.MODE_PRIVATE);
         String filterStateJson = settings.getString(FILTERS_STATE, null);

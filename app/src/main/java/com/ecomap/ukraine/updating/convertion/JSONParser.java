@@ -1,11 +1,11 @@
 package com.ecomap.ukraine.updating.convertion;
 
 
-import com.ecomap.ukraine.models.Types.ActivityType;
-import com.ecomap.ukraine.models.ProblemActivity;
 import com.ecomap.ukraine.models.Details;
 import com.ecomap.ukraine.models.Photo;
 import com.ecomap.ukraine.models.Problem;
+import com.ecomap.ukraine.models.ProblemActivity;
+import com.ecomap.ukraine.models.Types.ActivityType;
 import com.ecomap.ukraine.models.Types.ProblemStatus;
 import com.ecomap.ukraine.models.Types.ProblemType;
 
@@ -61,13 +61,13 @@ public class JSONParser {
     }
 
     /**
-     *  Converts detailed information about concrete problem
-     *  from JSON to Detail object.
+     * Converts detailed information about concrete problem
+     * from JSON to Detail object.
      *
      * @param detailedProblemJson detailed information about
      *                            concrete problem from server.
      * @return Detail object with detailed information about
-     *         concrete problem.
+     * concrete problem.
      * @throws JSONException if argument do not correct.
      */
     public Details parseDetailedProblem(final String detailedProblemJson)
@@ -84,7 +84,7 @@ public class JSONParser {
 
         List<ProblemActivity> problemActivities;
         problemActivities = getProblemActivities(detailedProblemArray
-                            .getJSONArray(JSONFields.PROBLEM_ACTIVITY_POSITION));
+                .getJSONArray(JSONFields.PROBLEM_ACTIVITY_POSITION));
 
         Details details;
         details = new Details(
@@ -104,7 +104,6 @@ public class JSONParser {
         return details;
     }
 
-   
 
     /**
      * Converts brief information about concrete problem from JSONObject
@@ -112,7 +111,7 @@ public class JSONParser {
      *
      * @param problemJsonObject brief information about concrete problem.
      * @return Problem object with brief information about
-     *         concrete problem.
+     * concrete problem.
      * @throws JSONException if argument do not correct.
      */
     private Problem getBasicDescription(final JSONObject problemJsonObject)
@@ -120,9 +119,9 @@ public class JSONParser {
         Problem problem;
 
         int problemStatusId = problemJsonObject.optInt(JSONFields.PROBLEM_STATUS,
-                                                       DEFAULT_VALUE);
+                DEFAULT_VALUE);
         int problemTypesId = problemJsonObject.optInt(JSONFields.PROBLEM_TYPES_ID,
-                                                      DEFAULT_VALUE);
+                DEFAULT_VALUE);
 
         problem = new Problem(
                 problemJsonObject.optInt(JSONFields.ID, DEFAULT_VALUE),
@@ -157,7 +156,7 @@ public class JSONParser {
 
             try {
                 contentObject = new JSONObject(commentObject
-                                               .getString(JSONFields.PROBLEM_ACTIVITY_CONTENT));
+                        .getString(JSONFields.PROBLEM_ACTIVITY_CONTENT));
             } catch (JSONException e) {
                 continue;
             }
@@ -165,15 +164,15 @@ public class JSONParser {
             int activityTypeId = commentObject.optInt(JSONFields.ACTIVITY_TYPES_ID, DEFAULT_VALUE);
             ActivityType activityTypeEnum = ActivityType.getActivityType(activityTypeId);
 
-                currentProblemActivity = new ProblemActivity(
-                        commentObject.optInt(JSONFields.PROBLEMS_ID, DEFAULT_VALUE),
-                        commentObject.optInt(JSONFields.ID, DEFAULT_VALUE),
-                        activityTypeEnum,
-                        commentObject.optInt(JSONFields.COMMENT_USERS_ID, DEFAULT_VALUE),
-                        contentObject.getString(JSONFields.COMMENT_CORE),
-                        commentObject.getString(JSONFields.PROBLEM_ACTIVITY_DATE),
-                        contentObject.getString(JSONFields.USER_NAME)
-                );
+            currentProblemActivity = new ProblemActivity(
+                    commentObject.optInt(JSONFields.PROBLEMS_ID, DEFAULT_VALUE),
+                    commentObject.optInt(JSONFields.ID, DEFAULT_VALUE),
+                    activityTypeEnum,
+                    commentObject.optInt(JSONFields.COMMENT_USERS_ID, DEFAULT_VALUE),
+                    contentObject.getString(JSONFields.COMMENT_CORE),
+                    commentObject.getString(JSONFields.PROBLEM_ACTIVITY_DATE),
+                    contentObject.getString(JSONFields.USER_NAME)
+            );
 
             problemActivities.add(currentProblemActivity);
         }
