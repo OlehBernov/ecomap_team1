@@ -63,7 +63,21 @@ public class AddNewProblemDecriptionActivity extends AppCompatActivity {
     private User user;
     private Toolbar toolbar;
     private ViewPager pager;
-    private CharSequence Titles[] = {"Description", "Photo"};
+    private String Titles[] = getResources().getStringArray(R.array.tabs_in_posting_prpblem);
+
+    public List<Bitmap> getBitmapsPhoto() {
+        List<Bitmap> photoBitmaps = new ArrayList<>();
+        if (userPhotos == null) {
+            return null;
+        }
+        BitmapResizer bitmapResizer = new BitmapResizer(getApplicationContext());
+        int userPhotoSize = (int) getResources().getDimension(R.dimen.edit_text_add_photo);
+        for (Uri userPhoto : userPhotos) {
+            String userPhotoPath = userPhoto.getPath();
+            photoBitmaps.add(bitmapResizer.scalePhoto(userPhotoPath, userPhotoSize));
+        }
+        return photoBitmaps;
+    }
 
     public void addPhoto(View v) {
         pager.setCurrentItem(ADD_PHOTO_ITEM);
@@ -87,22 +101,11 @@ public class AddNewProblemDecriptionActivity extends AppCompatActivity {
         }
     }
 
-    private File createImageFile() throws IOException {
-        String timeStamp = new SimpleDateFormat(DATE_TEMPLATE, Locale.ENGLISH).format(new Date());
-        String imageFileName = FILE_NAME_BEGINNING + timeStamp + "_";
-        File storageDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
-        return new File(storageDir, imageFileName + PHOTO_FORMAT);
-    }
-
     public void getPhotoFromGallery(View view) {
         Intent galleryIntent = new Intent(
                 Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
 
         startActivityForResult(galleryIntent, GALLERY_PHOTO);
-    }
-
-    public void temp() {
-
     }
 
     @Override
@@ -115,13 +118,7 @@ public class AddNewProblemDecriptionActivity extends AppCompatActivity {
         setupToolbar();
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
 
-        toolbar = (Toolbar) findViewById(R.id.tool_bar);
-        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onBackPressed();
-            }
-        });
+
 
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager(), Titles, NUMBER_OF_TUBS);
 
@@ -139,21 +136,6 @@ public class AddNewProblemDecriptionActivity extends AppCompatActivity {
         });
 
         tabs.setViewPager(pager);
-    }
-
-    /**
-     * Sets application toolbar.
-     */
-    private void setupToolbar() {
-        toolbar = (Toolbar) findViewById(R.id.tool_bar);
-        toolbar.setTitle(ADD_DESCRIPTION);
-        toolbar.setNavigationIcon(R.drawable.ic_arrow_back_white_24dp);
-        toolbar.setClickable(true);
-        setSupportActionBar(toolbar);
-        final ActionBar ab = getSupportActionBar();
-
-        assert ab != null;
-        ab.setDisplayHomeAsUpEnabled(true);
     }
 
     @Override
@@ -192,20 +174,6 @@ public class AddNewProblemDecriptionActivity extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
-    }
-
-    public List<Bitmap> getBitmapsPhoto() {
-        List<Bitmap> photoBitmaps = new ArrayList<>();
-        if (userPhotos == null) {
-            return null;
-        }
-        BitmapResizer bitmapResizer = new BitmapResizer(getApplicationContext());
-        int userPhotoSize = (int) getResources().getDimension(R.dimen.edit_text_add_photo);
-        for (Uri userPhoto : userPhotos) {
-            String userPhotoPath = userPhoto.getPath();
-            photoBitmaps.add(bitmapResizer.scalePhoto(userPhotoPath, userPhotoSize));
-        }
-        return photoBitmaps;
     }
 
     @Override
@@ -251,6 +219,28 @@ public class AddNewProblemDecriptionActivity extends AppCompatActivity {
 
     private boolean isPhotosSaved(Bundle savedInstanceState) {
         return (userPhotos == null) && savedInstanceState.containsKey(USER_PHOTOS);
+    }
+
+    /**
+     * Sets application toolbar.
+     */
+    private void setupToolbar() {
+        toolbar = (Toolbar) findViewById(R.id.tool_bar);
+        toolbar.setTitle(ADD_DESCRIPTION);
+        toolbar.setNavigationIcon(R.drawable.ic_arrow_back_white_24dp);
+        toolbar.setClickable(true);
+        setSupportActionBar(toolbar);
+        final ActionBar ab = getSupportActionBar();
+
+        assert ab != null;
+        ab.setDisplayHomeAsUpEnabled(true);
+        
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onBackPressed();
+            }
+        });
     }
 
     private boolean isCameraPhoto(int requestCode, int resultCode) {
@@ -417,6 +407,13 @@ public class AddNewProblemDecriptionActivity extends AppCompatActivity {
             descriptions = new ArrayList<>();
         }
         descriptions.add("");
+    }
+
+    private File createImageFile() throws IOException {
+        String timeStamp = new SimpleDateFormat(DATE_TEMPLATE, Locale.ENGLISH).format(new Date());
+        String imageFileName = FILE_NAME_BEGINNING + timeStamp + "_";
+        File storageDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
+        return new File(storageDir, imageFileName + PHOTO_FORMAT);
     }
 
 }
