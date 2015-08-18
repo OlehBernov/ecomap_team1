@@ -175,7 +175,6 @@
         android:clickable="false"
         android:orientation="vertical">
 
-
         <TextView
             android:id="@+id/description"
             android:layout_width="wrap_content"
@@ -189,18 +188,11 @@
             android:textSize="15dp"
             android:textStyle="bold" />
 
-        <com.ecomap.ukraine.activities.problemDetails.ExpandableTextView
-            android:id="@+id/description_field"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:paddingLeft="10dp"
-            android:paddingRight="10dp"
-            android:paddingTop="5dp"
-            android:text="Description: "
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:textColor="@color/abc_primary_text_disable_only_material_light"
-            android:textSize="15sp"
-            android:textStyle="normal" />
+        <include
+            android:id="@+id/expanded_description"
+            layout="@layout/expanded_description"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
 
         <TextView
             android:id="@+id/proposal"
@@ -208,26 +200,17 @@
             android:layout_height="wrap_content"
             android:paddingLeft="10dp"
             android:paddingRight="10dp"
-            android:paddingTop="10dp"
-            android:text="Description is missing."
+            android:text="Proposal: "
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:textColor="@color/abc_primary_text_disable_only_material_light"
             android:textSize="15sp"
             android:textStyle="bold" />
 
-
-        <com.ecomap.ukraine.activities.problemDetails.ExpandableTextView
-            android:id="@+id/proposal_field"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:paddingLeft="10dp"
-            android:paddingRight="10dp"
-            android:paddingTop="10dp"
-            android:text="Proposal is missing."
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:textColor="@color/abc_primary_text_disable_only_material_light"
-            android:textSize="15sp"
-            android:textStyle="normal" />
+        <include
+            android:id="@+id/expanded_proposal"
+            layout="@layout/expanded_proposal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
 
         <TextView
             android:id="@+id/photo"
@@ -235,7 +218,6 @@
             android:layout_height="wrap_content"
             android:paddingLeft="10dp"
             android:paddingRight="10dp"
-            android:paddingTop="10dp"
             android:text="Photo:"
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:textColor="@color/abc_primary_text_disable_only_material_light"
@@ -281,6 +263,8 @@
             android:layout_height="match_parent"
             android:layout_gravity="center_horizontal"
             android:paddingTop="10dp"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
             android:text="Send"
             android:textAllCaps="false"
             android:textAppearance="?android:attr/textAppearanceMedium"

@@ -139,7 +139,7 @@ public class AddProblemDescriptionFragment extends Fragment implements LogInList
         boolean isProblemValid;
         isProblemValid = new Validator().addProblemValidation(problemTitle);
         if (!isProblemValid) {
-            Toast.makeText(getActivity().getApplicationContext(), "Input problem data", Toast.LENGTH_LONG) .show();
+//            Toast.makeText(getActivity().getApplicationContext(), "Input problem data", Toast.LENGTH_LONG) .show();
             return;
         }
         addProblemManager.registerAddProblemListener(this);

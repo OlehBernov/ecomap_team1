@@ -1,6 +1,8 @@
 package com.ecomap.ukraine.activities.addProblem;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.net.Uri;
@@ -60,6 +62,7 @@ public class AddNewProblemDecriptionActivity extends AppCompatActivity  {
     private static final String DESCRIPTION = "Description";
 
     private Uri currentPhotoUri;
+    private String currentPhotoPath;
     private List<String> userPhotos;
     private TableLayout photoDescriptionLayout;
     private List<String> descriptions;
@@ -88,6 +91,7 @@ public class AddNewProblemDecriptionActivity extends AppCompatActivity  {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Log.e("OnCreate", "in");
         user = (User) getIntent().getSerializableExtra(ExtraFieldNames.USER);
 
         setContentView(R.layout.add_problem_description);
@@ -118,11 +122,6 @@ public class AddNewProblemDecriptionActivity extends AppCompatActivity  {
         });
 
         tabs.setViewPager(pager);
-
-        if (savedInstanceState != null) {
-            onRestoreInstanceState(savedInstanceState);
-        }
-
     }
 
     @Override
@@ -154,6 +153,7 @@ public class AddNewProblemDecriptionActivity extends AppCompatActivity  {
             }
 
             currentPhotoUri = Uri.fromFile(photoFile);
+         //   currentPhotoPath = currentPhotoUri.getPath();
             if (photoFile != null) {
                 takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT,
                         currentPhotoUri);
@@ -168,11 +168,18 @@ public class AddNewProblemDecriptionActivity extends AppCompatActivity  {
 
         startActivityForResult(galleryIntent, GALLERY_PHOTO);
     }
-
+String TIME = "fd";
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         if (currentPhotoUri != null) {
+            Log.e("onSave", currentPhotoUri.getPath());
+
+            SharedPreferences settings = getSharedPreferences(TIME, 0);
+            SharedPreferences.Editor editor = settings.edit();
+            editor.putString(TIME, currentPhotoUri.toString());
+            editor.commit();
+
             outState.putString(CAMERA_URI, currentPhotoUri.toString());
         }
         if (userPhotos != null) {
@@ -194,6 +201,8 @@ public class AddNewProblemDecriptionActivity extends AppCompatActivity  {
         super.onRestoreInstanceState(savedInstanceState);
         if (savedInstanceState.containsKey(CAMERA_URI)) {
             currentPhotoUri = Uri.parse(savedInstanceState.getString(CAMERA_URI));
+            Log.e("onRestore", currentPhotoUri.toString());
+         //   currentPhotoPath = savedInstanceState.getString(CAMERA_URI);
         }
         if (userPhotos == null && savedInstanceState.containsKey(NUMBER_OF_PHOTOS)) {
             int numberOfPhotos = savedInstanceState.getInt(NUMBER_OF_PHOTOS);
@@ -219,6 +228,10 @@ public class AddNewProblemDecriptionActivity extends AppCompatActivity  {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
+        Log.e("onActivityResult", "on");
+        SharedPreferences settings = getSharedPreferences(TIME, Context.MODE_PRIVATE);
+currentPhotoUri = Uri.parse(settings.getString(TIME, "lol"));
+        Log.e("onActivityResult", settings.getString(TIME, "lol"));
         if (isGalleryPhoto(requestCode, resultCode, data)) {
             processGalleryPhoto(data);
         } else if (isCameraPhoto(requestCode, resultCode)) {
@@ -269,7 +282,7 @@ public class AddNewProblemDecriptionActivity extends AppCompatActivity  {
     }
 
     private void processCameraPhoto() {
-        String photoPath = currentPhotoUri.getPath();
+       String photoPath = currentPhotoUri.getPath();
         savePhoto(photoPath);
         addPhotosToView();
     }
@@ -333,7 +346,7 @@ public class AddNewProblemDecriptionActivity extends AppCompatActivity  {
         BitmapResizer bitmapResizer = new BitmapResizer(getApplicationContext());
         int photoSize = (int) getResources().getDimension(R.dimen.edit_text_add_photo);
         Bitmap photoBitmap = bitmapResizer.changePhotoOrientation(photoPath, photoSize);
-        Log.e("tag", photoPath);
+
         TableRow.LayoutParams imageParams =
                 new TableRow.LayoutParams(photoBitmap.getWidth(),
                         photoBitmap.getHeight());
@@ -411,7 +424,10 @@ public class AddNewProblemDecriptionActivity extends AppCompatActivity  {
         String timeStamp = new SimpleDateFormat(DATE_TEMPLATE, Locale.ENGLISH).format(new Date());
         String imageFileName = FILE_NAME_BEGINNING + timeStamp + "_";
         File storageDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
-        return File.createTempFile(imageFileName, PHOTO_FORMAT, storageDir);
+
+        File photoFile = new File (storageDir, imageFileName + PHOTO_FORMAT);
+        currentPhotoPath = "file:" + photoFile.getAbsolutePath();
+        return photoFile;
     }
 
     @Override
