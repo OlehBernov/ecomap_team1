@@ -54,6 +54,15 @@
     <string name="Caution">Caution</string>
     <string name="next">NEXT</string>
 
+    <string name="title_activity_photo_view">PhotoViewActivity</string>
+    <string name="title_activity_problem_photo_slide_pager">ProblemPhotoSlidePager</string>
+    <string name="title_activity_user_photo_full_screen">UserPhotoFullScreen</string>
+    <string name="default_filter_date_from">11.31.2014</string>
+    <string name="default_filte_date_to">11.11.2014</string>
+
+    <string name="problem_added_sucessfully">Problem added sucessfully</string>
+    <string name="photo_post_error">Connection error. Photo hasn`t posted</string>
+    <string name="problem_post_error">Connection error. Problem hasn`t posted</string>
 
     <string-array name="types">
         <item>Forestry issues</item>
@@ -64,10 +73,5 @@
         <item>Poaching</item>
         <item>Other issues</item>
     </string-array>
-    <string name="title_activity_photo_view">PhotoViewActivity</string>
-    <string name="title_activity_problem_photo_slide_pager">ProblemPhotoSlidePager</string>
-    <string name="title_activity_user_photo_full_screen">UserPhotoFullScreen</string>
-    <string name="default_filter_date_from">11.31.2014</string>
-    <string name="default_filte_date_to">11.11.2014</string>
 
 </resources>

@@ -6,6 +6,5 @@ public interface AddProblemNotifier {
 
     void removeAddProblemListener(final AddProblemListener listener);
 
-    void sendAddProblemResult(final boolean result);
 
 }

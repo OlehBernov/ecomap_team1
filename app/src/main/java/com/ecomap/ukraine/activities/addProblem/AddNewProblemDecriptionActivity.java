@@ -71,8 +71,8 @@ public class AddNewProblemDecriptionActivity extends AppCompatActivity  {
     private CharSequence Titles[] = {"Description", "Photo"};
 
 
-    public ArrayList<Bitmap> getBitmapsPhoto() {
-        ArrayList<Bitmap> photoBitmaps = new ArrayList<>();
+    public List<Bitmap> getBitmapsPhoto() {
+        List<Bitmap> photoBitmaps = new ArrayList<>();
         if (userPhotos == null) {
             return null;
         }

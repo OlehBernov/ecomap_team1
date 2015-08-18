@@ -2,6 +2,13 @@ package com.ecomap.ukraine.addproblem.manager;
 
 public interface AddProblemRequestReceiver {
 
-    void setAddProblemRequestResult(final boolean result);
+
+    void onSuccesProblemPosting();
+
+    void onFailedProblemPosting();
+
+    void onSuccesPhotoPosting();
+
+    void onFailedPhotoPosting();
 
 }

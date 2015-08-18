@@ -195,19 +195,24 @@ public class FragmentEcoMap extends android.support.v4.app.Fragment
         }
         List<Problem> filteredProblems = new Filter().filterProblem(problems, filterState);
 
+      //  if(filteredProblems.size() != 0) {
         ClusterManager<Problem> clusterManager =
                 new ClusterManager<>(getActivity().getApplicationContext(), googleMap);
         googleMap.setOnCameraChangeListener(clusterManager);
         clusterManager.setOnClusterItemClickListener(this);
-        googleMap.setOnMarkerClickListener(clusterManager);
-        clusterManager.addItems(filteredProblems);
+            googleMap.setOnMarkerClickListener(clusterManager);
+            clusterManager.addItems(filteredProblems);
 
-        if(filteredProblems.size() != 0) {
             clusterManager.setRenderer(new IconRenderer(getActivity(), googleMap, clusterManager));
-        }
-        else {
-            clusterManager.setRenderer(new DefaultClusterRenderer<>(getActivity(), googleMap, clusterManager));
-        }
+
+        //clusterManager.setRenderer(new DefaultClusterRenderer<>(getActivity(), googleMap, clusterManager));
+        //}
+        /*else {
+            googleMap.clear();
+            //clusterManager.setRenderer(new DefaultClusterRenderer<>(getActivity(), googleMap, clusterManager));
+        }*/
+
+        filterManager.onFiltrationSuccess();
 
     }
 
@@ -287,4 +292,8 @@ public class FragmentEcoMap extends android.support.v4.app.Fragment
         googleMap.animateCamera(cameraUpdate);
     }
 
+    @Override
+    public void onFiltrationFinished () {
+
+    }
 }

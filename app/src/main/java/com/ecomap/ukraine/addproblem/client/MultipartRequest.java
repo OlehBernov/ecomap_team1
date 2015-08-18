@@ -101,7 +101,7 @@ public class MultipartRequest extends Request<String> {
         builder.setCharset(chars);
         try {
             for (Map.Entry<String, String> entry : params.entrySet()) {
-                builder.addTextBody(entry.getKey(), entry.getValue(), ContentType.DEFAULT_BINARY);
+                builder.addTextBody(entry.getKey(), entry.getValue(), ContentType.DEFAULT_BINARY.withCharset("UTF-8"));
             }
             httpEntity = builder.build();
         } catch (Exception e) {

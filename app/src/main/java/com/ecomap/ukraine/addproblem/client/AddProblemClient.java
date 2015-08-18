@@ -39,7 +39,7 @@ public class AddProblemClient {
 
     public void addProblemDescription (final String title, final String content, final String proposal,
      final String latitude, final String longitude, final String type, final String userId,
-     final String userName, final String userSurname, final ArrayList<Bitmap> bitmaps,
+     final String userName, final String userSurname, final List<Bitmap> bitmaps,
      final List<String> photoDescriptions) {
         HashMap<String, String> params = new HashMap<>();
 
@@ -70,7 +70,7 @@ public class AddProblemClient {
                     }
                 }
                 else {
-                    addProblemRequestReceiver.setAddProblemRequestResult(true);
+                    addProblemRequestReceiver.onSuccesProblemPosting();
                 }
             }
 
@@ -79,7 +79,7 @@ public class AddProblemClient {
             @Override
             public void onErrorResponse(VolleyError error) {
                 Log.e("Volley Request Error", error.getLocalizedMessage());
-                addProblemRequestReceiver.setAddProblemRequestResult(false);
+                addProblemRequestReceiver.onFailedProblemPosting();
             }
 
         }, null, params, 0);
@@ -106,7 +106,7 @@ public class AddProblemClient {
                         public void onResponse(String response) {
                             Log.d("response", response);
                             if(count == size) {
-                                addProblemRequestReceiver.setAddProblemRequestResult(true);
+                                addProblemRequestReceiver.onSuccesProblemPosting();
                             }
                         }
                     }, new Response.ErrorListener() {
@@ -115,7 +115,7 @@ public class AddProblemClient {
                 public void onErrorResponse(VolleyError error) {
                     Log.e("Volley Request Error", error.getLocalizedMessage());
                     if(count == size) {
-                        addProblemRequestReceiver.setAddProblemRequestResult(false);
+                        addProblemRequestReceiver.onFailedProblemPosting();
                     }
                 }
 
@@ -126,7 +126,7 @@ public class AddProblemClient {
 
     public void addPhotosToProblem(final String userID, final String userName,
                                    final String userSurname, final List<String> descriptions,
-                                   final String problemID, final ArrayList<Bitmap> photos) {
+                                   final String problemID, final List<Bitmap> photos) {
         final int size = photos.size();
         for (int i = 1; i <= descriptions.size(); i++) {
             addPhotoToProblem(userID, userName, userSurname, descriptions.get(i-1),

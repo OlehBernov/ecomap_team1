@@ -48,11 +48,6 @@ public class AddProblemDescriptionFragment extends Fragment implements LogInList
      */
     private static AddProblemDescriptionFragment instance;
 
-    private  String USER_ID = "";
-
-    private  String USER_NAME = "";
-
-    private  String USER_SURNAME = "";
 
     private AddProblemManager addProblemManager;
 
@@ -60,7 +55,7 @@ public class AddProblemDescriptionFragment extends Fragment implements LogInList
 
     private AccountManager accountManager;
 
-    private static ArrayList<Bitmap> bitmapPhotos;
+    private static List<Bitmap> bitmapPhotos;
 
     private static List<String> photoDescriptions;
 
@@ -82,7 +77,7 @@ public class AddProblemDescriptionFragment extends Fragment implements LogInList
         }
     };
 
-    public static AddProblemDescriptionFragment getInstance(ArrayList<Bitmap> bitmapPhotos,
+    public static AddProblemDescriptionFragment getInstance(List<Bitmap> bitmapPhotos,
         List<String> descriptions) {
         if (instance == null) {
             instance = new AddProblemDescriptionFragment();
@@ -94,14 +89,7 @@ public class AddProblemDescriptionFragment extends Fragment implements LogInList
         return instance;
     }
 
-    public AddProblemDescriptionFragment () {
-     super();
-        this.USER_ID = "";
-        this.USER_NAME = "";
-        this.USER_SURNAME = "";
 
-
-    }
 
     public void onDestroy() {
         super.onDestroy();
@@ -151,39 +139,41 @@ public class AddProblemDescriptionFragment extends Fragment implements LogInList
         String longitude = getActivity().getIntent().getDoubleExtra(ExtraFieldNames.LNG, 0) + "";
         String type = String.valueOf(spinner.getSelectedItemId() + 1);
         showProgresDialog();
-        addProblemManager.addProblem(title, description, solution, latitude, longitude, type, USER_ID,
-               USER_NAME, USER_SURNAME, bitmapPhotos, photoDescriptions);
+        addProblemManager.addProblem(title, description, solution, latitude, longitude, type, String.valueOf(user.getId()),
+                String.valueOf(user.getName()), String.valueOf(user.getSurname()), bitmapPhotos, photoDescriptions);
         bitmapPhotos = null;
         }
 
     @Override
    public void setLogInResult(final User user) {
         this.user = user;
-        USER_ID = String.valueOf(user.getId());
-        USER_NAME = String.valueOf(user.getName());
-        USER_SURNAME = String.valueOf(user.getSurname());
+    }
+
+
+    @Override
+    public void onSuccesProblemPosting() {
+        successPosting();
+    }
+
+
+    @Override
+    public void onFailedProblemPosting() {
+        Toast.makeText(getActivity().getApplicationContext(), R.string.problem_post_error,
+                Toast.LENGTH_LONG) .show();
     }
 
     @Override
-    public void setAddProblemResult(boolean result) {
-
-        if(result == true) {
-            dataManager.registerProblemListener(this);
-            dataManager.refreshAllProblem();
-
-        }
-        else {
-            Toast.makeText(getActivity().getApplicationContext(), "Connection error", Toast.LENGTH_LONG) .show();
-        }
+    public void onSuccesPhotoPosting() {
+       successPosting();
     }
 
-    private void showProgresDialog() {
-        ProgressDialog progressDialog = new ProgressDialog(getActivity(),
-                android.R.style.Theme_Holo_Light_Panel);
-        progressDialog.setIndeterminate(true);
-        progressDialog.setMessage("Posting...");
-        progressDialog.show();
+
+    @Override
+    public void onFailedPhotoPosting() {
+        Toast.makeText(getActivity().getApplicationContext(), R.string.photo_post_error,
+                Toast.LENGTH_LONG) .show();
     }
+
 
     @Override
     public void updateProblemDetails(final Details details) {
@@ -192,13 +182,26 @@ public class AddProblemDescriptionFragment extends Fragment implements LogInList
 
     @Override
     public void updateAllProblems(final List<Problem> problems) {
-        Toast.makeText(getActivity().getApplicationContext(), "Problem added sucessfully", Toast.LENGTH_LONG) .show();
         Intent intent = new Intent(getActivity(), MainActivity.class);
         intent.putExtra(ExtraFieldNames.USER, user);
         startActivity(intent);
         getActivity().finish();
         dataManager.removeProblemListener(this);
 
+    }
+
+    public void successPosting () {
+        Toast.makeText(getActivity().getApplicationContext(), R.string.problem_added_sucessfully, Toast.LENGTH_LONG) .show();
+        dataManager.registerProblemListener(this);
+        dataManager.refreshAllProblem();
+    }
+
+    private void showProgresDialog() {
+        ProgressDialog progressDialog = new ProgressDialog(getActivity(),
+                android.R.style.Theme_Holo_Light_Panel);
+        progressDialog.setIndeterminate(true);
+        progressDialog.setMessage("Posting...");
+        progressDialog.show();
     }
 
 

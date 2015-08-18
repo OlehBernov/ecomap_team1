@@ -38,6 +38,7 @@ import com.ecomap.ukraine.activities.ExtraFieldNames;
 import com.ecomap.ukraine.activities.addProblem.ChooseProblemLocationActivity;
 import com.ecomap.ukraine.data.manager.DataManager;
 import com.ecomap.ukraine.filter.FilterContract;
+import com.ecomap.ukraine.filter.FilterListener;
 import com.ecomap.ukraine.filter.FilterManager;
 import com.ecomap.ukraine.filter.FilterState;
 import com.ecomap.ukraine.filter.FilterStateConverter;
@@ -61,7 +62,7 @@ import io.codetail.animation.ViewAnimationUtils;
  * <p/>
  * Main activity, represent GUI and provides access to all functional
  */
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements FilterListener  {
 
     /**
      * Name of the filter window.
@@ -194,6 +195,9 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (drawerToggle.onOptionsItemSelected(item)) {
+            if (!filterLayout.isDrawerOpen(GravityCompat.END)) {
+
+            }
             return true;
         }
 
@@ -391,15 +395,18 @@ public class MainActivity extends AppCompatActivity {
     public void showFilter(MenuItem item) {
         filterLayout = (DrawerLayout) findViewById(R.id.drawer2);
         if (!filterLayout.isDrawerOpen(GravityCompat.END)) {
+            filterManager.registerFilterListener(this);
             item.setIcon(R.drawable.filter_back);
             setDate();
             filterLayout.openDrawer(GravityCompat.END);
             previousTitle = toolbar.getTitle();
             toolbar.setTitle(FILTER);
         } else {
+            filterManager.getFilterState(buildFiltersState());
             item.setIcon(R.drawable.filter8);
-            filterLayout.closeDrawer(GravityCompat.END);
-            toolbar.setTitle(previousTitle);
+            //filterLayout.closeDrawer(GravityCompat.END);
+            //toolbar.setTitle(previousTitle);
+            filterManager.removeFilterListener(this);
         }
     }
 
@@ -410,7 +417,8 @@ public class MainActivity extends AppCompatActivity {
         } else {
             checkBox.setChecked(false);
         }
-        filterManager.getFilterState(buildFiltersState());
+        //filterManager.getFilterState(buildFiltersState());
+
     }
 
     public void dateFromChoosing(View view) {
@@ -663,6 +671,22 @@ public class MainActivity extends AppCompatActivity {
                 });
         AlertDialog alert = builder.create();
         alert.show();
+    }
+
+    /*public void updateFilterState(final FilterState filterState) {
+        filterLayout.closeDrawer(GravityCompat.END);
+        toolbar.setTitle(previousTitle);
+    }*/
+
+    @Override
+    public void onFiltrationFinished () {
+
+        filterLayout.closeDrawer(GravityCompat.END);
+        toolbar.setTitle(previousTitle);
+    }
+    @Override
+    public void updateFilterState(final FilterState filterState) {
+
     }
 
 }

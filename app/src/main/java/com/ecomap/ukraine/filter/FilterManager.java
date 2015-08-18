@@ -5,6 +5,8 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.util.Log;
 
+import com.ecomap.ukraine.activities.main.MainActivity;
+
 import org.json.JSONException;
 
 import java.util.HashSet;
@@ -76,6 +78,12 @@ public class FilterManager implements FilterListenersNotifier {
     public void sendFilterState (final FilterState filterState) {
         for (FilterListener listener : filterListeners) {
             listener.updateFilterState(filterState);
+        }
+    }
+
+    public void onFiltrationSuccess () {
+        for (FilterListener listener : filterListeners) {
+            listener.onFiltrationFinished();
         }
     }
 
