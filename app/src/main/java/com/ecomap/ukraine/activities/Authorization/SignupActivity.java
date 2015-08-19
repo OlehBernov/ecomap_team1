@@ -1,6 +1,5 @@
 package com.ecomap.ukraine.activities.Authorization;
 
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -32,7 +31,12 @@ public class SignupActivity extends AppCompatActivity implements LogInListener {
     private static final String CREATING_ACCOUNT = "Creating Account...";
     private static final String SIGN_UP_FAILED = "Sign Up failed";
     private static final String SIGNUP_MESSAGE = "Please wait...";
+    private static final String SIGN_UP_TITLE = "Log in failed.";
+    private static final String FAILURE_OF_SIGN_UP = "message"; //TODO: write message
+    private final static String RETRY = "Retry";
+    private final static String CANCEL = "Cancel";
     private final String TAG = getClass().getSimpleName();
+
     View.OnFocusChangeListener focusChangeListener = new View.OnFocusChangeListener() {
         @Override
         public void onFocusChange(View v, boolean hasFocus) {
@@ -155,7 +159,36 @@ public class SignupActivity extends AppCompatActivity implements LogInListener {
             openMainActivity();
         } else {
             Log.e(TAG, "Registration null");
+            showFailureDialog();
         }
+    }
+
+    private void showFailureDialog() {
+        new MaterialDialog.Builder(this)
+                .title(SIGN_UP_TITLE)
+                .content(FAILURE_OF_SIGN_UP)
+                .backgroundColorRes(R.color.log_in_dialog)
+                .contentColorRes(R.color.log_in_content)
+                .negativeColorRes(R.color.log_in_content)
+                .titleColorRes(R.color.log_in_title)
+                .cancelable(false)
+                .positiveText(RETRY)
+                .negativeText(CANCEL).callback(
+                new MaterialDialog.ButtonCallback() {
+                    @Override
+                    public void onPositive(MaterialDialog dialog) {
+                        super.onPositive(dialog);
+                        dialog.cancel();
+                        signUp();
+                    }
+
+                    @Override
+                    public void onNegative(MaterialDialog dialog) {
+                        super.onNegative(dialog);
+                        dialog.cancel();
+                    }
+                })
+                .show();
     }
 
     private void openMainActivity() {

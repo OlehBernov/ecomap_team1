@@ -134,14 +134,14 @@ public class SplashScreen extends Activity implements ProblemListener {
 
         new MaterialDialog.Builder(this)
                 .title(FAILE_TITLE)
-                .content(SplashScreen.FAILURE_OF_LOADING)
+                .content(FAILURE_OF_LOADING)
                 .backgroundColorRes(R.color.log_in_dialog)
                 .contentColorRes(R.color.log_in_content)
                 .negativeColorRes(R.color.log_in_content)
                 .titleColorRes(R.color.log_in_title)
           .cancelable(false)
-                .positiveText(SplashScreen.RETRY)
-                .negativeText(SplashScreen.CANCEL).callback(
+                .positiveText(RETRY)
+                .negativeText(CANCEL).callback(
                         new MaterialDialog.ButtonCallback() {
                             @Override
                             public void onPositive(MaterialDialog dialog) {
@@ -153,6 +153,7 @@ public class SplashScreen extends Activity implements ProblemListener {
                             @Override
                             public void onNegative(MaterialDialog dialog) {
                                 super.onNegative(dialog);
+                                dialog.cancel();
                                 System.exit(0);
                             }
                         })
