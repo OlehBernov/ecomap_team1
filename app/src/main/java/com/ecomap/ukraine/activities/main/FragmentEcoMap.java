@@ -160,7 +160,7 @@ public class FragmentEcoMap extends android.support.v4.app.Fragment
     @Override
     public void updateAllProblems(final List<Problem> problems) {
         FragmentEcoMap.problems = problems;
-        putAllProblemsOnMap(problems, null, true);
+        putAllProblemsOnMap(null);
     }
 
     /**
@@ -169,9 +169,15 @@ public class FragmentEcoMap extends android.support.v4.app.Fragment
      * @param filterState state of filter
      */
     @Override
-    public void updateFilterState(final FilterState filterState, final boolean isRendering) {
-        putAllProblemsOnMap(problems, filterState, isRendering);
+    public void updateFilterState(final FilterState filterState) {
+        putAllProblemsOnMap(filterState);
     }
+
+    @Override
+    public void setRenderer () {
+        clusterManager.setRenderer(new IconRenderer(getActivity(), googleMap, clusterManager));
+    }
+
 
     /**
      * Get list of all details.
@@ -186,25 +192,17 @@ public class FragmentEcoMap extends android.support.v4.app.Fragment
     /**
      * Puts all problems on map
      *
-     * @param problems list of problems
+     * @param filterState State of filter
      */
-    public void putAllProblemsOnMap(final List<Problem> problems, FilterState filterState, boolean isRendering) {
+    public void putAllProblemsOnMap(FilterState filterState) {
         googleMap.clear();
         if (filterState == null) {
             filterState = filterManager.getFilterStateFromPreference();
             setupClusterManager(filterState);
-        }
-        if (!isRendering) {
+            setRenderer();
+        } else {
             setupClusterManager(filterState);
-
         }
-        if (isRendering) {
-            setupClusterManager(filterState);
-            clusterManager.setRenderer(new IconRenderer(getActivity(), googleMap, clusterManager));
-            //clusterManager.setRenderer(new DefaultClusterRenderer<Problem>(getActivity(), googleMap, clusterManager));
-        }
-
-
     }
 
     /**
@@ -292,5 +290,7 @@ public class FragmentEcoMap extends android.support.v4.app.Fragment
         googleMap.setOnMarkerClickListener(clusterManager);
         clusterManager.addItems(filteredProblems);
     }
+
+
 
 }

@@ -271,7 +271,7 @@ public class MainActivity extends AppCompatActivity {
             previousTitle = toolbar.getTitle();
             toolbar.setTitle(FILTER);
         } else {
-            filterManager.getFilterState(buildFiltersState(), true);
+            filterManager.setRenderer();
             item.setIcon(R.drawable.filter8);
             filterLayout.closeDrawer(GravityCompat.END);
             toolbar.setTitle(previousTitle);
@@ -285,7 +285,7 @@ public class MainActivity extends AppCompatActivity {
         } else {
             checkBox.setChecked(false);
         }
-        filterManager.getFilterState(buildFiltersState(), false);
+        filterManager.getFilterState(buildFiltersState());
 
     }
 
@@ -523,7 +523,7 @@ public class MainActivity extends AppCompatActivity {
                         if (isValidDates(date, calendarDateTo)) {
                             calendarDateFrom = date;
                             setDate();
-                            filterManager.getFilterState(buildFiltersState(), false);
+                            filterManager.getFilterState(buildFiltersState());
                         }
                     }
                 };
@@ -550,7 +550,7 @@ public class MainActivity extends AppCompatActivity {
                         if (isValidDates(calendarDateFrom, date)) {
                             calendarDateTo = date;
                             setDate();
-                            filterManager.getFilterState(buildFiltersState(), false);
+                            filterManager.getFilterState(buildFiltersState());
                         }
                     }
                 };

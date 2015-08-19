@@ -14,6 +14,8 @@
     <string name="Sign_up"><u>Sign up</u></string>
     <string name="Sign_in"><u>Sign in</u></string>
     <string name="Skip"><u>Skip</u></string>
+    <string name="Choose_problem_location_activity"><u>Choose problem location</u></string>
+    <string name="Tap_message"><u>Tap to place marker</u></string>
 
     <string name="unsolved">Unsolved</string>
     <string name="resolved">Resolved</string>

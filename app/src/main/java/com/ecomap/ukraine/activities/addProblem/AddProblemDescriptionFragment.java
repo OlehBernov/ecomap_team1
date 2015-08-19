@@ -94,6 +94,7 @@ public class AddProblemDescriptionFragment extends Fragment implements LogInList
         return v;
     }
 
+    @Override
     public void onDestroy() {
         super.onDestroy();
         accountManager.removeLogInListener(this);
@@ -125,7 +126,22 @@ public class AddProblemDescriptionFragment extends Fragment implements LogInList
         showProgresDialog();
         addProblemManager.addProblem(title, description, solution, latitude, longitude, type, String.valueOf(user.getId()),
                 String.valueOf(user.getName()), String.valueOf(user.getSurname()), bitmapPhotos, photoDescriptions);
+        onSuccessProblemPosting();
         bitmapPhotos = null;
+    }
+
+    public void successPosting(final int idOfmessage) {
+        Toast.makeText(getActivity().getApplicationContext(), idOfmessage, Toast.LENGTH_LONG).show();
+        dataManager.registerProblemListener(this);
+        dataManager.refreshAllProblem();
+    }
+
+    private void showProgresDialog() {
+        ProgressDialog progressDialog = new ProgressDialog(getActivity(),
+                android.R.style.Theme_Holo_Light_Panel);
+        progressDialog.setIndeterminate(true);
+        progressDialog.setMessage("Posting...");
+        progressDialog.show();
     }
 
     @Override
@@ -170,20 +186,6 @@ public class AddProblemDescriptionFragment extends Fragment implements LogInList
         getActivity().finish();
         dataManager.removeProblemListener(this);
 
-    }
-
-    public void successPosting(final int idOfmessage) {
-        Toast.makeText(getActivity().getApplicationContext(), idOfmessage, Toast.LENGTH_LONG).show();
-        dataManager.registerProblemListener(this);
-        dataManager.refreshAllProblem();
-    }
-
-    private void showProgresDialog() {
-        ProgressDialog progressDialog = new ProgressDialog(getActivity(),
-                android.R.style.Theme_Holo_Light_Panel);
-        progressDialog.setIndeterminate(true);
-        progressDialog.setMessage("Posting...");
-        progressDialog.show();
     }
 
 

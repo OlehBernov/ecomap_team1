@@ -71,9 +71,15 @@ public class FilterManager implements FilterListenersNotifier {
      *
      * @param filterState this filterState sends to all listeners
      */
-    public void sendFilterState (final FilterState filterState, final boolean isRendering) {
+    public void sendFilterState (final FilterState filterState) {
         for (FilterListener listener : filterListeners) {
-            listener.updateFilterState(filterState, isRendering);
+            listener.updateFilterState(filterState);
+        }
+    }
+
+    public void setRenderer () {
+        for (FilterListener listener : filterListeners) {
+            listener.setRenderer();
         }
     }
 
@@ -85,8 +91,8 @@ public class FilterManager implements FilterListenersNotifier {
      *
      * @param filterState this filterState gets for filter manager
      */
-        public void getFilterState (final FilterState filterState, final boolean isRendering) {
-            sendFilterState(filterState, isRendering);
+        public void getFilterState (final FilterState filterState) {
+            sendFilterState(filterState);
 
     }
 
