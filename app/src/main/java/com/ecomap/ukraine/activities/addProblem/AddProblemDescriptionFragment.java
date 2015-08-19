@@ -126,7 +126,6 @@ public class AddProblemDescriptionFragment extends Fragment implements LogInList
         showProgresDialog();
         addProblemManager.addProblem(title, description, solution, latitude, longitude, type, String.valueOf(user.getId()),
                 String.valueOf(user.getName()), String.valueOf(user.getSurname()), bitmapPhotos, photoDescriptions);
-        onSuccessProblemPosting();
         bitmapPhotos = null;
     }
 
