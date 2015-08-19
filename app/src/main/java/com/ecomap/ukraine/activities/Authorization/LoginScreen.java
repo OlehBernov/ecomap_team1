@@ -1,6 +1,5 @@
 package com.ecomap.ukraine.activities.Authorization;
 
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -12,6 +11,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.ecomap.ukraine.R;
 import com.ecomap.ukraine.account.manager.AccountManager;
 import com.ecomap.ukraine.account.manager.LogInListener;
@@ -39,8 +39,13 @@ import butterknife.InjectView;
 
 public class LoginScreen extends AppCompatActivity implements LogInListener {
 
+    private static final String LOGIN_MESSAGE = "Please wait...";
+    private static final String LOGIN_TITLE = "Log in";
+    private static final String FAILE_TITLE = "Log in failed.";
+    private static final String FAILURE_OF_LOG_IN = "message"; //TODO: write message
+    private final static String SIGN_UP = "Sign up";
+    private final static String CANCEL = "Cancel";
     protected final String TAG = getClass().getSimpleName();
-
     View.OnFocusChangeListener focusChangeListener = new View.OnFocusChangeListener() {
         @Override
         public void onFocusChange(View v, boolean hasFocus) {
@@ -58,23 +63,24 @@ public class LoginScreen extends AppCompatActivity implements LogInListener {
     private Intent mainIntent;
     private AccountManager accountManager;
     private CallbackManager callbackManager;
+    private MaterialDialog logInProgress;
 
     public void login() {
-        Log.d(TAG, "login");
-
         boolean isLogInValid;
         isLogInValid = new Validator().logInValid(emailText, passwordText);
         if (!isLogInValid) {
             return;
         }
-
         logInButton.setEnabled(false);
 
-        final ProgressDialog progressDialog = new ProgressDialog(LoginScreen.this,
-                android.R.style.Theme_Holo_Light_Panel);
-        progressDialog.setIndeterminate(true);
-        progressDialog.setMessage("Log in...");
-        progressDialog.show();
+        logInProgress = new MaterialDialog.Builder(this)
+                .title(LOGIN_TITLE)
+                .content(LOGIN_MESSAGE)
+                .progress(true, 0)
+                .backgroundColorRes(R.color.log_in_dialog)
+                .contentColorRes(R.color.log_in_content)
+                .titleColorRes(R.color.log_in_title)
+                .show();
 
         String email = emailText.getText().toString();
         String password = passwordText.getText().toString();
@@ -92,7 +98,9 @@ public class LoginScreen extends AppCompatActivity implements LogInListener {
             openMainActivity();
         } else {
             Log.e(TAG, "null");
+            showFailureDialog();
         }
+
     }
 
     @Override
@@ -179,6 +187,37 @@ public class LoginScreen extends AppCompatActivity implements LogInListener {
     public void onDestroy() {
         super.onDestroy();
         accountManager.removeLogInListener(this);
+    }
+
+    private void showFailureDialog() {
+        new MaterialDialog.Builder(this)
+                .title(FAILE_TITLE)
+                .content(FAILURE_OF_LOG_IN)
+                .backgroundColorRes(R.color.log_in_dialog)
+                .contentColorRes(R.color.log_in_content)
+                .negativeColorRes(R.color.log_in_content)
+                .titleColorRes(R.color.log_in_title)
+                .cancelable(false)
+                .positiveText(SIGN_UP)
+                .negativeText(CANCEL).callback(
+                new MaterialDialog.ButtonCallback() {
+                    @Override
+                    public void onPositive(MaterialDialog dialog) {
+                        super.onPositive(dialog);
+                        dialog.cancel();
+                        logInProgress.cancel();
+                        Intent signUpIntent = new Intent(LoginScreen.this, SignupActivity.class);
+                        startActivity(signUpIntent);
+                    }
+
+                    @Override
+                    public void onNegative(MaterialDialog dialog) {
+                        super.onNegative(dialog);
+                        logInProgress.cancel();
+                        dialog.cancel();
+                    }
+                })
+                .show();
     }
 
     private void openMainActivity() {

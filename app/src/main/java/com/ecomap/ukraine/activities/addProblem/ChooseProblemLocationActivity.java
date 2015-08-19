@@ -19,6 +19,28 @@ public class ChooseProblemLocationActivity extends AppCompatActivity {
     private User user;
     private FragmentChooseCoordMap map;
 
+
+    public void openAddDescriptionActivity(View view) {
+        if (map.getMarkerPosition() == null) {
+            Toast.makeText(this, R.string.Tap_message, Toast.LENGTH_SHORT).show();
+            return;
+        }
+        Intent mainIntent = new Intent(this, AddNewProblemDecriptionActivity.class);
+        mainIntent.putExtra(ExtraFieldNames.LAT, map.getMarkerPosition().latitude);
+        mainIntent.putExtra(ExtraFieldNames.LNG, map.getMarkerPosition().longitude);
+        mainIntent.putExtra(ExtraFieldNames.USER, user);
+        startActivity(mainIntent);
+        finish();
+
+    }
+
+    public void cancelButton(View view) {
+        Intent mainIntent = new Intent(this, MainActivity.class);
+        mainIntent.putExtra(ExtraFieldNames.USER, user);
+        startActivity(mainIntent);
+        finish();
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -39,6 +61,12 @@ public class ChooseProblemLocationActivity extends AppCompatActivity {
         });
     }
 
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        cancelButton(null);
+    }
+
     /**
      * Adds google map
      */
@@ -49,38 +77,11 @@ public class ChooseProblemLocationActivity extends AppCompatActivity {
                 .commit();
     }
 
-    public void openAddDescriptionActivity(View view) {
-        if (map.getMarkerPosition() == null) {
-            Toast.makeText(this, "Tap to place marker", Toast.LENGTH_SHORT).show();
-            return;
-        }
-        Intent mainIntent = new Intent(this, AddNewProblemDecriptionActivity.class);
-        mainIntent.putExtra(ExtraFieldNames.LAT, map.getMarkerPosition().latitude);
-        mainIntent.putExtra(ExtraFieldNames.LNG, map.getMarkerPosition().longitude);
-        mainIntent.putExtra(ExtraFieldNames.USER, user);
-        startActivity(mainIntent);
-        finish();
-
-    }
-
     private void setupToolbar() {
         toolbar = (Toolbar) findViewById(R.id.tool_bar);
-        toolbar.setTitle("Choose problem location");
+        toolbar.setTitle(R.string.Choose_problem_location_activity);
         toolbar.setNavigationIcon(R.drawable.ic_arrow_back_white_24dp);
         toolbar.setClickable(true);
-    }
-
-    public void cancelButton(View view) {
-        Intent mainIntent = new Intent(this, MainActivity.class);
-        mainIntent.putExtra(ExtraFieldNames.USER, user);
-        startActivity(mainIntent);
-        finish();
-    }
-
-    @Override
-    public void onBackPressed() {
-        super.onBackPressed();
-        cancelButton(null);
     }
 
 }

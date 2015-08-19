@@ -3,7 +3,6 @@ package com.ecomap.ukraine.filter;
 import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.support.annotation.Nullable;
 import android.util.Log;
 
 import org.json.JSONException;
@@ -44,7 +43,6 @@ public class FilterManager implements FilterListenersNotifier {
     public static FilterManager getInstance(final Activity activity) {
         if (instance == null) {
             instance = new FilterManager(activity);
-
         }
         return instance;
     }
@@ -68,31 +66,34 @@ public class FilterManager implements FilterListenersNotifier {
         filterListeners.remove(listener);
     }
 
-    public void onFiltrationSuccess() {
+    /**
+     * This method use to send to listeners filter state
+     *
+     * @param filterState this filterState sends to all listeners
+     */
+    public void sendFilterState (final FilterState filterState) {
         for (FilterListener listener : filterListeners) {
-            listener.onFiltrationFinished();
+            listener.updateFilterState(filterState);
         }
     }
+
+    public void setRenderer () {
+        for (FilterListener listener : filterListeners) {
+            listener.setRenderer();
+        }
+    }
+
+   
+
 
     /**
      * This method use to get  filter state for filter manager
      *
      * @param filterState this filterState gets for filter manager
      */
-    public void getFilterState(final FilterState filterState) {
-        sendFilterState(filterState);
+        public void getFilterState (final FilterState filterState) {
+            sendFilterState(filterState);
 
-    }
-
-    /**
-     * This method use to send to listeners filter state
-     *
-     * @param filterState this filterState sends to all listeners
-     */
-    public void sendFilterState(final FilterState filterState) {
-        for (FilterListener listener : filterListeners) {
-            listener.updateFilterState(filterState);
-        }
     }
 
     /**

@@ -1,6 +1,5 @@
 package com.ecomap.ukraine.activities.Authorization;
 
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -15,6 +14,7 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.ecomap.ukraine.R;
 import com.ecomap.ukraine.account.manager.AccountManager;
 import com.ecomap.ukraine.account.manager.LogInListener;
@@ -30,7 +30,13 @@ public class SignupActivity extends AppCompatActivity implements LogInListener {
 
     private static final String CREATING_ACCOUNT = "Creating Account...";
     private static final String SIGN_UP_FAILED = "Sign Up failed";
+    private static final String SIGNUP_MESSAGE = "Please wait...";
+    private static final String SIGN_UP_TITLE = "Log in failed.";
+    private static final String FAILURE_OF_SIGN_UP = "message"; //TODO: write message
+    private final static String RETRY = "Retry";
+    private final static String CANCEL = "Cancel";
     private final String TAG = getClass().getSimpleName();
+
     View.OnFocusChangeListener focusChangeListener = new View.OnFocusChangeListener() {
         @Override
         public void onFocusChange(View v, boolean hasFocus) {
@@ -57,6 +63,7 @@ public class SignupActivity extends AppCompatActivity implements LogInListener {
     private ScrollView background;
     private Intent mainIntent;
     private AccountManager accountManager;
+    private MaterialDialog signUpProgress;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -110,11 +117,14 @@ public class SignupActivity extends AppCompatActivity implements LogInListener {
         }
 
         signUpButton.setEnabled(false);
-        final ProgressDialog progressDialog = new ProgressDialog(SignupActivity.this,
-                android.R.style.Theme_Holo_Light_Panel);
-        progressDialog.setIndeterminate(true);
-        progressDialog.setMessage(CREATING_ACCOUNT);
-        progressDialog.show();
+        signUpProgress = new MaterialDialog.Builder(this)
+                .title(CREATING_ACCOUNT)
+                .content(SIGNUP_MESSAGE)
+                .progress(true, 0)
+                .backgroundColorRes(R.color.log_in_dialog)
+                .contentColorRes(R.color.log_in_content)
+                .titleColorRes(R.color.log_in_title)
+                .show();
 
         String name = nameText.getText().toString();
         String surname = surnameText.getText().toString();
@@ -145,12 +155,43 @@ public class SignupActivity extends AppCompatActivity implements LogInListener {
     @Override
     public void setLogInResult(final User user) {
         accountManager.removeLogInListener(this);
+        signUpButton.setEnabled(true);
         if (user != null) {
             mainIntent.putExtra(ExtraFieldNames.USER, user);
             openMainActivity();
         } else {
             Log.e(TAG, "Registration null");
+            showFailureDialog();
         }
+    }
+
+    private void showFailureDialog() {
+        new MaterialDialog.Builder(this)
+                .title(SIGN_UP_TITLE)
+                .content(FAILURE_OF_SIGN_UP)
+                .backgroundColorRes(R.color.log_in_dialog)
+                .contentColorRes(R.color.log_in_content)
+                .negativeColorRes(R.color.log_in_content)
+                .titleColorRes(R.color.log_in_title)
+                .cancelable(false)
+                .positiveText(RETRY)
+                .negativeText(CANCEL).callback(
+                new MaterialDialog.ButtonCallback() {
+                    @Override
+                    public void onPositive(MaterialDialog dialog) {
+                        super.onPositive(dialog);
+                        dialog.cancel();
+                        signUp();
+                    }
+
+                    @Override
+                    public void onNegative(MaterialDialog dialog) {
+                        super.onNegative(dialog);
+                        signUpProgress.cancel();
+                        dialog.cancel();
+                    }
+                })
+                .show();
     }
 
     private void openMainActivity() {

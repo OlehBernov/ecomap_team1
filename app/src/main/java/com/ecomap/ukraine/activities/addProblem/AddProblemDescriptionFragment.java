@@ -94,6 +94,7 @@ public class AddProblemDescriptionFragment extends Fragment implements LogInList
         return v;
     }
 
+    @Override
     public void onDestroy() {
         super.onDestroy();
         accountManager.removeLogInListener(this);
@@ -128,6 +129,20 @@ public class AddProblemDescriptionFragment extends Fragment implements LogInList
         bitmapPhotos = null;
     }
 
+    public void successPosting(final int idOfmessage) {
+        Toast.makeText(getActivity().getApplicationContext(), idOfmessage, Toast.LENGTH_LONG).show();
+        dataManager.registerProblemListener(this);
+        dataManager.refreshAllProblem();
+    }
+
+    private void showProgresDialog() {
+        ProgressDialog progressDialog = new ProgressDialog(getActivity(),
+                android.R.style.Theme_Holo_Light_Panel);
+        progressDialog.setIndeterminate(true);
+        progressDialog.setMessage("Posting...");
+        progressDialog.show();
+    }
+
     @Override
     public void setLogInResult(final User user) {
         this.user = user;
@@ -159,7 +174,8 @@ public class AddProblemDescriptionFragment extends Fragment implements LogInList
     }
 
     @Override
-    public void updateProblemDetails(final Details details) {}
+    public void updateProblemDetails(final Details details) {
+    }
 
     @Override
     public void updateAllProblems(final List<Problem> problems) {
@@ -169,20 +185,6 @@ public class AddProblemDescriptionFragment extends Fragment implements LogInList
         getActivity().finish();
         dataManager.removeProblemListener(this);
 
-    }
-
-    public void successPosting (final int idOfmessage) {
-        Toast.makeText(getActivity().getApplicationContext(), idOfmessage, Toast.LENGTH_LONG) .show();
-        dataManager.registerProblemListener(this);
-        dataManager.refreshAllProblem();
-    }
-
-    private void showProgresDialog() {
-        ProgressDialog progressDialog = new ProgressDialog(getActivity(),
-                android.R.style.Theme_Holo_Light_Panel);
-        progressDialog.setIndeterminate(true);
-        progressDialog.setMessage("Posting...");
-        progressDialog.show();
     }
 
 
