@@ -63,7 +63,7 @@ public class AddNewProblemDecriptionActivity extends AppCompatActivity {
     private User user;
     private Toolbar toolbar;
     private ViewPager pager;
-    private String Titles[] = getResources().getStringArray(R.array.tabs_in_posting_prpblem);
+    private String[] Titles;
 
     public List<Bitmap> getBitmapsPhoto() {
         List<Bitmap> photoBitmaps = new ArrayList<>();
@@ -111,7 +111,7 @@ public class AddNewProblemDecriptionActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        Titles = getResources().getStringArray(R.array.tabs_in_posting_prpblem);
         user = (User) getIntent().getSerializableExtra(ExtraFieldNames.USER);
 
         setContentView(R.layout.add_problem_description);
