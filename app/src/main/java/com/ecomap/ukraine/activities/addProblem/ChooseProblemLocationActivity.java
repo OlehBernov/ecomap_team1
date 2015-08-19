@@ -16,7 +16,6 @@ import com.ecomap.ukraine.models.User;
 public class ChooseProblemLocationActivity extends AppCompatActivity {
 
     private Toolbar toolbar;
-    private User user;
     private FragmentChooseCoordMap map;
 
 
@@ -28,24 +27,25 @@ public class ChooseProblemLocationActivity extends AppCompatActivity {
         Intent mainIntent = new Intent(this, AddNewProblemDecriptionActivity.class);
         mainIntent.putExtra(ExtraFieldNames.LAT, map.getMarkerPosition().latitude);
         mainIntent.putExtra(ExtraFieldNames.LNG, map.getMarkerPosition().longitude);
-        mainIntent.putExtra(ExtraFieldNames.USER, user);
         startActivity(mainIntent);
         finish();
 
     }
 
     public void cancelButton(View view) {
-        Intent mainIntent = new Intent(this, MainActivity.class);
-        mainIntent.putExtra(ExtraFieldNames.USER, user);
-        startActivity(mainIntent);
         finish();
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        cancelButton(null);
     }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.choose_coordinate_layout);
-        user = (User) getIntent().getSerializableExtra(ExtraFieldNames.USER);
         map = new FragmentChooseCoordMap();
 
         addMapFragment();
@@ -61,11 +61,6 @@ public class ChooseProblemLocationActivity extends AppCompatActivity {
         });
     }
 
-    @Override
-    public void onBackPressed() {
-        super.onBackPressed();
-        cancelButton(null);
-    }
 
     /**
      * Adds google map

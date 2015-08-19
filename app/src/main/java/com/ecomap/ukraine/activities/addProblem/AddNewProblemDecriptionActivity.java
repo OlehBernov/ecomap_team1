@@ -60,7 +60,6 @@ public class AddNewProblemDecriptionActivity extends AppCompatActivity {
     private List<Uri> userPhotos;
     private TableLayout photoDescriptionLayout;
     private List<String> descriptions;
-    private User user;
     private Toolbar toolbar;
     private ViewPager pager;
     private String[] Titles;
@@ -109,10 +108,36 @@ public class AddNewProblemDecriptionActivity extends AppCompatActivity {
     }
 
     @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_add_problem, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+
+        if (id == R.id.action_confirm_problem) {
+            AddProblemDescriptionFragment.getInstance(getBitmapsPhoto(), descriptions).postProblemValidation();
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        Intent mainIntent = new Intent(this, ChooseProblemLocationActivity.class);
+        startActivity(mainIntent);
+        finish();
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Titles = getResources().getStringArray(R.array.tabs_in_posting_prpblem);
-        user = (User) getIntent().getSerializableExtra(ExtraFieldNames.USER);
+
+        Titles = getResources().getStringArray(R.array.tabs_in_posting_problem);
 
         setContentView(R.layout.add_problem_description);
         setupToolbar();
@@ -158,24 +183,6 @@ public class AddNewProblemDecriptionActivity extends AppCompatActivity {
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_add_problem, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
-
-        if (id == R.id.action_confirm_problem) {
-            AddProblemDescriptionFragment.getInstance(getBitmapsPhoto(), descriptions).sendProblem();
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
-
-    @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (isGalleryPhoto(requestCode, resultCode, data)) {
@@ -183,15 +190,6 @@ public class AddNewProblemDecriptionActivity extends AppCompatActivity {
         } else if (isCameraPhoto(requestCode, resultCode)) {
             processCameraPhoto();
         }
-    }
-
-    @Override
-    public void onBackPressed() {
-        super.onBackPressed();
-        Intent mainIntent = new Intent(this, ChooseProblemLocationActivity.class);
-        mainIntent.putExtra(ExtraFieldNames.USER, user);
-        startActivity(mainIntent);
-        finish();
     }
 
     @Override

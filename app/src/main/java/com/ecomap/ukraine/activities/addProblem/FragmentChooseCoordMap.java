@@ -33,6 +33,10 @@ public class FragmentChooseCoordMap extends android.support.v4.app.Fragment {
     private MapView mapView;
     private LatLng markerPosition;
 
+    public LatLng getMarkerPosition() {
+        return markerPosition;
+    }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -126,10 +130,6 @@ public class FragmentChooseCoordMap extends android.support.v4.app.Fragment {
         googleMap.setMyLocationEnabled(true);
         settings.setMyLocationButtonEnabled(false);
 
-    }
-
-    public LatLng getMarkerPosition() {
-        return markerPosition;
     }
 
     private void moveCameraToMyLocation(Location myLocation) {

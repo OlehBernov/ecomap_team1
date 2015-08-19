@@ -15,6 +15,7 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.ecomap.ukraine.R;
 import com.ecomap.ukraine.account.manager.AccountManager;
 import com.ecomap.ukraine.account.manager.LogInListener;
@@ -65,6 +66,8 @@ public class AddProblemDescriptionFragment extends Fragment implements LogInList
     private DataManager dataManager;
     private AccountManager accountManager;
     private User user;
+    private String USER_NAME;
+    private String USER_SURNAME;
 
     public static AddProblemDescriptionFragment getInstance(List<Bitmap> bitmapPhotos,
                                                             List<String> descriptions) {
@@ -76,6 +79,32 @@ public class AddProblemDescriptionFragment extends Fragment implements LogInList
             AddProblemDescriptionFragment.photoDescriptions = descriptions;
         }
         return instance;
+    }
+
+
+
+    public void hideKeyboard(View view) {
+        InputMethodManager inputMethodManager
+                = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+        inputMethodManager.hideSoftInputFromWindow(view.getWindowToken(), 0);
+    }
+
+    public void postProblemValidation () {
+        boolean isProblemValid;
+        isProblemValid = new Validator().addProblemValidation(problemTitle);
+        if (!isProblemValid) {
+            Toast.makeText(getActivity().getApplicationContext(), "Input problem data", Toast.LENGTH_LONG).show();
+            return;
+        }
+        setChooseNameDialog();
+    }
+
+
+
+    public void successPosting(final int idOfmessage) {
+        Toast.makeText(getActivity().getApplicationContext(), idOfmessage, Toast.LENGTH_LONG).show();
+        dataManager.registerProblemListener(this);
+        dataManager.refreshAllProblem();
     }
 
     @Override
@@ -102,50 +131,12 @@ public class AddProblemDescriptionFragment extends Fragment implements LogInList
 
     }
 
-    public void hideKeyboard(View view) {
-        InputMethodManager inputMethodManager
-                = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
-        inputMethodManager.hideSoftInputFromWindow(view.getWindowToken(), 0);
-    }
-
-    public void sendProblem() {
-        boolean isProblemValid;
-        isProblemValid = new Validator().addProblemValidation(problemTitle);
-        if (!isProblemValid) {
-            Toast.makeText(getActivity().getApplicationContext(), "Input problem data", Toast.LENGTH_LONG).show();
-            return;
-        }
-        addProblemManager.registerAddProblemListener(this);
-        String title = problemTitle.getText().toString();
-        String description = problemDescription.getText().toString();
-
-        String solution = problemSolution.getText().toString();
-        String latitude = getActivity().getIntent().getDoubleExtra(ExtraFieldNames.LAT, 0) + "";
-        String longitude = getActivity().getIntent().getDoubleExtra(ExtraFieldNames.LNG, 0) + "";
-        String type = String.valueOf(spinner.getSelectedItemId() + 1);
-        showProgresDialog();
-        addProblemManager.addProblem(title, description, solution, latitude, longitude, type, String.valueOf(user.getId()),
-                String.valueOf(user.getName()), String.valueOf(user.getSurname()), bitmapPhotos, photoDescriptions);
-        bitmapPhotos = null;
-    }
-
-    public void successPosting(final int idOfmessage) {
-        Toast.makeText(getActivity().getApplicationContext(), idOfmessage, Toast.LENGTH_LONG).show();
-        dataManager.registerProblemListener(this);
-        dataManager.refreshAllProblem();
-    }
-
-    private void showProgresDialog() {
-        ProgressDialog progressDialog = new ProgressDialog(getActivity(),
-                android.R.style.Theme_Holo_Light_Panel);
-        progressDialog.setIndeterminate(true);
-        progressDialog.setMessage("Posting...");
-        progressDialog.show();
-    }
 
     @Override
     public void setLogInResult(final User user) {
         this.user = user;
+        USER_NAME = user.getName();
+        USER_SURNAME = user.getSurname();
     }
 
 
@@ -179,13 +170,63 @@ public class AddProblemDescriptionFragment extends Fragment implements LogInList
 
     @Override
     public void updateAllProblems(final List<Problem> problems) {
-        Intent intent = new Intent(getActivity(), MainActivity.class);
-        intent.putExtra(ExtraFieldNames.USER, user);
-        startActivity(intent);
         getActivity().finish();
         dataManager.removeProblemListener(this);
 
     }
 
+    private void sendProblem() {
+        addProblemManager.registerAddProblemListener(this);
+        String title = problemTitle.getText().toString();
+        String description = problemDescription.getText().toString();
+
+        String solution = problemSolution.getText().toString();
+        String latitude = getActivity().getIntent().getDoubleExtra(ExtraFieldNames.LAT, 0) + "";
+        String longitude = getActivity().getIntent().getDoubleExtra(ExtraFieldNames.LNG, 0) + "";
+        String type = String.valueOf(spinner.getSelectedItemId() + 1);
+        showProgresDialog();
+        addProblemManager.addProblem(title, description, solution, latitude,
+                longitude, type, String.valueOf(user.getId()),
+                USER_NAME, USER_SURNAME, bitmapPhotos, photoDescriptions);
+        bitmapPhotos = null;
+    }
+
+    private void showProgresDialog() {
+        ProgressDialog progressDialog = new ProgressDialog(getActivity(),
+                android.R.style.Theme_Holo_Light_Panel);
+        progressDialog.setIndeterminate(true);
+        progressDialog.setMessage("Posting...");
+        progressDialog.show();
+    }
+
+    private void setChooseNameDialog() {
+        new MaterialDialog.Builder(getActivity())
+                .title(R.string.Caution)
+                .content(R.string.post_problem_anonymously)
+                .backgroundColorRes(R.color.log_in_dialog)
+                .contentColorRes(R.color.log_in_content)
+                .negativeColorRes(R.color.log_in_content)
+                .titleColorRes(R.color.log_in_title)
+                .cancelable(false)
+                .positiveText(R.string.yes)
+                .negativeText(R.string.no).callback(
+                new MaterialDialog.ButtonCallback() {
+                    @Override
+                    public void onPositive(MaterialDialog dialog) {
+                        super.onPositive(dialog);
+                        USER_NAME = "";
+                        USER_SURNAME = "";
+                        dialog.cancel();
+                        sendProblem();
+                    }
+                    @Override
+                    public void onNegative(MaterialDialog dialog) {
+                        super.onNegative(dialog);
+                        dialog.cancel();
+                        sendProblem();
+                    }
+                })
+                .show();
+    }
 
 }

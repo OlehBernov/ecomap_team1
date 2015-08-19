@@ -78,6 +78,22 @@ public class FragmentEcoMap extends android.support.v4.app.Fragment
     }
 
     /**
+     * Puts all problems on map
+     *
+     * @param filterState State of filter
+     */
+    public void putAllProblemsOnMap(FilterState filterState) {
+        googleMap.clear();
+        if (filterState == null) {
+            filterState = filterManager.getFilterStateFromPreference();
+            setupClusterManager(filterState);
+            setRenderer();
+        } else {
+            setupClusterManager(filterState);
+        }
+    }
+
+    /**
      * Called to have the fragment instantiate its user interface view.
      * This is optional, and non-graphical fragments can return null (which is the default implementation).
      *
@@ -189,21 +205,7 @@ public class FragmentEcoMap extends android.support.v4.app.Fragment
         informationPanel.setProblemDetails(details);
     }
 
-    /**
-     * Puts all problems on map
-     *
-     * @param filterState State of filter
-     */
-    public void putAllProblemsOnMap(FilterState filterState) {
-        googleMap.clear();
-        if (filterState == null) {
-            filterState = filterManager.getFilterStateFromPreference();
-            setupClusterManager(filterState);
-            setRenderer();
-        } else {
-            setupClusterManager(filterState);
-        }
-    }
+
 
     /**
      * Action after click on Marker
@@ -290,7 +292,4 @@ public class FragmentEcoMap extends android.support.v4.app.Fragment
         googleMap.setOnMarkerClickListener(clusterManager);
         clusterManager.addItems(filteredProblems);
     }
-
-
-
 }
