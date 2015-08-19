@@ -63,6 +63,7 @@ public class LoginScreen extends AppCompatActivity implements LogInListener {
     private Intent mainIntent;
     private AccountManager accountManager;
     private CallbackManager callbackManager;
+    private MaterialDialog logInProgress;
 
     public void login() {
         boolean isLogInValid;
@@ -72,7 +73,7 @@ public class LoginScreen extends AppCompatActivity implements LogInListener {
         }
         logInButton.setEnabled(false);
 
-        new MaterialDialog.Builder(this)
+        logInProgress = new MaterialDialog.Builder(this)
                 .title(LOGIN_TITLE)
                 .content(LOGIN_MESSAGE)
                 .progress(true, 0)
@@ -99,6 +100,7 @@ public class LoginScreen extends AppCompatActivity implements LogInListener {
             Log.e(TAG, "null");
             showFailureDialog();
         }
+
     }
 
     @Override
@@ -203,6 +205,7 @@ public class LoginScreen extends AppCompatActivity implements LogInListener {
                     public void onPositive(MaterialDialog dialog) {
                         super.onPositive(dialog);
                         dialog.cancel();
+                        logInProgress.cancel();
                         Intent signUpIntent = new Intent(LoginScreen.this, SignupActivity.class);
                         startActivity(signUpIntent);
                     }
@@ -210,6 +213,7 @@ public class LoginScreen extends AppCompatActivity implements LogInListener {
                     @Override
                     public void onNegative(MaterialDialog dialog) {
                         super.onNegative(dialog);
+                        logInProgress.cancel();
                         dialog.cancel();
                     }
                 })

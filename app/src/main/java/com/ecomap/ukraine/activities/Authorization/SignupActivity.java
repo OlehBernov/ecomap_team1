@@ -63,6 +63,7 @@ public class SignupActivity extends AppCompatActivity implements LogInListener {
     private ScrollView background;
     private Intent mainIntent;
     private AccountManager accountManager;
+    private MaterialDialog signUpProgress;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -116,7 +117,7 @@ public class SignupActivity extends AppCompatActivity implements LogInListener {
         }
 
         signUpButton.setEnabled(false);
-        new MaterialDialog.Builder(this)
+        signUpProgress = new MaterialDialog.Builder(this)
                 .title(CREATING_ACCOUNT)
                 .content(SIGNUP_MESSAGE)
                 .progress(true, 0)
@@ -154,6 +155,7 @@ public class SignupActivity extends AppCompatActivity implements LogInListener {
     @Override
     public void setLogInResult(final User user) {
         accountManager.removeLogInListener(this);
+        signUpButton.setEnabled(true);
         if (user != null) {
             mainIntent.putExtra(ExtraFieldNames.USER, user);
             openMainActivity();
@@ -185,6 +187,7 @@ public class SignupActivity extends AppCompatActivity implements LogInListener {
                     @Override
                     public void onNegative(MaterialDialog dialog) {
                         super.onNegative(dialog);
+                        signUpProgress.cancel();
                         dialog.cancel();
                     }
                 })
