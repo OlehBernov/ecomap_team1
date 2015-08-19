@@ -19,6 +19,8 @@
 
     <color name="add_problem_description_bg">#eceff1</color>
     <color name="transparent">#00000000</color>
-    <!--<color name="white">#ffffff</color>-->
+    <color name="log_in_dialog">#ffdee5d6</color>
+    <color name="log_in_content">#ff5e635e</color>
+    <color name="log_in_title">#ff414641</color>
 
 </resources>

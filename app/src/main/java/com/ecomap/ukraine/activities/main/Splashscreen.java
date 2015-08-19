@@ -2,14 +2,13 @@ package com.ecomap.ukraine.activities.main;
 
 
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.View;
 
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.ecomap.ukraine.R;
 import com.ecomap.ukraine.activities.Authorization.LoginScreen;
 import com.ecomap.ukraine.data.manager.DataManager;
@@ -29,8 +28,10 @@ public class SplashScreen extends Activity implements ProblemListener {
     /**
      * Failure loading message
      */
-    private static final String FAILURE_OF_LOADING = "Failed to load. Please " +
+    private static final String FAILURE_OF_LOADING = "Please " +
             " ensure you`re connected to the Internet and try again.";
+
+    private static final String FAILE_TITLE = "Failed to load.";
 
     /**
      * Retry button title
@@ -131,29 +132,32 @@ public class SplashScreen extends Activity implements ProblemListener {
     private void setFailureLoadingDialog() {
         smoothProgressBar.setVisibility(View.INVISIBLE);
 
-        AlertDialog.Builder builder = new AlertDialog.Builder(this, android.R.style.Theme_Holo_Light_Panel);
-        builder.setCancelable(false);
-        builder.setMessage(SplashScreen.FAILURE_OF_LOADING);
-        builder.setPositiveButton(SplashScreen.RETRY,
-                new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(final DialogInterface dialog,
-                                        final int id) {
-                        smoothProgressBar.setVisibility(View.VISIBLE);
-                        manager.getAllProblems();
-                    }
-                });
-        builder.setNegativeButton(SplashScreen.CANCEL,
-                new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(final DialogInterface dialog,
-                                        final int id) {
-                        System.exit(0);
-                        dialog.cancel();
-                    }
-                });
-        AlertDialog alert = builder.create();
-        alert.show();
+        new MaterialDialog.Builder(this)
+                .title(FAILE_TITLE)
+                .content(FAILURE_OF_LOADING)
+                .backgroundColorRes(R.color.log_in_dialog)
+                .contentColorRes(R.color.log_in_content)
+                .negativeColorRes(R.color.log_in_content)
+                .titleColorRes(R.color.log_in_title)
+          .cancelable(false)
+                .positiveText(RETRY)
+                .negativeText(CANCEL).callback(
+                        new MaterialDialog.ButtonCallback() {
+                            @Override
+                            public void onPositive(MaterialDialog dialog) {
+                                super.onPositive(dialog);
+                                smoothProgressBar.setVisibility(View.VISIBLE);
+                                manager.getAllProblems();
+                            }
+
+                            @Override
+                            public void onNegative(MaterialDialog dialog) {
+                                super.onNegative(dialog);
+                                dialog.cancel();
+                                System.exit(0);
+                            }
+                        })
+                .show();
     }
 
 }
