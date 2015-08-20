@@ -53,7 +53,7 @@ public class FragmentEcoMap extends android.support.v4.app.Fragment
     private static List<Problem> problems;
 
     private MapView mapView;
-    private static GoogleMap googleMap;
+    private  GoogleMap googleMap;
     private DataManager dataManager;
     private static ClusterManager<Problem> clusterManager;
 
