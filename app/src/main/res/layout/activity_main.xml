@@ -47,6 +47,18 @@
                                 android:layout_height="match_parent">
 
                             </FrameLayout>
+                            <android.support.design.widget.FloatingActionButton
+                                android:id="@+id/fabUkraine"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="top|right"
+                                android:layout_marginTop="72dp"
+                                android:src="@drawable/ic_ukraine"
+                                app:backgroundTint="#FFFFFFFF"
+                                app:elevation="6dp"
+                                app:pressedTranslationZ="12dp" />
+
+
 
                             <android.support.design.widget.FloatingActionButton
                                 android:id="@+id/fab1"
@@ -169,6 +181,18 @@
 
                         </io.codetail.widget.RevealLinearLayout>
 
+                        <android.support.v7.widget.Toolbar
+                            android:id="@+id/toolbar"
+                            android:layout_width="match_parent"
+                            android:layout_height="?attr/actionBarSize"
+                            android:background="#ff004d40"
+                            android:theme="@style/DrawerArrowStyle"
+                            android:title="@string/app_name"
+                            app:popupTheme="@style/AppTheme"
+                            android:layout_gravity="right|top">
+
+                        </android.support.v7.widget.Toolbar>
+
 
                     </FrameLayout>
 
@@ -195,17 +219,6 @@
 
             </FrameLayout>
 
-
-            <android.support.v7.widget.Toolbar
-                android:id="@+id/toolbar"
-                android:layout_width="match_parent"
-                android:layout_height="?attr/actionBarSize"
-                android:background="#ff004d40"
-                android:theme="@style/DrawerArrowStyle"
-                android:title="@string/app_name"
-                app:popupTheme="@style/AppTheme">
-
-            </android.support.v7.widget.Toolbar>
 
         </FrameLayout>
 

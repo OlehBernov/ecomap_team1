@@ -53,9 +53,9 @@ public class FragmentEcoMap extends android.support.v4.app.Fragment
     private static List<Problem> problems;
 
     private MapView mapView;
-    private GoogleMap googleMap;
+    private  GoogleMap googleMap;
     private DataManager dataManager;
-    private ClusterManager<Problem> clusterManager;
+    private static ClusterManager<Problem> clusterManager;
 
     /**
      * Filter dataManager instance
@@ -82,11 +82,8 @@ public class FragmentEcoMap extends android.support.v4.app.Fragment
         googleMap.clear();
         if (filterState == null) {
             filterState = filterManager.getFilterStateFromPreference();
-            setupClusterManager(filterState);
-            setRenderer();
-        } else {
-            setupClusterManager(filterState);
         }
+            setupClusterManager(filterState);
     }
 
     /**
@@ -109,6 +106,23 @@ public class FragmentEcoMap extends android.support.v4.app.Fragment
         mapView = (MapView) rootView.findViewById(R.id.mapView);
         mapView.onCreate(savedInstanceState);
         mapView.onResume();
+
+        FloatingActionButton ukrainePositionButton = (FloatingActionButton) getActivity().findViewById(R.id.fabUkraine);
+        ukrainePositionButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                CameraPosition cameraPosition = new CameraPosition
+                        .Builder()
+                        .target(INITIAL_POSITION)
+                        .zoom(INITIAL_ZOOM)
+                        .build();
+                CameraUpdate cameraUpdate = CameraUpdateFactory.newCameraPosition(cameraPosition);
+                googleMap.animateCamera(cameraUpdate);
+
+                }
+            });
+
+
 
         FloatingActionButton myPositionButton = (FloatingActionButton) getActivity().findViewById(R.id.fab1);
         myPositionButton.setOnClickListener(new View.OnClickListener() {
@@ -145,6 +159,12 @@ public class FragmentEcoMap extends android.support.v4.app.Fragment
         this.setUpMapIfNeeded();
 
         return rootView;
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        setRenderer();
     }
 
     /**
@@ -200,9 +220,6 @@ public class FragmentEcoMap extends android.support.v4.app.Fragment
     public void updateProblemDetails(final Details details) {
         informationPanel.setProblemDetails(details);
     }
-
-
-
     /**
      * Action after click on Marker
      *

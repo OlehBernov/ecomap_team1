@@ -41,7 +41,6 @@ public class LoginScreen extends AppCompatActivity implements LogInListener {
     private static final String LOGIN_MESSAGE = "Please wait...";
     private static final String LOGIN_TITLE = "Log in";
     private static final String FAILE_TITLE = "Log in failed.";
-    private static final String FAILURE_OF_LOG_IN = "message"; //TODO: write message
     private final static String SIGN_UP = "Sign up";
     private final static String CANCEL = "Cancel";
 
@@ -179,7 +178,7 @@ public class LoginScreen extends AppCompatActivity implements LogInListener {
     private void showFailureDialog() {
         new MaterialDialog.Builder(this)
                 .title(FAILE_TITLE)
-                .content(FAILURE_OF_LOG_IN)
+                .content(R.string.FAILURE_OF_LOG_IN)
                 .backgroundColorRes(R.color.log_in_dialog)
                 .contentColorRes(R.color.log_in_content)
                 .negativeColorRes(R.color.log_in_content)
