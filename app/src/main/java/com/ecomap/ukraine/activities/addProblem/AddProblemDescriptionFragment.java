@@ -1,8 +1,5 @@
 package com.ecomap.ukraine.activities.addProblem;
 
-import android.app.ProgressDialog;
-import android.content.Context;
-import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -10,7 +7,6 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
@@ -20,7 +16,7 @@ import com.ecomap.ukraine.R;
 import com.ecomap.ukraine.account.manager.AccountManager;
 import com.ecomap.ukraine.account.manager.LogInListener;
 import com.ecomap.ukraine.activities.ExtraFieldNames;
-import com.ecomap.ukraine.activities.main.MainActivity;
+import com.ecomap.ukraine.activities.Keyboard;
 import com.ecomap.ukraine.addproblem.manager.AddProblemListener;
 import com.ecomap.ukraine.addproblem.manager.AddProblemManager;
 import com.ecomap.ukraine.data.manager.DataManager;
@@ -40,34 +36,29 @@ import butterknife.InjectView;
  */
 public class AddProblemDescriptionFragment extends Fragment implements LogInListener, AddProblemListener, ProblemListener {
 
+    private static final String PLEASE_WAIT = "Please wait...";
     /**
      * Holds the Singleton global instance of AddProblemDescriptionFragment.
      */
     private static AddProblemDescriptionFragment instance;
     private static List<Bitmap> bitmapPhotos;
     private static List<String> photoDescriptions;
-    @InjectView(R.id.problemTitle)
-    EditText problemTitle;
-    @InjectView(R.id.problemDescription)
-    EditText problemDescription;
-    @InjectView(R.id.problemSolution)
-    EditText problemSolution;
-    @InjectView(R.id.spinner)
-    Spinner spinner;
-    View.OnFocusChangeListener focusChangeListener = new View.OnFocusChangeListener() {
-        @Override
-        public void onFocusChange(View v, boolean hasFocus) {
-            if (!hasFocus) {
-                hideKeyboard(v);
-            }
-        }
-    };
+
+    private static final String INPUT_PROBLEM_DATA = "Input problem data";
+    private static final String POSTING = "Posting...";
+
     private AddProblemManager addProblemManager;
     private DataManager dataManager;
     private AccountManager accountManager;
     private User user;
     private String USER_NAME;
     private String USER_SURNAME;
+    private MaterialDialog progressDialog;
+
+    @InjectView(R.id.problemTitle) EditText problemTitle;
+    @InjectView(R.id.problemDescription) EditText problemDescription;
+    @InjectView(R.id.problemSolution) EditText problemSolution;
+    @InjectView(R.id.spinner) Spinner spinner;
 
     public static AddProblemDescriptionFragment getInstance(List<Bitmap> bitmapPhotos,
                                                             List<String> descriptions) {
@@ -80,35 +71,28 @@ public class AddProblemDescriptionFragment extends Fragment implements LogInList
         }
         return instance;
     }
-
-
-
-    public void hideKeyboard(View view) {
-        InputMethodManager inputMethodManager
-                = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
-        inputMethodManager.hideSoftInputFromWindow(view.getWindowToken(), 0);
-    }
-
+    
     public void postProblemValidation () {
         boolean isProblemValid;
         isProblemValid = new Validator().addProblemValidation(problemTitle);
         if (!isProblemValid) {
-            Toast.makeText(getActivity().getApplicationContext(), "Input problem data", Toast.LENGTH_LONG).show();
+            Toast.makeText(getActivity()
+                           .getApplicationContext(), INPUT_PROBLEM_DATA, Toast.LENGTH_LONG)
+                           .show();
             return;
         }
         setChooseNameDialog();
     }
 
-
-
-    public void successPosting(final int idOfmessage) {
-        Toast.makeText(getActivity().getApplicationContext(), idOfmessage, Toast.LENGTH_LONG).show();
+    public void successPosting(final int idOfMessage) {
+        Toast.makeText(getActivity().getApplicationContext(), idOfMessage, Toast.LENGTH_LONG).show();
         dataManager.registerProblemListener(this);
         dataManager.refreshAllProblem();
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
+                             @Nullable Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.tab_1, container, false);
 
         addProblemManager = AddProblemManager.getInstance(getActivity().getApplicationContext());
@@ -116,9 +100,11 @@ public class AddProblemDescriptionFragment extends Fragment implements LogInList
         dataManager = DataManager.getInstance(getActivity().getApplicationContext());
 
         ButterKnife.inject(this, v);
-        problemTitle.setOnFocusChangeListener(focusChangeListener);
-        problemDescription.setOnFocusChangeListener(focusChangeListener);
-        problemSolution.setOnFocusChangeListener(focusChangeListener);
+
+        Keyboard keyboard = new Keyboard(getActivity());
+        keyboard.setOnFocusChangeListener(problemTitle);
+        keyboard.setOnFocusChangeListener(problemDescription);
+        keyboard.setOnFocusChangeListener(problemSolution);
 
         return v;
     }
@@ -128,9 +114,35 @@ public class AddProblemDescriptionFragment extends Fragment implements LogInList
         super.onDestroy();
         accountManager.removeLogInListener(this);
         addProblemManager.removeAddProblemListener(this);
-
     }
 
+    private void sendProblem() {
+        addProblemManager.registerAddProblemListener(this);
+        String title = problemTitle.getText().toString();
+        String description = problemDescription.getText().toString();
+
+        String solution = problemSolution.getText().toString();
+        String latitude = getActivity().getIntent().getDoubleExtra(ExtraFieldNames.LAT, 0) + "";
+        String longitude = getActivity().getIntent().getDoubleExtra(ExtraFieldNames.LNG, 0) + "";
+        String type = String.valueOf(spinner.getSelectedItemId() + 1);
+        showProgressDialog();
+        addProblemManager.addProblem(title, description, solution, latitude,
+                longitude, type, String.valueOf(user.getId()),
+                USER_NAME, USER_SURNAME, bitmapPhotos, photoDescriptions);
+        bitmapPhotos = null;
+        progressDialog.cancel();
+    }
+
+    private void showProgressDialog() {
+        progressDialog = new MaterialDialog.Builder(getActivity())
+                .title(POSTING)
+                .content(PLEASE_WAIT)
+                .progress(true, 0)
+                .backgroundColorRes(R.color.log_in_dialog)
+                .contentColorRes(R.color.log_in_content)
+                .titleColorRes(R.color.log_in_title)
+                .show();
+    }
 
     @Override
     public void setLogInResult(final User user) {
@@ -138,7 +150,6 @@ public class AddProblemDescriptionFragment extends Fragment implements LogInList
         USER_NAME = user.getName();
         USER_SURNAME = user.getSurname();
     }
-
 
     @Override
     public void onSuccessProblemPosting() {
@@ -172,31 +183,6 @@ public class AddProblemDescriptionFragment extends Fragment implements LogInList
     public void updateAllProblems(final List<Problem> problems) {
         getActivity().finish();
         dataManager.removeProblemListener(this);
-
-    }
-
-    private void sendProblem() {
-        addProblemManager.registerAddProblemListener(this);
-        String title = problemTitle.getText().toString();
-        String description = problemDescription.getText().toString();
-
-        String solution = problemSolution.getText().toString();
-        String latitude = getActivity().getIntent().getDoubleExtra(ExtraFieldNames.LAT, 0) + "";
-        String longitude = getActivity().getIntent().getDoubleExtra(ExtraFieldNames.LNG, 0) + "";
-        String type = String.valueOf(spinner.getSelectedItemId() + 1);
-        showProgresDialog();
-        addProblemManager.addProblem(title, description, solution, latitude,
-                longitude, type, String.valueOf(user.getId()),
-                USER_NAME, USER_SURNAME, bitmapPhotos, photoDescriptions);
-        bitmapPhotos = null;
-    }
-
-    private void showProgresDialog() {
-        ProgressDialog progressDialog = new ProgressDialog(getActivity(),
-                android.R.style.Theme_Holo_Light_Panel);
-        progressDialog.setIndeterminate(true);
-        progressDialog.setMessage("Posting...");
-        progressDialog.show();
     }
 
     private void setChooseNameDialog() {

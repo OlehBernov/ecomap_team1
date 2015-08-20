@@ -19,6 +19,7 @@ import com.ecomap.ukraine.R;
 import com.ecomap.ukraine.account.manager.AccountManager;
 import com.ecomap.ukraine.account.manager.LogInListener;
 import com.ecomap.ukraine.activities.ExtraFieldNames;
+import com.ecomap.ukraine.activities.Keyboard;
 import com.ecomap.ukraine.activities.main.MainActivity;
 import com.ecomap.ukraine.models.User;
 import com.ecomap.ukraine.validation.Validator;
@@ -37,44 +38,32 @@ public class SignupActivity extends AppCompatActivity implements LogInListener {
     private final static String CANCEL = "Cancel";
     private final String TAG = getClass().getSimpleName();
 
-    View.OnFocusChangeListener focusChangeListener = new View.OnFocusChangeListener() {
-        @Override
-        public void onFocusChange(View v, boolean hasFocus) {
-            if (!hasFocus) {
-                hideKeyboard(v);
-            }
-        }
-    };
-    @InjectView(R.id.input_name)
-    EditText nameText;
-    @InjectView(R.id.input_surname)
-    EditText surnameText;
-    @InjectView(R.id.input_email)
-    EditText emailText;
-    @InjectView(R.id.input_password)
-    EditText passwordText;
-    @InjectView(R.id.input_password_confirmation)
-    EditText passwordConfirmText;
-    @InjectView(R.id.btn_signup)
-    Button signUpButton;
-    @InjectView(R.id.link_login_p2)
-    TextView loginLink;
     private ScrollView scrollView;
     private ScrollView background;
     private Intent mainIntent;
     private AccountManager accountManager;
     private MaterialDialog signUpProgress;
 
+    @InjectView(R.id.input_name) EditText nameText;
+    @InjectView(R.id.input_surname) EditText surnameText;
+    @InjectView(R.id.input_email) EditText emailText;
+    @InjectView(R.id.input_password) EditText passwordText;
+    @InjectView(R.id.input_password_confirmation) EditText passwordConfirmText;
+    @InjectView(R.id.btn_signup) Button signUpButton;
+    @InjectView(R.id.link_login_p2) TextView loginLink;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_signup);
         ButterKnife.inject(this);
-        nameText.setOnFocusChangeListener(focusChangeListener);
-        surnameText.setOnFocusChangeListener(focusChangeListener);
-        emailText.setOnFocusChangeListener(focusChangeListener);
-        passwordText.setOnFocusChangeListener(focusChangeListener);
-        passwordConfirmText.setOnFocusChangeListener(focusChangeListener);
+
+        Keyboard keyboard = new Keyboard(this);
+        keyboard.setOnFocusChangeListener(nameText);
+        keyboard.setOnFocusChangeListener(surnameText);
+        keyboard.setOnFocusChangeListener(emailText);
+        keyboard.setOnFocusChangeListener(passwordText);
+        keyboard.setOnFocusChangeListener(passwordConfirmText);
 
         scrollView = (ScrollView) findViewById(R.id.scroll_view);
         background = (ScrollView) findViewById(R.id.background_layout);
@@ -144,12 +133,6 @@ public class SignupActivity extends AppCompatActivity implements LogInListener {
     public void onSignUpFailed() {
         Toast.makeText(getBaseContext(), SIGN_UP_FAILED, Toast.LENGTH_LONG).show();
         signUpButton.setEnabled(true);
-    }
-
-    public void hideKeyboard(View view) {
-        InputMethodManager inputMethodManager
-                = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-        inputMethodManager.hideSoftInputFromWindow(view.getWindowToken(), 0);
     }
 
     @Override

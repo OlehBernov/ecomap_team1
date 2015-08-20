@@ -1,19 +1,21 @@
 package com.ecomap.ukraine.activities.addProblem;
 
 
+import android.content.Context;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 
 public class ViewPagerAdapter extends FragmentStatePagerAdapter {
 
-    private CharSequence Titles[];
-    private int NumbOfTabs;
+    private String[] titles;
+    private int numbOfTabs;
 
-    public ViewPagerAdapter(FragmentManager fm, CharSequence mTitles[], int mNumbOfTabsumb) {
-        super(fm);
-        this.Titles = mTitles;
-        this.NumbOfTabs = mNumbOfTabsumb;
+    public ViewPagerAdapter(FragmentManager fragmentManager,
+                            String[] titles, int numbOfTabsumb) {
+        super(fragmentManager);
+        this.titles = titles;
+        this.numbOfTabs = numbOfTabsumb;
     }
 
     @Override
@@ -27,12 +29,12 @@ public class ViewPagerAdapter extends FragmentStatePagerAdapter {
 
     @Override
     public int getCount() {
-        return NumbOfTabs;
+        return numbOfTabs;
     }
 
     @Override
     public CharSequence getPageTitle(int position) {
-        return Titles[position];
+        return titles[position];
     }
 
 }

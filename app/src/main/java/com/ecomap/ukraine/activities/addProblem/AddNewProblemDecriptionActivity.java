@@ -30,6 +30,7 @@ import android.widget.TableRow;
 import com.ecomap.ukraine.R;
 import com.ecomap.ukraine.activities.BitmapResizer;
 import com.ecomap.ukraine.activities.ExtraFieldNames;
+import com.ecomap.ukraine.activities.Keyboard;
 import com.ecomap.ukraine.models.User;
 
 import java.io.File;
@@ -60,9 +61,7 @@ public class AddNewProblemDecriptionActivity extends AppCompatActivity {
     private List<Uri> userPhotos;
     private TableLayout photoDescriptionLayout;
     private List<String> descriptions;
-    private Toolbar toolbar;
     private ViewPager pager;
-    private String[] Titles;
 
     public List<Bitmap> getBitmapsPhoto() {
         List<Bitmap> photoBitmaps = new ArrayList<>();
@@ -136,15 +135,12 @@ public class AddNewProblemDecriptionActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        Titles = getResources().getStringArray(R.array.tabs_in_posting_problem);
-
+        String[] titles = getResources().getStringArray(R.array.tabs_in_posting_problem);
         setContentView(R.layout.add_problem_description);
         setupToolbar();
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
 
-
-        ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager(), Titles, NUMBER_OF_TUBS);
+        ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager(), titles, NUMBER_OF_TUBS);
 
         pager = (ViewPager) findViewById(R.id.pager);
         pager.setAdapter(adapter);
@@ -222,7 +218,7 @@ public class AddNewProblemDecriptionActivity extends AppCompatActivity {
      * Sets application toolbar.
      */
     private void setupToolbar() {
-        toolbar = (Toolbar) findViewById(R.id.tool_bar);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.tool_bar);
         toolbar.setTitle(ADD_DESCRIPTION);
         toolbar.setNavigationIcon(R.drawable.ic_arrow_back_white_24dp);
         toolbar.setClickable(true);
@@ -310,7 +306,10 @@ public class AddNewProblemDecriptionActivity extends AppCompatActivity {
                 (int) getResources().getDimension(R.dimen.description_right_padding),
                 (int) getResources().getDimension(R.dimen.description_bottom_padding)
         );
-        AddPhotoFragment.getInstance(this).setOnFocusChangeListener(photoDescription);
+
+        Keyboard keyboard = new Keyboard(this);
+        keyboard.setOnFocusChangeListener(photoDescription);
+
         if (!descriptions.get(id).equals("")) {
             photoDescription.setText(descriptions.get(id));
         }
