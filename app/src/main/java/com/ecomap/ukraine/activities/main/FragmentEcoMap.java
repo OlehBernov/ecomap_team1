@@ -107,6 +107,23 @@ public class FragmentEcoMap extends android.support.v4.app.Fragment
         mapView.onCreate(savedInstanceState);
         mapView.onResume();
 
+        FloatingActionButton ukrainePositionButton = (FloatingActionButton) getActivity().findViewById(R.id.fabUkraine);
+        ukrainePositionButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                CameraPosition cameraPosition = new CameraPosition
+                        .Builder()
+                        .target(INITIAL_POSITION)
+                        .zoom(INITIAL_ZOOM)
+                        .build();
+                CameraUpdate cameraUpdate = CameraUpdateFactory.newCameraPosition(cameraPosition);
+                googleMap.animateCamera(cameraUpdate);
+
+                }
+            });
+
+
+
         FloatingActionButton myPositionButton = (FloatingActionButton) getActivity().findViewById(R.id.fab1);
         myPositionButton.setOnClickListener(new View.OnClickListener() {
             @Override
