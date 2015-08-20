@@ -181,17 +181,7 @@
 
                         </io.codetail.widget.RevealLinearLayout>
 
-                        <android.support.v7.widget.Toolbar
-                            android:id="@+id/toolbar"
-                            android:layout_width="match_parent"
-                            android:layout_height="?attr/actionBarSize"
-                            android:background="#ff004d40"
-                            android:theme="@style/DrawerArrowStyle"
-                            android:title="@string/app_name"
-                            app:popupTheme="@style/AppTheme"
-                            android:layout_gravity="right|top">
 
-                        </android.support.v7.widget.Toolbar>
 
 
                     </FrameLayout>
@@ -218,6 +208,18 @@
 
 
             </FrameLayout>
+
+            <android.support.v7.widget.Toolbar
+                android:id="@+id/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                android:background="#ff004d40"
+                android:theme="@style/DrawerArrowStyle"
+                android:title="@string/app_name"
+                app:popupTheme="@style/AppTheme"
+                android:layout_gravity="right|top">
+
+            </android.support.v7.widget.Toolbar>
 
 
         </FrameLayout>

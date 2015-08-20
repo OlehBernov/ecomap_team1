@@ -107,7 +107,8 @@ public class FragmentEcoMap extends android.support.v4.app.Fragment
         mapView.onCreate(savedInstanceState);
         mapView.onResume();
 
-        FloatingActionButton ukrainePositionButton = (FloatingActionButton) getActivity().findViewById(R.id.fabUkraine);
+        FloatingActionButton ukrainePositionButton = (FloatingActionButton) getActivity().
+                findViewById(R.id.fabUkraine);
         ukrainePositionButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
