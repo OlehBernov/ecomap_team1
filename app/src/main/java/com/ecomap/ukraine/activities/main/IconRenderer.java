@@ -59,6 +59,57 @@ public class IconRenderer extends DefaultClusterRenderer<Problem> {
     }
 
     /**
+     * Called before the marker for a ClusterItem is added to the map.
+     */
+    @Override
+    protected void onBeforeClusterItemRendered(Problem problem, MarkerOptions markerOptions) {
+        BitmapDescriptor icon = BitmapDescriptorFactory.fromResource(IconRenderer.getResourceIdForMarker(
+                problem.getProblemType()));
+        markerOptions.icon(icon)
+                .anchor(0.5f, 1f);
+        super.onBeforeClusterItemRendered(problem, markerOptions);
+    }
+
+    @Override
+    protected String getClusterText(int bucket) {
+        return String.valueOf(bucket);
+    }
+
+    /**
+     * Gets the "bucket" for a particular cluster. By default, uses the number of points within the
+     * cluster, bucketed to some set points.
+     */
+    @Override
+    protected int getBucket(Cluster<Problem> cluster) {
+        int size = cluster.getSize();
+        return size;
+
+    }
+
+    /**
+     * Called before the marker for a Cluster is added to the map.
+     * The default implementation draws a circle with a rough count of the number of items.
+     */
+    protected void onBeforeClusterRendered(final Cluster<Problem> cluster,
+                                           final MarkerOptions markerOptions) {
+
+        int bucket = getBucket(cluster);
+        BitmapDescriptor descriptor = icons.get(bucket);
+        if (descriptor == null) {
+            View clusterView = activity.getLayoutInflater().inflate(
+                    R.layout.cluster_marker_view, null);
+            ((TextView) clusterView.findViewById(R.id.marker_count))
+                    .setText(getClusterText(bucket));
+            clusterView.setBackgroundResource(getResourceIdForCluster(bucket));
+            descriptor = BitmapDescriptorFactory.fromBitmap(createDrawableFromView(clusterView));
+            icons.put(bucket, descriptor);
+        }
+
+        markerOptions.icon(descriptor);
+
+    }
+
+    /**
      * Gets markers resourses
      *
      * @param problemType id of type
@@ -92,54 +143,6 @@ public class IconRenderer extends DefaultClusterRenderer<Problem> {
         return resId;
     }
 
-    @Override
-    protected String getClusterText(int bucket) {
-        return String.valueOf(bucket);
-    }
-
-    /**
-     * Gets the "bucket" for a particular cluster. By default, uses the number of points within the
-     * cluster, bucketed to some set points.
-     */
-    @Override
-    protected int getBucket(Cluster<Problem> cluster) {
-        int size = cluster.getSize();
-        return size;
-    }
-
-    /**
-     * Called before the marker for a ClusterItem is added to the map.
-     */
-    @Override
-    protected void onBeforeClusterItemRendered(Problem problem, MarkerOptions markerOptions) {
-        BitmapDescriptor icon = BitmapDescriptorFactory.fromResource(IconRenderer.getResourceIdForMarker(
-                problem.getProblemType()));
-        markerOptions.icon(icon)
-                .anchor(0.5f, 1f);
-        super.onBeforeClusterItemRendered(problem, markerOptions);
-    }
-
-    /**
-     * Called before the marker for a Cluster is added to the map.
-     * The default implementation draws a circle with a rough count of the number of items.
-     */
-    protected void onBeforeClusterRendered(final Cluster<Problem> cluster,
-                                           final MarkerOptions markerOptions) {
-        int bucket = getBucket(cluster);
-        BitmapDescriptor descriptor = icons.get(bucket);
-        if (descriptor == null) {
-            View clusterView = activity.getLayoutInflater().inflate(
-                    R.layout.cluster_marker_view, null);
-            ((TextView) clusterView.findViewById(R.id.marker_count))
-                    .setText(getClusterText(bucket));
-            clusterView.setBackgroundResource(getResourceIdForCluster(bucket));
-            descriptor = BitmapDescriptorFactory.fromBitmap(createDrawableFromView(clusterView));
-            icons.put(bucket, descriptor);
-        }
-
-        markerOptions.icon(descriptor);
-    }
-
     /**
      * Gets markers resources
      *
@@ -148,11 +151,17 @@ public class IconRenderer extends DefaultClusterRenderer<Problem> {
      */
     private int getResourceIdForCluster(final int size) {
         int resId = 0;
-        if (size < 10) resId = R.drawable.m1;
-        else if (size < 50) resId = R.drawable.m2;
-        else if (size < 100) resId = R.drawable.m3;
-        else if (size < 500) resId = R.drawable.m4;
-        else if (size < Integer.MAX_VALUE) resId = R.drawable.m5;
+        if (size < 10) {
+            resId = R.drawable.m1;
+        } else if (size < 50) {
+            resId = R.drawable.m2;
+        } else if (size < 100) {
+            resId = R.drawable.m3;
+        } else if (size < 500) {
+            resId = R.drawable.m4;
+        } else if (size < Integer.MAX_VALUE) {
+            resId = R.drawable.m5;
+        }
         return resId;
     }
 

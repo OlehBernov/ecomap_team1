@@ -36,6 +36,17 @@ public class Filter {
         }
     }
 
+    private boolean filtration(final FilterState filterState, final Problem problem) {
+        if (filterState.isFilterOff(getFilterCriteria(problem.getProblemType()))) {
+            if (showProblemBySolvedFilter(filterState, problem)) {
+                if (showActualProblem(filterState, problem)) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
     /**
      * Converts problem type to appropriate filter criteria.
      *
@@ -63,17 +74,6 @@ public class Filter {
         }
     }
 
-    private boolean filtration(final FilterState filterState, final Problem problem) {
-        if (filterState.isFilterOff(getFilterCriteria(problem.getProblemType()))) {
-            if (showProblemBySolvedFilter(filterState, problem)) {
-                if (showActualProblem(filterState, problem)) {
-                    return true;
-                }
-            }
-        }
-        return false;
-    }
-
     /**
      * Filtration by solwed state
      *
@@ -86,31 +86,6 @@ public class Filter {
         return showResolvedProblem(filterState, problem)
                 || showUnsolvedProblem(filterState, problem);
 
-    }
-
-    /**
-     * Show problem if it is unsolwed and filter allows to show unsolwed problem
-     *
-     * @param filterState rules of filtration
-     * @param problem     problem under filtration
-     * @return access to show problem
-     */
-    private boolean showUnsolvedProblem(final FilterState filterState, final Problem problem) {
-        return (filterState.isFilterOff(FilterContract.UNSOLVED))
-                && (problem.getStatus().equals(ProblemStatus.UNSOLVED));
-
-    }
-
-    /**
-     * Show problem if it is resolved and filter allows to show resolved problem
-     *
-     * @param filterState rules of filtration
-     * @param problem     problem under filtration
-     * @return access to show problem
-     */
-    private boolean showResolvedProblem(final FilterState filterState, final Problem problem) {
-        return (filterState.isFilterOff(FilterContract.RESOLVED))
-                && (problem.getStatus().equals(ProblemStatus.RESOLVED));
     }
 
     /**
@@ -127,6 +102,31 @@ public class Filter {
         Calendar creatingProblemDate = new GregorianCalendar(year, month, day);
         return creatingProblemDate.after(filterState.getDateFrom())
                 && filterState.getDateTo().after(creatingProblemDate);
+    }
+
+    /**
+     * Show problem if it is resolved and filter allows to show resolved problem
+     *
+     * @param filterState rules of filtration
+     * @param problem     problem under filtration
+     * @return access to show problem
+     */
+    private boolean showResolvedProblem(final FilterState filterState, final Problem problem) {
+        return filterState.isFilterOff(FilterContract.RESOLVED)
+                && (problem.getStatus() == ProblemStatus.RESOLVED);
+    }
+
+    /**
+     * Show problem if it is unsolwed and filter allows to show unsolwed problem
+     *
+     * @param filterState rules of filtration
+     * @param problem     problem under filtration
+     * @return access to show problem
+     */
+    private boolean showUnsolvedProblem(final FilterState filterState, final Problem problem) {
+        return filterState.isFilterOff(FilterContract.UNSOLVED)
+                && (problem.getStatus() == ProblemStatus.UNSOLVED);
+
     }
 
 }
