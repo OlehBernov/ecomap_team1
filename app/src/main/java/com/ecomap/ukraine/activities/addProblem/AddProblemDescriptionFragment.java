@@ -230,7 +230,6 @@ public class AddProblemDescriptionFragment extends Fragment implements LogInList
         addProblemManager.addProblem(title, description, solution, latitude,
                 longitude, type, String.valueOf(user.getId()),
                 USER_NAME, USER_SURNAME, bitmapPhotos, photoDescriptions);
-        onSuccessProblemPosting();
         bitmapPhotos = null;
     }
 

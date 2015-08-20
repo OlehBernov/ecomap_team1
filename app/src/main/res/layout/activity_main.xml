@@ -52,7 +52,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="top|right"
-                                android:layout_marginTop="72dp"
+                                android:layout_marginTop="65dp"
                                 android:src="@drawable/ic_ukraine"
                                 app:backgroundTint="#FFFFFFFF"
                                 app:elevation="6dp"
