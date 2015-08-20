@@ -51,8 +51,6 @@ public class FragmentEcoMap extends android.support.v4.app.Fragment
     private static final String LONGITUDE = "longitude";
     private static final String ZOOM = "zoom";
     private static List<Problem> problems;
-    private static Activity activity;
-    private static FragmentManager fragmentManager;
 
     private MapView mapView;
     private GoogleMap googleMap;
@@ -71,9 +69,7 @@ public class FragmentEcoMap extends android.support.v4.app.Fragment
     public FragmentEcoMap() {
     }
 
-    public static FragmentEcoMap newInstance(final Activity activity, FragmentManager fragmentManager) {
-        FragmentEcoMap.activity = activity;
-        FragmentEcoMap.fragmentManager = fragmentManager;
+    public static FragmentEcoMap newInstance() {
         return new FragmentEcoMap();
     }
 
@@ -114,7 +110,7 @@ public class FragmentEcoMap extends android.support.v4.app.Fragment
         mapView.onCreate(savedInstanceState);
         mapView.onResume();
 
-        FloatingActionButton myPositionButton = (FloatingActionButton) activity.findViewById(R.id.fab1);
+        FloatingActionButton myPositionButton = (FloatingActionButton) getActivity().findViewById(R.id.fab1);
         myPositionButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -128,7 +124,7 @@ public class FragmentEcoMap extends android.support.v4.app.Fragment
             private Location getLocation() {
                 Location myLocation = null;
                 LocationManager locationManager =
-                        (LocationManager) activity.getSystemService(Context.LOCATION_SERVICE);
+                        (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
                 List<String> providers = locationManager.getAllProviders();
                 for (String provider : providers) {
                     Location location = locationManager.getLastKnownLocation(provider);
@@ -143,7 +139,7 @@ public class FragmentEcoMap extends android.support.v4.app.Fragment
         filterManager = FilterManager.getInstance(getActivity());
         filterManager.registerFilterListener(this);
 
-        activity.getActionBar();
+        getActivity().getActionBar();
 
         MapsInitializer.initialize(getActivity().getApplicationContext());
         this.setUpMapIfNeeded();
@@ -215,8 +211,8 @@ public class FragmentEcoMap extends android.support.v4.app.Fragment
      */
     @Override
     public boolean onClusterItemClick(final Problem problem) {
-        if (!((MainActivity) activity).problemAddingMenu) {
-            informationPanel = new InformationPanel(activity, problem);
+        if (!((MainActivity) getActivity()).problemAddingMenu) {
+            informationPanel = new InformationPanel(getActivity(), problem);
             dataManager.getProblemDetail(problem.getProblemId());
             moveCameraToProblem(problem);
             return true;

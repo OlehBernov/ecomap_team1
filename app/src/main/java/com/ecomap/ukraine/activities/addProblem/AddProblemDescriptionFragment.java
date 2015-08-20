@@ -20,7 +20,7 @@ import com.ecomap.ukraine.R;
 import com.ecomap.ukraine.account.manager.AccountManager;
 import com.ecomap.ukraine.account.manager.LogInListener;
 import com.ecomap.ukraine.activities.ExtraFieldNames;
-import com.ecomap.ukraine.activities.main.MainActivity;
+import com.ecomap.ukraine.activities.Keyboard;
 import com.ecomap.ukraine.addproblem.manager.AddProblemListener;
 import com.ecomap.ukraine.addproblem.manager.AddProblemManager;
 import com.ecomap.ukraine.data.manager.DataManager;
@@ -40,38 +40,33 @@ import butterknife.InjectView;
  */
 public class AddProblemDescriptionFragment extends Fragment implements LogInListener, AddProblemListener, ProblemListener {
 
+    private static final String PLEASE_WAIT = "Please wait...";
     /**
      * Holds the Singleton global instance of AddProblemDescriptionFragment.
      */
     private static AddProblemDescriptionFragment instance;
     private static List<Bitmap> bitmapPhotos;
     private static List<String> photoDescriptions;
-    @InjectView(R.id.problemTitle)
-    EditText problemTitle;
-    @InjectView(R.id.problemDescription)
-    EditText problemDescription;
-    @InjectView(R.id.problemSolution)
-    EditText problemSolution;
-    @InjectView(R.id.spinner)
-    Spinner spinner;
-    View.OnFocusChangeListener focusChangeListener = new View.OnFocusChangeListener() {
-        @Override
-        public void onFocusChange(View v, boolean hasFocus) {
-            if (!hasFocus) {
-                hideKeyboard(v);
-            }
-        }
-    };
+
+    private static final String INPUT_PROBLEM_DATA = "Input problem data";
+    private static final String POSTING = "Posting...";
+
     private AddProblemManager addProblemManager;
     private DataManager dataManager;
     private AccountManager accountManager;
     private User user;
     private String USER_NAME;
     private String USER_SURNAME;
+    private MaterialDialog progressDialog;
 
     /**
      * Returns Singleton instance of AddProblemDescriptionFragment
      */
+    @InjectView(R.id.problemTitle) EditText problemTitle;
+    @InjectView(R.id.problemDescription) EditText problemDescription;
+    @InjectView(R.id.problemSolution) EditText problemSolution;
+    @InjectView(R.id.spinner) Spinner spinner;
+
     public static AddProblemDescriptionFragment getInstance(List<Bitmap> bitmapPhotos,
                                                             List<String> descriptions) {
         if (instance == null) {
@@ -83,31 +78,20 @@ public class AddProblemDescriptionFragment extends Fragment implements LogInList
         }
         return instance;
     }
-
-
-    /**
-     * Hides keyboard
-     * @param view onFocused view
-     */
-    public void hideKeyboard(View view) {
-        InputMethodManager inputMethodManager
-                = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
-        inputMethodManager.hideSoftInputFromWindow(view.getWindowToken(), 0);
-    }
-
-    /**
-     * Validation of posting data
-     */
+    
     public void postProblemValidation () {
         boolean isProblemValid;
         isProblemValid = new Validator().addProblemValidation(problemTitle);
         if (!isProblemValid) {
-            Toast.makeText(getActivity().getApplicationContext(), "Input problem data", Toast.LENGTH_LONG).show();
+            Toast.makeText(getActivity()
+                           .getApplicationContext(), INPUT_PROBLEM_DATA, Toast.LENGTH_LONG)
+                           .show();
             return;
         }
         setChooseNameDialog();
     }
 
+   
     /**
      * Calls when posting are successfull
      * @param idOfmessage
@@ -123,7 +107,8 @@ public class AddProblemDescriptionFragment extends Fragment implements LogInList
      * Initialize view
      */
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
+                             @Nullable Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.tab_1, container, false);
 
         addProblemManager = AddProblemManager.getInstance(getActivity().getApplicationContext());
@@ -131,9 +116,11 @@ public class AddProblemDescriptionFragment extends Fragment implements LogInList
         dataManager = DataManager.getInstance(getActivity().getApplicationContext());
 
         ButterKnife.inject(this, v);
-        problemTitle.setOnFocusChangeListener(focusChangeListener);
-        problemDescription.setOnFocusChangeListener(focusChangeListener);
-        problemSolution.setOnFocusChangeListener(focusChangeListener);
+
+        Keyboard keyboard = new Keyboard(getActivity());
+        keyboard.setOnFocusChangeListener(problemTitle);
+        keyboard.setOnFocusChangeListener(problemDescription);
+        keyboard.setOnFocusChangeListener(problemSolution);
 
         return v;
     }
@@ -146,13 +133,24 @@ public class AddProblemDescriptionFragment extends Fragment implements LogInList
         super.onDestroy();
         accountManager.removeLogInListener(this);
         addProblemManager.removeAddProblemListener(this);
-
     }
+    
 
     /**
      * Set result of authorization
      * @param user authorize user
      */
+    private void showProgressDialog() {
+        progressDialog = new MaterialDialog.Builder(getActivity())
+                .title(POSTING)
+                .content(PLEASE_WAIT)
+                .progress(true, 0)
+                .backgroundColorRes(R.color.log_in_dialog)
+                .contentColorRes(R.color.log_in_content)
+                .titleColorRes(R.color.log_in_title)
+                .show();
+    }
+
     @Override
     public void setLogInResult(final User user) {
         this.user = user;
