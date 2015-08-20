@@ -1,7 +1,6 @@
 package com.ecomap.ukraine.activities.addProblem;
 
-import android.app.ProgressDialog;
-import android.content.Context;
+
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
@@ -10,7 +9,6 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
@@ -21,6 +19,7 @@ import com.ecomap.ukraine.account.manager.AccountManager;
 import com.ecomap.ukraine.account.manager.LogInListener;
 import com.ecomap.ukraine.activities.ExtraFieldNames;
 import com.ecomap.ukraine.activities.Keyboard;
+import com.ecomap.ukraine.activities.main.MainActivity;
 import com.ecomap.ukraine.addproblem.manager.AddProblemListener;
 import com.ecomap.ukraine.addproblem.manager.AddProblemManager;
 import com.ecomap.ukraine.data.manager.DataManager;
@@ -36,7 +35,7 @@ import butterknife.ButterKnife;
 import butterknife.InjectView;
 
 /**
- * Created by Edwin on 15/02/2015.
+ * Fragment for posting description of new problem
  */
 public class AddProblemDescriptionFragment extends Fragment implements LogInListener, AddProblemListener, ProblemListener {
 
@@ -59,14 +58,14 @@ public class AddProblemDescriptionFragment extends Fragment implements LogInList
     private String USER_SURNAME;
     private MaterialDialog progressDialog;
 
-    /**
-     * Returns Singleton instance of AddProblemDescriptionFragment
-     */
+
     @InjectView(R.id.problemTitle) EditText problemTitle;
     @InjectView(R.id.problemDescription) EditText problemDescription;
     @InjectView(R.id.problemSolution) EditText problemSolution;
     @InjectView(R.id.spinner) Spinner spinner;
-
+    /**
+     * Returns Singleton instance of AddProblemDescriptionFragment
+     */
     public static AddProblemDescriptionFragment getInstance(List<Bitmap> bitmapPhotos,
                                                             List<String> descriptions) {
         if (instance == null) {
@@ -78,7 +77,10 @@ public class AddProblemDescriptionFragment extends Fragment implements LogInList
         }
         return instance;
     }
-    
+
+    /**
+     * Validation of data of new problem
+     */
     public void postProblemValidation () {
         boolean isProblemValid;
         isProblemValid = new Validator().addProblemValidation(problemTitle);
@@ -96,7 +98,6 @@ public class AddProblemDescriptionFragment extends Fragment implements LogInList
      * Calls when posting are successfull
      * @param idOfmessage
      */
-
     public void successPosting(final int idOfmessage) {
         Toast.makeText(getActivity().getApplicationContext(), idOfmessage, Toast.LENGTH_LONG).show();
         dataManager.registerProblemListener(this);
@@ -134,11 +135,10 @@ public class AddProblemDescriptionFragment extends Fragment implements LogInList
         accountManager.removeLogInListener(this);
         addProblemManager.removeAddProblemListener(this);
     }
-    
+
 
     /**
-     * Set result of authorization
-     * @param user authorize user
+     * Show progres dialog when problem posting
      */
     private void showProgressDialog() {
         progressDialog = new MaterialDialog.Builder(getActivity())
@@ -151,6 +151,10 @@ public class AddProblemDescriptionFragment extends Fragment implements LogInList
                 .show();
     }
 
+    /**
+     * Set result of authorization
+     * @param user authorize user
+     */
     @Override
     public void setLogInResult(final User user) {
         this.user = user;
@@ -165,7 +169,6 @@ public class AddProblemDescriptionFragment extends Fragment implements LogInList
     public void onSuccessProblemPosting() {
         successPosting(R.string.problem_added_sucessfully);
     }
-
 
     @Override
     public void onFailedProblemPosting() {
@@ -221,7 +224,7 @@ public class AddProblemDescriptionFragment extends Fragment implements LogInList
         String latitude = getActivity().getIntent().getDoubleExtra(ExtraFieldNames.LAT, 0) + "";
         String longitude = getActivity().getIntent().getDoubleExtra(ExtraFieldNames.LNG, 0) + "";
         String type = String.valueOf(spinner.getSelectedItemId() + 1);
-        showProgresDialog();
+        showProgressDialog();
         addProblemManager.addProblem(title, description, solution, latitude,
                 longitude, type, String.valueOf(user.getId()),
                 USER_NAME, USER_SURNAME, bitmapPhotos, photoDescriptions);
@@ -229,16 +232,7 @@ public class AddProblemDescriptionFragment extends Fragment implements LogInList
         bitmapPhotos = null;
     }
 
-    /**
-     * Show progres dialog when problem posting
-     */
-    private void showProgresDialog() {
-        ProgressDialog progressDialog = new ProgressDialog(getActivity(),
-                android.R.style.Theme_Holo_Light_Panel);
-        progressDialog.setIndeterminate(true);
-        progressDialog.setMessage("Posting...");
-        progressDialog.show();
-    }
+
 
     /**
      * Set dialog of choise user name
