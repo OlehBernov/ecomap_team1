@@ -1,13 +1,11 @@
 package com.ecomap.ukraine.activities.Authorization;
 
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 
@@ -18,6 +16,7 @@ import com.ecomap.ukraine.account.manager.LogInListener;
 import com.ecomap.ukraine.activities.ExtraFieldNames;
 import com.ecomap.ukraine.activities.addProblem.AddProblemDescriptionFragment;
 import com.ecomap.ukraine.activities.main.MainActivity;
+import com.ecomap.ukraine.activities.Keyboard;
 import com.ecomap.ukraine.models.User;
 import com.ecomap.ukraine.validation.Validator;
 import com.facebook.CallbackManager;
@@ -45,25 +44,17 @@ public class LoginScreen extends AppCompatActivity implements LogInListener {
     private static final String FAILURE_OF_LOG_IN = "message"; //TODO: write message
     private final static String SIGN_UP = "Sign up";
     private final static String CANCEL = "Cancel";
-    protected final String TAG = getClass().getSimpleName();
-    View.OnFocusChangeListener focusChangeListener = new View.OnFocusChangeListener() {
-        @Override
-        public void onFocusChange(View v, boolean hasFocus) {
-            if (!hasFocus) {
-                hideKeyboard(v);
-            }
-        }
-    };
-    @InjectView(R.id.input_email_log)
-    EditText emailText;
-    @InjectView(R.id.input_password_log)
-    EditText passwordText;
-    @InjectView(R.id.btn_log_in)
-    Button logInButton;
+
     private Intent mainIntent;
     private AccountManager accountManager;
     private CallbackManager callbackManager;
     private MaterialDialog logInProgress;
+
+    protected final String TAG = getClass().getSimpleName();
+
+    @InjectView(R.id.input_email_log) EditText emailText;
+    @InjectView(R.id.input_password_log) EditText passwordText;
+    @InjectView(R.id.btn_log_in) Button logInButton;
 
     public void login() {
         boolean isLogInValid;
@@ -85,7 +76,8 @@ public class LoginScreen extends AppCompatActivity implements LogInListener {
         String email = emailText.getText().toString();
         String password = passwordText.getText().toString();
 
-        accountManager.registerLogInListener(AddProblemDescriptionFragment.getInstance(null, null));
+        accountManager.registerLogInListener(AddProblemDescriptionFragment
+                                            .getInstance(null, null));
         accountManager.registerLogInListener(this);
         accountManager.logInUser(password, email);
     }
@@ -100,19 +92,12 @@ public class LoginScreen extends AppCompatActivity implements LogInListener {
             Log.e(TAG, "null");
             showFailureDialog();
         }
-
     }
 
     @Override
     public void onActivityResult(final int requestCode, final int resultCode, final Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         callbackManager.onActivityResult(requestCode, resultCode, data);
-    }
-
-    public void hideKeyboard(View view) {
-        InputMethodManager inputMethodManager
-                = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-        inputMethodManager.hideSoftInputFromWindow(view.getWindowToken(), 0);
     }
 
     /**
@@ -134,8 +119,10 @@ public class LoginScreen extends AppCompatActivity implements LogInListener {
         ButterKnife.inject(this);
         emailText.setText(sharedPreferences.getString(AccountManager.LOGIN, ""));
         passwordText.setText(sharedPreferences.getString(AccountManager.PASSWORD, ""));
-        emailText.setOnFocusChangeListener(focusChangeListener);
-        passwordText.setOnFocusChangeListener(focusChangeListener);
+
+        Keyboard keyboard = new Keyboard(this);
+        keyboard.setOnFocusChangeListener(emailText);
+        keyboard.setOnFocusChangeListener(passwordText);
 
         logInButton.setOnClickListener(new View.OnClickListener() {
             @Override

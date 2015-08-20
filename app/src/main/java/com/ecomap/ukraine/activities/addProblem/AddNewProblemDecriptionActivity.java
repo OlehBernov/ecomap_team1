@@ -1,5 +1,6 @@
 package com.ecomap.ukraine.activities.addProblem;
 
+import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
@@ -20,6 +21,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -30,6 +32,7 @@ import android.widget.TableRow;
 import com.ecomap.ukraine.R;
 import com.ecomap.ukraine.activities.BitmapResizer;
 import com.ecomap.ukraine.activities.ExtraFieldNames;
+import com.ecomap.ukraine.activities.Keyboard;
 import com.ecomap.ukraine.models.User;
 
 import java.io.File;
@@ -60,10 +63,10 @@ public class AddNewProblemDecriptionActivity extends AppCompatActivity {
     private List<Uri> userPhotos;
     private TableLayout photoDescriptionLayout;
     private List<String> descriptions;
-    private User user;
     private Toolbar toolbar;
     private ViewPager pager;
-    private String[] Titles;
+    private String[] titles;
+    private User user;
 
     public List<Bitmap> getBitmapsPhoto() {
         List<Bitmap> photoBitmaps = new ArrayList<>();
@@ -109,17 +112,44 @@ public class AddNewProblemDecriptionActivity extends AppCompatActivity {
     }
 
     @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_add_problem, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+
+        if (id == R.id.action_confirm_problem) {
+            AddProblemDescriptionFragment.getInstance(getBitmapsPhoto(), descriptions).postProblemValidation();
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+        public void onBackPressed() {
+                super.onBackPressed();
+                Intent mainIntent = new Intent(this, ChooseProblemLocationActivity.class);
+                mainIntent.putExtra(ExtraFieldNames.USER, user);
+                startActivity(mainIntent);
+                finish();
+            }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Titles = getResources().getStringArray(R.array.tabs_in_posting_prpblem);
+
+        titles = getResources().getStringArray(R.array.tabs_in_posting_problem);
         user = (User) getIntent().getSerializableExtra(ExtraFieldNames.USER);
 
         setContentView(R.layout.add_problem_description);
         setupToolbar();
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
 
-
-        ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager(), Titles, NUMBER_OF_TUBS);
+        ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager(), titles, NUMBER_OF_TUBS);
 
         pager = (ViewPager) findViewById(R.id.pager);
         pager.setAdapter(adapter);
@@ -158,24 +188,6 @@ public class AddNewProblemDecriptionActivity extends AppCompatActivity {
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_add_problem, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
-
-        if (id == R.id.action_confirm_problem) {
-            AddProblemDescriptionFragment.getInstance(getBitmapsPhoto(), descriptions).sendProblem();
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
-
-    @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (isGalleryPhoto(requestCode, resultCode, data)) {
@@ -183,15 +195,6 @@ public class AddNewProblemDecriptionActivity extends AppCompatActivity {
         } else if (isCameraPhoto(requestCode, resultCode)) {
             processCameraPhoto();
         }
-    }
-
-    @Override
-    public void onBackPressed() {
-        super.onBackPressed();
-        Intent mainIntent = new Intent(this, ChooseProblemLocationActivity.class);
-        mainIntent.putExtra(ExtraFieldNames.USER, user);
-        startActivity(mainIntent);
-        finish();
     }
 
     @Override
@@ -224,7 +227,7 @@ public class AddNewProblemDecriptionActivity extends AppCompatActivity {
      * Sets application toolbar.
      */
     private void setupToolbar() {
-        toolbar = (Toolbar) findViewById(R.id.tool_bar);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.tool_bar);
         toolbar.setTitle(ADD_DESCRIPTION);
         toolbar.setNavigationIcon(R.drawable.ic_arrow_back_white_24dp);
         toolbar.setClickable(true);
@@ -312,7 +315,10 @@ public class AddNewProblemDecriptionActivity extends AppCompatActivity {
                 (int) getResources().getDimension(R.dimen.description_right_padding),
                 (int) getResources().getDimension(R.dimen.description_bottom_padding)
         );
-        AddPhotoFragment.getInstance(this).setOnFocusChangeListener(photoDescription);
+
+        Keyboard keyboard = new Keyboard(this);
+        keyboard.setOnFocusChangeListener(photoDescription);
+
         if (!descriptions.get(id).equals("")) {
             photoDescription.setText(descriptions.get(id));
         }

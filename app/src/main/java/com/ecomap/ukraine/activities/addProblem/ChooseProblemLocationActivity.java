@@ -19,7 +19,9 @@ public class ChooseProblemLocationActivity extends AppCompatActivity {
     private User user;
     private FragmentChooseCoordMap map;
 
-
+    /**
+     * Open AddDescriptionActivity
+     */
     public void openAddDescriptionActivity(View view) {
         if (map.getMarkerPosition() == null) {
             Toast.makeText(this, R.string.Tap_message, Toast.LENGTH_SHORT).show();
@@ -33,7 +35,9 @@ public class ChooseProblemLocationActivity extends AppCompatActivity {
         finish();
 
     }
-
+    /**
+     * Calls when pressed custom back button
+     */
     public void cancelButton(View view) {
         Intent mainIntent = new Intent(this, MainActivity.class);
         mainIntent.putExtra(ExtraFieldNames.USER, user);
@@ -41,6 +45,18 @@ public class ChooseProblemLocationActivity extends AppCompatActivity {
         finish();
     }
 
+    /**
+     * Calls when pressed back button
+     */
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        cancelButton(null);
+    }
+
+    /**
+     * Initialize activity
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -61,11 +77,6 @@ public class ChooseProblemLocationActivity extends AppCompatActivity {
         });
     }
 
-    @Override
-    public void onBackPressed() {
-        super.onBackPressed();
-        cancelButton(null);
-    }
 
     /**
      * Adds google map
@@ -77,6 +88,9 @@ public class ChooseProblemLocationActivity extends AppCompatActivity {
                 .commit();
     }
 
+    /**
+     * Set custom setting on toolbar
+     */
     private void setupToolbar() {
         toolbar = (Toolbar) findViewById(R.id.tool_bar);
         toolbar.setTitle(R.string.Choose_problem_location_activity);

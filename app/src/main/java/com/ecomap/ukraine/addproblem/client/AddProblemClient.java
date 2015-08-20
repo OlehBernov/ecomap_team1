@@ -15,15 +15,31 @@ import org.json.JSONException;
 
 import java.util.HashMap;
 import java.util.List;
-
+/**
+ * Performs posting problems on server.
+ */
 public class AddProblemClient {
 
+    /**
+     * Address of the server on which LoadingClient post
+     * information about new problems.
+     */
     private static final String POST_PROBLEM_URL = "http://ecomap.org/api/problempost/";
 
+    /**
+     * Address of the server on which LoadingClient post
+     * photos of new problems.
+     */
     private static final String POST_PHOTO_URL = "http://ecomap.org/api/photo/";
 
+    /**
+     * Application context.
+     */
     private Context context;
 
+    /**
+     * Request receiver.
+     */
     private AddProblemRequestReceiver addProblemRequestReceiver;
 
     /**
@@ -38,6 +54,9 @@ public class AddProblemClient {
         this.context = context;
     }
 
+    /**
+     * Sends a request to post information about new problems.
+     */
     public void addProblemDescription(final String title, final String content, final String proposal,
                                       final String latitude, final String longitude, final String type, final String userId,
                                       final String userName, final String userSurname, final List<Bitmap> bitmaps,
@@ -87,6 +106,9 @@ public class AddProblemClient {
 
     }
 
+    /**
+     * Sends a request to post photo of new problems.
+     */
     public void addPhotoToProblem(final String userID, final String userName,
                                   final String userSurname, final String description,
                                   final String problemID, Bitmap photo, final int count, final int size) {
@@ -122,6 +144,9 @@ public class AddProblemClient {
         RequestQueueWrapper.getInstance(context).addToRequestQueue(multipartRequest);
     }
 
+    /**
+     * Sends all  photos of new problems.
+     */
     public void addPhotosToProblem(final String userID, final String userName,
                                    final String userSurname, final List<String> descriptions,
                                    final String problemID, final List<Bitmap> photos) {

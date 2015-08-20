@@ -274,8 +274,9 @@ public class MainActivity extends AppCompatActivity {
         } else {
             filterManager.setRenderer();
             item.setIcon(R.drawable.filter8);
-            filterLayout.closeDrawer(GravityCompat.END);
             toolbar.setTitle(previousTitle);
+            filterLayout.closeDrawer(GravityCompat.END);
+
         }
     }
 
@@ -305,6 +306,7 @@ public class MainActivity extends AppCompatActivity {
             Intent intent = new Intent(this, ChooseProblemLocationActivity.class);
             intent.putExtra(ExtraFieldNames.USER, user);
             startActivity(intent);
+            reverseAnimateReavel(null);
             finish();
         }
     }
@@ -337,33 +339,6 @@ public class MainActivity extends AppCompatActivity {
                 })
                 .show();
 
-        /*AlertDialog.Builder builder = new AlertDialog.Builder(activity);
-
-        builder.setTitle(R.string.Caution);
-        builder.setMessage(ALERT_MESSAGE);
-        builder.setCancelable(false);
-        builder.setIcon(R.drawable.ic_info_outline_black_24dp);
-        builder.setPositiveButton(OK,
-                new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(final DialogInterface dialog,
-                                        final int id) {
-                        Intent mainIntent = new Intent(activity, LoginScreen.class);
-                        startActivity(mainIntent);
-                        finish();
-                    }
-                });
-        builder.setNegativeButton(CANCEL,
-                new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(final DialogInterface dialog,
-                                        final int id) {
-                        dialog.cancel();
-
-                    }
-                });
-        AlertDialog alert = builder.create();
-        alert.show();*/
     }
 
 
@@ -617,7 +592,7 @@ public class MainActivity extends AppCompatActivity {
     private void addMapFragment() {
         FragmentManager fragmentManager = getSupportFragmentManager();
         fragmentManager.beginTransaction()
-                .replace(R.id.container, FragmentEcoMap.newInstance(this, fragmentManager))
+                .replace(R.id.container, FragmentEcoMap.newInstance())
                 .commit();
     }
 

@@ -3,6 +3,9 @@ package com.ecomap.ukraine.addproblem.convertion;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+/**
+ * Performs converting JSON to entities.
+ */
 public class JSONParser {
 
     public String parseAddedProblemInformation(final String addedProblemJSON) throws JSONException {

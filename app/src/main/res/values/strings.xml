@@ -14,8 +14,8 @@
     <string name="Sign_up"><u>Sign up</u></string>
     <string name="Sign_in"><u>Sign in</u></string>
     <string name="Skip"><u>Skip</u></string>
-    <string name="Choose_problem_location_activity"><u>Choose problem location</u></string>
-    <string name="Tap_message"><u>Tap to place marker</u></string>
+    <string name="Choose_problem_location_activity">Choose problem location</string>
+    <string name="Tap_message">Tap to place marker</string>
 
     <string name="unsolved">Unsolved</string>
     <string name="resolved">Resolved</string>
@@ -65,6 +65,9 @@
     <string name="problem_added_sucessfully">Problem added sucessfully</string>
     <string name="photo_post_error">Connection error. Photo hasn`t posted</string>
     <string name="problem_post_error">Connection error. Problem hasn`t posted</string>
+    <string name="post_problem_anonymously">Do you want post problem anonymously?</string>
+    <string name="yes">YES</string>
+    <string name="no">NO</string>
 
     <string-array name="types">
         <item>Forestry issues</item>
@@ -79,7 +82,7 @@
     <string name="Description">Description</string>
     <string name="Photo">Photo</string>
 
-    <string-array name="tabs_in_posting_prpblem">
+    <string-array name="tabs_in_posting_problem">
         <item>@string/Description</item>
         <item>@string/Photo</item>
     </string-array>
