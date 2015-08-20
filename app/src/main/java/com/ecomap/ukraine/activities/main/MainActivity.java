@@ -304,8 +304,10 @@ public class MainActivity extends AppCompatActivity {
             setNotAutorizeDialog();
         } else {
             Intent intent = new Intent(this, ChooseProblemLocationActivity.class);
+            intent.putExtra(ExtraFieldNames.USER, user);
             startActivity(intent);
             reverseAnimateReavel(null);
+            finish();
         }
     }
 

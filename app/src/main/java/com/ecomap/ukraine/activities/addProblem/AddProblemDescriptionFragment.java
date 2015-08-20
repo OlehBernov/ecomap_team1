@@ -69,6 +69,9 @@ public class AddProblemDescriptionFragment extends Fragment implements LogInList
     private String USER_NAME;
     private String USER_SURNAME;
 
+    /**
+     * Returns Singleton instance of AddProblemDescriptionFragment
+     */
     public static AddProblemDescriptionFragment getInstance(List<Bitmap> bitmapPhotos,
                                                             List<String> descriptions) {
         if (instance == null) {
@@ -82,13 +85,19 @@ public class AddProblemDescriptionFragment extends Fragment implements LogInList
     }
 
 
-
+    /**
+     * Hides keyboard
+     * @param view onFocused view
+     */
     public void hideKeyboard(View view) {
         InputMethodManager inputMethodManager
                 = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
         inputMethodManager.hideSoftInputFromWindow(view.getWindowToken(), 0);
     }
 
+    /**
+     * Validation of posting data
+     */
     public void postProblemValidation () {
         boolean isProblemValid;
         isProblemValid = new Validator().addProblemValidation(problemTitle);
@@ -99,7 +108,10 @@ public class AddProblemDescriptionFragment extends Fragment implements LogInList
         setChooseNameDialog();
     }
 
-
+    /**
+     * Calls when posting are successfull
+     * @param idOfmessage
+     */
 
     public void successPosting(final int idOfmessage) {
         Toast.makeText(getActivity().getApplicationContext(), idOfmessage, Toast.LENGTH_LONG).show();
@@ -107,6 +119,9 @@ public class AddProblemDescriptionFragment extends Fragment implements LogInList
         dataManager.refreshAllProblem();
     }
 
+    /**
+     * Initialize view
+     */
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.tab_1, container, false);
@@ -123,6 +138,9 @@ public class AddProblemDescriptionFragment extends Fragment implements LogInList
         return v;
     }
 
+    /**
+     * Callback on destroy fragment
+     */
     @Override
     public void onDestroy() {
         super.onDestroy();
@@ -131,7 +149,10 @@ public class AddProblemDescriptionFragment extends Fragment implements LogInList
 
     }
 
-
+    /**
+     * Set result of authorization
+     * @param user authorize user
+     */
     @Override
     public void setLogInResult(final User user) {
         this.user = user;
@@ -139,7 +160,9 @@ public class AddProblemDescriptionFragment extends Fragment implements LogInList
         USER_SURNAME = user.getSurname();
     }
 
-
+    /**
+     * Represents variants of posting result
+     */
     @Override
     public void onSuccessProblemPosting() {
         successPosting(R.string.problem_added_sucessfully);
@@ -164,17 +187,33 @@ public class AddProblemDescriptionFragment extends Fragment implements LogInList
 
     }
 
+    /**
+     * Get list of all details.
+     *
+     * @param details details of concrete problem.
+     */
     @Override
     public void updateProblemDetails(final Details details) {
     }
 
+    /**
+     * Get list of all problems.
+     *
+     * @param problems list of all problems.
+     */
     @Override
     public void updateAllProblems(final List<Problem> problems) {
+        Intent intent = new Intent(getActivity(), MainActivity.class);
+        intent.putExtra(ExtraFieldNames.USER, user);
+        startActivity(intent);
         getActivity().finish();
         dataManager.removeProblemListener(this);
 
     }
 
+    /**
+     * Post new problem on server
+     */
     private void sendProblem() {
         addProblemManager.registerAddProblemListener(this);
         String title = problemTitle.getText().toString();
@@ -188,9 +227,13 @@ public class AddProblemDescriptionFragment extends Fragment implements LogInList
         addProblemManager.addProblem(title, description, solution, latitude,
                 longitude, type, String.valueOf(user.getId()),
                 USER_NAME, USER_SURNAME, bitmapPhotos, photoDescriptions);
+        onSuccessProblemPosting();
         bitmapPhotos = null;
     }
 
+    /**
+     * Show progres dialog when problem posting
+     */
     private void showProgresDialog() {
         ProgressDialog progressDialog = new ProgressDialog(getActivity(),
                 android.R.style.Theme_Holo_Light_Panel);
@@ -199,6 +242,9 @@ public class AddProblemDescriptionFragment extends Fragment implements LogInList
         progressDialog.show();
     }
 
+    /**
+     * Set dialog of choise user name
+     */
     private void setChooseNameDialog() {
         new MaterialDialog.Builder(getActivity())
                 .title(R.string.Caution)

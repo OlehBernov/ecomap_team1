@@ -23,6 +23,9 @@ import java.nio.charset.Charset;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * Performs multipart request
+ */
 public class MultipartRequest extends Request<String> {
 
     private final Response.Listener<String> listener;
@@ -33,6 +36,9 @@ public class MultipartRequest extends Request<String> {
     private Bitmap file;
     private int counter = 0;
 
+    /**
+     * Constructor
+     */
     public MultipartRequest(final String url, final Response.Listener<String> listener,
                             final Response.ErrorListener errorListener,
                             final Bitmap file, final HashMap<String, String> params, int count) {

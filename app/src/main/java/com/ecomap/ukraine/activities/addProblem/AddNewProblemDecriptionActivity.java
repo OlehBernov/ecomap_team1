@@ -1,5 +1,6 @@
 package com.ecomap.ukraine.activities.addProblem;
 
+import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
@@ -20,6 +21,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -63,6 +65,7 @@ public class AddNewProblemDecriptionActivity extends AppCompatActivity {
     private Toolbar toolbar;
     private ViewPager pager;
     private String[] Titles;
+    private User user;
 
     public List<Bitmap> getBitmapsPhoto() {
         List<Bitmap> photoBitmaps = new ArrayList<>();
@@ -126,18 +129,20 @@ public class AddNewProblemDecriptionActivity extends AppCompatActivity {
     }
 
     @Override
-    public void onBackPressed() {
-        super.onBackPressed();
-        Intent mainIntent = new Intent(this, ChooseProblemLocationActivity.class);
-        startActivity(mainIntent);
-        finish();
-    }
+        public void onBackPressed() {
+                super.onBackPressed();
+                Intent mainIntent = new Intent(this, ChooseProblemLocationActivity.class);
+                mainIntent.putExtra(ExtraFieldNames.USER, user);
+                startActivity(mainIntent);
+                finish();
+            }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         Titles = getResources().getStringArray(R.array.tabs_in_posting_problem);
+        user = (User) getIntent().getSerializableExtra(ExtraFieldNames.USER);
 
         setContentView(R.layout.add_problem_description);
         setupToolbar();

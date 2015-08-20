@@ -85,7 +85,8 @@ public class LoginScreen extends AppCompatActivity implements LogInListener {
         String email = emailText.getText().toString();
         String password = passwordText.getText().toString();
 
-        accountManager.registerLogInListener(AddProblemDescriptionFragment.getInstance(null, null));
+        accountManager.registerLogInListener(AddProblemDescriptionFragment.
+                getInstance(null, null));
         accountManager.registerLogInListener(this);
         accountManager.logInUser(password, email);
     }
