@@ -157,9 +157,11 @@ public class AddProblemDescriptionFragment extends Fragment implements LogInList
      */
     @Override
     public void setLogInResult(final User user) {
-        this.user = user;
-        USER_NAME = user.getName();
-        USER_SURNAME = user.getSurname();
+        if(user != null) {
+            this.user = user;
+            USER_NAME = user.getName();
+            USER_SURNAME = user.getSurname();
+        }
     }
 
     /**

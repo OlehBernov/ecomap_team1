@@ -5,8 +5,6 @@ import android.animation.AnimatorListenerAdapter;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.app.Activity;
-import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
@@ -39,7 +37,6 @@ import com.ecomap.ukraine.activities.ExtraFieldNames;
 import com.ecomap.ukraine.activities.addProblem.ChooseProblemLocationActivity;
 import com.ecomap.ukraine.data.manager.DataManager;
 import com.ecomap.ukraine.filter.FilterContract;
-import com.ecomap.ukraine.filter.FilterListener;
 import com.ecomap.ukraine.filter.FilterManager;
 import com.ecomap.ukraine.filter.FilterState;
 import com.ecomap.ukraine.filter.FilterStateConverter;
@@ -264,7 +261,6 @@ public class MainActivity extends AppCompatActivity {
      * Controls the position of the filter7 window on the screen.
      */
     public void showFilter(MenuItem item) {
-        filterLayout = (DrawerLayout) findViewById(R.id.drawer2);
         if (!filterLayout.isDrawerOpen(GravityCompat.END)) {
             item.setIcon(R.drawable.filter_back);
             setDate();
@@ -272,7 +268,6 @@ public class MainActivity extends AppCompatActivity {
             previousTitle = toolbar.getTitle();
             toolbar.setTitle(FILTER);
         } else {
-            filterManager.setRenderer();
             item.setIcon(R.drawable.filter8);
             toolbar.setTitle(previousTitle);
             filterLayout.closeDrawer(GravityCompat.END);
@@ -353,6 +348,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        filterLayout = (DrawerLayout) findViewById(R.id.drawer2);
         fab = (FloatingActionButton) findViewById(R.id.fab2);
 
         fab.setOnClickListener(new View.OnClickListener() {
@@ -381,6 +377,9 @@ public class MainActivity extends AppCompatActivity {
         createDateToPickerDialog();
 
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
+        filterLayout.setDrawerListener(new FilterDrawerListener());
+
+
     }
 
     /**
@@ -624,7 +623,6 @@ public class MainActivity extends AppCompatActivity {
      * Adds google map
      */
     private void setupFilter() {
-        filterLayout = (DrawerLayout) findViewById(R.id.drawer2);
         filterLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
         FilterState filterState = filterManager.getFilterStateFromPreference();
         setFiltersState(filterState);
@@ -686,4 +684,12 @@ public class MainActivity extends AppCompatActivity {
         setDate();
     }
 
+
+private  class FilterDrawerListener extends DrawerLayout.SimpleDrawerListener{
+        @Override
+        public void onDrawerClosed(View view) {
+            filterManager.setRenderer();
+        }
+
+    }
 }
