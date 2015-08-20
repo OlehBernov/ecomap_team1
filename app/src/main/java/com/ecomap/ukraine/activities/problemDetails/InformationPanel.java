@@ -592,7 +592,7 @@ public class InformationPanel {
     private void addPhotos(final Details details) {
         final List<Photo> photos = details.getPhotos();
         if (photos == null) {
-            hidePhotosTitle();
+            hidePhotosBlock();
             return;
         }
         if (isPhotoContainerHaveChild()) {
@@ -642,7 +642,7 @@ public class InformationPanel {
     }
 
     private boolean isPhotoContainerHaveChild() {
-        return photoContainer != null && (photoContainer.getChildCount() > 0);
+        return (photoContainer != null) && (photoContainer.getChildCount() > 0);
     }
 
     private void openPhotoSlidePager(final int position, final List<Photo> photos) {
@@ -653,11 +653,12 @@ public class InformationPanel {
         context.startActivity(intent);
     }
 
-    private void hidePhotosTitle() {
+    private void hidePhotosBlock() {
         TextView photosTitle = (TextView) activity.findViewById(R.id.photo);
         photosTitle.setText("");
         photosTitle.setPadding(0, 0, 0, 0);
         photosTitle.setTextSize(0.0f);
+        photoContainer.removeAllViews();
     }
 
 }

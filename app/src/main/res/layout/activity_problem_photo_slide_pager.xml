@@ -27,7 +27,6 @@
           android:layout_marginStart="34dp"
           android:textColor="#d4d4d4"
           android:layout_marginTop="33dp"
-          android:text="sdf"
           android:textAppearance="?android:attr/textAppearanceMedium"
           android:layout_below="@+id/problem_photo"
           android:layout_alignParentLeft="true"
