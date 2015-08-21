@@ -56,7 +56,6 @@ public class AddProblemDescriptionFragment extends Fragment implements LogInList
     private User user;
     private String USER_NAME;
     private String USER_SURNAME;
-    private MaterialDialog progressDialog;
 
 
     @InjectView(R.id.problemTitle) EditText problemTitle;
@@ -141,10 +140,11 @@ public class AddProblemDescriptionFragment extends Fragment implements LogInList
      * Show progres dialog when problem posting
      */
     private void showProgressDialog() {
-        progressDialog = new MaterialDialog.Builder(getActivity())
+        new MaterialDialog.Builder(getActivity())
                 .title(POSTING)
                 .content(PLEASE_WAIT)
                 .progress(true, 0)
+                .cancelable(false)
                 .backgroundColorRes(R.color.log_in_dialog)
                 .contentColorRes(R.color.log_in_content)
                 .titleColorRes(R.color.log_in_title)

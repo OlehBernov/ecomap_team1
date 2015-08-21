@@ -1,6 +1,8 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="0dp"
+    android:layout_weight="1"
     android:background="#fafafa"
     android:clickable="false"
     android:orientation="vertical">
@@ -19,11 +21,12 @@
             android:layout_alignParentStart="true"
             android:layout_marginLeft="5dp"
             android:layout_marginTop="5dp"
-            android:background="@drawable/type1" />
+            android:background="@drawable/type1"/>
 
 
-        <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        <RelativeLayout
             android:id="@+id/frameLayout"
+            xmlns:android="http://schemas.android.com/apk/res/android"
             android:layout_width="match_parent"
             android:layout_height="30dp"
             android:layout_alignParentEnd="true"
@@ -42,7 +45,7 @@
                 android:layout_height="25dp"
                 android:layout_marginLeft="3dp"
                 android:layout_marginTop="2dp"
-                android:src="@drawable/ic_star_border_black_24dp" />
+                android:src="@drawable/ic_star_border_black_24dp"/>
 
             <ImageView
                 android:id="@+id/star2"
@@ -51,7 +54,7 @@
                 android:layout_alignTop="@+id/star1"
                 android:layout_toEndOf="@+id/star1"
                 android:layout_toRightOf="@+id/star1"
-                android:src="@drawable/ic_star_border_black_24dp" />
+                android:src="@drawable/ic_star_border_black_24dp"/>
 
             <ImageView
                 android:id="@+id/star3"
@@ -60,7 +63,7 @@
                 android:layout_alignTop="@+id/star2"
                 android:layout_toEndOf="@+id/star2"
                 android:layout_toRightOf="@+id/star2"
-                android:src="@drawable/ic_star_border_black_24dp" />
+                android:src="@drawable/ic_star_border_black_24dp"/>
 
 
             <ImageView
@@ -70,7 +73,7 @@
                 android:layout_alignTop="@+id/star3"
                 android:layout_toEndOf="@+id/star3"
                 android:layout_toRightOf="@+id/star3"
-                android:src="@drawable/ic_star_border_black_24dp" />
+                android:src="@drawable/ic_star_border_black_24dp"/>
 
             <ImageView
                 android:id="@+id/star5"
@@ -79,7 +82,7 @@
                 android:layout_alignTop="@+id/star4"
                 android:layout_toEndOf="@+id/star4"
                 android:layout_toRightOf="@+id/star4"
-                android:src="@drawable/ic_star_border_black_24dp" />
+                android:src="@drawable/ic_star_border_black_24dp"/>
 
 
             <TextView
@@ -95,7 +98,7 @@
                 android:textAppearance="?android:attr/textAppearanceSmall"
                 android:textColor="#d01716"
                 android:textSize="17dp"
-                android:textStyle="bold" />
+                android:textStyle="bold"/>
 
             <ImageView
                 android:id="@+id/like"
@@ -106,7 +109,7 @@
                 android:layout_marginRight="8dp"
                 android:layout_toLeftOf="@+id/number_of_likes"
                 android:layout_toStartOf="@+id/number_of_likes"
-                android:src="@drawable/like_iconq" />
+                android:src="@drawable/like_iconq"/>
 
             <TextView
                 android:id="@+id/number_of_likes"
@@ -120,7 +123,7 @@
                 android:text="0"
                 android:textAppearance="?android:attr/textAppearanceSmall"
                 android:textColor="@color/abc_primary_text_disable_only_material_light"
-                android:textSize="17dp" />
+                android:textSize="17dp"/>
 
         </RelativeLayout>
 
@@ -134,7 +137,7 @@
             android:textAppearance="?android:attr/textAppearanceSmall"
             android:textColor="#bdbdbd"
             android:textSize="13dp"
-            android:textStyle="italic" />
+            android:textStyle="italic"/>
 
 
         <LinearLayout
@@ -158,133 +161,157 @@
                 android:textAppearance="?android:attr/textAppearanceSmall"
                 android:textColor="@color/abc_primary_text_disable_only_material_light"
                 android:textSize="15dp"
-                android:textStyle="bold" />
+                android:textStyle="bold"/>
 
         </LinearLayout>
 
     </RelativeLayout>
 
-    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        android:id="@+id/information"
+
+    <FrameLayout
+        android:id="@+id/connection_error2"
+        xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="10dp"
-        android:background="#fafafa"
-        android:clickable="false"
-        android:orientation="vertical">
+        android:layout_height="match_parent">
 
-        <TextView
-            android:id="@+id/description"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:paddingLeft="10dp"
-            android:paddingRight="10dp"
-            android:paddingTop="5dp"
-            android:text="Description: "
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:textColor="@color/abc_primary_text_disable_only_material_light"
-            android:textSize="15dp"
-            android:textStyle="bold" />
-
-        <include
-            android:id="@+id/expanded_description"
-            layout="@layout/expanded_description"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
-
-        <TextView
-            android:id="@+id/proposal"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:paddingLeft="10dp"
-            android:paddingRight="10dp"
-            android:paddingTop="5dp"
-            android:text="Proposal: "
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:textColor="@color/abc_primary_text_disable_only_material_light"
-            android:textSize="15sp"
-            android:textStyle="bold" />
-
-        <include
-            android:id="@+id/expanded_proposal"
-            layout="@layout/expanded_proposal"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
-
-        <TextView
-            android:id="@+id/photo"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:paddingLeft="10dp"
-            android:paddingRight="10dp"
-            android:paddingTop="5dp"
-            android:text="Photo:"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:textColor="@color/abc_primary_text_disable_only_material_light"
-            android:textSize="15dp"
-            android:textStyle="bold" />
-
-        <include
-            android:id="@+id/photo_preview"
-            layout="@layout/small_photo_preview"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
-
-        <RelativeLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
-
-            <EditText
-                android:id="@+id/add_comment"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@drawable/edit_text_style"
-                android:clickable="true"
-                android:descendantFocusability="beforeDescendants"
-                android:focusable="true"
-                android:focusableInTouchMode="true"
-                android:gravity="top"
-                android:hint="Add comment..."
-                android:minLines="6"
-                android:paddingLeft="12dp"
-                android:paddingRight="10dp"
-                android:paddingTop="10dp"
-                android:textAppearance="?android:attr/textAppearanceMedium"
-                android:textColor="@color/abc_primary_text_disable_only_material_light"
-                android:textColorHint="#6d6d6d"
-                android:textSize="15dp" />
-
-        </RelativeLayout>
-
-
-        <Button
-            android:id="@+id/send_comment"
+        <LinearLayout
+            xmlns:android="http://schemas.android.com/apk/res/android"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_gravity="center_horizontal"
-            android:paddingTop="10dp"
-            android:paddingLeft="10dp"
-            android:paddingRight="10dp"
-            android:text="Send"
-            android:textAllCaps="false"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:textColor="@color/abc_primary_text_disable_only_material_light"
-            android:textSize="15dp" />
+            android:background="#fafafa"
+            android:clickable="false"
+            android:orientation="vertical">
 
-    </LinearLayout>
+            <LinearLayout
+                android:id="@+id/information"
+                xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="10dp"
+                android:background="#fafafa"
+                android:clickable="false"
+                android:orientation="vertical">
 
-    <TableLayout
-        android:id="@+id/activities"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="left"
-        android:paddingLeft="10dp"
-        android:paddingRight="10dp"
-        android:paddingTop="10dp">
+                <TextView
+                    android:id="@+id/description"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingLeft="10dp"
+                    android:paddingRight="10dp"
+                    android:paddingTop="5dp"
+                    android:text="Description: "
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:textColor="@color/abc_primary_text_disable_only_material_light"
+                    android:textSize="15dp"
+                    android:textStyle="bold"/>
 
+                <include
+                    android:id="@+id/expanded_description"
+                    layout="@layout/expanded_description"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"/>
 
-    </TableLayout>
+                <TextView
+                    android:id="@+id/proposal"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingLeft="10dp"
+                    android:paddingRight="10dp"
+                    android:paddingTop="5dp"
+                    android:text="Proposal: "
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:textColor="@color/abc_primary_text_disable_only_material_light"
+                    android:textSize="15sp"
+                    android:textStyle="bold"/>
+
+                <include
+                    android:id="@+id/expanded_proposal"
+                    layout="@layout/expanded_proposal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"/>
+
+                <TextView
+                    android:id="@+id/photo"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingLeft="10dp"
+                    android:paddingRight="10dp"
+                    android:text="Photo:"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:textColor="@color/abc_primary_text_disable_only_material_light"
+                    android:textSize="15dp"
+                    android:textStyle="bold"/>
+
+                <include
+                    android:id="@+id/photo_preview"
+                    layout="@layout/small_photo_preview"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"/>
+
+                <RelativeLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+
+                    <EditText
+                        android:id="@+id/add_comment"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/edit_text_style"
+                        android:clickable="true"
+                        android:descendantFocusability="beforeDescendants"
+                        android:focusable="true"
+                        android:focusableInTouchMode="true"
+                        android:gravity="top"
+                        android:hint="Add comment..."
+                        android:minLines="6"
+                        android:paddingLeft="12dp"
+                        android:paddingRight="10dp"
+                        android:paddingTop="10dp"
+                        android:textAppearance="?android:attr/textAppearanceMedium"
+                        android:textColor="@color/abc_primary_text_disable_only_material_light"
+                        android:textColorHint="#6d6d6d"
+                        android:textSize="15dp"/>
+
+                </RelativeLayout>
+
+                <Button
+                    android:id="@+id/send_comment"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:paddingLeft="10dp"
+                    android:paddingRight="10dp"
+                    android:paddingTop="10dp"
+                    android:text="Send"
+                    android:textAllCaps="false"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:textColor="@color/abc_primary_text_disable_only_material_light"
+                    android:textSize="15dp"/>
+
+                <TableLayout
+                    android:id="@+id/activities"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="left"
+                    android:paddingLeft="10dp"
+                    android:paddingRight="10dp"
+                    android:paddingTop="10dp">
+
+                </TableLayout>
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <FrameLayout
+            android:id="@+id/connection_error"
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+        </FrameLayout>
+
+    </FrameLayout>
 
 </LinearLayout>
+

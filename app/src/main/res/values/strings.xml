@@ -82,6 +82,7 @@
 
     <string name="Description">Description</string>
     <string name="Photo">Photo</string>
+    <string name="settings">Settings</string>
 
     <string-array name="tabs_in_posting_problem">
         <item>@string/Description</item>

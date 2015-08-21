@@ -110,6 +110,7 @@ public class SignupActivity extends AppCompatActivity implements LogInListener {
                 .title(CREATING_ACCOUNT)
                 .content(SIGNUP_MESSAGE)
                 .progress(true, 0)
+                .cancelable(false)
                 .backgroundColorRes(R.color.log_in_dialog)
                 .contentColorRes(R.color.log_in_content)
                 .titleColorRes(R.color.log_in_title)

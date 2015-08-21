@@ -9,6 +9,7 @@ import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.content.res.ResourcesCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -92,6 +93,7 @@ public class InformationPanel {
     private boolean isScrollDisable;
     private float fabStartingPosition;
     private float currentOffset;
+    private FragmentManager fragmentManager;
 
     /**
      * Constructor
@@ -99,11 +101,13 @@ public class InformationPanel {
      * @param activity callback activity
      * @param problem  clicked problem
      */
-    public InformationPanel(final Activity activity, final Problem problem) {
+    public InformationPanel(final Activity activity, final FragmentManager fragmentManager,
+                            final Problem problem) {
 
         this.context = activity.getApplicationContext();
         this.activity = activity;
         this.toolbar = (Toolbar) activity.findViewById(R.id.toolbar);
+        this.fragmentManager = fragmentManager;
         this.problem = problem;
 
         slidingUpPanelLayout = (SlidingUpPanelLayout) activity.findViewById(R.id.sliding_layout);
@@ -371,7 +375,8 @@ public class InformationPanel {
                         event.getRawY(),
                         event.getMetaState()
                 );
-            }            @Override
+            }
+            @Override
             public boolean onTouch(View v, MotionEvent event) {
                 if (event.getAction() == MotionEvent.ACTION_DOWN) {
                     previousY = event.getY();
@@ -386,12 +391,23 @@ public class InformationPanel {
         });
     }
 
+    InternetConnectionErrorFragment errorFragment;
+
     public void setProblemDetails(final Details details) {
+        clearDetailsPanel();
         if (details == null) {
+            errorFragment = InternetConnectionErrorFragment.newInstance();
+            fragmentManager.beginTransaction()
+                    .replace(R.id.connection_error, errorFragment)
+                    .commit();
             return;
         }
 
-        clearDetailsPanel();
+        if (errorFragment != null) {
+            fragmentManager.beginTransaction().remove(errorFragment).commit();
+            errorFragment = null;
+        }
+
         putDetailsOnPanel(details);
 
         if (details.getProblemActivities() != null) {
