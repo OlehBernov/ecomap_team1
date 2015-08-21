@@ -67,6 +67,7 @@ public class LoginScreen extends AppCompatActivity implements LogInListener {
                 .title(LOGIN_TITLE)
                 .content(LOGIN_MESSAGE)
                 .progress(true, 0)
+                .cancelable(false)
                 .backgroundColorRes(R.color.log_in_dialog)
                 .contentColorRes(R.color.log_in_content)
                 .titleColorRes(R.color.log_in_title)

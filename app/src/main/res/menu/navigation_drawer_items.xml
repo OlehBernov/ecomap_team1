@@ -5,17 +5,27 @@
     <group android:checkableBehavior="all">
         <item
             android:id="@+id/navigation_item_1"
-            android:icon="@drawable/type0"
-            android:title="@string/sing_up"/>
+            android:icon="@drawable/ic_login"
+            android:onClick="logIn"
+            android:title="@string/log_in"/>
         <item
             android:id="@+id/navigation_item_2"
-            android:icon="@drawable/type0"
-            android:title="@string/log_in"/>
+            android:icon="@drawable/signup"
+            android:onClick="signUp"
+            android:title="@string/Sign_up"/>
 
         <item
             android:id="@+id/navigation_item_3"
-            android:icon="@drawable/type0"
+            android:icon="@drawable/logout_512"
+            android:onClick="logOut"
             android:title="@string/log_out"/>
+
+        <item
+            android:id="@+id/navigation_item_4"
+            android:icon="@drawable/ic_settings"
+            android:onClick="openSettings"
+            android:title="@string/settings"/>
+
     </group>
 
 </menu>

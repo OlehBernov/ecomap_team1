@@ -33,6 +33,7 @@ import com.afollestad.materialdialogs.MaterialDialog;
 import com.codetroopers.betterpickers.calendardatepicker.CalendarDatePickerDialog;
 import com.ecomap.ukraine.R;
 import com.ecomap.ukraine.activities.Authorization.LoginScreen;
+import com.ecomap.ukraine.activities.Authorization.SignupActivity;
 import com.ecomap.ukraine.activities.ExtraFieldNames;
 import com.ecomap.ukraine.activities.addProblem.ChooseProblemLocationActivity;
 import com.ecomap.ukraine.data.manager.DataManager;
@@ -163,7 +164,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void logOut(MenuItem item) {
-        //TODO
+        //TODO: implement logOut
     }
 
     @Override
@@ -282,8 +283,8 @@ public class MainActivity extends AppCompatActivity {
         } else {
             checkBox.setChecked(false);
         }
-        filterManager.getFilterState(buildFiltersState());
 
+        filterManager.getFilterState(buildFiltersState());
     }
 
     public void dateFromChoosing(View view) {
@@ -334,6 +335,22 @@ public class MainActivity extends AppCompatActivity {
                 })
                 .show();
 
+    }
+
+    public void logIn(MenuItem item) {
+        Intent intent = new Intent(this, LoginScreen.class);
+        startActivity(intent);
+        finish();
+    }
+
+    public void signUp(MenuItem item) {
+        Intent intent = new Intent(this, SignupActivity.class);
+        startActivity(intent);
+        finish();
+    }
+
+    public void openSettings(MenuItem item) {
+        //TODO: implement settings
     }
 
 

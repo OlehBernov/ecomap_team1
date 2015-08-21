@@ -1,13 +1,13 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/white"
-    android:orientation="vertical">
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:background="@color/white"
+              android:orientation="vertical">
 
     <ImageView
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
-        android:background="#ff004d40" />
+        android:background="#ff004d40"/>
 
     <ScrollView
         android:id="@+id/scrollView"
@@ -20,16 +20,16 @@
             android:orientation="vertical"
             android:weightSum="1">
 
-            <android.support.v7.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
-                android:id="@+id/card_view"
-                android:layout_width="327dp"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_margin="@dimen/cards"
+            <android.support.v7.widget.CardView android:id="@+id/card_view"
+                                                xmlns:card_view="http://schemas.android.com/apk/res-auto"
+                                                android:layout_width="327dp"
+                                                android:layout_height="wrap_content"
+                                                android:layout_gravity="center"
+                                                android:layout_margin="@dimen/cards"
 
-                card_view:cardBackgroundColor="@color/card_view_background"
-                card_view:cardCornerRadius="@dimen/corner_radius"
-                card_view:cardElevation="0dp">
+                                                card_view:cardBackgroundColor="@color/card_view_background"
+                                                card_view:cardCornerRadius="@dimen/corner_radius"
+                                                card_view:cardElevation="0dp">
 
                 <LinearLayout
                     android:id="@+id/ibm"
@@ -49,7 +49,7 @@
                         android:textAppearance="?android:attr/textAppearanceMedium"
                         android:textColor="@color/filter_button_text"
                         android:textSize="15sp"
-                        android:textStyle="bold" />
+                        android:textStyle="bold"/>
 
                     <RelativeLayout
                         android:layout_width="305dp"
@@ -70,7 +70,7 @@
                             android:text="@string/default_filter_date_from"
                             android:textAppearance="?android:attr/textAppearanceMedium"
                             android:textColor="#ff5e5e5e"
-                            android:textSize="15sp" />
+                            android:textSize="15sp"/>
 
                         <ImageView
                             android:id="@+id/imageView3"
@@ -79,7 +79,7 @@
                             android:layout_alignParentLeft="true"
                             android:layout_alignParentStart="true"
                             android:layout_alignParentTop="true"
-                            android:src="@drawable/new_calendar" />
+                            android:src="@drawable/new_calendar"/>
 
                         <TextView
                             android:id="@+id/textView2"
@@ -94,7 +94,7 @@
                             android:text="@string/date_from"
                             android:textAppearance="?android:attr/textAppearanceSmall"
                             android:textColor="@color/filter_button_text"
-                            android:textSize="15sp" />
+                            android:textSize="15sp"/>
 
                     </RelativeLayout>
 
@@ -117,7 +117,7 @@
                             android:text="@string/date_to"
                             android:textAppearance="?android:attr/textAppearanceSmall"
                             android:textColor="@color/filter_button_text"
-                            android:textSize="15sp" />
+                            android:textSize="15sp"/>
 
                         <TextView
                             android:id="@+id/date_to"
@@ -131,7 +131,7 @@
                             android:text="@string/default_filte_date_to"
                             android:textAppearance="?android:attr/textAppearanceMedium"
                             android:textColor="#ff5e5e5e"
-                            android:textSize="15sp" />
+                            android:textSize="15sp"/>
 
                         <ImageView
                             android:id="@+id/imageView5"
@@ -140,7 +140,7 @@
                             android:layout_alignParentLeft="true"
                             android:layout_alignParentStart="true"
                             android:layout_alignParentTop="true"
-                            android:src="@drawable/new_calendar" />
+                            android:src="@drawable/new_calendar"/>
 
                     </RelativeLayout>
 
@@ -149,15 +149,15 @@
             </android.support.v7.widget.CardView>
 
 
-            <android.support.v7.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
-                android:id="@+id/card_view2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_margin="@dimen/cards"
-                card_view:cardBackgroundColor="@color/card_view_background"
-                card_view:cardCornerRadius="@dimen/corner_radius"
-                card_view:cardElevation="0dp">
+            <android.support.v7.widget.CardView android:id="@+id/card_view2"
+                                                xmlns:card_view="http://schemas.android.com/apk/res-auto"
+                                                android:layout_width="wrap_content"
+                                                android:layout_height="wrap_content"
+                                                android:layout_gravity="center"
+                                                android:layout_margin="@dimen/cards"
+                                                card_view:cardBackgroundColor="@color/card_view_background"
+                                                card_view:cardCornerRadius="@dimen/corner_radius"
+                                                card_view:cardElevation="0dp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -175,7 +175,7 @@
                         android:textAppearance="?android:attr/textAppearanceMedium"
                         android:textColor="@color/filter_button_text"
                         android:textSize="15sp"
-                        android:textStyle="bold" />
+                        android:textStyle="bold"/>
 
                     <RelativeLayout
                         android:layout_width="323dp"
@@ -188,7 +188,7 @@
                             android:id="@+id/imageView10"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:src="@drawable/star" />
+                            android:src="@drawable/star"/>
 
                         <CheckBox
                             android:id="@+id/ButtonResolved"
@@ -200,12 +200,13 @@
                             android:layout_marginLeft="16dp"
                             android:layout_marginStart="16dp"
                             android:layout_toRightOf="@+id/imageView10"
+                            android:background="@null"
                             android:button="@null"
                             android:checked="true"
                             android:drawableRight="@drawable/check_button_style"
                             android:gravity="left|center_vertical"
                             android:onClick="switchCheckButtonState"
-                            android:text="@string/resolved" />
+                            android:text="@string/resolved"/>
 
 
                     </RelativeLayout>
@@ -222,7 +223,7 @@
                             android:id="@+id/imageView11"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:src="@drawable/new_problem" />
+                            android:src="@drawable/new_problem"/>
 
                         <CheckBox
                             android:id="@+id/ButtonUnsolved"
@@ -235,12 +236,13 @@
                             android:layout_marginStart="16dp"
                             android:layout_toEndOf="@+id/imageView11"
                             android:layout_toRightOf="@+id/imageView11"
+                            android:background="@null"
                             android:button="@null"
                             android:checked="true"
                             android:drawableRight="@drawable/check_button_style"
                             android:gravity="left|center_vertical"
                             android:onClick="switchCheckButtonState"
-                            android:text="@string/unsolved" />
+                            android:text="@string/unsolved"/>
 
                     </RelativeLayout>
                 </LinearLayout>
@@ -249,15 +251,15 @@
             </android.support.v7.widget.CardView>
 
 
-            <android.support.v7.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
-                android:id="@+id/card_view3"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_margin="@dimen/cards"
-                card_view:cardBackgroundColor="@color/card_view_background"
-                card_view:cardCornerRadius="@dimen/corner_radius"
-                card_view:cardElevation="0dp">
+            <android.support.v7.widget.CardView android:id="@+id/card_view3"
+                                                xmlns:card_view="http://schemas.android.com/apk/res-auto"
+                                                android:layout_width="wrap_content"
+                                                android:layout_height="wrap_content"
+                                                android:layout_gravity="center"
+                                                android:layout_margin="@dimen/cards"
+                                                card_view:cardBackgroundColor="@color/card_view_background"
+                                                card_view:cardCornerRadius="@dimen/corner_radius"
+                                                card_view:cardElevation="0dp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -279,7 +281,7 @@
                         android:textAppearance="?android:attr/textAppearanceMedium"
                         android:textColor="@color/filter_button_text"
                         android:textSize="15dp"
-                        android:textStyle="bold" />
+                        android:textStyle="bold"/>
 
                     <RelativeLayout
                         android:layout_width="323dp"
@@ -292,7 +294,7 @@
                             android:id="@+id/imageView12"
                             android:layout_width="40dp"
                             android:layout_height="40dp"
-                            android:src="@drawable/problem1" />
+                            android:src="@drawable/problem1"/>
 
                         <CheckBox
                             android:id="@+id/forestry_issues"
@@ -305,12 +307,13 @@
                             android:layout_marginStart="16dp"
                             android:layout_toEndOf="@+id/imageView12"
                             android:layout_toRightOf="@+id/imageView12"
+                            android:background="@null"
                             android:button="@null"
                             android:checked="true"
                             android:drawableRight="@drawable/check_button_style"
                             android:gravity="left|center_vertical"
                             android:onClick="switchCheckButtonState"
-                            android:text="@string/deforestation" />
+                            android:text="@string/deforestation"/>
 
                     </RelativeLayout>
 
@@ -325,7 +328,7 @@
                             android:id="@+id/imageView13"
                             android:layout_width="40dp"
                             android:layout_height="40dp"
-                            android:src="@drawable/problem2" />
+                            android:src="@drawable/problem2"/>
 
                         <CheckBox
                             android:id="@+id/rubbish_dump"
@@ -338,12 +341,13 @@
                             android:layout_marginStart="16dp"
                             android:layout_toEndOf="@+id/imageView13"
                             android:layout_toRightOf="@+id/imageView13"
+                            android:background="@null"
                             android:button="@null"
                             android:checked="true"
                             android:drawableRight="@drawable/check_button_style"
                             android:gravity="left|center_vertical"
                             android:onClick="switchCheckButtonState"
-                            android:text="@string/rubish_dump" />
+                            android:text="@string/rubish_dump"/>
 
                     </RelativeLayout>
 
@@ -358,7 +362,7 @@
                             android:id="@+id/imageView14"
                             android:layout_width="40dp"
                             android:layout_height="40dp"
-                            android:src="@drawable/problem4" />
+                            android:src="@drawable/problem4"/>
 
                         <CheckBox
                             android:id="@+id/water_pollution"
@@ -371,12 +375,13 @@
                             android:layout_marginStart="16dp"
                             android:layout_toEndOf="@+id/imageView14"
                             android:layout_toRightOf="@+id/imageView14"
+                            android:background="@null"
                             android:button="@null"
                             android:checked="true"
                             android:drawableRight="@drawable/check_button_style"
                             android:gravity="left|center_vertical"
                             android:onClick="switchCheckButtonState"
-                            android:text="@string/water_pollution" />
+                            android:text="@string/water_pollution"/>
 
                     </RelativeLayout>
 
@@ -391,7 +396,7 @@
                             android:id="@+id/imageView15"
                             android:layout_width="40dp"
                             android:layout_height="40dp"
-                            android:src="@drawable/problem3" />
+                            android:src="@drawable/problem3"/>
 
                         <CheckBox
                             android:id="@+id/illegal_building"
@@ -404,12 +409,13 @@
                             android:layout_marginStart="16dp"
                             android:layout_toEndOf="@+id/imageView15"
                             android:layout_toRightOf="@+id/imageView15"
+                            android:background="@null"
                             android:button="@null"
                             android:checked="true"
                             android:drawableRight="@drawable/check_button_style"
                             android:gravity="left|center_vertical"
                             android:onClick="switchCheckButtonState"
-                            android:text="@string/illegal_building" />
+                            android:text="@string/illegal_building"/>
 
                     </RelativeLayout>
 
@@ -424,7 +430,7 @@
                             android:id="@+id/imageView16"
                             android:layout_width="40dp"
                             android:layout_height="40dp"
-                            android:src="@drawable/problem5" />
+                            android:src="@drawable/problem5"/>
 
                         <CheckBox
                             android:id="@+id/biodiversity"
@@ -437,12 +443,13 @@
                             android:layout_marginStart="16dp"
                             android:layout_toEndOf="@+id/imageView16"
                             android:layout_toRightOf="@+id/imageView16"
+                            android:background="@null"
                             android:button="@null"
                             android:checked="true"
                             android:drawableRight="@drawable/check_button_style"
                             android:gravity="left|center_vertical"
                             android:onClick="switchCheckButtonState"
-                            android:text="@string/biodiversity" />
+                            android:text="@string/biodiversity"/>
 
                     </RelativeLayout>
 
@@ -457,7 +464,7 @@
                             android:id="@+id/imageView17"
                             android:layout_width="40dp"
                             android:layout_height="40dp"
-                            android:src="@drawable/problem6" />
+                            android:src="@drawable/problem6"/>
 
                         <CheckBox
                             android:id="@+id/poaching"
@@ -470,12 +477,13 @@
                             android:layout_marginStart="16dp"
                             android:layout_toEndOf="@+id/imageView17"
                             android:layout_toRightOf="@+id/imageView17"
+                            android:background="@null"
                             android:button="@null"
                             android:checked="true"
                             android:drawableRight="@drawable/check_button_style"
                             android:gravity="left|center_vertical"
                             android:onClick="switchCheckButtonState"
-                            android:text="@string/poaching" />
+                            android:text="@string/poaching"/>
 
                     </RelativeLayout>
 
@@ -491,7 +499,7 @@
                             android:id="@+id/imageView18"
                             android:layout_width="40dp"
                             android:layout_height="40dp"
-                            android:src="@drawable/problem7" />
+                            android:src="@drawable/problem7"/>
 
                         <CheckBox
                             android:id="@+id/other"
@@ -504,12 +512,13 @@
                             android:layout_marginStart="16dp"
                             android:layout_toEndOf="@+id/imageView18"
                             android:layout_toRightOf="@+id/imageView18"
+                            android:background="@null"
                             android:button="@null"
                             android:checked="true"
                             android:drawableRight="@drawable/check_button_style"
                             android:gravity="left|center_vertical"
                             android:onClick="switchCheckButtonState"
-                            android:text="@string/other" />
+                            android:text="@string/other"/>
 
                     </RelativeLayout>
 
