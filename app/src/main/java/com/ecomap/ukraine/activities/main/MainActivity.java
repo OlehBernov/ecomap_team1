@@ -123,7 +123,6 @@ public class MainActivity extends AppCompatActivity {
 
     private Menu menu;
 
-    private FloatingActionButton fab;
 
     private Activity activity = this;
 
@@ -292,15 +291,6 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         filterLayout = (DrawerLayout) findViewById(R.id.drawer2);
-        fab = (FloatingActionButton) findViewById(R.id.fab2);
-
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(MainActivity.this, ChooseProblemLocationActivity.class));
-            }
-
-        });
         filterManager = FilterManager.getInstance(this);
         setupToolbar();
         setUpDrawerLayout();
