@@ -1,13 +1,19 @@
 package com.ecomap.ukraine.activities.problemDetails;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
+import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.graphics.Matrix;
 import android.graphics.drawable.Drawable;
+import android.os.AsyncTask;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.content.res.ResourcesCompat;
@@ -16,9 +22,11 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
 import android.view.Gravity;
+import android.view.KeyEvent;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.WindowManager;
 import android.view.animation.DecelerateInterpolator;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
@@ -31,6 +39,7 @@ import android.widget.TextView;
 
 import com.ecomap.ukraine.R;
 import com.ecomap.ukraine.activities.BitmapResizer;
+import com.ecomap.ukraine.activities.addProblem.ChooseProblemLocationActivity;
 import com.ecomap.ukraine.activities.main.IconRenderer;
 import com.ecomap.ukraine.activities.main.MainActivity;
 import com.ecomap.ukraine.data.manager.DataManager;
@@ -257,8 +266,14 @@ public class InformationPanel {
                 fab.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        DataManager.getInstance(activity)
-                                .refreshProblemDetails(problem.getProblemId());
+                        new AsyncTask<Void, Void, Void>() {
+                            @Override
+                            protected Void doInBackground(Void... params) {
+                                DataManager.getInstance(activity)
+                                        .refreshProblemDetails(problem.getProblemId());
+                                return null;
+                            }
+                        }.execute();
                     }
                 });
             }
@@ -269,7 +284,8 @@ public class InformationPanel {
                 fab.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        ((MainActivity) activity).animateButton(fab);
+                        activity.startActivity(
+                                new Intent(activity, ChooseProblemLocationActivity.class));
                     }
                 });
                 fab.setTranslationY(0);
@@ -337,16 +353,6 @@ public class InformationPanel {
             }
         });
 
-        commentText.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                v.findFocus();
-                InputMethodManager imm = (InputMethodManager)
-                        activity.getSystemService(Context.INPUT_METHOD_SERVICE);
-                imm.showSoftInput(v, InputMethodManager.SHOW_IMPLICIT);
-            }
-        });
-
         this.votesNumber.setText("");
         this.putBriefInformation();
 
@@ -355,6 +361,21 @@ public class InformationPanel {
         scrollView.setVerticalScrollBarEnabled(false);
         scrollView.setOnTouchListener(new View.OnTouchListener() {
             float previousY;
+
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                    previousY = event.getY();
+                    return false;
+                }
+                if (((scrollView.getScrollY() == 0) && dragingDown(event))
+                        || (slidingUpPanelLayout.getPanelState()
+                        != SlidingUpPanelLayout.PanelState.EXPANDED)) {
+                    slidingUpPanelLayout.onTouchEvent(remapToParentLayout(event));
+                    return true;
+                }
+                return isScrollDisable;
+            }
 
             private boolean dragingDown(MotionEvent event) {
                 if (previousY < event.getY()) {
@@ -375,18 +396,6 @@ public class InformationPanel {
                         event.getRawY(),
                         event.getMetaState()
                 );
-            }
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                if (event.getAction() == MotionEvent.ACTION_DOWN) {
-                    previousY = event.getY();
-                    return false;
-                }
-                if (scrollView.getScrollY() == 0 && dragingDown(event)) {
-                    slidingUpPanelLayout.onTouchEvent(remapToParentLayout(event));
-                    return true;
-                }
-                return isScrollDisable;
             }
         });
     }

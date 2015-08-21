@@ -185,79 +185,6 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    public void animateButton(final FloatingActionButton fab) {
-        problemAddingMenu = true;
-        slidingUpPanelLayout.setPanelState(SlidingUpPanelLayout.PanelState.HIDDEN);
-        Interpolator curveInterpolator = PathInterpolatorCompat.create(1, 0);
-        AnimatorSet animator = new AnimatorSet();
-        ObjectAnimator movementX
-                = ObjectAnimator.ofFloat(fab, "translationX", -150);
-        ObjectAnimator movementY
-                = ObjectAnimator.ofFloat(fab, "translationY", 35);
-        movementX.setInterpolator(curveInterpolator);
-        animator.playTogether(movementX, movementY);
-        animator.setDuration(200);
-        animator.addListener(new AnimatorListenerAdapter() {
-            @Override
-            public void onAnimationEnd(Animator animation) {
-                super.onAnimationEnd(animation);
-                animateReavel();
-                fab.hide();
-            }
-
-            @Override
-            public void onAnimationStart(Animator animation) {
-                super.onAnimationStart(animation);
-                fab.setClickable(false);
-            }
-        });
-        animator.start();
-    }
-
-    public void refresh(MenuItem item) {
-        DataManager.getInstance(this).refreshAllProblems();
-    }
-
-    public void reverseAnimateReavel(final View v) {
-        problemAddingMenu = false;
-        final View myView = findViewById(R.id.ll_reveal);
-
-        int cx = (int) ((fab.getX() + fab.getHeight() / 2));
-        int cy = (int) ((fab.getY() + fab.getHeight() / 2)) -
-                (slidingUpPanelLayout.getHeight() - myView.getBottom());
-
-        int finalRadius = Math.max(myView.getWidth(), myView.getHeight());
-
-        SupportAnimator animator =
-                ViewAnimationUtils.createCircularReveal(myView, cx, cy, 0, finalRadius);
-        animator.setInterpolator(new AccelerateDecelerateInterpolator());
-        animator.setDuration(200);
-        SupportAnimator reversedAnimator = animator.reverse();
-        reversedAnimator.addListener(new SupportAnimator.AnimatorListener() {
-            @Override
-            public void onAnimationStart() {
-                fab.show();
-            }
-
-            @Override
-            public void onAnimationEnd() {
-                fab.setVisibility(View.VISIBLE);
-                myView.setVisibility(View.INVISIBLE);
-                showButton(fab);
-            }
-
-            @Override
-            public void onAnimationCancel() {
-            }
-
-            @Override
-            public void onAnimationRepeat() {
-            }
-        });
-        reversedAnimator.start();
-
-    }
-
     /**
      * Controls the position of the filter7 window on the screen.
      */
@@ -302,7 +229,6 @@ public class MainActivity extends AppCompatActivity {
             Intent intent = new Intent(this, ChooseProblemLocationActivity.class);
             intent.putExtra(ExtraFieldNames.USER, user);
             startActivity(intent);
-            reverseAnimateReavel(null);
             finish();
         }
     }
@@ -371,8 +297,7 @@ public class MainActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//               openChooseProblemLocationActivity(v);
-                animateButton(fab);
+                startActivity(new Intent(MainActivity.this, ChooseProblemLocationActivity.class));
             }
 
         });
@@ -444,59 +369,6 @@ public class MainActivity extends AppCompatActivity {
     private boolean isInformationalPanelExpanded() {
         return slidingUpPanelLayout.getPanelState()
                 == SlidingUpPanelLayout.PanelState.EXPANDED;
-    }
-
-    private void animateReavel() {
-        final View myView = findViewById(R.id.ll_reveal);
-        int cx = (int) ((fab.getX() + fab.getHeight() / 2));
-        int cy = (int) ((fab.getY() + fab.getHeight() / 2))
-                - (slidingUpPanelLayout.getHeight() - myView.getBottom());
-
-        int finalRadius = Math.max(myView.getWidth(), myView.getHeight());
-
-        SupportAnimator animator =
-                ViewAnimationUtils.createCircularReveal(myView, cx, cy, 0, finalRadius);
-        animator.setInterpolator(new AccelerateDecelerateInterpolator());
-        animator.setDuration(200);
-        animator.addListener(new SupportAnimator.AnimatorListener() {
-            @Override
-            public void onAnimationStart() {
-                myView.setVisibility(View.VISIBLE);
-            }
-
-            @Override
-            public void onAnimationEnd() {
-            }
-
-            @Override
-            public void onAnimationCancel() {
-            }
-
-            @Override
-            public void onAnimationRepeat() {
-            }
-        });
-        animator.start();
-    }
-
-    private void showButton(final FloatingActionButton fab) {
-        Interpolator curveInterpolator = PathInterpolatorCompat.create(0, 1);
-        AnimatorSet animator = new AnimatorSet();
-        ObjectAnimator movementX
-                = ObjectAnimator.ofFloat(fab, "translationX", 0);
-        ObjectAnimator movementY
-                = ObjectAnimator.ofFloat(fab, "translationY", 0);
-        movementX.setInterpolator(curveInterpolator);
-        animator.playTogether(movementX, movementY);
-        animator.setDuration(200);
-        animator.addListener(new AnimatorListenerAdapter() {
-            @Override
-            public void onAnimationEnd(Animator animation) {
-                super.onAnimationEnd(animation);
-                fab.setClickable(true);
-            }
-        });
-        animator.start();
     }
 
     private void setDateOnScreen(Calendar dateFrom, Calendar dateTo) {

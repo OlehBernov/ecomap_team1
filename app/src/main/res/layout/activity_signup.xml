@@ -7,7 +7,8 @@
 
     <FrameLayout
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:background="@color/toolbar_teal">
         <ScrollView
             android:id="@+id/background_layout"
             android:layout_width="match_parent"
@@ -18,8 +19,7 @@
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:scaleType="centerCrop"
-                    android:src="@drawable/signup_background11"/>
+                    android:scaleType="centerCrop"/>
             </FrameLayout>
         </ScrollView>
     </FrameLayout>
@@ -28,7 +28,8 @@
         android:orientation="vertical"
         android:layout_width="match_parent"
         app:layout_scrollFlags="scroll|exitUntilCollapsed"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:background="@color/toolbar_teal">
 
         <!--<android.support.design.widget.CoordinatorLayout-->
             <!--android:id="@+id/background_layout"-->

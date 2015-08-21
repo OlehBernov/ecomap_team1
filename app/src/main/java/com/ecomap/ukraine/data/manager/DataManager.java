@@ -11,6 +11,7 @@ import com.ecomap.ukraine.updating.serverclient.LoadingClient;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
  * Coordinates the work of the database, data loading client and activities.
@@ -37,7 +38,7 @@ public class DataManager implements ProblemListenersNotifier,
     /**
      * Set of problem listeners.
      */
-    private Collection<ProblemListener> problemListeners = new HashSet<>();
+    private Collection<ProblemListener> problemListeners = new CopyOnWriteArrayList<>();
 
     /**
      * Holds the reference to LoadingClient used by DataManager.
@@ -221,6 +222,7 @@ public class DataManager implements ProblemListenersNotifier,
     }
 
     public void refreshProblemDetails(int problemId) {
+//        registerProblemListener(listener);
         loadingClient.getProblemDetail(problemId);
     }
 
