@@ -3,10 +3,13 @@ package com.ecomap.ukraine.settings;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.support.v4.content.res.ResourcesCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.Html;
 import android.view.View;
+import android.widget.Button;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.ecomap.ukraine.R;
@@ -17,6 +20,13 @@ import com.ecomap.ukraine.data.manager.DataManager;
 public class Settings extends AppCompatActivity {
 
     private static final String SETTINGS = "Settings";
+    private static final String EVERY_TIME = "Updating time <br/><font color='grey'>Every time</font>";
+    private static final String ONCE_A_DAY = "Updating time <br/><font color='grey'>Once a day</font>";
+    private static final String ONCE_A_WEEK = "Updating time <br/><font color='grey'>Once a week</font>";
+    private static final String ONCE_A_MONTH = "Updating time <br/><font color='grey'>Once a month</font>";
+
+    private Button updateTimeButton;
+    private Button mapTypeButton;
 
     private UpdateTime updateTime = UpdateTime.ONCE_A_WEEK;
     private MapType mapType = MapType.FIRST;
@@ -34,6 +44,7 @@ public class Settings extends AppCompatActivity {
                     public boolean onSelection(MaterialDialog dialog, View view, int which,
                                                CharSequence text) {
                         updateTime = UpdateTime.values()[which];
+                        updateTimeButton.setText(Html.fromHtml(getTitle(which)));
                         saveUpdateTimeToSharedPreferences();
                         return true;
                     }
@@ -77,6 +88,11 @@ public class Settings extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
+
+        updateTimeButton = (Button) findViewById(R.id.update_time_button);
+        updateTimeButton.setText(Html.fromHtml(ONCE_A_WEEK));
+        mapTypeButton = (Button) findViewById(R.id.map_type_button);
+
         setupToolbar();
         SharedPreferences settings = getSharedPreferences(ExtraFieldNames.SETTINGS_PREFERENCES,
                                                           MODE_PRIVATE);
@@ -120,6 +136,21 @@ public class Settings extends AppCompatActivity {
                 onBackPressed();
             }
         });
+    }
+
+    private String getTitle(int id) {
+        switch (id) {
+            case 0:
+                return EVERY_TIME;
+            case 1:
+                return ONCE_A_DAY;
+            case 2:
+                return ONCE_A_WEEK;
+            case 3:
+                return ONCE_A_MONTH;
+            default:
+                return ONCE_A_WEEK;
+        }
     }
 
 }

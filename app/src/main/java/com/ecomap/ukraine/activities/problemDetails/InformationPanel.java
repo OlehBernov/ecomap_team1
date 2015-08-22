@@ -353,8 +353,8 @@ public class InformationPanel {
             }
         });
 
-        this.votesNumber.setText("");
-        this.putBriefInformation();
+        votesNumber.setText("");
+        putBriefInformation();
 
         isScrollDisable = true;
         scrollView.fullScroll(ScrollView.FOCUS_UP);
@@ -434,8 +434,8 @@ public class InformationPanel {
 
     public void putBriefInformation() {
         problemTitle.setText(problem.getTitle());
-        this.setProblemStatus(problem.getStatus());
-        this.markerIcon.setImageResource(IconRenderer.getResourceIdForMarker(problem.getProblemType()));
+        setProblemStatus(problem.getStatus());
+        markerIcon.setImageResource(IconRenderer.getResourceIdForMarker(problem.getProblemType()));
     }
 
     /**
@@ -458,7 +458,7 @@ public class InformationPanel {
     }
 
     private boolean isActivityLayoutHaveChild() {
-        return activitiesLayout != null && (activitiesLayout.getChildCount() > 0);
+        return (activitiesLayout != null) && (activitiesLayout.getChildCount() > 0);
     }
 
     /**
@@ -580,7 +580,7 @@ public class InformationPanel {
      * @param details details of problem
      */
     private void putDetailsOnPanel(final Details details) {
-        this.votesNumber.setText(String.valueOf(details.getVotes()));
+        votesNumber.setText(String.valueOf(details.getVotes()));
         for (int i = 0; i < details.getSeverity(); i++) {
             ImageView star = (ImageView) activity.findViewById(STARS_ID[i]);
             star.setBackgroundResource(R.drawable.ic_star_black_48dp);

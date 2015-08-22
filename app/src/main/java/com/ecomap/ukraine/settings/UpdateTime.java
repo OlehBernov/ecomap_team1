@@ -7,7 +7,7 @@ public enum UpdateTime {
     ONCE_A_WEEK (2),
     ONCE_A_MONTH (3);
 
-    private static final int UPDATE = 10_000;
+    private static final int UPDATE = 20_000;
     private static final int DAY_IN_MILLISECONDS = 86_400_000;
     private static final int WEEK_IN_MILLISECONDS = 604_800_000;
     private static final long MONTH_IN_MILLISECONDS = 26_297_438_30L;

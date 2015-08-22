@@ -155,7 +155,7 @@ public class FragmentEcoMap extends android.support.v4.app.Fragment
         getActivity().getActionBar();
 
         MapsInitializer.initialize(getActivity().getApplicationContext());
-        this.setUpMapIfNeeded();
+        setUpMapIfNeeded();
 
         return rootView;
     }

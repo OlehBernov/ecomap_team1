@@ -83,7 +83,6 @@ public class IconRenderer extends DefaultClusterRenderer<Problem> {
     protected int getBucket(Cluster<Problem> cluster) {
         int size = cluster.getSize();
         return size;
-
     }
 
     /**
@@ -92,7 +91,6 @@ public class IconRenderer extends DefaultClusterRenderer<Problem> {
      */
     protected void onBeforeClusterRendered(final Cluster<Problem> cluster,
                                            final MarkerOptions markerOptions) {
-
         int bucket = getBucket(cluster);
         BitmapDescriptor descriptor = icons.get(bucket);
         if (descriptor == null) {

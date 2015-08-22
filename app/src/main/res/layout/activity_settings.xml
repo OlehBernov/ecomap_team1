@@ -30,7 +30,7 @@
                 android:orientation="vertical">
 
                 <Button
-                    android:id="@+id/button3"
+                    android:id="@+id/update_time_button"
                     android:layout_width="@dimen/setting_item_width"
                     android:layout_height="@dimen/setting_item_height"
                     android:layout_gravity="center"
@@ -51,7 +51,7 @@
                 </View>
 
                 <Button
-                    android:id="@+id/button4"
+                    android:id="@+id/map_type_button"
                     android:layout_width="@dimen/setting_item_width"
                     android:layout_height="@dimen/setting_item_height"
                     android:layout_gravity="center"
