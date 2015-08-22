@@ -1,18 +1,12 @@
 package com.ecomap.ukraine.activities.main;
 
-import android.animation.Animator;
-import android.animation.AnimatorListenerAdapter;
-import android.animation.AnimatorSet;
-import android.animation.ObjectAnimator;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.GravityCompat;
-import android.support.v4.view.animation.PathInterpolatorCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -24,8 +18,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
-import android.view.animation.AccelerateDecelerateInterpolator;
-import android.view.animation.Interpolator;
 import android.widget.CheckBox;
 import android.widget.TextView;
 
@@ -35,6 +27,9 @@ import com.ecomap.ukraine.R;
 import com.ecomap.ukraine.activities.Authorization.LoginScreen;
 import com.ecomap.ukraine.activities.Authorization.SignupActivity;
 import com.ecomap.ukraine.activities.ExtraFieldNames;
+import com.ecomap.ukraine.settings.MapType;
+import com.ecomap.ukraine.settings.Settings;
+import com.ecomap.ukraine.settings.UpdateTime;
 import com.ecomap.ukraine.activities.addProblem.ChooseProblemLocationActivity;
 import com.ecomap.ukraine.data.manager.DataManager;
 import com.ecomap.ukraine.filter.FilterContract;
@@ -53,8 +48,6 @@ import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 
-import io.codetail.animation.SupportAnimator;
-import io.codetail.animation.ViewAnimationUtils;
 
 /**
  * Created by Andriy on 01.07.2015.
@@ -74,10 +67,6 @@ public class MainActivity extends AppCompatActivity {
 
     private static final String FILTERS_STATE = "Filters state";
 
-    private static final String ANONYM_USER_NAME = "Anonym";
-
-    private static final String ANONYM_USER_EMAIL = "secret@gmail.com";
-
     private static final String DATE_TEMPLATE = "dd-MM-yyyy";
 
     private static final String DEFAULT_DATE_FROM = "01-01-1990";
@@ -90,23 +79,19 @@ public class MainActivity extends AppCompatActivity {
             "To append a problem you must first be authorized. Authorize?";
 
     private static final String OK = "OK";
+
     private static final String CANCEL = "Cancel";
 
-    /**
-     * Drawer toggle.
-     */
+    private static final UpdateTime DEFAULT_UPDATE_TIME = UpdateTime.ONCE_A_WEEK;
+
+    private static final MapType DEFAULT_MAP_TYPE = MapType.FIRST;
+
     public ActionBarDrawerToggle drawerToggle;
 
     public boolean problemAddingMenu;
 
-    /**
-     * Filter layout.
-     */
     private DrawerLayout filterLayout;
 
-    /**
-     * Application toolbar.
-     */
     private Toolbar toolbar;
 
     private CalendarDatePickerDialog dialogDateFrom;
@@ -119,17 +104,16 @@ public class MainActivity extends AppCompatActivity {
 
     private SlidingUpPanelLayout slidingUpPanelLayout;
 
-    private User user;
-
     private Menu menu;
 
-
     private Activity activity = this;
+
 
     /**
      * Filter manager instance
      */
     private FilterManager filterManager;
+
     private CharSequence previousTitle;
 
     /**
@@ -145,11 +129,6 @@ public class MainActivity extends AppCompatActivity {
         return true;
     }
 
-    /**
-     * Handle action bar items.
-     *
-     * @param item menu item.
-     */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (drawerToggle.onOptionsItemSelected(item)) {
@@ -160,10 +139,6 @@ public class MainActivity extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
-    }
-
-    public void logOut(MenuItem item) {
-        //TODO: implement logOut
     }
 
     @Override
@@ -222,17 +197,20 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void openChooseProblemLocationActivity(View view) {
-        if (user == null) {
-            setNotAutorizeDialog();
+        if (isAnonymousUser()) {
+            setNotAuthorizeDialog();
         } else {
             Intent intent = new Intent(this, ChooseProblemLocationActivity.class);
-            intent.putExtra(ExtraFieldNames.USER, user);
             startActivity(intent);
             finish();
         }
     }
 
-    public void setNotAutorizeDialog() {
+    private boolean isAnonymousUser() {
+        return User.getInstance().getId() < 0;
+    }
+
+    public void setNotAuthorizeDialog() {
         new MaterialDialog.Builder(this)
                 .title(R.string.Caution)
                 .content(ALERT_MESSAGE)
@@ -259,13 +237,17 @@ public class MainActivity extends AppCompatActivity {
                     }
                 })
                 .show();
-
     }
 
     public void logIn(MenuItem item) {
         Intent intent = new Intent(this, LoginScreen.class);
         startActivity(intent);
         finish();
+    }
+
+    public void logOut(MenuItem item) {
+        User.reset();
+        setUserInformation(User.getInstance());
     }
 
     public void signUp(MenuItem item) {
@@ -275,9 +257,10 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void openSettings(MenuItem item) {
-        //TODO: implement settings
+        Intent intent = new Intent (this, Settings.class);
+        startActivity(intent);
+        finish();
     }
-
 
     /**
      * Initialize activity
@@ -290,28 +273,30 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        MapType mapType = (MapType) getIntent().getSerializableExtra(ExtraFieldNames.MAP_TYPE);
+        if (mapType == null) {
+            mapType = DEFAULT_MAP_TYPE;
+        }
+
         filterLayout = (DrawerLayout) findViewById(R.id.drawer2);
         filterManager = FilterManager.getInstance(this);
         setupToolbar();
         setUpDrawerLayout();
         setupFilter();
 
-        user = (User) getIntent().getSerializableExtra(ExtraFieldNames.USER);
-        setUserInformation(user);
+        setUserInformation(User.getInstance());
 
         slidingUpPanelLayout = (SlidingUpPanelLayout) findViewById(R.id.sliding_layout);
         slidingUpPanelLayout.setAnchorPoint(ANCHOR_POINT);
         slidingUpPanelLayout.setDragView(R.id.sliding_linear_layout);
 
-        this.addMapFragment();
+        addMapFragment();
 
         createDateFromPickerDialog();
         createDateToPickerDialog();
 
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
         filterLayout.setDrawerListener(new FilterDrawerListener());
-
-
     }
 
     /**
@@ -381,13 +366,8 @@ public class MainActivity extends AppCompatActivity {
     private void setUserInformation(User user) {
         TextView userName = (TextView) findViewById(R.id.navigation_user_name);
         TextView email = (TextView) findViewById(R.id.navigation_email);
-        if (user != null) {
-            userName.setText(user.getName() + " " + user.getSurname());
-            email.setText(user.getEmail());
-        } else {
-            userName.setText(ANONYM_USER_NAME);
-            email.setText(ANONYM_USER_EMAIL);
-        }
+        userName.setText(user.getName() + " " + user.getSurname());
+        email.setText(user.getEmail());
     }
 
     private void createDateFromPickerDialog() {
@@ -507,7 +487,6 @@ public class MainActivity extends AppCompatActivity {
         setFiltersState(filterState);
     }
 
-
     private void setDate() {
         SimpleDateFormat dateFormat = new SimpleDateFormat(DATE_TEMPLATE, Locale.ENGLISH);
         try {
@@ -563,12 +542,10 @@ public class MainActivity extends AppCompatActivity {
         setDate();
     }
 
-
-private  class FilterDrawerListener extends DrawerLayout.SimpleDrawerListener{
+    private class FilterDrawerListener extends DrawerLayout.SimpleDrawerListener {
         @Override
         public void onDrawerClosed(View view) {
             filterManager.setRenderer();
         }
-
     }
 }

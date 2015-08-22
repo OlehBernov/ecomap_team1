@@ -76,8 +76,6 @@ public class LoginScreen extends AppCompatActivity implements LogInListener {
         String email = emailText.getText().toString();
         String password = passwordText.getText().toString();
 
-        accountManager.registerLogInListener(AddProblemDescriptionFragment
-                                            .getInstance(null, null));
         accountManager.registerLogInListener(this);
         accountManager.logInUser(password, email);
     }
@@ -86,7 +84,6 @@ public class LoginScreen extends AppCompatActivity implements LogInListener {
     public void setLogInResult(final User user) {
         logInButton.setEnabled(true);
         if (user != null) {
-            mainIntent.putExtra(ExtraFieldNames.USER, user);
             openMainActivity();
         } else {
             Log.e(TAG, "null");
@@ -111,7 +108,7 @@ public class LoginScreen extends AppCompatActivity implements LogInListener {
         super.onCreate(savedInstanceState);
         FacebookSdk.sdkInitialize(this);
         SharedPreferences sharedPreferences =
-                this.getSharedPreferences(AccountManager.USER_INFO, MODE_PRIVATE);
+                getSharedPreferences(AccountManager.USER_INFO, MODE_PRIVATE);
 
         setContentView(R.layout.login_activity);
         mainIntent = new Intent(this, MainActivity.class);

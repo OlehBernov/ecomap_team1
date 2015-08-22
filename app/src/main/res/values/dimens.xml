@@ -20,4 +20,7 @@
     <dimen name="description_top_padding">3dp</dimen>
     <dimen name="description_bottom_padding">3dp</dimen>
 
+    <dimen name="setting_item_width">320dp</dimen>
+    <dimen name="setting_item_height">55dp</dimen>
+
 </resources>

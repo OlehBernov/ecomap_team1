@@ -95,7 +95,7 @@ public class DBHelper extends SQLiteOpenHelper {
         if (problems == null) {
             return;
         }
-        SQLiteDatabase db = this.getWritableDatabase();
+        SQLiteDatabase db = getWritableDatabase();
         db.execSQL(DBHelper.DELETE_FROM + DBContract.Problems.TABLE_NAME);
         setAllProblems(problems);
     }    @Override
@@ -116,7 +116,7 @@ public class DBHelper extends SQLiteOpenHelper {
         if (details == null) {
             return;
         }
-        SQLiteDatabase db = this.getWritableDatabase();
+        SQLiteDatabase db = getWritableDatabase();
         int problemId = details.getProblemId();
         db.delete(DBContract.Details.TABLE_NAME,
                 DBContract.Details.PROBLEM_ID + " = ?",
@@ -158,7 +158,7 @@ public class DBHelper extends SQLiteOpenHelper {
         values.put(DBContract.Details.SEVERITY, details.getSeverity());
         values.put(DBContract.Details.LAST_UPDATE, details.getLastUpdate());
 
-        SQLiteDatabase db = this.getWritableDatabase();
+        SQLiteDatabase db = getWritableDatabase();
         db.insert(DBContract.Details.TABLE_NAME, null, values);
 
         List<ProblemActivity> problemActivities = details.getProblemActivities();
@@ -179,7 +179,7 @@ public class DBHelper extends SQLiteOpenHelper {
         if (problemActivities == null) {
             return;
         }
-        SQLiteDatabase db = this.getWritableDatabase();
+        SQLiteDatabase db = getWritableDatabase();
         ContentValues values;
         for (ProblemActivity problemActivity : problemActivities) {
             int activityTypeId = problemActivity.getActivityType().getId();
@@ -213,7 +213,7 @@ public class DBHelper extends SQLiteOpenHelper {
         if (photos == null) {
             return;
         }
-        SQLiteDatabase db = this.getWritableDatabase();
+        SQLiteDatabase db = getWritableDatabase();
 
         ContentValues values;
         for (Photo photo : photos) {
@@ -237,7 +237,7 @@ public class DBHelper extends SQLiteOpenHelper {
      * @return list of problems.
      */
     public List<Problem> getAllProblems() {
-        SQLiteDatabase db = this.getWritableDatabase();
+        SQLiteDatabase db = getWritableDatabase();
         Cursor cursor = db.query(DBContract.Problems.TABLE_NAME, null, null, null, null, null, null);
         List<Problem> problems = null;
         if (cursor.moveToFirst()) {
@@ -255,7 +255,7 @@ public class DBHelper extends SQLiteOpenHelper {
         if (problems == null) {
             return;
         }
-        SQLiteDatabase db = this.getWritableDatabase();
+        SQLiteDatabase db = getWritableDatabase();
         ContentValues contentValues = new ContentValues();
         for (Problem problem : problems) {
             contentValues.put(DBContract.Problems.ID, problem.getProblemId());
@@ -325,7 +325,7 @@ public class DBHelper extends SQLiteOpenHelper {
         String selection = DBContract.Details.PROBLEM_ID + " = ?";
         String[] selectionArgs = new String[]{String.valueOf(problemId)};
 
-        SQLiteDatabase db = this.getWritableDatabase();
+        SQLiteDatabase db = getWritableDatabase();
         Cursor cursor = db.query(DBContract.Details.TABLE_NAME, projection, selection,
                 selectionArgs, null, null, null);
 
@@ -348,7 +348,7 @@ public class DBHelper extends SQLiteOpenHelper {
         if (problemId < 0) {
             return null;
         }
-        SQLiteDatabase db = this.getWritableDatabase();
+        SQLiteDatabase db = getWritableDatabase();
 
         String[] projection = {
                 DBContract.Photos.PHOTO_ID, DBContract.Photos.PHOTO_USERS_ID,
@@ -381,7 +381,7 @@ public class DBHelper extends SQLiteOpenHelper {
             return null;
         }
 
-        SQLiteDatabase db = this.getWritableDatabase();
+        SQLiteDatabase db = getWritableDatabase();
         String[] projection = {
                 DBContract.ProblemActivity.PROBLEM_ACTIVITY_DATE,
                 DBContract.ProblemActivity.ACTIVITY_TYPES_ID,
@@ -503,7 +503,7 @@ public class DBHelper extends SQLiteOpenHelper {
             return null;
         }
 
-        SQLiteDatabase db = this.getWritableDatabase();
+        SQLiteDatabase db = getWritableDatabase();
         String[] projection = {DBContract.Details.LAST_UPDATE};
         String selection = DBContract.Details.PROBLEM_ID + " = ?";
         String[] selectionArgs = new String[]{String.valueOf(problemId)};

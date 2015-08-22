@@ -5,22 +5,10 @@ import com.ecomap.ukraine.models.User;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-/**
- * Created by Alexander on 06.08.2015.
- */
 public class JSONParser {
 
     private static final String NULL_ARGUMENT = "Argument is null";
 
-    private static int DEFAULT_VALUE = -1;
-
-    /**
-     * TODO docs
-     *
-     * @param userInformationJson
-     * @return
-     * @throws JSONException
-     */
     public User parseUserInformation(final String userInformationJson)
             throws JSONException {
 
@@ -29,8 +17,8 @@ public class JSONParser {
         }
 
         JSONObject userInformation = new JSONObject(userInformationJson);
-        User user = new User(
-                userInformation.optInt(JSONFields.USER_ID, DEFAULT_VALUE),
+        User user = User.getInstance(
+                userInformation.optInt(JSONFields.USER_ID, -1),
                 userInformation.getString(JSONFields.NAME),
                 userInformation.getString(JSONFields.SURNAME),
                 userInformation.getString(JSONFields.ROLE),
@@ -49,7 +37,7 @@ public class JSONParser {
             throw new JSONException(NULL_ARGUMENT);
         }
         JSONObject registrationUserInformation = new JSONObject(registrationUserInformationJson);
-        User user = new User(
+        User user = User.getInstance(
                 registrationUserInformation.getJSONObject(JSONFields.REGISTRATION_ID)
                         .getInt(JSONFields.ID_OF_REGISTRATION_USER),
                 registrationUserInformation.getString(JSONFields.NAME),

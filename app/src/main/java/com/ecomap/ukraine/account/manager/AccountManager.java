@@ -10,7 +10,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 public class AccountManager implements LogInListenerNotifier,
-        LogRequestReceiver {
+                                       LogRequestReceiver {
 
     /**
      * The name of the preference to retrieve.

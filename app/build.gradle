@@ -42,4 +42,5 @@ dependencies {
     compile 'org.apache.httpcomponents:httpcore:4.3-alpha1'
 	compile 'com.ms-square:expandableTextView:0.1.4'
 	compile 'com.afollestad:material-dialogs:0.7.8.1'
+	compile 'com.jenzz:materialpreference:1.3'
 }

@@ -2,14 +2,15 @@ package com.ecomap.ukraine.data.manager;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.util.Log;
 
+import com.ecomap.ukraine.settings.UpdateTime;
 import com.ecomap.ukraine.database.DBHelper;
 import com.ecomap.ukraine.models.Details;
 import com.ecomap.ukraine.models.Problem;
 import com.ecomap.ukraine.updating.serverclient.LoadingClient;
 
 import java.util.Collection;
-import java.util.HashSet;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
@@ -18,7 +19,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
  * Provides updates of the database.
  */
 public class DataManager implements ProblemListenersNotifier,
-        ProblemRequestReceiver {
+                                    ProblemRequestReceiver {
 
     /**
      * The name of the preference to retrieve.
@@ -26,14 +27,11 @@ public class DataManager implements ProblemListenersNotifier,
     private static final String TIME = "Time";
 
     /**
-     * Update frequency (one week in milliseconds).
-     */
-    private static final long UPDATE_PERIOD = 604800000;
-
-    /**
      * Holds the Singleton global instance of DataManager.
      */
     private static DataManager instance;
+
+    private static long updateTime = UpdateTime.ONCE_A_WEEK.getTimeInMilliseconds();
 
     /**
      * Set of problem listeners.
@@ -72,6 +70,11 @@ public class DataManager implements ProblemListenersNotifier,
             instance = new DataManager(context);
         }
         return instance;
+    }
+
+    public static void setUpdateTime(UpdateTime updateTime) {
+        DataManager.updateTime = updateTime.getTimeInMilliseconds();
+        Log.e("update", "" + updateTime.getId());
     }
 
     /**
@@ -206,7 +209,7 @@ public class DataManager implements ProblemListenersNotifier,
      * @return the need to update.
      */
     private boolean isUpdateTime(final long lastUpdateTime) {
-        return (System.currentTimeMillis() - lastUpdateTime) >= UPDATE_PERIOD;
+        return (System.currentTimeMillis() - lastUpdateTime) >= updateTime;
     }
 
     public void refreshAllProblem() {

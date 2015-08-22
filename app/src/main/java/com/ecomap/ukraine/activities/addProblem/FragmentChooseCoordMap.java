@@ -29,6 +29,8 @@ import java.util.List;
 public class FragmentChooseCoordMap extends android.support.v4.app.Fragment {
 
     private static final float ON_MY_POSITION_CLICK_ZOOM = 15;
+    private static final LatLng INITIAL_POSITION = new LatLng(48.4, 31.2);
+    private static final float INITIAL_ZOOM = 5;
     private GoogleMap googleMap;
     private MapView mapView;
     private LatLng markerPosition;
@@ -55,7 +57,6 @@ public class FragmentChooseCoordMap extends android.support.v4.app.Fragment {
                     moveCameraToMyLocation(myLocation);
                 }
             }
-
             @Nullable
             private Location getLocation() {
                 Location myLocation = null;
@@ -73,10 +74,8 @@ public class FragmentChooseCoordMap extends android.support.v4.app.Fragment {
         });
 
         MapsInitializer.initialize(getActivity().getApplicationContext());
-        this.setUpMapIfNeeded();
-        googleMap.setOnMarkerDragListener(new GoogleMap.OnMarkerDragListener()
-
-        {
+        setUpMapIfNeeded();
+        googleMap.setOnMarkerDragListener(new GoogleMap.OnMarkerDragListener() {
             @Override
             public void onMarkerDragStart(Marker marker) {
             }
@@ -90,9 +89,7 @@ public class FragmentChooseCoordMap extends android.support.v4.app.Fragment {
                 markerPosition = marker.getPosition();
             }
         });
-        googleMap.setOnMapClickListener(new GoogleMap.OnMapClickListener()
-
-        {
+        googleMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
             @Override
             public void onMapClick(LatLng latLng) {
                 if (latLng != null) {
@@ -100,13 +97,26 @@ public class FragmentChooseCoordMap extends android.support.v4.app.Fragment {
                 }
                 googleMap.addMarker(new MarkerOptions()
                         .draggable(true).position(latLng)
-                        .icon(BitmapDescriptorFactory.fromResource(R.drawable.type0))
+                        .icon(BitmapDescriptorFactory.fromResource(R.drawable.pin))
                         .anchor(0.5F, 1));
                 markerPosition = latLng;
 
             }
         });
+
+        moveCameraToInitialPosition();
+
         return rootView;
+    }
+
+    private void moveCameraToInitialPosition() {
+        CameraPosition cameraPosition = new CameraPosition
+                .Builder()
+                .target(INITIAL_POSITION)
+                .zoom(INITIAL_ZOOM)
+                .build();
+        CameraUpdate cameraUpdate = CameraUpdateFactory.newCameraPosition(cameraPosition);
+        googleMap.moveCamera(cameraUpdate);
     }
 
     /**

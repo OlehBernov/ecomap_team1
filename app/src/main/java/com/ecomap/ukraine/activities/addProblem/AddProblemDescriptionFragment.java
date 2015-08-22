@@ -16,7 +16,6 @@ import android.widget.Toast;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.ecomap.ukraine.R;
 import com.ecomap.ukraine.account.manager.AccountManager;
-import com.ecomap.ukraine.account.manager.LogInListener;
 import com.ecomap.ukraine.activities.ExtraFieldNames;
 import com.ecomap.ukraine.activities.Keyboard;
 import com.ecomap.ukraine.activities.main.MainActivity;
@@ -37,7 +36,7 @@ import butterknife.InjectView;
 /**
  * Fragment for posting description of new problem
  */
-public class AddProblemDescriptionFragment extends Fragment implements LogInListener, AddProblemListener, ProblemListener {
+public class AddProblemDescriptionFragment extends Fragment implements AddProblemListener, ProblemListener {
 
     private static final String PLEASE_WAIT = "Please wait...";
     /**
@@ -52,10 +51,8 @@ public class AddProblemDescriptionFragment extends Fragment implements LogInList
 
     private AddProblemManager addProblemManager;
     private DataManager dataManager;
-    private AccountManager accountManager;
-    private User user;
-    private String USER_NAME;
-    private String USER_SURNAME;
+    private String userName = User.getInstance().getName();
+    private String userSurname = User.getInstance().getSurname();
 
 
     @InjectView(R.id.problemTitle) EditText problemTitle;
@@ -112,7 +109,6 @@ public class AddProblemDescriptionFragment extends Fragment implements LogInList
         View v = inflater.inflate(R.layout.tab_1, container, false);
 
         addProblemManager = AddProblemManager.getInstance(getActivity().getApplicationContext());
-        accountManager = AccountManager.getInstance(getActivity().getApplicationContext());
         dataManager = DataManager.getInstance(getActivity().getApplicationContext());
 
         ButterKnife.inject(this, v);
@@ -131,7 +127,6 @@ public class AddProblemDescriptionFragment extends Fragment implements LogInList
     @Override
     public void onDestroy() {
         super.onDestroy();
-        accountManager.removeLogInListener(this);
         addProblemManager.removeAddProblemListener(this);
     }
 
@@ -152,24 +147,11 @@ public class AddProblemDescriptionFragment extends Fragment implements LogInList
     }
 
     /**
-     * Set result of authorization
-     * @param user authorize user
-     */
-    @Override
-    public void setLogInResult(final User user) {
-        if(user != null) {
-            this.user = user;
-            USER_NAME = user.getName();
-            USER_SURNAME = user.getSurname();
-        }
-    }
-
-    /**
      * Represents variants of posting result
      */
     @Override
     public void onSuccessProblemPosting() {
-        successPosting(R.string.problem_added_sucessfully);
+        successPosting(R.string.problem_added_successfully);
     }
 
     @Override
@@ -180,7 +162,7 @@ public class AddProblemDescriptionFragment extends Fragment implements LogInList
 
     @Override
     public void onSuccessPhotoPosting() {
-        successPosting(R.string.problem_added_sucessfully);
+        successPosting(R.string.problem_added_successfully);
     }
 
 
@@ -207,7 +189,6 @@ public class AddProblemDescriptionFragment extends Fragment implements LogInList
     @Override
     public void updateAllProblems(final List<Problem> problems) {
         Intent intent = new Intent(getActivity(), MainActivity.class);
-        intent.putExtra(ExtraFieldNames.USER, user);
         startActivity(intent);
         getActivity().finish();
         dataManager.removeProblemListener(this);
@@ -228,8 +209,8 @@ public class AddProblemDescriptionFragment extends Fragment implements LogInList
         String type = String.valueOf(spinner.getSelectedItemId() + 1);
         showProgressDialog();
         addProblemManager.addProblem(title, description, solution, latitude,
-                longitude, type, String.valueOf(user.getId()),
-                USER_NAME, USER_SURNAME, bitmapPhotos, photoDescriptions);
+                longitude, type, String.valueOf(User.getInstance().getId()),
+                userName, userSurname, bitmapPhotos, photoDescriptions);
         bitmapPhotos = null;
     }
 
@@ -253,8 +234,8 @@ public class AddProblemDescriptionFragment extends Fragment implements LogInList
                     @Override
                     public void onPositive(MaterialDialog dialog) {
                         super.onPositive(dialog);
-                        USER_NAME = "";
-                        USER_SURNAME = "";
+                        userName = "";
+                        userSurname = "";
                         dialog.cancel();
                         sendProblem();
                     }

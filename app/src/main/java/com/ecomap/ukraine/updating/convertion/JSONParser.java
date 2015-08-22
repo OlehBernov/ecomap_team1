@@ -30,12 +30,6 @@ public class JSONParser {
     private static final String NULL_ARGUMENT = "Argument is null";
 
     /**
-     * Message which will assigned to numeric argument of entities,
-     * if value from server be null.
-     */
-    private static final int DEFAULT_VALUE = -1;
-
-    /**
      * Converts brief information from JSON to List of Problem objects.
      *
      * @param briefProblemsJson brief information about problems from server.
@@ -78,9 +72,9 @@ public class JSONParser {
         }
 
         JSONArray detailedProblemArray = new JSONArray(detailedProblemJson);
-        JSONObject problemDetails = (detailedProblemArray
-                .getJSONArray(JSONFields.DETAILS_POSITION))
-                .getJSONObject(0);
+        JSONObject problemDetails = detailedProblemArray
+                                    .getJSONArray(JSONFields.DETAILS_POSITION)
+                                    .getJSONObject(0);
 
         List<ProblemActivity> problemActivities;
         problemActivities = getProblemActivities(detailedProblemArray
@@ -88,10 +82,10 @@ public class JSONParser {
 
         Details details;
         details = new Details(
-                problemDetails.optInt(JSONFields.ID, DEFAULT_VALUE),
-                problemDetails.optInt(JSONFields.SEVERITY, DEFAULT_VALUE),
-                problemDetails.optInt(JSONFields.MODERATION, DEFAULT_VALUE),
-                problemDetails.optInt(JSONFields.VOTES, DEFAULT_VALUE),
+                problemDetails.optInt(JSONFields.ID, -1),
+                problemDetails.optInt(JSONFields.SEVERITY, -1),
+                problemDetails.optInt(JSONFields.MODERATION, -1),
+                problemDetails.optInt(JSONFields.VOTES, -1),
                 problemDetails.getString(JSONFields.PROBLEM_CONTENT),
                 problemDetails.getString(JSONFields.PROPOSAL),
                 problemDetails.getString(JSONFields.TITLE),
@@ -118,13 +112,11 @@ public class JSONParser {
             throws JSONException {
         Problem problem;
 
-        int problemStatusId = problemJsonObject.optInt(JSONFields.PROBLEM_STATUS,
-                DEFAULT_VALUE);
-        int problemTypesId = problemJsonObject.optInt(JSONFields.PROBLEM_TYPES_ID,
-                DEFAULT_VALUE);
+        int problemStatusId = problemJsonObject.optInt(JSONFields.PROBLEM_STATUS, -1);
+        int problemTypesId = problemJsonObject.optInt(JSONFields.PROBLEM_TYPES_ID, -1);
 
         problem = new Problem(
-                problemJsonObject.optInt(JSONFields.ID, DEFAULT_VALUE),
+                problemJsonObject.optInt(JSONFields.ID, -1),
                 ProblemStatus.getProblemStatus(problemStatusId),
                 ProblemType.getProblemType(problemTypesId),
                 problemJsonObject.getString(JSONFields.TITLE),
@@ -161,14 +153,14 @@ public class JSONParser {
                 continue;
             }
 
-            int activityTypeId = commentObject.optInt(JSONFields.ACTIVITY_TYPES_ID, DEFAULT_VALUE);
+            int activityTypeId = commentObject.optInt(JSONFields.ACTIVITY_TYPES_ID, -1);
             ActivityType activityTypeEnum = ActivityType.getActivityType(activityTypeId);
 
             currentProblemActivity = new ProblemActivity(
-                    commentObject.optInt(JSONFields.PROBLEMS_ID, DEFAULT_VALUE),
-                    commentObject.optInt(JSONFields.ID, DEFAULT_VALUE),
+                    commentObject.optInt(JSONFields.PROBLEMS_ID, -1),
+                    commentObject.optInt(JSONFields.ID, -1),
                     activityTypeEnum,
-                    commentObject.optInt(JSONFields.COMMENT_USERS_ID, DEFAULT_VALUE),
+                    commentObject.optInt(JSONFields.COMMENT_USERS_ID, -1),
                     contentObject.getString(JSONFields.COMMENT_CORE),
                     commentObject.getString(JSONFields.PROBLEM_ACTIVITY_DATE),
                     contentObject.getString(JSONFields.USER_NAME)
@@ -199,10 +191,10 @@ public class JSONParser {
             JSONObject photoObject = photosArray.getJSONObject(i);
 
             currentPhoto = new Photo(
-                    photoObject.optInt(JSONFields.PROBLEMS_ID, DEFAULT_VALUE),
-                    photoObject.optInt(JSONFields.ID, DEFAULT_VALUE),
-                    photoObject.optInt(JSONFields.PHOTO_USERS_ID, DEFAULT_VALUE),
-                    photoObject.optInt(JSONFields.PHOTO_STATUS, DEFAULT_VALUE),
+                    photoObject.optInt(JSONFields.PROBLEMS_ID, -1),
+                    photoObject.optInt(JSONFields.ID, -1),
+                    photoObject.optInt(JSONFields.PHOTO_USERS_ID, -1),
+                    photoObject.optInt(JSONFields.PHOTO_STATUS, -1),
                     JSONFields.PHOTOS_PATH + photoObject.getString(JSONFields.LINK),
                     photoObject.getString(JSONFields.PHOTO_DESCRIPTION)
             );

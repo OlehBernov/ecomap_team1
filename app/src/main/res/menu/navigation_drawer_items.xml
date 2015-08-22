@@ -8,17 +8,18 @@
             android:icon="@drawable/ic_login"
             android:onClick="logIn"
             android:title="@string/log_in"/>
-        <item
-            android:id="@+id/navigation_item_2"
-            android:icon="@drawable/signup"
-            android:onClick="signUp"
-            android:title="@string/Sign_up"/>
 
         <item
             android:id="@+id/navigation_item_3"
             android:icon="@drawable/logout_512"
             android:onClick="logOut"
             android:title="@string/log_out"/>
+
+        <item
+            android:id="@+id/navigation_item_2"
+            android:icon="@drawable/sign_up"
+            android:onClick="signUp"
+            android:title="@string/sign_up_navigator"/>
 
         <item
             android:id="@+id/navigation_item_4"

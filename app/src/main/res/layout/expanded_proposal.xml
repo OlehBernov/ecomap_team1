@@ -6,7 +6,8 @@
         android:background="#fafafa"
         android:orientation="vertical">
 
-        <com.ms.square.android.expandabletextview.ExpandableTextView xmlns:android="http://schemas.android.com/apk/res/android"
+        <com.ms.square.android.expandabletextview.ExpandableTextView
+            xmlns:android="http://schemas.android.com/apk/res/android"
             xmlns:expandableTextView="http://schemas.android.com/apk/res-auto"
             android:id="@+id/proposal_field"
             android:layout_width="match_parent"

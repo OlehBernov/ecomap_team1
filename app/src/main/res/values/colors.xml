@@ -23,4 +23,10 @@
     <color name="log_in_content">#ff5e635e</color>
     <color name="log_in_title">#ff414641</color>
 
+    <color name="divider_color">#ff979797</color>
+    <color name="settings_title">#ff414641</color>
+    <color name="settings_text">#ff5e635e</color>
+    <color name="radio_button">#004D40</color>
+
+
 </resources>

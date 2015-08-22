@@ -1,8 +1,10 @@
 package com.ecomap.ukraine.models;
 
-import java.io.Serializable;
+public class User {
 
-public class User implements Serializable {
+    private static final String DEFAULT_NAME = "Anonym";
+
+    private static User instance;
 
     private int id;
 
@@ -18,8 +20,8 @@ public class User implements Serializable {
 
     private String email;
 
-    public User(int id, String name, String surname, String role, String iat,
-                String token, String email) {
+    private User(int id, String name, String surname, String role, String iat,
+                 String token, String email) {
 
         this.id = id;
         this.name = name;
@@ -28,6 +30,23 @@ public class User implements Serializable {
         this.iat = iat;
         this.token = token;
         this.email = email;
+    }
+
+    public static User getInstance(int id, String name, String surname, String role, String iat,
+                                   String token, String email) {
+        instance = new User(id, name, surname, role, iat, token, email);
+        return instance;
+    }
+
+    public static User getInstance() {
+        if (instance == null) {
+            instance = setDefaultInstance();
+        }
+        return instance;
+    }
+
+    public static void reset() {
+        setDefaultInstance();
     }
 
     public int getId() {
@@ -56,5 +75,10 @@ public class User implements Serializable {
 
     public String getEmail() {
         return email;
+    }
+
+    private static User setDefaultInstance() {
+        instance = new User(-1, DEFAULT_NAME, "", "", "", "", "");
+        return instance;
     }
 }

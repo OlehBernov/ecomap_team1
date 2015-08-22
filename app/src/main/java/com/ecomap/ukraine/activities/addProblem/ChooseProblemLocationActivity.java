@@ -12,11 +12,13 @@ import com.ecomap.ukraine.R;
 import com.ecomap.ukraine.activities.ExtraFieldNames;
 import com.ecomap.ukraine.activities.main.MainActivity;
 import com.ecomap.ukraine.models.User;
+import com.google.android.gms.maps.CameraUpdate;
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.model.CameraPosition;
 
 public class ChooseProblemLocationActivity extends AppCompatActivity {
 
     private Toolbar toolbar;
-    private User user;
     private FragmentChooseCoordMap map;
 
     /**
@@ -30,17 +32,14 @@ public class ChooseProblemLocationActivity extends AppCompatActivity {
         Intent mainIntent = new Intent(this, AddNewProblemDecriptionActivity.class);
         mainIntent.putExtra(ExtraFieldNames.LAT, map.getMarkerPosition().latitude);
         mainIntent.putExtra(ExtraFieldNames.LNG, map.getMarkerPosition().longitude);
-        mainIntent.putExtra(ExtraFieldNames.USER, user);
         startActivity(mainIntent);
         finish();
-
     }
     /**
      * Calls when pressed custom back button
      */
     public void cancelButton(View view) {
         Intent mainIntent = new Intent(this, MainActivity.class);
-        mainIntent.putExtra(ExtraFieldNames.USER, user);
         startActivity(mainIntent);
         finish();
     }
@@ -61,7 +60,6 @@ public class ChooseProblemLocationActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.choose_coordinate_layout);
-        user = (User) getIntent().getSerializableExtra(ExtraFieldNames.USER);
         map = new FragmentChooseCoordMap();
 
         addMapFragment();
@@ -76,7 +74,6 @@ public class ChooseProblemLocationActivity extends AppCompatActivity {
             }
         });
     }
-
 
     /**
      * Adds google map

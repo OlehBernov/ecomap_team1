@@ -74,7 +74,7 @@ public class SignupActivity extends AppCompatActivity implements LogInListener {
                 .addOnScrollChangedListener(new ViewTreeObserver.OnScrollChangedListener() {
                     @Override
                     public void onScrollChanged() {
-                        background.setScrollY(((int) (scrollView.getScrollY() * 0.5)));
+                        background.setScrollY((int) (scrollView.getScrollY() * 0.5));
                     }
                 });
 
@@ -141,7 +141,6 @@ public class SignupActivity extends AppCompatActivity implements LogInListener {
         accountManager.removeLogInListener(this);
         signUpButton.setEnabled(true);
         if (user != null) {
-            mainIntent.putExtra(ExtraFieldNames.USER, user);
             openMainActivity();
         } else {
             Log.e(TAG, "Registration null");

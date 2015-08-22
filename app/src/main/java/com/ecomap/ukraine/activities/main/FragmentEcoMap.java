@@ -43,7 +43,7 @@ public class FragmentEcoMap extends android.support.v4.app.Fragment
     private static final float INITIAL_ZOOM = 5;
     private static final float ON_MARKER_CLICK_ZOOM = 12;
     private static final float ON_MY_POSITION_CLICK_ZOOM = 15;
-    /**
+     /**
      * The name of the preference to retrieve.
      */
     private static final String POSITION = "POSITION";
@@ -53,7 +53,7 @@ public class FragmentEcoMap extends android.support.v4.app.Fragment
     private static List<Problem> problems;
 
     private MapView mapView;
-    private  GoogleMap googleMap;
+    private GoogleMap googleMap;
     private DataManager dataManager;
     private static ClusterManager<Problem> clusterManager;
 
@@ -122,8 +122,6 @@ public class FragmentEcoMap extends android.support.v4.app.Fragment
 
                 }
             });
-
-
 
         FloatingActionButton myPositionButton = (FloatingActionButton) getActivity().findViewById(R.id.fab1);
         myPositionButton.setOnClickListener(new View.OnClickListener() {
@@ -210,7 +208,6 @@ public class FragmentEcoMap extends android.support.v4.app.Fragment
     public void setRenderer () {
         clusterManager.setRenderer(new IconRenderer(getActivity(), googleMap, clusterManager));
     }
-
 
     /**
      * Get list of all details.

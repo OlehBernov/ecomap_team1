@@ -1,7 +1,6 @@
 package com.ecomap.ukraine.activities.addProblem;
 
 
-import android.content.Context;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
@@ -12,10 +11,10 @@ public class ViewPagerAdapter extends FragmentStatePagerAdapter {
     private int numbOfTabs;
 
     public ViewPagerAdapter(FragmentManager fragmentManager,
-                            String[] titles, int numbOfTabsumb) {
+                            String[] titles, int numbOfTabs) {
         super(fragmentManager);
         this.titles = titles;
-        this.numbOfTabs = numbOfTabsumb;
+        this.numbOfTabs = numbOfTabs;
     }
 
     @Override
