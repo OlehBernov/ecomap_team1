@@ -1,6 +1,7 @@
 package com.ecomap.ukraine.activities.addProblem;
 
 
+import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
@@ -36,7 +37,8 @@ import butterknife.InjectView;
 /**
  * Fragment for posting description of new problem
  */
-public class AddProblemDescriptionFragment extends Fragment implements AddProblemListener, ProblemListener {
+public class AddProblemDescriptionFragment extends Fragment implements AddProblemListener,
+                                                                       ProblemListener {
 
     private static final String PLEASE_WAIT = "Please wait...";
     /**
@@ -45,6 +47,7 @@ public class AddProblemDescriptionFragment extends Fragment implements AddProble
     private static AddProblemDescriptionFragment instance;
     private static List<Bitmap> bitmapPhotos;
     private static List<String> photoDescriptions;
+    private static Activity activity;
 
     private static final String INPUT_PROBLEM_DATA = "Input problem data";
     private static final String POSTING = "Posting...";
@@ -54,7 +57,6 @@ public class AddProblemDescriptionFragment extends Fragment implements AddProble
     private String userName = User.getInstance().getName();
     private String userSurname = User.getInstance().getSurname();
 
-
     @InjectView(R.id.problemTitle) EditText problemTitle;
     @InjectView(R.id.problemDescription) EditText problemDescription;
     @InjectView(R.id.problemSolution) EditText problemSolution;
@@ -63,13 +65,15 @@ public class AddProblemDescriptionFragment extends Fragment implements AddProble
      * Returns Singleton instance of AddProblemDescriptionFragment
      */
     public static AddProblemDescriptionFragment getInstance(List<Bitmap> bitmapPhotos,
-                                                            List<String> descriptions) {
+                                                            List<String> descriptions,
+                                                            Activity activity) {
         if (instance == null) {
             instance = new AddProblemDescriptionFragment();
         }
         if (bitmapPhotos != null) {
             AddProblemDescriptionFragment.bitmapPhotos = bitmapPhotos;
             AddProblemDescriptionFragment.photoDescriptions = descriptions;
+            AddProblemDescriptionFragment.activity = activity;
         }
         return instance;
     }
@@ -81,7 +85,7 @@ public class AddProblemDescriptionFragment extends Fragment implements AddProble
         boolean isProblemValid;
         isProblemValid = new Validator().addProblemValidation(problemTitle);
         if (!isProblemValid) {
-            Toast.makeText(getActivity()
+            Toast.makeText(activity
                            .getApplicationContext(), INPUT_PROBLEM_DATA, Toast.LENGTH_LONG)
                            .show();
             return;
@@ -89,13 +93,15 @@ public class AddProblemDescriptionFragment extends Fragment implements AddProble
         setChooseNameDialog();
     }
 
-   
-    /**
-     * Calls when posting are successfull
-     * @param idOfmessage
-     */
-    public void successPosting(final int idOfmessage) {
-        Toast.makeText(getActivity().getApplicationContext(), idOfmessage, Toast.LENGTH_LONG).show();
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        dataManager = DataManager.getInstance(activity.getApplicationContext());
+        addProblemManager = AddProblemManager.getInstance(activity.getApplicationContext());
+    }
+
+    public void successPosting(final int idOfMessage) {
+        Toast.makeText(activity.getApplicationContext(), idOfMessage, Toast.LENGTH_LONG).show();
         dataManager.registerProblemListener(this);
         dataManager.refreshAllProblem();
     }
@@ -108,12 +114,13 @@ public class AddProblemDescriptionFragment extends Fragment implements AddProble
                              @Nullable Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.tab_1, container, false);
 
-        addProblemManager = AddProblemManager.getInstance(getActivity().getApplicationContext());
-        dataManager = DataManager.getInstance(getActivity().getApplicationContext());
+        activity = getActivity();
+        addProblemManager = AddProblemManager.getInstance(activity.getApplicationContext());
+        dataManager = DataManager.getInstance(activity.getApplicationContext());
 
         ButterKnife.inject(this, v);
 
-        Keyboard keyboard = new Keyboard(getActivity());
+        Keyboard keyboard = new Keyboard(activity);
         keyboard.setOnFocusChangeListener(problemTitle);
         keyboard.setOnFocusChangeListener(problemDescription);
         keyboard.setOnFocusChangeListener(problemSolution);
@@ -135,7 +142,7 @@ public class AddProblemDescriptionFragment extends Fragment implements AddProble
      * Show progres dialog when problem posting
      */
     private void showProgressDialog() {
-        new MaterialDialog.Builder(getActivity())
+        new MaterialDialog.Builder(activity)
                 .title(POSTING)
                 .content(PLEASE_WAIT)
                 .progress(true, 0)
@@ -156,7 +163,7 @@ public class AddProblemDescriptionFragment extends Fragment implements AddProble
 
     @Override
     public void onFailedProblemPosting() {
-        Toast.makeText(getActivity().getApplicationContext(), R.string.problem_post_error,
+        Toast.makeText(activity.getApplicationContext(), R.string.problem_post_error,
                 Toast.LENGTH_LONG).show();
     }
 
@@ -188,9 +195,9 @@ public class AddProblemDescriptionFragment extends Fragment implements AddProble
      */
     @Override
     public void updateAllProblems(final List<Problem> problems) {
-        Intent intent = new Intent(getActivity(), MainActivity.class);
+        Intent intent = new Intent(activity, MainActivity.class);
         startActivity(intent);
-        getActivity().finish();
+        activity.finish();
         dataManager.removeProblemListener(this);
 
     }
@@ -204,8 +211,8 @@ public class AddProblemDescriptionFragment extends Fragment implements AddProble
         String description = problemDescription.getText().toString();
 
         String solution = problemSolution.getText().toString();
-        String latitude = getActivity().getIntent().getDoubleExtra(ExtraFieldNames.LAT, 0) + "";
-        String longitude = getActivity().getIntent().getDoubleExtra(ExtraFieldNames.LNG, 0) + "";
+        String latitude = activity.getIntent().getDoubleExtra(ExtraFieldNames.LAT, 0) + "";
+        String longitude = activity.getIntent().getDoubleExtra(ExtraFieldNames.LNG, 0) + "";
         String type = String.valueOf(spinner.getSelectedItemId() + 1);
         showProgressDialog();
         addProblemManager.addProblem(title, description, solution, latitude,
@@ -214,13 +221,11 @@ public class AddProblemDescriptionFragment extends Fragment implements AddProble
         bitmapPhotos = null;
     }
 
-
-
     /**
      * Set dialog of choise user name
      */
     private void setChooseNameDialog() {
-        new MaterialDialog.Builder(getActivity())
+        new MaterialDialog.Builder(activity)
                 .title(R.string.Caution)
                 .content(R.string.post_problem_anonymously)
                 .backgroundColorRes(R.color.log_in_dialog)

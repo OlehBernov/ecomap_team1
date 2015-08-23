@@ -119,7 +119,8 @@ public class AddNewProblemDecriptionActivity extends AppCompatActivity {
         int id = item.getItemId();
 
         if (id == R.id.action_confirm_problem) {
-            AddProblemDescriptionFragment.getInstance(getBitmapsPhoto(), descriptions).postProblemValidation();
+            AddProblemDescriptionFragment.getInstance(getBitmapsPhoto(), descriptions, this)
+                                         .postProblemValidation();
             return true;
         }
 
@@ -144,8 +145,8 @@ public class AddNewProblemDecriptionActivity extends AppCompatActivity {
         setupToolbar();
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
 
-        ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager(), titles, NUMBER_OF_TUBS);
-
+        ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager(), titles,
+                                                        NUMBER_OF_TUBS, this);
         pager = (ViewPager) findViewById(R.id.pager);
         pager.setAdapter(adapter);
 
@@ -170,7 +171,7 @@ public class AddNewProblemDecriptionActivity extends AppCompatActivity {
         }
         if (isPhotosSaved(savedInstanceState)) {
             userPhotos = new ArrayList<>();
-            ArrayList<String> userPhotoArrayList = savedInstanceState.getStringArrayList(USER_PHOTOS);
+            List<String> userPhotoArrayList = savedInstanceState.getStringArrayList(USER_PHOTOS);
             for (int i = 0; i < userPhotoArrayList.size(); i++) {
                 userPhotos.add(Uri.parse(userPhotoArrayList.get(i)));
             }
@@ -275,7 +276,7 @@ public class AddNewProblemDecriptionActivity extends AppCompatActivity {
     }
 
     private boolean isActivityLayoutHaveChild() {
-        return photoDescriptionLayout != null && (photoDescriptionLayout.getChildCount() > 0);
+        return (photoDescriptionLayout != null) && (photoDescriptionLayout.getChildCount() > 0);
     }
 
     private void addPhotosToView() {
