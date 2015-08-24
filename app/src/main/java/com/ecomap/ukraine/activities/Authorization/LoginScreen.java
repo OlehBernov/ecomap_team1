@@ -1,6 +1,5 @@
 package com.ecomap.ukraine.activities.Authorization;
 
-import android.app.Activity;
 import android.content.ComponentName;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -161,12 +160,17 @@ public class LoginScreen extends AppCompatActivity implements LogInListener {
         accountManager = AccountManager.getInstance(getApplicationContext());
 
         View skip = findViewById(R.id.skip_button);
-        skip.setOnClickListener(new View.OnClickListener() {
-                                    @Override
-                                    public void onClick(View v) {
-                                        openMainActivity();
-                                    }
-                                }
+        skip.setOnClickListener(
+                new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if (isCameFromMainActivity()) {
+                            finish();
+                        } else {
+                            openMainActivity();
+                        }
+                    }
+                }
         );
 
         View signUp = findViewById(R.id.sign_up);

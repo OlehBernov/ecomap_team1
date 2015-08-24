@@ -271,6 +271,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+        setUserInformation(User.getInstance());
         if (isSettingsRequest(requestCode)) {
             Fragment fragment = getSupportFragmentManager().findFragmentByTag(MAP_TAG);
             if(fragment != null) {
