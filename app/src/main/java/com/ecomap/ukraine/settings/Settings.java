@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.support.v4.content.res.ResourcesCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -26,10 +25,13 @@ public class Settings extends AppCompatActivity {
     private static final String ONCE_A_WEEK = "Updating time <br/><font color='grey'>Once a week</font>";
     private static final String ONCE_A_MONTH = "Updating time <br/><font color='grey'>Once a month</font>";
 
+    private static final String NORMAL_MAP_TYPE = "Map type <br/><font color='grey'>Normal map type</font>";
+    private static final String VIEW_FROM_SATELLITE = "Map type <br/><font color='grey'>View from satellite</font>";
+
     private Button updateTimeButton;
     private Button mapTypeButton;
 
-    private UpdateTime updateTime = UpdateTime.ONCE_A_WEEK;
+    private UpdateTime updateTime;
     private MapType mapType = MapType.MAP_TYPE_NORMAL;
 
     public void openChoosingTimeWindow(View view) {
@@ -45,7 +47,7 @@ public class Settings extends AppCompatActivity {
                     public boolean onSelection(MaterialDialog dialog, View view, int which,
                                                CharSequence text) {
                         updateTime = UpdateTime.values()[which];
-                        updateTimeButton.setText(Html.fromHtml(getTitle(which)));
+                        updateTimeButton.setText(Html.fromHtml(getUpdateTimeTitle(which)));
                         saveUpdateTimeToSharedPreferences();
                         return true;
                     }
@@ -67,6 +69,7 @@ public class Settings extends AppCompatActivity {
                     public boolean onSelection(MaterialDialog dialog, View view, int which,
                                                CharSequence text) {
                         mapType = MapType.values()[which];
+                        mapTypeButton.setText(Html.fromHtml(getMapTypeTitle(which)));
                         saveMapTypeToSharedPreferences();
                         return true;
                     }
@@ -79,12 +82,10 @@ public class Settings extends AppCompatActivity {
     public void onBackPressed() {
         super.onBackPressed();
         DataManager.setUpdateTime(updateTime);
-        Intent intent = new Intent(this, MainActivity.class);
         SharedPreferences.Editor editor = getSharedPreferences(ExtraFieldNames.MAP_TYPE,
                 Context.MODE_PRIVATE).edit();
         editor.putInt(ExtraFieldNames.MAP_TYPE_ID, mapType.getId());
         editor.apply();
-        startActivity(intent);
         finish();
     }
 
@@ -92,19 +93,26 @@ public class Settings extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
-
-        updateTimeButton = (Button) findViewById(R.id.update_time_button);
-        updateTimeButton.setText(Html.fromHtml(ONCE_A_WEEK));
-        mapTypeButton = (Button) findViewById(R.id.map_type_button);
-
         setupToolbar();
         SharedPreferences settings = getSharedPreferences(ExtraFieldNames.SETTINGS_PREFERENCES,
-                                                          MODE_PRIVATE);
+                MODE_PRIVATE);
+        setUpdateTimeTitle(settings);
+        setMapTypeTitle(settings);
+    }
+
+    private void setUpdateTimeTitle(SharedPreferences settings) {
         int updateTimeValue = settings.getInt(ExtraFieldNames.UPDATE_TIME,
-                                              UpdateTime.ONCE_A_WEEK.getId());
+                UpdateTime.ONCE_A_WEEK.getId());
         updateTime = UpdateTime.values()[updateTimeValue];
+        updateTimeButton = (Button) findViewById(R.id.update_time_button);
+        updateTimeButton.setText(Html.fromHtml(getUpdateTimeTitle(updateTimeValue)));
+    }
+
+    private void setMapTypeTitle(SharedPreferences settings) {
         int mapTypeValue = settings.getInt(ExtraFieldNames.MAP_TYPE, MapType.MAP_TYPE_NORMAL.getId());
         mapType = MapType.values()[mapTypeValue];
+        mapTypeButton = (Button) findViewById(R.id.map_type_button);
+        mapTypeButton.setText(Html.fromHtml(getMapTypeTitle(mapTypeValue)));
     }
 
     private void saveUpdateTimeToSharedPreferences() {
@@ -142,7 +150,7 @@ public class Settings extends AppCompatActivity {
         });
     }
 
-    private String getTitle(int id) {
+    private String getUpdateTimeTitle(int id) {
         switch (id) {
             case 0:
                 return EVERY_TIME;
@@ -154,6 +162,17 @@ public class Settings extends AppCompatActivity {
                 return ONCE_A_MONTH;
             default:
                 return ONCE_A_WEEK;
+        }
+    }
+
+    private String getMapTypeTitle(int id) {
+        switch (id) {
+            case 0:
+                return NORMAL_MAP_TYPE;
+            case 1:
+                return VIEW_FROM_SATELLITE;
+            default:
+                return NORMAL_MAP_TYPE;
         }
     }
 

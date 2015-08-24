@@ -14,9 +14,8 @@ import com.ecomap.ukraine.R;
 import com.ecomap.ukraine.account.manager.AccountManager;
 import com.ecomap.ukraine.account.manager.LogInListener;
 import com.ecomap.ukraine.activities.ExtraFieldNames;
-import com.ecomap.ukraine.activities.addProblem.AddProblemDescriptionFragment;
-import com.ecomap.ukraine.activities.main.MainActivity;
 import com.ecomap.ukraine.activities.Keyboard;
+import com.ecomap.ukraine.activities.main.MainActivity;
 import com.ecomap.ukraine.models.User;
 import com.ecomap.ukraine.validation.Validator;
 import com.facebook.CallbackManager;
@@ -43,17 +42,17 @@ public class LoginScreen extends AppCompatActivity implements LogInListener {
     private static final String FAILE_TITLE = "Log in failed.";
     private final static String SIGN_UP = "Sign up";
     private final static String CANCEL = "Cancel";
-
+    protected final String TAG = getClass().getSimpleName();
+    @InjectView(R.id.input_email_log)
+    EditText emailText;
+    @InjectView(R.id.input_password_log)
+    EditText passwordText;
+    @InjectView(R.id.btn_log_in)
+    Button logInButton;
     private Intent mainIntent;
     private AccountManager accountManager;
     private CallbackManager callbackManager;
     private MaterialDialog logInProgress;
-
-    protected final String TAG = getClass().getSimpleName();
-
-    @InjectView(R.id.input_email_log) EditText emailText;
-    @InjectView(R.id.input_password_log) EditText passwordText;
-    @InjectView(R.id.btn_log_in) Button logInButton;
 
     public void login() {
         boolean isLogInValid;
@@ -95,6 +94,12 @@ public class LoginScreen extends AppCompatActivity implements LogInListener {
     public void onActivityResult(final int requestCode, final int resultCode, final Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         callbackManager.onActivityResult(requestCode, resultCode, data);
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        finish();
     }
 
     /**
@@ -157,14 +162,15 @@ public class LoginScreen extends AppCompatActivity implements LogInListener {
                                 }
         );
 
-        final Intent signUpIntent = new Intent(this, SignupActivity.class);
         View signUp = findViewById(R.id.sign_up);
-        signUp.setOnClickListener(new View.OnClickListener() {
-                                      @Override
-                                      public void onClick(View v) {
-                                          startActivity(signUpIntent);
-                                      }
-                                  }
+        signUp.setOnClickListener(
+                new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent signUpIntent = new Intent(LoginScreen.this, SignupActivity.class);
+                        startActivityForResult(signUpIntent, 1);
+                    }
+                }
         );
     }
 

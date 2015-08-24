@@ -30,7 +30,7 @@ public class FragmentChooseCoordMap extends android.support.v4.app.Fragment {
 
     private static final float ON_MY_POSITION_CLICK_ZOOM = 15;
     private static final LatLng INITIAL_POSITION = new LatLng(48.4, 31.2);
-    private static final float INITIAL_ZOOM = 5;
+    private static final float INITIAL_ZOOM = 4.5f;
     private GoogleMap googleMap;
     private MapView mapView;
     private LatLng markerPosition;

@@ -197,7 +197,6 @@ public class FragmentEcoMap extends android.support.v4.app.Fragment
         FragmentEcoMap.problems = problems;
         putAllProblemsOnMap(null);
         setRenderer();
-
     }
 
     /**

@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -28,7 +29,6 @@ import com.ecomap.ukraine.account.manager.AccountManager;
 import com.ecomap.ukraine.activities.Authorization.LoginScreen;
 import com.ecomap.ukraine.activities.Authorization.SignupActivity;
 import com.ecomap.ukraine.settings.Settings;
-import com.ecomap.ukraine.settings.UpdateTime;
 import com.ecomap.ukraine.activities.addProblem.ChooseProblemLocationActivity;
 import com.ecomap.ukraine.filter.FilterContract;
 import com.ecomap.ukraine.filter.FilterManager;
@@ -76,12 +76,17 @@ public class MainActivity extends AppCompatActivity {
     private static final String ALERT_MESSAGE =
             "To append a problem you must first be authorized. Authorize?";
 
+    private static final String MAP_TAG = "Map tag";
+
     private static final String OK = "OK";
 
     private static final String CANCEL = "Cancel";
 
-    private static final UpdateTime DEFAULT_UPDATE_TIME = UpdateTime.ONCE_A_WEEK;
+    private static final int LOG_IN_REQUEST_CODE = 1;
 
+    private static final int SIGN_UP_REQUEST_CODE = 2;
+
+    private static final int SETTINGS_REQUEST_CODE = 3;
 
     public ActionBarDrawerToggle drawerToggle;
 
@@ -238,8 +243,7 @@ public class MainActivity extends AppCompatActivity {
 
     public void logIn(MenuItem item) {
         Intent intent = new Intent(this, LoginScreen.class);
-        startActivity(intent);
-        finish();
+        startActivityForResult(intent, LOG_IN_REQUEST_CODE);
     }
 
     public void logOut(MenuItem item) {
@@ -251,14 +255,24 @@ public class MainActivity extends AppCompatActivity {
 
     public void signUp(MenuItem item) {
         Intent intent = new Intent(this, SignupActivity.class);
-        startActivity(intent);
-        finish();
+        startActivityForResult(intent, SIGN_UP_REQUEST_CODE);
     }
 
     public void openSettings(MenuItem item) {
-        Intent intent = new Intent (this, Settings.class);
-        startActivity(intent);
-        finish();
+        Intent intent = new Intent(this, Settings.class);
+        startActivityForResult(intent, SETTINGS_REQUEST_CODE);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (isSettingsRequest(requestCode)) {
+            Fragment fragment = getSupportFragmentManager().findFragmentByTag(MAP_TAG);
+            if(fragment != null) {
+                getSupportFragmentManager().beginTransaction().remove(fragment).commit();
+            }
+            addMapFragment();
+        }
     }
 
     /**
@@ -327,6 +341,10 @@ public class MainActivity extends AppCompatActivity {
             Log.e("JSONException", "onDestroy");
         }
         editor.apply();
+    }
+
+    private boolean isSettingsRequest(int requestCode) {
+        return requestCode == SETTINGS_REQUEST_CODE;
     }
 
     private boolean isInformationalPanelCollapsed() {
@@ -448,7 +466,7 @@ public class MainActivity extends AppCompatActivity {
     private void addMapFragment() {
         FragmentManager fragmentManager = getSupportFragmentManager();
         fragmentManager.beginTransaction()
-                .replace(R.id.container, FragmentEcoMap.newInstance())
+                .replace(R.id.container, FragmentEcoMap.newInstance(), MAP_TAG)
                 .commit();
     }
 
@@ -497,7 +515,6 @@ public class MainActivity extends AppCompatActivity {
                 calendarDateTo.setTime(dateFormat.parse(DEFAULT_DATE_TO));
             }
         } catch (ParseException e) {
-            //TODO
             Log.e("parseException", "setDate to");
             return;
         }
