@@ -147,7 +147,7 @@ public class MainActivity extends AppCompatActivity {
     public void onBackPressed() {
         if (filterLayout.isDrawerOpen(GravityCompat.END)) {
             menu.findItem(R.id.action_find_location)
-                    .setIcon(R.drawable.filter8);
+                    .setIcon(R.drawable.ic_filter_list_white_36dp);
             filterLayout.closeDrawer(GravityCompat.END);
             toolbar.setTitle(previousTitle);
         } else if (isInformationalPanelExpanded()) {
@@ -170,13 +170,13 @@ public class MainActivity extends AppCompatActivity {
      */
     public void showFilter(MenuItem item) {
         if (!filterLayout.isDrawerOpen(GravityCompat.END)) {
-            item.setIcon(R.drawable.filter_back);
+            item.setIcon(R.drawable.ic_arrow_forward_white_36dp);
             setDate();
             filterLayout.openDrawer(GravityCompat.END);
             previousTitle = toolbar.getTitle();
             toolbar.setTitle(FILTER);
         } else {
-            item.setIcon(R.drawable.filter8);
+            item.setIcon(R.drawable.ic_filter_list_white_36dp);
             toolbar.setTitle(R.string.app_name);
             filterLayout.closeDrawer(GravityCompat.END);
 

@@ -81,7 +81,7 @@
                             android:layout_alignParentLeft="true"
                             android:layout_alignParentStart="true"
                             android:layout_alignParentTop="true"
-                            android:src="@drawable/new_calendar"/>
+                            android:src="@drawable/ic_today_black_36dp"/>
 
                         <TextView
                             android:id="@+id/textView2"
@@ -142,7 +142,7 @@
                             android:layout_alignParentLeft="true"
                             android:layout_alignParentStart="true"
                             android:layout_alignParentTop="true"
-                            android:src="@drawable/new_calendar"/>
+                            android:src="@drawable/ic_today_black_36dp"/>
 
                     </RelativeLayout>
 
@@ -191,7 +191,7 @@
                             android:id="@+id/imageView10"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:src="@drawable/star"/>
+                            android:src="@drawable/ic_stars_black_36dp"/>
 
                         <CheckBox
                             android:id="@+id/ButtonResolved"
@@ -199,9 +199,10 @@
                             android:layout_height="wrap_content"
                             android:layout_alignParentEnd="true"
                             android:layout_alignParentRight="true"
-                            android:layout_alignParentTop="true"
+                            android:layout_centerVertical="true"
                             android:layout_marginLeft="16dp"
                             android:layout_marginStart="16dp"
+                            android:layout_toEndOf="@+id/imageView10"
                             android:layout_toRightOf="@+id/imageView10"
                             android:background="@null"
                             android:button="@null"
@@ -226,7 +227,7 @@
                             android:id="@+id/imageView11"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:src="@drawable/new_problem"/>
+                            android:src="@drawable/ic_new_releases_black_36dp"/>
 
                         <CheckBox
                             android:id="@+id/ButtonUnsolved"
@@ -245,6 +246,7 @@
                             android:drawableRight="@drawable/check_button_style"
                             android:gravity="left|center_vertical"
                             android:onClick="switchCheckButtonState"
+                            android:paddingTop="6dp"
                             android:text="@string/unsolved"/>
 
                     </RelativeLayout>
@@ -317,6 +319,7 @@
                             android:drawableRight="@drawable/check_button_style"
                             android:gravity="left|center_vertical"
                             android:onClick="switchCheckButtonState"
+                            android:paddingTop="6dp"
                             android:text="@string/deforestation"/>
 
                     </RelativeLayout>
@@ -385,6 +388,7 @@
                             android:drawableRight="@drawable/check_button_style"
                             android:gravity="left|center_vertical"
                             android:onClick="switchCheckButtonState"
+                            android:paddingBottom="7dp"
                             android:text="@string/water_pollution"/>
 
                     </RelativeLayout>
@@ -419,6 +423,7 @@
                             android:drawableRight="@drawable/check_button_style"
                             android:gravity="left|center_vertical"
                             android:onClick="switchCheckButtonState"
+                            android:paddingBottom="7dp"
                             android:text="@string/illegal_building"/>
 
                     </RelativeLayout>
@@ -453,6 +458,7 @@
                             android:drawableRight="@drawable/check_button_style"
                             android:gravity="left|center_vertical"
                             android:onClick="switchCheckButtonState"
+                            android:paddingBottom="7dp"
                             android:text="@string/biodiversity"/>
 
                     </RelativeLayout>
@@ -487,6 +493,7 @@
                             android:drawableRight="@drawable/check_button_style"
                             android:gravity="left|center_vertical"
                             android:onClick="switchCheckButtonState"
+                            android:paddingTop="6dp"
                             android:text="@string/poaching"/>
 
                     </RelativeLayout>
@@ -522,6 +529,7 @@
                             android:drawableRight="@drawable/check_button_style"
                             android:gravity="left|center_vertical"
                             android:onClick="switchCheckButtonState"
+                            android:paddingTop="6dp"
                             android:text="@string/other"/>
 
                     </RelativeLayout>

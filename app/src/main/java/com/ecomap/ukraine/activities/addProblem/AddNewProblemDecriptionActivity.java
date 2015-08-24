@@ -363,7 +363,7 @@ public class AddNewProblemDecriptionActivity extends AppCompatActivity {
         deleteButton.setLayoutParams(setDeleteButtonParams());
         deleteButton.setId(buttonId);
         deleteButton.setImageDrawable(ContextCompat.getDrawable(getApplicationContext(),
-                R.drawable.delete));
+                R.drawable.ic_clear_black_18dp));
         deleteButton.setBackgroundColor(getResources().getColor(R.color.white));
         deleteButton.setLayoutParams(setDeleteButtonParams());
         addListenerOnDeleteButton(deleteButton);

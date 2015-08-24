@@ -16,7 +16,7 @@
         android:orderInCategory="101"
         android:title=""
         android:onClick="showFilter"
-        android:icon="@drawable/filter8"
+        android:icon="@drawable/ic_filter_list_white_36dp"
         app:showAsAction="ifRoom"/>
 
 </menu>

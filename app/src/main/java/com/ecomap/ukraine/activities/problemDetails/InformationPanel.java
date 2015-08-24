@@ -558,13 +558,13 @@ public class InformationPanel {
     private Drawable getActivityIcon(final ActivityType activityType) {
         switch (activityType) {
             case CREATE:
-                return ResourcesCompat.getDrawable(context.getResources(), R.drawable.create, null);
+                return ResourcesCompat.getDrawable(context.getResources(), R.drawable.ic_done_black_36dp, null);
             case UNKNOWN:
                 return ResourcesCompat.getDrawable(context.getResources(), R.drawable.type1, null);
             case LIKE:
                 return ResourcesCompat.getDrawable(context.getResources(), R.drawable.like_iconq, null);
             case PHOTO:
-                return ResourcesCompat.getDrawable(context.getResources(), R.drawable.add_photo_camera_36, null);
+                return ResourcesCompat.getDrawable(context.getResources(), R.drawable.ic_photo_camera_black_36dp, null);
             case COMMENT:
                 return ResourcesCompat.getDrawable(context.getResources(), R.drawable.comment3, null);
             case UNKNOWN2:

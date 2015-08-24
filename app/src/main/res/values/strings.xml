@@ -44,7 +44,6 @@
     <string name="sign_up_navigator">Sign up</string>
 
     <string name="photos">Photos:</string>
-    <string name="title_activity_photo_viewe">PhotoViewer</string>
     <string name="title_activity_photo_viewer">PhotoViewer</string>
     <string name="title_activity_screen_slide_pager">ScreenSlidePagerActivity</string>
 
