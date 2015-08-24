@@ -55,7 +55,7 @@ public class LogInClient {
                         try {
                             User user = new JSONParser().parseUserInformation(response);
                             logRequestReceiver.setLogInRequestResult(user);
-                            logRequestReceiver.putLogInResultToPreferences(password, login);
+                            logRequestReceiver.putUserToPreferences(user, password);
                         } catch (JSONException e) {
                             Log.e("exception", "JSONException in LogInUser");
                             logRequestReceiver.setLogInRequestResult(null);
@@ -102,7 +102,7 @@ public class LogInClient {
                         try {
                             User user = new JSONParser().parseRegistrationInformation(response, email);
                             logRequestReceiver.setLogInRequestResult(user);
-                            logRequestReceiver.putLogInResultToPreferences(password, email);
+                            logRequestReceiver.putUserToPreferences(user, password);
                         } catch (JSONException e) {
                             Log.e("exception", "JSONException in Registration");
                             logRequestReceiver.setLogInRequestResult(null);

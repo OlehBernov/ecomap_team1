@@ -1,5 +1,7 @@
 package com.ecomap.ukraine.models;
 
+import com.ecomap.ukraine.account.manager.AccountManager;
+
 public class User {
 
     private static final String DEFAULT_NAME = "Anonym";
@@ -78,7 +80,9 @@ public class User {
     }
 
     private static User setDefaultInstance() {
-        instance = new User(-1, DEFAULT_NAME, "", "", "", "", "");
+        instance = new User(-1, DEFAULT_NAME, "", "", "", "",
+                User.getInstance().getEmail());
+
         return instance;
     }
 }

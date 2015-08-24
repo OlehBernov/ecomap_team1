@@ -4,17 +4,21 @@ package com.ecomap.ukraine.activities.main;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.View;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.ecomap.ukraine.R;
+import com.ecomap.ukraine.account.manager.AccountManager;
 import com.ecomap.ukraine.activities.Authorization.LoginScreen;
+import com.ecomap.ukraine.activities.ExtraFieldNames;
 import com.ecomap.ukraine.data.manager.DataManager;
 import com.ecomap.ukraine.data.manager.ProblemListener;
 import com.ecomap.ukraine.models.Details;
 import com.ecomap.ukraine.models.Problem;
+import com.ecomap.ukraine.models.User;
 
 import java.util.List;
 
@@ -71,6 +75,11 @@ public class SplashScreen extends Activity implements ProblemListener {
     private SmoothProgressBar smoothProgressBar;
 
     /**
+     * User
+     */
+    User user;
+
+    /**
      * Opens Main Activity.
      *
      * @param problems list of all problems.
@@ -116,6 +125,15 @@ public class SplashScreen extends Activity implements ProblemListener {
 
         Context context = this.getApplicationContext();
         intent = new Intent(this, LoginScreen.class);
+        AccountManager.getInstance(getApplicationContext());
+        AccountManager.getUserFromPreference();
+        user = User.getInstance();
+        if(MainActivity.isAnonymousUser()) {
+            intent = new Intent(this, LoginScreen.class);
+        }
+        else {
+            intent = new Intent(this, MainActivity.class);
+        }
 
         manager = DataManager.getInstance(context);
         manager.registerProblemListener(this);

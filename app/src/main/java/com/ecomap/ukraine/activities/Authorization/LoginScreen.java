@@ -108,14 +108,14 @@ public class LoginScreen extends AppCompatActivity implements LogInListener {
         super.onCreate(savedInstanceState);
         FacebookSdk.sdkInitialize(this);
         SharedPreferences sharedPreferences =
-                getSharedPreferences(AccountManager.USER_INFO, MODE_PRIVATE);
+                getSharedPreferences(ExtraFieldNames.USER_INFO, MODE_PRIVATE);
 
         setContentView(R.layout.login_activity);
         mainIntent = new Intent(this, MainActivity.class);
 
         ButterKnife.inject(this);
-        emailText.setText(sharedPreferences.getString(AccountManager.LOGIN, ""));
-        passwordText.setText(sharedPreferences.getString(AccountManager.PASSWORD, ""));
+        emailText.setText(sharedPreferences.getString(ExtraFieldNames.LOGIN, ""));
+        passwordText.setText(sharedPreferences.getString(ExtraFieldNames.PASSWORD, ""));
 
         Keyboard keyboard = new Keyboard(this);
         keyboard.setOnFocusChangeListener(emailText);

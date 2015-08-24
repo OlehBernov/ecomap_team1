@@ -164,7 +164,7 @@ public class FragmentEcoMap extends android.support.v4.app.Fragment
 
         SharedPreferences mapTypePreference = getActivity().getApplicationContext()
                 .getSharedPreferences(ExtraFieldNames.MAP_TYPE, Context.MODE_PRIVATE);
-        mapType = mapTypePreference.getInt(ExtraFieldNames.MAP_TYPE_ID, 1);
+        mapType = mapTypePreference.getInt(ExtraFieldNames.MAP_TYPE_ID, 0);
         setUpMapIfNeeded();
 
         return rootView;

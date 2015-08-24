@@ -24,6 +24,7 @@ import android.widget.TextView;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.codetroopers.betterpickers.calendardatepicker.CalendarDatePickerDialog;
 import com.ecomap.ukraine.R;
+import com.ecomap.ukraine.account.manager.AccountManager;
 import com.ecomap.ukraine.activities.Authorization.LoginScreen;
 import com.ecomap.ukraine.activities.Authorization.SignupActivity;
 import com.ecomap.ukraine.settings.Settings;
@@ -155,6 +156,10 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    public static boolean isAnonymousUser() {
+        return User.getInstance().getId() < 0;
+    }
+
     /**
      * Controls the position of the filter7 window on the screen.
      */
@@ -202,10 +207,6 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private boolean isAnonymousUser() {
-        return User.getInstance().getId() < 0;
-    }
-
     public void setNotAuthorizeDialog() {
         new MaterialDialog.Builder(this)
                 .title(R.string.Caution)
@@ -244,6 +245,8 @@ public class MainActivity extends AppCompatActivity {
     public void logOut(MenuItem item) {
         User.reset();
         setUserInformation(User.getInstance());
+        AccountManager.getInstance(getApplicationContext()).
+                putUserToPreferences(User.getInstance(), "");
     }
 
     public void signUp(MenuItem item) {
@@ -357,7 +360,12 @@ public class MainActivity extends AppCompatActivity {
         TextView userName = (TextView) findViewById(R.id.navigation_user_name);
         TextView email = (TextView) findViewById(R.id.navigation_email);
         userName.setText(user.getName() + " " + user.getSurname());
-        email.setText(user.getEmail());
+        if(!isAnonymousUser()) {
+            email.setText(user.getEmail());
+        }
+        else {
+            email.setText("");
+        }
     }
 
     private void createDateFromPickerDialog() {

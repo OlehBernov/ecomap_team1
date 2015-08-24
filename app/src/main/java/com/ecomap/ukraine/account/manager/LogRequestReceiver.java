@@ -6,6 +6,6 @@ public interface LogRequestReceiver {
 
     void setLogInRequestResult(User user);
 
-    void putLogInResultToPreferences (String password, String login);
+    void putUserToPreferences (User user, String password);
 
 }
