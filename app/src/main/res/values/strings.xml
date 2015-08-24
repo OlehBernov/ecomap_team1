@@ -41,6 +41,7 @@
     <string name="sing_up">Sign up</string>
     <string name="confirm_password">Confirm Password</string>
     <string name="FAILURE_OF_LOG_IN">Unfortunately authentication was failed try again</string>
+    <string name="FAILURE_OF_SIGN_UP">Unfortunately registration was failed try again</string>
     <string name="sign_up_navigator">Sign up</string>
 
     <string name="photos">Photos:</string>

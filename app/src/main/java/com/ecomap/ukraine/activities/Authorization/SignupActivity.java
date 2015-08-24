@@ -32,7 +32,6 @@ public class SignupActivity extends AppCompatActivity implements LogInListener {
     private static final String SIGN_UP_FAILED = "Sign Up failed";
     private static final String SIGN_UP_MESSAGE = "Please wait...";
     private static final String SIGN_UP_TITLE = "Log in failed.";
-    private static final String FAILURE_OF_SIGN_UP = "message"; //TODO: write message
     private final static String RETRY = "Retry";
     private final static String CANCEL = "Cancel";
     private final String TAG = getClass().getSimpleName();
@@ -166,7 +165,7 @@ public class SignupActivity extends AppCompatActivity implements LogInListener {
     private void showFailureDialog() {
         new MaterialDialog.Builder(this)
                 .title(SIGN_UP_TITLE)
-                .content(FAILURE_OF_SIGN_UP)
+                .content(R.string.FAILURE_OF_SIGN_UP)
                 .backgroundColorRes(R.color.log_in_dialog)
                 .contentColorRes(R.color.log_in_content)
                 .negativeColorRes(R.color.log_in_content)

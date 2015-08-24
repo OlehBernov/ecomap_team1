@@ -48,6 +48,7 @@ public class User {
     }
 
     public static void reset() {
+
         setDefaultInstance();
     }
 
@@ -81,8 +82,7 @@ public class User {
 
     private static User setDefaultInstance() {
         instance = new User(-1, DEFAULT_NAME, "", "", "", "",
-                User.getInstance().getEmail());
-
+                "");
         return instance;
     }
 }
