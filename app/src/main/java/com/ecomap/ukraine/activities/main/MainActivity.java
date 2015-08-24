@@ -26,12 +26,9 @@ import com.codetroopers.betterpickers.calendardatepicker.CalendarDatePickerDialo
 import com.ecomap.ukraine.R;
 import com.ecomap.ukraine.activities.Authorization.LoginScreen;
 import com.ecomap.ukraine.activities.Authorization.SignupActivity;
-import com.ecomap.ukraine.activities.ExtraFieldNames;
-import com.ecomap.ukraine.settings.MapType;
 import com.ecomap.ukraine.settings.Settings;
 import com.ecomap.ukraine.settings.UpdateTime;
 import com.ecomap.ukraine.activities.addProblem.ChooseProblemLocationActivity;
-import com.ecomap.ukraine.data.manager.DataManager;
 import com.ecomap.ukraine.filter.FilterContract;
 import com.ecomap.ukraine.filter.FilterManager;
 import com.ecomap.ukraine.filter.FilterState;
@@ -84,7 +81,6 @@ public class MainActivity extends AppCompatActivity {
 
     private static final UpdateTime DEFAULT_UPDATE_TIME = UpdateTime.ONCE_A_WEEK;
 
-    private static final MapType DEFAULT_MAP_TYPE = MapType.FIRST;
 
     public ActionBarDrawerToggle drawerToggle;
 
@@ -171,7 +167,7 @@ public class MainActivity extends AppCompatActivity {
             toolbar.setTitle(FILTER);
         } else {
             item.setIcon(R.drawable.filter8);
-            toolbar.setTitle(previousTitle);
+            toolbar.setTitle(R.string.app_name);
             filterLayout.closeDrawer(GravityCompat.END);
 
         }
@@ -272,12 +268,6 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        MapType mapType = (MapType) getIntent().getSerializableExtra(ExtraFieldNames.MAP_TYPE);
-        if (mapType == null) {
-            mapType = DEFAULT_MAP_TYPE;
-        }
-
         filterLayout = (DrawerLayout) findViewById(R.id.drawer2);
         filterManager = FilterManager.getInstance(this);
         setupToolbar();

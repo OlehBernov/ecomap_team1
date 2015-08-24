@@ -104,8 +104,8 @@
     </string-array>
 
     <string-array name="map_type_items">
-        <item>1</item>
-        <item>2</item>
+        <item>Normal map type</item>
+        <item>View from satelite</item>
     </string-array>
 
 </resources>

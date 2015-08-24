@@ -97,7 +97,7 @@ public class FragmentChooseCoordMap extends android.support.v4.app.Fragment {
                 }
                 googleMap.addMarker(new MarkerOptions()
                         .draggable(true).position(latLng)
-                        .icon(BitmapDescriptorFactory.fromResource(R.drawable.pin))
+                        .icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_marker))
                         .anchor(0.5F, 1));
                 markerPosition = latLng;
 

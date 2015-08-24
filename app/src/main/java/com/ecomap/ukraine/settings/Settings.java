@@ -1,5 +1,6 @@
 package com.ecomap.ukraine.settings;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -29,7 +30,7 @@ public class Settings extends AppCompatActivity {
     private Button mapTypeButton;
 
     private UpdateTime updateTime = UpdateTime.ONCE_A_WEEK;
-    private MapType mapType = MapType.FIRST;
+    private MapType mapType = MapType.MAP_TYPE_NORMAL;
 
     public void openChoosingTimeWindow(View view) {
         new MaterialDialog.Builder(this)
@@ -79,7 +80,10 @@ public class Settings extends AppCompatActivity {
         super.onBackPressed();
         DataManager.setUpdateTime(updateTime);
         Intent intent = new Intent(this, MainActivity.class);
-        intent.putExtra(ExtraFieldNames.MAP_TYPE, mapType);
+        SharedPreferences.Editor editor = getSharedPreferences(ExtraFieldNames.MAP_TYPE,
+                Context.MODE_PRIVATE).edit();
+        editor.putInt(ExtraFieldNames.MAP_TYPE_ID, mapType.getId());
+        editor.apply();
         startActivity(intent);
         finish();
     }
@@ -99,7 +103,7 @@ public class Settings extends AppCompatActivity {
         int updateTimeValue = settings.getInt(ExtraFieldNames.UPDATE_TIME,
                                               UpdateTime.ONCE_A_WEEK.getId());
         updateTime = UpdateTime.values()[updateTimeValue];
-        int mapTypeValue = settings.getInt(ExtraFieldNames.MAP_TYPE, MapType.FIRST.getId());
+        int mapTypeValue = settings.getInt(ExtraFieldNames.MAP_TYPE, MapType.MAP_TYPE_NORMAL.getId());
         mapType = MapType.values()[mapTypeValue];
     }
 

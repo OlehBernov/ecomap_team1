@@ -14,6 +14,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.ecomap.ukraine.R;
+import com.ecomap.ukraine.activities.ExtraFieldNames;
 import com.ecomap.ukraine.activities.problemDetails.InformationPanel;
 import com.ecomap.ukraine.data.manager.DataManager;
 import com.ecomap.ukraine.data.manager.ProblemListener;
@@ -23,6 +24,7 @@ import com.ecomap.ukraine.filter.FilterManager;
 import com.ecomap.ukraine.filter.FilterState;
 import com.ecomap.ukraine.models.Details;
 import com.ecomap.ukraine.models.Problem;
+import com.ecomap.ukraine.settings.MapType;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -40,9 +42,12 @@ public class FragmentEcoMap extends android.support.v4.app.Fragment
         ClusterManager.OnClusterItemClickListener<Problem> {
 
     private static final LatLng INITIAL_POSITION = new LatLng(48.4, 31.2);
-    private static final float INITIAL_ZOOM = 5;
+    private static final float INITIAL_ZOOM = 4.5f;
     private static final float ON_MARKER_CLICK_ZOOM = 12;
     private static final float ON_MY_POSITION_CLICK_ZOOM = 15;
+    private static final MapType DEFAULT_MAP_TYPE = MapType.MAP_TYPE_NORMAL;
+    private static final int MAP_TYPE_MORMAL_ID = MapType.MAP_TYPE_NORMAL.getId();
+    private static final int MAP_TYPE_HYBRID_ID = MapType.MAP_TYPE_HYBRID.getId();
      /**
      * The name of the preference to retrieve.
      */
@@ -55,6 +60,7 @@ public class FragmentEcoMap extends android.support.v4.app.Fragment
     private MapView mapView;
     private GoogleMap googleMap;
     private DataManager dataManager;
+    private int mapType;
     private static ClusterManager<Problem> clusterManager;
 
     /**
@@ -155,15 +161,13 @@ public class FragmentEcoMap extends android.support.v4.app.Fragment
         getActivity().getActionBar();
 
         MapsInitializer.initialize(getActivity().getApplicationContext());
+
+        SharedPreferences mapTypePreference = getActivity().getApplicationContext()
+                .getSharedPreferences(ExtraFieldNames.MAP_TYPE, Context.MODE_PRIVATE);
+        mapType = mapTypePreference.getInt(ExtraFieldNames.MAP_TYPE_ID, 1);
         setUpMapIfNeeded();
 
         return rootView;
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
-        setRenderer();
     }
 
     /**
@@ -192,6 +196,8 @@ public class FragmentEcoMap extends android.support.v4.app.Fragment
     public void updateAllProblems(final List<Problem> problems) {
         FragmentEcoMap.problems = problems;
         putAllProblemsOnMap(null);
+        setRenderer();
+
     }
 
     /**
@@ -252,7 +258,7 @@ public class FragmentEcoMap extends android.support.v4.app.Fragment
      * This is where we can add markers or lines, add listeners or move the camera.
      */
     private void setUpMap() {
-        googleMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
+        setMapType();
         UiSettings settings = googleMap.getUiSettings();
         settings.setMapToolbarEnabled(false);
         googleMap.setMyLocationEnabled(true);
@@ -302,5 +308,14 @@ public class FragmentEcoMap extends android.support.v4.app.Fragment
         clusterManager.setOnClusterItemClickListener(this);
         googleMap.setOnMarkerClickListener(clusterManager);
         clusterManager.addItems(filteredProblems);
+    }
+
+    private void setMapType() {
+        if(mapType == MAP_TYPE_MORMAL_ID) {
+            googleMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
+        }
+        else {
+            googleMap.setMapType(GoogleMap.MAP_TYPE_HYBRID);
+        }
     }
 }

@@ -2,8 +2,8 @@ package com.ecomap.ukraine.settings;
 
 
 public enum MapType {
-    FIRST (0),
-    SECOND (1);
+    MAP_TYPE_NORMAL (0),
+    MAP_TYPE_HYBRID (1);
 
     private int id;
 
