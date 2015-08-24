@@ -110,6 +110,8 @@ public class MainActivity extends AppCompatActivity {
 
     private Activity activity = this;
 
+    private DrawerLayout menuDrawer;
+
 
     /**
      * Filter manager instance
@@ -244,6 +246,7 @@ public class MainActivity extends AppCompatActivity {
     public void logIn(MenuItem item) {
         Intent intent = new Intent(this, LoginScreen.class);
         startActivityForResult(intent, LOG_IN_REQUEST_CODE);
+        menuDrawer.closeDrawers();
     }
 
     public void logOut(MenuItem item) {
@@ -256,11 +259,13 @@ public class MainActivity extends AppCompatActivity {
     public void signUp(MenuItem item) {
         Intent intent = new Intent(this, SignupActivity.class);
         startActivityForResult(intent, SIGN_UP_REQUEST_CODE);
+        menuDrawer.closeDrawers();
     }
 
     public void openSettings(MenuItem item) {
         Intent intent = new Intent(this, Settings.class);
         startActivityForResult(intent, SETTINGS_REQUEST_CODE);
+        menuDrawer.closeDrawers();
     }
 
     @Override
@@ -285,6 +290,8 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        menuDrawer = (DrawerLayout) findViewById(R.id.drawer);
+
         filterLayout = (DrawerLayout) findViewById(R.id.drawer2);
         filterManager = FilterManager.getInstance(this);
         setupToolbar();

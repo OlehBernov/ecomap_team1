@@ -1,5 +1,6 @@
 package com.ecomap.ukraine.activities.Authorization;
 
+import android.content.ComponentName;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -26,6 +27,7 @@ import butterknife.InjectView;
 
 public class SignupActivity extends AppCompatActivity implements LogInListener {
 
+    private static final String MAIN_ACTIVITY = "com.ecomap.ukraine.activities.main.MainActivity";
     private static final String CREATING_ACCOUNT = "Creating Account...";
     private static final String SIGN_UP_FAILED = "Sign Up failed";
     private static final String SIGN_UP_MESSAGE = "Please wait...";
@@ -150,7 +152,11 @@ public class SignupActivity extends AppCompatActivity implements LogInListener {
         accountManager.removeLogInListener(this);
         signUpButton.setEnabled(true);
         if (user != null) {
-            openMainActivity();
+            if (isCameFromMainActivity()) {
+                finish();
+            } else {
+                openMainActivity();
+            }
         } else {
             Log.e(TAG, "Registration null");
             showFailureDialog();
@@ -189,6 +195,11 @@ public class SignupActivity extends AppCompatActivity implements LogInListener {
     private void openMainActivity() {
         startActivity(mainIntent);
         finish();
+    }
+
+    private boolean isCameFromMainActivity() {
+        ComponentName componentName = getCallingActivity();
+        return (componentName != null) && componentName.getClassName().equals(MAIN_ACTIVITY);
     }
 
 }

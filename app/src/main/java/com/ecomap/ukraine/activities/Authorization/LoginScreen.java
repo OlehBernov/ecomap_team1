@@ -1,5 +1,7 @@
 package com.ecomap.ukraine.activities.Authorization;
 
+import android.app.Activity;
+import android.content.ComponentName;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -37,6 +39,7 @@ import butterknife.InjectView;
 
 public class LoginScreen extends AppCompatActivity implements LogInListener {
 
+    private static final String MAIN_ACTIVITY = "com.ecomap.ukraine.activities.main.MainActivity";
     private static final String LOGIN_MESSAGE = "Please wait...";
     private static final String LOGIN_TITLE = "Log in";
     private static final String FAILE_TITLE = "Log in failed.";
@@ -83,7 +86,11 @@ public class LoginScreen extends AppCompatActivity implements LogInListener {
     public void setLogInResult(final User user) {
         logInButton.setEnabled(true);
         if (user != null) {
-            openMainActivity();
+            if (isCameFromMainActivity()) {
+                finish();
+            } else {
+                openMainActivity();
+            }
         } else {
             Log.e(TAG, "null");
             showFailureDialog();
@@ -236,6 +243,11 @@ public class LoginScreen extends AppCompatActivity implements LogInListener {
     private long generatePassword(final String id) {
         long input = Long.getLong(id);
         return new Random(input + 1).nextLong();
+    }
+
+    private boolean isCameFromMainActivity() {
+        ComponentName componentName = getCallingActivity();
+        return (componentName != null) && componentName.getClassName().equals(MAIN_ACTIVITY);
     }
 
 }
