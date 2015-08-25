@@ -38,7 +38,6 @@ import butterknife.InjectView;
 
 public class LoginScreen extends AppCompatActivity implements LogInListener {
 
-    private static final String MAIN_ACTIVITY = "com.ecomap.ukraine.activities.main.MainActivity";
     private static final String LOGIN_MESSAGE = "Please wait...";
     private static final String LOGIN_TITLE = "Log in";
     private static final String FAILE_TITLE = "Log in failed.";
@@ -51,7 +50,6 @@ public class LoginScreen extends AppCompatActivity implements LogInListener {
     EditText passwordText;
     @InjectView(R.id.btn_log_in)
     Button logInButton;
-    private Intent mainIntent;
     private AccountManager accountManager;
     private CallbackManager callbackManager;
     private MaterialDialog logInProgress;
@@ -85,11 +83,7 @@ public class LoginScreen extends AppCompatActivity implements LogInListener {
     public void setLogInResult(final User user) {
         logInButton.setEnabled(true);
         if (user != null) {
-            if (isCameFromMainActivity()) {
-                finish();
-            } else {
-                openMainActivity();
-            }
+            openMainActivity();
         } else {
             Log.e(TAG, "null");
             showFailureDialog();
@@ -122,7 +116,6 @@ public class LoginScreen extends AppCompatActivity implements LogInListener {
                 getSharedPreferences(ExtraFieldNames.USER_INFO, MODE_PRIVATE);
 
         setContentView(R.layout.login_activity);
-        mainIntent = new Intent(this, MainActivity.class);
 
         ButterKnife.inject(this);
         emailText.setText(sharedPreferences.getString(ExtraFieldNames.LOGIN, ""));
@@ -164,11 +157,7 @@ public class LoginScreen extends AppCompatActivity implements LogInListener {
                 new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        if (isCameFromMainActivity()) {
-                            finish();
-                        } else {
-                            openMainActivity();
-                        }
+                        openMainActivity();
                     }
                 }
         );
@@ -222,6 +211,8 @@ public class LoginScreen extends AppCompatActivity implements LogInListener {
     }
 
     private void openMainActivity() {
+        Intent mainIntent = new Intent(this, MainActivity.class);
+        mainIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(mainIntent);
         finish();
     }
@@ -247,11 +238,6 @@ public class LoginScreen extends AppCompatActivity implements LogInListener {
     private long generatePassword(final String id) {
         long input = Long.getLong(id);
         return new Random(input + 1).nextLong();
-    }
-
-    private boolean isCameFromMainActivity() {
-        ComponentName componentName = getCallingActivity();
-        return (componentName != null) && componentName.getClassName().equals(MAIN_ACTIVITY);
     }
 
 }

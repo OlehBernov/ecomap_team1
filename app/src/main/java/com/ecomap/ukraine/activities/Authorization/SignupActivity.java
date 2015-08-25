@@ -27,7 +27,6 @@ import butterknife.InjectView;
 
 public class SignupActivity extends AppCompatActivity implements LogInListener {
 
-    private static final String MAIN_ACTIVITY = "com.ecomap.ukraine.activities.main.MainActivity";
     private static final String CREATING_ACCOUNT = "Creating Account...";
     private static final String SIGN_UP_FAILED = "Sign Up failed";
     private static final String SIGN_UP_MESSAGE = "Please wait...";
@@ -51,7 +50,6 @@ public class SignupActivity extends AppCompatActivity implements LogInListener {
     TextView loginLink;
     private ScrollView scrollView;
     private ScrollView background;
-    private Intent mainIntent;
     private AccountManager accountManager;
     private MaterialDialog signUpProgress;
 
@@ -80,8 +78,6 @@ public class SignupActivity extends AppCompatActivity implements LogInListener {
                         background.setScrollY((int) (scrollView.getScrollY() * 0.5));
                     }
                 });
-
-        mainIntent = new Intent(this, MainActivity.class);
 
         accountManager = AccountManager.getInstance(getApplicationContext());
 
@@ -151,11 +147,8 @@ public class SignupActivity extends AppCompatActivity implements LogInListener {
         accountManager.removeLogInListener(this);
         signUpButton.setEnabled(true);
         if (user != null) {
-            if (isCameFromMainActivity()) {
-                finish();
-            } else {
-                openMainActivity();
-            }
+            openMainActivity();
+
         } else {
             Log.e(TAG, "Registration null");
             showFailureDialog();
@@ -192,13 +185,10 @@ public class SignupActivity extends AppCompatActivity implements LogInListener {
     }
 
     private void openMainActivity() {
+        Intent mainIntent = new Intent(this, MainActivity.class);
+        mainIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(mainIntent);
         finish();
-    }
-
-    private boolean isCameFromMainActivity() {
-        ComponentName componentName = getCallingActivity();
-        return (componentName != null) && componentName.getClassName().equals(MAIN_ACTIVITY);
     }
 
 }
