@@ -215,10 +215,9 @@ public class AddProblemDescriptionFragment extends Fragment implements AddProble
         String longitude = activity.getIntent().getDoubleExtra(ExtraFieldNames.LNG, 0) + "";
         String type = String.valueOf(spinner.getSelectedItemId() + 1);
         showProgressDialog();
-        /*addProblemManager.addProblem(title, description, solution, latitude,
+        addProblemManager.addProblem(title, description, solution, latitude,
                 longitude, type, String.valueOf(User.getInstance().getId()),
-                userName, userSurname, bitmapPhotos, photoDescriptions);*/
-        onSuccessProblemPosting();
+                userName, userSurname, bitmapPhotos, photoDescriptions);
         bitmapPhotos = null;
     }
 
