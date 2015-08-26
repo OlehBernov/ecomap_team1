@@ -402,6 +402,9 @@ public class InformationPanel {
         fragmentManager.beginTransaction()
                 .replace(R.id.connection_error, errorFragment)
                 .commit();
+        if(isPhotoContainerHaveChild()) {
+            photoContainer.removeAllViews();
+        }
     }
 
     public void setProblemDetails(final Details details) {
@@ -684,8 +687,6 @@ public class InformationPanel {
     private void hidePhotosBlock() {
         TextView photosTitle = (TextView) activity.findViewById(R.id.photo);
         photosTitle.setText("");
-   //     photosTitle.setPadding(0, 0, 0, 0);
-  //      photosTitle.setTextSize(0.0f);
         photoContainer.removeAllViews();
     }
 
