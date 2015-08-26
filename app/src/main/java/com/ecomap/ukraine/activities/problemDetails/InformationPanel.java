@@ -149,6 +149,7 @@ public class InformationPanel implements DetailsListener {
 
         slidingUpPanelLayout = (SlidingUpPanelLayout) activity.findViewById(R.id.sliding_layout);
 
+        voteIcon.setEnabled(true);
         voteIcon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -284,14 +285,7 @@ public class InformationPanel implements DetailsListener {
                 fab.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        new AsyncTask<Void, Void, Void>() {
-                            @Override
-                            protected Void doInBackground(Void... params) {
-                                DataManager.getInstance(activity)
-                                        .refreshProblemDetails(problem.getProblemId());
-                                return null;
-                            }
-                        }.execute();
+                       setRefreshTask();
                     }
                 });
             }
@@ -433,7 +427,8 @@ public class InformationPanel implements DetailsListener {
     }
     @Override
     public void onVoteAdded() {
-        fab.callOnClick();
+        setRefreshTask();
+        voteIcon.setEnabled(false);
     }
 
 
@@ -512,7 +507,11 @@ public class InformationPanel implements DetailsListener {
         if (problemActivities == null) {
             return;
         }
+        User user = User.getInstance();
         for (int i = problemActivities.size() - 1; i >= 0; i--) {
+            if(isProblemLikedBefore(problemActivities.get(i), user)){
+                voteIcon.setEnabled(false);
+            }
             setPostInformation(problemActivities.get(i));
 
             TableRow activityRow = new TableRow(context);
@@ -718,6 +717,25 @@ public class InformationPanel implements DetailsListener {
         TextView photosTitle = (TextView) activity.findViewById(R.id.photo);
         photosTitle.setText("");
         photoContainer.removeAllViews();
+    }
+
+    private boolean isProblemLikedBefore(ProblemActivity problemActivity, User user) {
+        if((problemActivity.getUserId() == user.getId())
+                && (problemActivity.getActivityType().getId() == ActivityType.LIKE.getId())) {
+            return true;
+        }
+        return false;
+    }
+
+    private void setRefreshTask () {
+        new AsyncTask<Void, Void, Void>() {
+            @Override
+            protected Void doInBackground(Void... params) {
+                DataManager.getInstance(activity)
+                        .refreshProblemDetails(problem.getProblemId());
+                return null;
+            }
+        }.execute();
     }
 
 }
