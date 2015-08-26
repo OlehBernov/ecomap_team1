@@ -1,10 +1,12 @@
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/details_linear_layout"
     android:layout_width="match_parent"
     android:layout_height="0dp"
     android:layout_weight="1"
     android:background="#fafafa"
     android:clickable="false"
+    android:minHeight="520dp"
     android:orientation="vertical">
 
     <RelativeLayout
@@ -22,7 +24,6 @@
             android:layout_marginLeft="5dp"
             android:layout_marginTop="5dp"
             android:background="@drawable/type1"/>
-
 
         <RelativeLayout
             android:id="@+id/frameLayout"
@@ -246,9 +247,10 @@
                     android:id="@+id/photo_preview"
                     layout="@layout/small_photo_preview"
                     android:layout_width="match_parent"
+                    android:layout_marginBottom="3dp"
                     android:layout_height="wrap_content"/>
 
-                <RelativeLayout
+               <RelativeLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content">
 

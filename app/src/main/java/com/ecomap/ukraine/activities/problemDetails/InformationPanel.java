@@ -437,6 +437,7 @@ public class InformationPanel implements DetailsListener {
             return;
         }
 
+        clearDetailsPanel();
         if (errorFragment != null) {
             fragmentManager.beginTransaction().remove(errorFragment).commit();
             errorFragment = null;
@@ -720,11 +721,8 @@ public class InformationPanel implements DetailsListener {
     }
 
     private boolean isProblemLikedBefore(ProblemActivity problemActivity, User user) {
-        if((problemActivity.getUserId() == user.getId())
-                && (problemActivity.getActivityType().getId() == ActivityType.LIKE.getId())) {
-            return true;
-        }
-        return false;
+        return (problemActivity.getUserId() == user.getId())
+                && (problemActivity.getActivityType().getId() == ActivityType.LIKE.getId());
     }
 
     private void setRefreshTask () {
