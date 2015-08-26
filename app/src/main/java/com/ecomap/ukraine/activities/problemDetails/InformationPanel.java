@@ -28,6 +28,7 @@ import android.widget.ScrollView;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.ecomap.ukraine.R;
 import com.ecomap.ukraine.activities.BitmapResizer;
@@ -35,12 +36,15 @@ import com.ecomap.ukraine.activities.addProblem.ChooseProblemLocationActivity;
 import com.ecomap.ukraine.activities.main.IconRenderer;
 import com.ecomap.ukraine.activities.main.MainActivity;
 import com.ecomap.ukraine.data.manager.DataManager;
+import com.ecomap.ukraine.details.manager.DetailsListener;
+import com.ecomap.ukraine.details.manager.DetailsManager;
 import com.ecomap.ukraine.models.Details;
 import com.ecomap.ukraine.models.Photo;
 import com.ecomap.ukraine.models.Problem;
 import com.ecomap.ukraine.models.ProblemActivity;
 import com.ecomap.ukraine.models.Types.ActivityType;
 import com.ecomap.ukraine.models.Types.ProblemStatus;
+import com.ecomap.ukraine.models.User;
 import com.ms.square.android.expandabletextview.ExpandableTextView;
 import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 import com.squareup.picasso.Picasso;
@@ -48,7 +52,7 @@ import com.squareup.picasso.Transformation;
 
 import java.util.List;
 
-public class InformationPanel {
+public class InformationPanel implements DetailsListener {
 
     private static final float ANCHOR_POINT = 0.3f;
 
@@ -82,6 +86,7 @@ public class InformationPanel {
     private TextView problemTitle;
     private TextView problemStatus;
     private TextView userInformation;
+    private ImageView voteIcon;
     private TextView votesNumber;
     private EditText commentText;
     private ExpandableTextView descriptionFiled;
@@ -97,6 +102,7 @@ public class InformationPanel {
     private float fabStartingPosition;
     private float currentOffset;
     private FragmentManager fragmentManager;
+    private DetailsManager detailsManager;
 
     /**
      * Constructor
@@ -112,6 +118,9 @@ public class InformationPanel {
         this.toolbar = (Toolbar) activity.findViewById(R.id.toolbar);
         this.fragmentManager = fragmentManager;
         this.problem = problem;
+        this.detailsManager = DetailsManager.getInstance(context);
+        detailsManager.removeAllDetailsListener();
+        detailsManager.registerDetailsListener(this);
 
         slidingUpPanelLayout = (SlidingUpPanelLayout) activity.findViewById(R.id.sliding_layout);
         scrollView = (ScrollView) activity.findViewById(R.id.panelScrollView);
@@ -120,6 +129,7 @@ public class InformationPanel {
         problemTitle = (TextView) activity.findViewById(R.id.title_of_problem);
         problemStatus = (TextView) activity.findViewById(R.id.status_of_problem);
         userInformation = (TextView) activity.findViewById(R.id.user);
+        voteIcon = (ImageView) activity.findViewById(R.id.like);
         votesNumber = (TextView) activity.findViewById(R.id.number_of_likes);
 
         activitiesLayout = (TableLayout) activity.findViewById(R.id.activities);
@@ -138,6 +148,19 @@ public class InformationPanel {
         proposalFiled = (ExpandableTextView) activity.findViewById(R.id.proposal_field);
 
         slidingUpPanelLayout = (SlidingUpPanelLayout) activity.findViewById(R.id.sliding_layout);
+
+        voteIcon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                User user = User.getInstance();
+                String problemID = String.valueOf(problem.getProblemId());
+                String userId = String.valueOf(user.getId());
+                String userName = user.getName();
+                String userSurname = user.getSurname();
+                detailsManager.postVote(problemID, userId, userName, userSurname);
+            }
+        });
+
         slidingUpPanelLayout.setPanelSlideListener(new SlidingUpPanelLayout.PanelSlideListener() {
             public static final int TRANSPARENT_WHITE_COLOR = 0x00ffffff;
 
@@ -185,6 +208,7 @@ public class InformationPanel {
             @Override
             public void onPanelHidden(View view) {
             }
+
 
             public void backgroundResolver(final float v) {
                 float anchor = slidingUpPanelLayout.getAnchorPoint();
@@ -288,6 +312,7 @@ public class InformationPanel {
             private float getFabCenterY() {
                 return fab.getY() + fab.getHeight() / 2;
             }
+
 
             private void setToolbarInitialState() {
                 toolbar.setBackgroundColor(0xff004d40);
@@ -403,6 +428,11 @@ public class InformationPanel {
                 .replace(R.id.connection_error, errorFragment)
                 .commit();
     }
+    @Override
+    public void onVoteAdded() {
+        fab.callOnClick();
+    }
+
 
     public void setProblemDetails(final Details details) {
         if (details == null) {

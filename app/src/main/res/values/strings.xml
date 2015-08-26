@@ -43,6 +43,8 @@
     <string name="FAILURE_OF_LOG_IN">Unfortunately authentication was failed try again</string>
     <string name="FAILURE_OF_SIGN_UP">Unfortunately registration was failed try again</string>
     <string name="sign_up_navigator">Sign up</string>
+    <string name="non_authorized_like">You must be authorized to like problems</string>
+    <string name="error_of_connection">Error of connection. Try again</string>
 
     <string name="photos">Photos:</string>
     <string name="title_activity_photo_viewer">PhotoViewer</string>

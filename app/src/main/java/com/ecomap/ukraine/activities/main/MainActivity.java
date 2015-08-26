@@ -1,6 +1,7 @@
 package com.ecomap.ukraine.activities.main;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
@@ -204,7 +205,7 @@ public class MainActivity extends AppCompatActivity {
 
     public void openChooseProblemLocationActivity(View view) {
         if (isAnonymousUser()) {
-            setNotAuthorizeDialog();
+            setNotAuthorizeDialog(ALERT_MESSAGE);
         } else {
             Intent intent = new Intent(this, ChooseProblemLocationActivity.class);
             startActivity(intent);
@@ -212,10 +213,10 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    public void setNotAuthorizeDialog() {
-        new MaterialDialog.Builder(this)
+    public  void setNotAuthorizeDialog(final String message) {
+        new MaterialDialog.Builder(activity)
                 .title(R.string.Caution)
-                .content(ALERT_MESSAGE)
+                .content(message)
                 .backgroundColorRes(R.color.log_in_dialog)
                 .contentColorRes(R.color.log_in_content)
                 .negativeColorRes(R.color.log_in_content)
@@ -228,8 +229,8 @@ public class MainActivity extends AppCompatActivity {
                     public void onPositive(MaterialDialog dialog) {
                         super.onPositive(dialog);
                         Intent mainIntent = new Intent(activity, LoginScreen.class);
-                        startActivity(mainIntent);
-                        finish();
+                        activity.startActivity(mainIntent);
+                        activity.finish();
                     }
 
                     @Override
