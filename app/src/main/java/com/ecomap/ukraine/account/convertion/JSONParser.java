@@ -17,7 +17,7 @@ public class JSONParser {
         }
 
         JSONObject userInformation = new JSONObject(userInformationJson);
-        User user = User.getInstance(
+        User user = User.newInstance(
                 userInformation.optInt(JSONFields.USER_ID, -1),
                 userInformation.getString(JSONFields.NAME),
                 userInformation.getString(JSONFields.SURNAME),
@@ -37,7 +37,7 @@ public class JSONParser {
             throw new JSONException(NULL_ARGUMENT);
         }
         JSONObject registrationUserInformation = new JSONObject(registrationUserInformationJson);
-        User user = User.getInstance(
+        User user = User.newInstance(
                 registrationUserInformation.getJSONObject(JSONFields.REGISTRATION_ID)
                         .getInt(JSONFields.ID_OF_REGISTRATION_USER),
                 registrationUserInformation.getString(JSONFields.NAME),

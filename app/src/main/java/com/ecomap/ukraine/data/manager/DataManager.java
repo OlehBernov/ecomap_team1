@@ -53,6 +53,8 @@ public class DataManager implements ProblemListenersNotifier,
      */
     private DBHelper dbHelper;
 
+    private int currentProblemId;
+
     /**
      * Data manager constructor.
      */
@@ -88,7 +90,7 @@ public class DataManager implements ProblemListenersNotifier,
     }
 
     /**
-     * Removes the specified listener from the set of problemaListeners.
+     * Removes the specified listener from the set of problemListeners.
      *
      * @param listener the ProblemListener to remove.
      */
@@ -129,7 +131,7 @@ public class DataManager implements ProblemListenersNotifier,
             saveUpdateTime();
             getAllProblems();
         } else {
-            sendAllProblems(null);
+            sendAllProblems(dbHelper.getAllProblems());
         }
     }
 
@@ -145,7 +147,7 @@ public class DataManager implements ProblemListenersNotifier,
             dbHelper.updateProblemDetails(details);
             getProblemDetail(details.getProblemId());
         } else {
-            sendProblemDetails(null);
+            sendProblemDetails(dbHelper.getProblemDetails(currentProblemId));
         }
     }
 
@@ -164,6 +166,7 @@ public class DataManager implements ProblemListenersNotifier,
         } else {
             long lastUpdateTime = Long.valueOf(dbHelper.getLastUpdateTime(problemId));
             if (isUpdateTime(lastUpdateTime)) {
+                currentProblemId = problemId;
                 loadingClient.getProblemDetail(problemId);
             } else {
                 sendProblemDetails(details);

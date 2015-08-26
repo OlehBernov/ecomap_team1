@@ -112,7 +112,6 @@ public class MainActivity extends AppCompatActivity {
 
     private DrawerLayout menuDrawer;
 
-
     /**
      * Filter manager instance
      */
@@ -181,7 +180,6 @@ public class MainActivity extends AppCompatActivity {
             item.setIcon(R.drawable.ic_filter_list_white_36dp);
             toolbar.setTitle(R.string.app_name);
             filterLayout.closeDrawer(GravityCompat.END);
-
         }
     }
 

@@ -239,7 +239,7 @@
                     android:text="Photo:"
                     android:textAppearance="?android:attr/textAppearanceMedium"
                     android:textColor="@color/abc_primary_text_disable_only_material_light"
-                    android:textSize="15dp"
+                    android:textSize="@dimen/photo_title_text_size"
                     android:textStyle="bold"/>
 
                 <include

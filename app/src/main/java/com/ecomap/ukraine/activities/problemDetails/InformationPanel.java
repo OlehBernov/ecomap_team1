@@ -1,17 +1,12 @@
 package com.ecomap.ukraine.activities.problemDetails;
 
-import android.animation.Animator;
-import android.animation.AnimatorListenerAdapter;
-import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Color;
-import android.graphics.Matrix;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.support.design.widget.FloatingActionButton;
@@ -22,13 +17,10 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
 import android.view.Gravity;
-import android.view.KeyEvent;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.WindowManager;
 import android.view.animation.DecelerateInterpolator;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -66,6 +58,7 @@ public class InformationPanel {
     private static final String TRANSFORMATION = "transformation";
     private static final String POSITION = "position";
     private static final String WRONG_TEXT = "null";
+    private static final String PHOTOS_TITLE = "Photo:";
 
     private static final int STAR_NUMBER = 5;
 
@@ -78,6 +71,7 @@ public class InformationPanel {
 
     private static float currentTitleAlpha = 1;
     private static int[] STARS_ID = {R.id.star1, R.id.star2, R.id.star3, R.id.star4, R.id.star5};
+    private InternetConnectionErrorFragment errorFragment;
     private FloatingActionButton fab;
     private SlidingUpPanelLayout slidingUpPanelLayout;
     private ScrollView scrollView;
@@ -398,17 +392,20 @@ public class InformationPanel {
                 );
             }
         });
+
+        clear();
     }
 
-    InternetConnectionErrorFragment errorFragment;
+    private void clear() {
+        clearDetailsPanel();
+        errorFragment = InternetConnectionErrorFragment.newInstance();
+        fragmentManager.beginTransaction()
+                .replace(R.id.connection_error, errorFragment)
+                .commit();
+    }
 
     public void setProblemDetails(final Details details) {
-        clearDetailsPanel();
         if (details == null) {
-            errorFragment = InternetConnectionErrorFragment.newInstance();
-            fragmentManager.beginTransaction()
-                    .replace(R.id.connection_error, errorFragment)
-                    .commit();
             return;
         }
 
@@ -620,6 +617,7 @@ public class InformationPanel {
             hidePhotosBlock();
             return;
         }
+        setPhotosTitle();
         if (isPhotoContainerHaveChild()) {
             photoContainer.removeAllViews();
         }
@@ -637,6 +635,11 @@ public class InformationPanel {
                 }
             });
         }
+    }
+
+    private void setPhotosTitle() {
+        TextView photosTitle = (TextView) activity.findViewById(R.id.photo);
+        photosTitle.setText(PHOTOS_TITLE);
     }
 
     private void loadPhotoToView(final Photo photo, final ImageView photoView) {
@@ -681,8 +684,8 @@ public class InformationPanel {
     private void hidePhotosBlock() {
         TextView photosTitle = (TextView) activity.findViewById(R.id.photo);
         photosTitle.setText("");
-        photosTitle.setPadding(0, 0, 0, 0);
-        photosTitle.setTextSize(0.0f);
+   //     photosTitle.setPadding(0, 0, 0, 0);
+  //      photosTitle.setTextSize(0.0f);
         photoContainer.removeAllViews();
     }
 

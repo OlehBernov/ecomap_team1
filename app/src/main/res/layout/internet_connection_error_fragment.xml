@@ -26,7 +26,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:layout_marginTop="46dp"
-        android:text="No internet connection"
+        android:text="Server connection problem"
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:layout_below="@+id/imageView7"
         android:layout_centerHorizontal="true"/>

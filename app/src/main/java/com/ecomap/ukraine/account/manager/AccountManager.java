@@ -81,6 +81,6 @@ public class AccountManager implements LogInListenerNotifier,
         String userName = userPreference.getString(ExtraFieldNames.USER_NAME, "");
         String userSurname = userPreference.getString(ExtraFieldNames.USER_SURNAME, "");
         String email = userPreference.getString(ExtraFieldNames.LOGIN, "");
-        User.getInstance(userID, userName, userSurname, "", "", "", email);
+        User.newInstance(userID, userName, userSurname, "", "", "", email);
     }
 }

@@ -1,8 +1,10 @@
 package com.ecomap.ukraine.models;
 
-import com.ecomap.ukraine.account.manager.AccountManager;
+import com.google.android.gms.ads.search.SearchAdRequest;
 
-public class User {
+import java.io.Serializable;
+
+public class User implements Serializable{
 
     private static final String DEFAULT_NAME = "Anonym";
 
@@ -24,7 +26,6 @@ public class User {
 
     private User(int id, String name, String surname, String role, String iat,
                  String token, String email) {
-
         this.id = id;
         this.name = name;
         this.surname = surname;
@@ -34,7 +35,7 @@ public class User {
         this.email = email;
     }
 
-    public static User getInstance(int id, String name, String surname, String role, String iat,
+    public static User newInstance(int id, String name, String surname, String role, String iat,
                                    String token, String email) {
         instance = new User(id, name, surname, role, iat, token, email);
         return instance;
@@ -48,7 +49,6 @@ public class User {
     }
 
     public static void reset() {
-
         setDefaultInstance();
     }
 
@@ -81,8 +81,7 @@ public class User {
     }
 
     private static User setDefaultInstance() {
-        instance = new User(-1, DEFAULT_NAME, "", "", "", "",
-                "");
+        instance = new User(-1, DEFAULT_NAME, "", "", "", "", "");
         return instance;
     }
 }

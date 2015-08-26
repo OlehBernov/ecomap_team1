@@ -56,14 +56,13 @@ public class AddNewProblemDecriptionActivity extends AppCompatActivity {
     private static final String CAMERA_URI = "Camera Uri";
     private static final String USER_PHOTOS = "Number of photos";
     private static final String DESCRIPTION = "Description";
+    private static final String USER = "User";
     protected final String TAG = getClass().getSimpleName();
     private Uri currentPhotoUri;
     private List<Uri> userPhotos;
     private TableLayout photoDescriptionLayout;
     private List<String> descriptions;
-    private Toolbar toolbar;
     private ViewPager pager;
-    private String[] titles;
 
     public List<Bitmap> getBitmapsPhoto() {
         List<Bitmap> photoBitmaps = new ArrayList<>();
@@ -139,7 +138,7 @@ public class AddNewProblemDecriptionActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        titles = getResources().getStringArray(R.array.tabs_in_posting_problem);
+        String[] titles = getResources().getStringArray(R.array.tabs_in_posting_problem);
 
         setContentView(R.layout.add_problem_description);
         setupToolbar();
@@ -181,6 +180,11 @@ public class AddNewProblemDecriptionActivity extends AppCompatActivity {
             descriptions = savedInstanceState.getStringArrayList(DESCRIPTION);
             addPhotosToView();
         }
+        if (isUserSaved(savedInstanceState)) {
+            User user = (User) savedInstanceState.getSerializable(USER);
+            User.newInstance(user.getId(), user.getName(), user.getSurname(), user.getRole(),
+                    user.getIat(), user.getToken(), user.getEmail());
+        }
     }
 
     @Override
@@ -209,6 +213,17 @@ public class AddNewProblemDecriptionActivity extends AppCompatActivity {
         if (descriptions != null) {
             outState.putStringArrayList(DESCRIPTION, new ArrayList<>(descriptions));
         }
+        if (!isAnonymousUser()) {
+            outState.putSerializable(USER, User.getInstance());
+        }
+    }
+
+    private boolean isAnonymousUser() {
+        return User.getInstance().getId() < 0;
+    }
+
+    private boolean isUserSaved(Bundle savedInstanceState) {
+        return isAnonymousUser() && savedInstanceState.containsKey(USER);
     }
 
     private boolean isDescriptionsSaved(Bundle savedInstanceState) {
