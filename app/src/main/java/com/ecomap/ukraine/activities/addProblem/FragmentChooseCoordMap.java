@@ -5,6 +5,7 @@ import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.FloatingActionButton;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -48,7 +49,8 @@ public class FragmentChooseCoordMap extends android.support.v4.app.Fragment {
         mapView.onCreate(savedInstanceState);
         mapView.onResume();
 
-        ImageButton myPositionButton = (ImageButton) getActivity().findViewById(R.id.position_button);
+        FloatingActionButton myPositionButton = (FloatingActionButton)
+                getActivity().findViewById(R.id.position_button);
         myPositionButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

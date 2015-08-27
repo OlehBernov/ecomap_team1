@@ -58,7 +58,8 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="bottom|right"
-                                android:layout_marginBottom="140dp"
+                                android:layout_marginBottom="165dp"
+                                android:layout_marginRight="15dp"
                                 android:src="@drawable/ic_ukraine"
                                 app:backgroundTint="#FFFFFFFF"
                                 app:elevation="6dp"
@@ -70,7 +71,8 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="bottom|right"
-                                android:layout_marginBottom="72dp"
+                                android:layout_marginBottom="97dp"
+                                android:layout_marginRight="15dp"
                                 android:src="@drawable/ic_gps_fixed_black_24dp"
                                 app:backgroundTint="#FFFFFFFF"
                                 app:elevation="6dp"
@@ -137,7 +139,11 @@
                             app:backgroundTint="#ff004d40"
                             app:borderWidth="0dp"
                             app:elevation="6dp"
-                            app:pressedTranslationZ="12dp"/>
+                            app:pressedTranslationZ="12dp"
+                            android:layout_alignParentRight="true"
+                            android:layout_alignParentEnd="true"
+                            android:layout_marginRight="15dp"
+                            android:layout_marginBottom="15dp"/>
 
                         <io.codetail.widget.RevealLinearLayout
                             xmlns:android="http://schemas.android.com/apk/res/android"
