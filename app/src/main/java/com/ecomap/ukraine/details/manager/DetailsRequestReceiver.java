@@ -7,4 +7,6 @@ public interface DetailsRequestReceiver {
 
     void onVoteAdded ();
 
+    void onCommentAdded ();
+
 }

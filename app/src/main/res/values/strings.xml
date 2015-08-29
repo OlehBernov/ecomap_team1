@@ -45,6 +45,7 @@
     <string name="sign_up_navigator">Sign up</string>
     <string name="non_authorized_like">You must be authorized to like problems</string>
     <string name="error_of_connection">Error of connection. Try again</string>
+    <string name="success_post_comment">Your comment was post successfully</string>
 
     <string name="photos">Photos:</string>
     <string name="title_activity_photo_viewer">PhotoViewer</string>

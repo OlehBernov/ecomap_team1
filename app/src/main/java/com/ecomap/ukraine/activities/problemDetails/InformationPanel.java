@@ -21,6 +21,7 @@ import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.animation.DecelerateInterpolator;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -93,6 +94,7 @@ public class InformationPanel implements DetailsListener {
     private ExpandableTextView proposalFiled;
     private TableLayout activitiesLayout;
     private EditText addComment;
+    private Button sendComment;
     private LinearLayout photoContainer;
     private TextView titleView;
     private Toolbar toolbar;
@@ -135,6 +137,7 @@ public class InformationPanel implements DetailsListener {
         activitiesLayout = (TableLayout) activity.findViewById(R.id.activities);
         addComment = (EditText) activity.findViewById(R.id.add_comment);
         commentText = (EditText) activity.findViewById(R.id.add_comment);
+        sendComment = (Button) activity.findViewById(R.id.send_comment);
         photoContainer = (LinearLayout) activity.findViewById(R.id.small_photo_conteiner);
 
         slidingUpPanelLayout.setAnchorPoint(ANCHOR_POINT);
@@ -159,6 +162,21 @@ public class InformationPanel implements DetailsListener {
                 String userName = user.getName();
                 String userSurname = user.getSurname();
                 detailsManager.postVote(problemID, userId, userName, userSurname);
+            }
+        });
+
+        sendComment.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                User user = User.getInstance();
+                int problemID = problem.getProblemId();
+                String userId = String.valueOf(user.getId());
+                //String content = String.valueOf(commentText.getText());
+                String content = "Test comment";
+                String userName = user.getName();
+                String userSurname = user.getSurname();
+                detailsManager.postComment(problemID, userId, userName,
+                        userSurname, content);
             }
         });
 
@@ -429,6 +447,14 @@ public class InformationPanel implements DetailsListener {
     public void onVoteAdded() {
         setRefreshTask();
         voteIcon.setEnabled(false);
+    }
+
+    @Override
+    public void onCommentAdded () {
+        setRefreshTask();
+       /* Toast.makeText(context,
+                R.string.success_post_comment, Toast.LENGTH_LONG).show();*/
+        commentText.setText("");
     }
 
 

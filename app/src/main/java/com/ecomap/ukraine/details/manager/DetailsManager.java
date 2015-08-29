@@ -37,6 +37,13 @@ public class DetailsManager implements DetailsRequestReceiver, DetailsNotifier {
         }
     }
 
+    @Override
+    public void onCommentAdded () {
+        for (DetailsListener listener : detailsListeners) {
+            listener.onCommentAdded();
+        }
+    }
+
 
 
     @Override
@@ -58,6 +65,12 @@ public class DetailsManager implements DetailsRequestReceiver, DetailsNotifier {
                           final String userName, final String userSurname) {
         detaisClient.postVote(problemID, userID, userName, userSurname);
 
+    }
+
+    public void postComment (final int problemID, final String userID,
+                             final String userName, final String userSurname,
+                             final String content) {
+        detaisClient.postComment(problemID, userID, userName, userSurname, content);
     }
 
 

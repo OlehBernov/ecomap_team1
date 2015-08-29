@@ -29,6 +29,7 @@ import com.ecomap.ukraine.R;
 import com.ecomap.ukraine.account.manager.AccountManager;
 import com.ecomap.ukraine.activities.Authorization.LoginScreen;
 import com.ecomap.ukraine.activities.Authorization.SignupActivity;
+import com.ecomap.ukraine.details.manager.DetailsManager;
 import com.ecomap.ukraine.settings.Settings;
 import com.ecomap.ukraine.activities.addProblem.ChooseProblemLocationActivity;
 import com.ecomap.ukraine.filter.FilterContract;
@@ -135,12 +136,6 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if (drawerToggle.onOptionsItemSelected(item)) {
-            if (!filterLayout.isDrawerOpen(GravityCompat.END)) {
-
-            }
-            return true;
-        }
 
         return super.onOptionsItemSelected(item);
     }
@@ -158,6 +153,7 @@ public class MainActivity extends AppCompatActivity {
         } else if (isInformationalPanelCollapsed()) {
             slidingUpPanelLayout.setPanelState(SlidingUpPanelLayout
                     .PanelState.HIDDEN);
+            DetailsManager.getInstance(getApplicationContext()).removeAllDetailsListener();
         } else {
             super.onBackPressed();
         }

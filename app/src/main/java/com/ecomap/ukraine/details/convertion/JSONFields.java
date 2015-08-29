@@ -1,4 +1,4 @@
-package com.ecomap.ukraine.details.client;
+package com.ecomap.ukraine.details.convertion;
 
 /**
  * Created by Andriy on 26.08.2015.
@@ -12,4 +12,8 @@ public class JSONFields {
     public static final String USER_NAME = "userName";
 
     public static final String USER_SURNAME = "userSurname";
+
+    public static final String CONTENT = "Content";
+
+    public static final String DATA = "data";
 }

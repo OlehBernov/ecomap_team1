@@ -8,11 +8,19 @@ import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonArrayRequest;
+import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.ecomap.ukraine.R;
 import com.ecomap.ukraine.activities.main.MainActivity;
+import com.ecomap.ukraine.details.convertion.JSONFields;
+import com.ecomap.ukraine.details.convertion.JSONParser;
 import com.ecomap.ukraine.details.manager.DetailsRequestReceiver;
 import com.ecomap.ukraine.updating.serverclient.RequestQueueWrapper;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -23,6 +31,8 @@ import java.util.Map;
 public class DetaisClient {
 
     private static final String POST_VOTE_URL = "http://ecomap.org/api/vote";
+
+    private static final String POST_COMMENT_URL = "http://ecomap.org/api/comment/";
 
     private Context context;
 
@@ -74,5 +84,38 @@ public class DetaisClient {
         };
 
         RequestQueueWrapper.getInstance(context).addToRequestQueue(stringRequest);
+    }
+
+
+    public void postComment(final int problemID, final String userID,
+                            final String userName, final String userSurname,
+                            final String content) {
+        JSONObject dataJSON;
+        try {
+            dataJSON = new JSONParser().generateCommentObj(
+                   userID, userName, userSurname, content);
+        } catch (JSONException e) {
+            Log.e("exception", "JSONException in postComment");
+            return;
+        }
+        JsonObjectRequest jsObjRequest = new JsonObjectRequest(Request.Method.POST,
+                POST_COMMENT_URL + problemID, dataJSON ,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        detailsRequestReceiver.onCommentAdded();
+                    }
+                }, new Response.ErrorListener()  {
+            @Override
+            public void onErrorResponse(VolleyError volleyError) {
+                Log.e("error response", "onErrorResponse in postComment");
+                detailsRequestReceiver.onCommentAdded();
+                /*Toast.makeText(context,
+                        R.string.error_of_connection, Toast.LENGTH_LONG).show();*/
+            }
+        });
+
+
+        RequestQueueWrapper.getInstance(context).addToRequestQueue(jsObjRequest);
     }
 }
