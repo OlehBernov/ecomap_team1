@@ -9,8 +9,8 @@ public class Keyboard {
 
     private Activity activity;
 
-    public Keyboard(Activity context) {
-        this.activity = context;
+    public Keyboard(Activity activity) {
+        this.activity = activity;
     }
 
     public void setOnFocusChangeListener(View view) {

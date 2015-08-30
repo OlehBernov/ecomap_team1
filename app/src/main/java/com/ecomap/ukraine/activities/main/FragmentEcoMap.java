@@ -222,7 +222,9 @@ public class FragmentEcoMap extends android.support.v4.app.Fragment
     @Override
     public void updateProblemDetails(final Details details) {
         informationPanel.setProblemDetails(details);
+        informationPanel.showDetailsView();
     }
+
     /**
      * Action after click on Marker
      *
@@ -232,7 +234,7 @@ public class FragmentEcoMap extends android.support.v4.app.Fragment
     @Override
     public boolean onClusterItemClick(final Problem problem) {
         if (!((MainActivity) getActivity()).problemAddingMenu) {
-            informationPanel = new InformationPanel(getActivity(), getFragmentManager(), problem);
+            informationPanel = new InformationPanel(getActivity(), problem);
             dataManager.getProblemDetail(problem.getProblemId());
             moveCameraToProblem(problem);
             return true;
@@ -312,8 +314,7 @@ public class FragmentEcoMap extends android.support.v4.app.Fragment
     private void setMapType() {
         if(mapType == MAP_TYPE_MORMAL_ID) {
             googleMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
-        }
-        else {
+        } else {
             googleMap.setMapType(GoogleMap.MAP_TYPE_HYBRID);
         }
     }
