@@ -1,7 +1,6 @@
 package com.ecomap.ukraine.activities.main;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
@@ -30,6 +29,7 @@ import com.ecomap.ukraine.account.manager.AccountManager;
 import com.ecomap.ukraine.activities.Authorization.LoginScreen;
 import com.ecomap.ukraine.activities.Authorization.SignupActivity;
 import com.ecomap.ukraine.details.manager.DetailsManager;
+import com.ecomap.ukraine.search.Search;
 import com.ecomap.ukraine.settings.Settings;
 import com.ecomap.ukraine.activities.addProblem.ChooseProblemLocationActivity;
 import com.ecomap.ukraine.filter.FilterContract;
@@ -262,6 +262,12 @@ public class MainActivity extends AppCompatActivity {
     public void openSettings(MenuItem item) {
         Intent intent = new Intent(this, Settings.class);
         startActivityForResult(intent, SETTINGS_REQUEST_CODE);
+        menuDrawer.closeDrawers();
+    }
+
+    public void openSearch(MenuItem item) {
+        Intent intent = new Intent(this, Search.class);
+        startActivity(intent);
         menuDrawer.closeDrawers();
     }
 

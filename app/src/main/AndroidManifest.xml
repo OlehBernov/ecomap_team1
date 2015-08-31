@@ -89,6 +89,11 @@
             android:label="@string/title_activity_settings"
             android:screenOrientation="portrait" >
         </activity>
+        <activity
+            android:name=".search.Search"
+            android:label="@string/app_name"
+            android:screenOrientation="portrait" >
+        </activity>
     </application>
 
 </manifest>

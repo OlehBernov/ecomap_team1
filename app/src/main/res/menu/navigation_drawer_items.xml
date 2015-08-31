@@ -23,6 +23,12 @@
 
         <item
             android:id="@+id/navigation_item_4"
+            android:icon="@drawable/ic_search_black_24dp"
+            android:onClick="openSearch"
+            android:title="@string/search"/>
+
+        <item
+            android:id="@+id/navigation_item_5"
             android:icon="@drawable/ic_settings_black_18dp"
             android:onClick="openSettings"
             android:title="@string/settings"/>
