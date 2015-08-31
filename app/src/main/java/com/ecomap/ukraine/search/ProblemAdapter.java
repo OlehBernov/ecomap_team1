@@ -4,10 +4,12 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.ecomap.ukraine.R;
 import com.ecomap.ukraine.models.Problem;
+import com.ecomap.ukraine.models.Types.ProblemType;
 
 import java.util.List;
 
@@ -16,6 +18,7 @@ public class ProblemAdapter extends RecyclerView.Adapter<ProblemAdapter.ViewHold
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
         private TextView textView;
+        private ImageView imageView;
         private View view;
         private Problem problem;
 
@@ -23,17 +26,47 @@ public class ProblemAdapter extends RecyclerView.Adapter<ProblemAdapter.ViewHold
             super(view);
             this.view = view;
             textView = (TextView)view.findViewById(R.id.search_item_title);
+            imageView = (ImageView)view.findViewById(R.id.search_item_type);
         }
 
         public void setProblem(Problem problem) {
             this.problem = problem;
             textView.setText(problem.getTitle());
+            imageView.setImageResource(getIconRes(problem.getProblemType()));
             view.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     //TODO implement onclick event
                 }
             });
+        }
+
+        private int getIconRes(ProblemType problemType) {
+            int resId;
+            switch (problemType) {
+                case FOREST_DESTRUCTION:
+                    resId = R.drawable.type1;
+                    break;
+                case RUBBISH_DUMP:
+                    resId = R.drawable.type2;
+                    break;
+                case ILLEGAL_BUILDING:
+                    resId = R.drawable.type3;
+                    break;
+                case WATER_POLLUTION:
+                    resId = R.drawable.type4;
+                    break;
+                case THREAD_TO_BIODIVERSITY:
+                    resId = R.drawable.type5;
+                    break;
+                case POACHING:
+                    resId = R.drawable.type6;
+                    break;
+                default:
+                    resId = R.drawable.type7;
+                    break;
+            }
+            return resId;
         }
 
     }
