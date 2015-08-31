@@ -9,6 +9,7 @@ import com.android.volley.VolleyError;
 import com.ecomap.ukraine.addproblem.convertion.JSONParser;
 import com.ecomap.ukraine.addproblem.manager.AddProblemRequestReceiver;
 import com.ecomap.ukraine.addproblem.convertion.JSONFields;
+import com.ecomap.ukraine.models.new_problem_data.NewProblemData;
 import com.ecomap.ukraine.updating.serverclient.RequestQueueWrapper;
 
 import org.json.JSONException;
@@ -57,18 +58,18 @@ public class AddProblemClient {
     /**
      * Sends a request to post information about new problems.
      */
-    public void addProblemDescription(final String title, final String content, final String proposal,
-                                      final String latitude, final String longitude, final String type, final String userId,
-                                      final String userName, final String userSurname, final List<Bitmap> bitmaps,
-                                      final List<String> photoDescriptions) {
+    public void addProblemDescription(final NewProblemData problemData) {
         HashMap<String, String> params = new HashMap<>();
+        final String userId = problemData.getUserId();
+        final String userName = problemData.getUserName();
+        final String userSurname = problemData.getUserSurname();
 
-        params.put(JSONFields.TITLE, title);
-        params.put(JSONFields.CONTENT, content);
-        params.put(JSONFields.PROPOSAL, proposal);
-        params.put(JSONFields.LATITUDE, latitude);
-        params.put(JSONFields.LONGITUDE, longitude);
-        params.put(JSONFields.PROBLEM_TYPE, type);
+        params.put(JSONFields.TITLE, problemData.getTitle());
+        params.put(JSONFields.CONTENT, problemData.getContent());
+        params.put(JSONFields.PROPOSAL, problemData.getProposal());
+        params.put(JSONFields.LATITUDE, String.valueOf(problemData.getPosition().latitude));
+        params.put(JSONFields.LONGITUDE, String.valueOf(problemData.getPosition().longitude));
+        params.put(JSONFields.PROBLEM_TYPE, problemData.getType());
         params.put(JSONFields.USER_ID, userId);
         params.put(JSONFields.USER_NAME, userName);
         params.put(JSONFields.USER_SURNAME, userSurname);
@@ -78,12 +79,13 @@ public class AddProblemClient {
             @Override
             public void onResponse(String response) {
                 Log.d("response", response);
-                if (bitmaps != null) {
+                if (problemData.getPhotos() != null) {
                     try {
                         JSONParser jsonParser = new JSONParser();
                         String addedProblemID = jsonParser.parseAddedProblemInformation(response);
                         addPhotosToProblem(userId, userName, userSurname,
-                                photoDescriptions, addedProblemID, bitmaps);
+                                problemData.getPhotoDescriptions(), addedProblemID,
+                                problemData.getPhotos());
                     } catch (JSONException e) {
                         Log.e("JSONException", "JSONException in parsing json from new problem");
                     }

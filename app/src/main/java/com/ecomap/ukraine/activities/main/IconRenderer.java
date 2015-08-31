@@ -28,6 +28,11 @@ public class IconRenderer extends DefaultClusterRenderer<Problem> {
     private Activity activity;
 
     /**
+     * If cluster size is less than this size, display individual markers.
+     */
+    private static final int MIN_CLUSTER_SIZE = 2;
+
+    /**
      * Constructor
      *
      * @param activity       which callback manager
@@ -83,6 +88,14 @@ public class IconRenderer extends DefaultClusterRenderer<Problem> {
     protected int getBucket(Cluster<Problem> cluster) {
         int size = cluster.getSize();
         return size;
+    }
+
+    /**
+     * Determine whether the cluster should be rendered as individual markers or a cluster.
+     */
+    @Override
+    protected boolean shouldRenderAsCluster(Cluster<Problem> cluster) {
+        return cluster.getSize() > MIN_CLUSTER_SIZE;
     }
 
     /**

@@ -33,13 +33,15 @@ import com.google.android.gms.maps.MapsInitializer;
 import com.google.android.gms.maps.UiSettings;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.maps.android.clustering.Cluster;
 import com.google.maps.android.clustering.ClusterManager;
 
 import java.util.List;
 
 public class FragmentEcoMap extends android.support.v4.app.Fragment
         implements ProblemListener, FilterListener,
-        ClusterManager.OnClusterItemClickListener<Problem> {
+        ClusterManager.OnClusterItemClickListener<Problem>,
+        ClusterManager.OnClusterClickListener <Problem> {
 
     private static final LatLng INITIAL_POSITION = new LatLng(48.4, 31.2);
     private static final float INITIAL_ZOOM = 4.5f;
@@ -242,6 +244,16 @@ public class FragmentEcoMap extends android.support.v4.app.Fragment
         return false;
     }
 
+
+    @Override
+    public boolean onClusterClick(Cluster<Problem> cluster) {
+
+        googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(cluster.getPosition(),
+                googleMap.getCameraPosition().zoom + 2));
+        return true;
+    }
+
+
     /**
      * Sets up the map if it is possible to do so (i.e., the Google Play services APK is correctly
      * installed) and the map has not already been instantiated.
@@ -307,6 +319,7 @@ public class FragmentEcoMap extends android.support.v4.app.Fragment
                 new ClusterManager<>(getActivity().getApplicationContext(), googleMap);
         googleMap.setOnCameraChangeListener(clusterManager);
         clusterManager.setOnClusterItemClickListener(this);
+        clusterManager.setOnClusterClickListener(this);
         googleMap.setOnMarkerClickListener(clusterManager);
         clusterManager.addItems(filteredProblems);
     }
@@ -318,4 +331,6 @@ public class FragmentEcoMap extends android.support.v4.app.Fragment
             googleMap.setMapType(GoogleMap.MAP_TYPE_HYBRID);
         }
     }
+
+
 }

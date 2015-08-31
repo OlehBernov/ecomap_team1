@@ -27,7 +27,10 @@ import com.ecomap.ukraine.data.manager.ProblemListener;
 import com.ecomap.ukraine.models.Details;
 import com.ecomap.ukraine.models.Problem;
 import com.ecomap.ukraine.models.User;
+import com.ecomap.ukraine.models.new_problem_data.NewProblemData;
+import com.ecomap.ukraine.models.new_problem_data.NewProblemDataBuilder;
 import com.ecomap.ukraine.validation.Validator;
+import com.google.android.gms.maps.model.LatLng;
 
 import java.util.List;
 
@@ -211,13 +214,24 @@ public class AddProblemDescriptionFragment extends Fragment implements AddProble
         String description = problemDescription.getText().toString();
 
         String solution = problemSolution.getText().toString();
-        String latitude = activity.getIntent().getDoubleExtra(ExtraFieldNames.LAT, 0) + "";
-        String longitude = activity.getIntent().getDoubleExtra(ExtraFieldNames.LNG, 0) + "";
+        double latitude = activity.getIntent().getDoubleExtra(ExtraFieldNames.LAT, 0);
+        double longitude = activity.getIntent().getDoubleExtra(ExtraFieldNames.LNG, 0);
         String type = String.valueOf(spinner.getSelectedItemId() + 1);
         showProgressDialog();
-        addProblemManager.addProblem(title, description, solution, latitude,
-                longitude, type, String.valueOf(User.getInstance().getId()),
-                userName, userSurname, bitmapPhotos, photoDescriptions);
+        NewProblemData problemData = new NewProblemDataBuilder()
+                .setTitle(title)
+                .setContent(description)
+                .setProposal(solution)
+                .setPosition(new LatLng(latitude, longitude))
+                .setType(type)
+                .setUserId(String.valueOf(User.getInstance().getId()))
+                .setUserName(userName)
+                .setUserSurname(userSurname)
+                .setPhotos(bitmapPhotos)
+                .setPhotoDescriptions(photoDescriptions)
+                .build();
+        addProblemManager.addProblem(problemData);
+
         bitmapPhotos = null;
     }
 
