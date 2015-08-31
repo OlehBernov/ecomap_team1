@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
-import android.support.v4.app.FragmentManager;
 import android.support.v4.content.res.ResourcesCompat;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -48,9 +47,6 @@ public class DetailsContent implements DetailsListener {
     private static final String PHOTOS_TITLE = "Photo:";
 
     private static final int STAR_NUMBER = 5;
-
-    private static final int ACTIVITY_ICON_WIDTH = 75;
-    private static final int ACTIVITY_ICON_HEIGHT = 75;
 
     private static int[] STARS_ID = {R.id.star1, R.id.star2, R.id.star3, R.id.star4, R.id.star5};
     private Problem problem;
@@ -144,7 +140,6 @@ public class DetailsContent implements DetailsListener {
 
         clearDetailsPanel();
         setErrorScreen();
-
         votesNumber.setText("");
         putBriefInformation();
     }
@@ -274,9 +269,13 @@ public class DetailsContent implements DetailsListener {
      * @return icon
      */
     private ImageView buildActivityIcon(final ProblemActivity problemActivity) {
-        TableRow.LayoutParams imageParams = new TableRow.LayoutParams(ACTIVITY_ICON_WIDTH, ACTIVITY_ICON_HEIGHT);
+        TableRow.LayoutParams imageParams = new TableRow.LayoutParams();
+
         imageParams.topMargin = (int) context.getResources().getDimension(R.dimen.slide_panel_items_margin);
         imageParams.bottomMargin = (int) context.getResources().getDimension(R.dimen.slide_panel_items_margin);
+        imageParams.height = (int) context.getResources().getDimension(R.dimen.slide_panel_image_margin);
+        imageParams.width = (int) context.getResources().getDimension(R.dimen.slide_panel_image_margin);
+
         ImageView activityTypeIcon = new ImageView(context);
         activityTypeIcon.setImageDrawable(getActivityIcon(problemActivity.getActivityType()));
         activityTypeIcon.setLayoutParams(imageParams);

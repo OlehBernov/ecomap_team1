@@ -8,6 +8,7 @@
     <dimen name="card_bottom">25dp</dimen>
     <dimen name="calendar_size">50dp</dimen>
     <dimen name="slide_panel_items_margin">12dp</dimen>
+    <dimen name="slide_panel_image_margin">36dp</dimen>
     <dimen name="comment_text_size">7dp</dimen>
     <dimen name="small_photo_size">50dp</dimen>
 

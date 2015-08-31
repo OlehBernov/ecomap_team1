@@ -244,10 +244,8 @@ public class FragmentEcoMap extends android.support.v4.app.Fragment
         return false;
     }
 
-
     @Override
     public boolean onClusterClick(Cluster<Problem> cluster) {
-
         googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(cluster.getPosition(),
                 googleMap.getCameraPosition().zoom + 2));
         return true;
@@ -331,6 +329,5 @@ public class FragmentEcoMap extends android.support.v4.app.Fragment
             googleMap.setMapType(GoogleMap.MAP_TYPE_HYBRID);
         }
     }
-
 
 }

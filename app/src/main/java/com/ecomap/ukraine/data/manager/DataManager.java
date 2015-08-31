@@ -228,7 +228,7 @@ public class DataManager implements ProblemListenersNotifier,
     }
 
     public void refreshProblemDetails(int problemId) {
-//        registerProblemListener(listener);
+        currentProblemId = problemId;
         loadingClient.getProblemDetail(problemId);
     }
 
