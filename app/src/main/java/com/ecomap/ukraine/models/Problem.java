@@ -6,12 +6,14 @@ import com.ecomap.ukraine.models.Types.ProblemType;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.maps.android.clustering.ClusterItem;
 
+import java.io.Serializable;
+
 
 /**
  * Class Problem represent general information about problem, enough to show the problem on the map.
  * Created by Andriy on 17.07.2015.
  */
-public class Problem implements ClusterItem {
+public class Problem implements ClusterItem, Serializable {
 
     /**
      * id of current problem

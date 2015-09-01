@@ -102,6 +102,10 @@ public class Search extends AppCompatActivity
         recyclerView.setAdapter(adapter);
     }
 
+    public void getProblemDetails(int problemId) {
+        DataManager.getInstance(this).getProblemDetail(problemId);
+    }
+
     @Override
     public void updateProblemDetails(Details details) {}
 }

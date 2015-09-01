@@ -223,8 +223,9 @@ public class FragmentEcoMap extends android.support.v4.app.Fragment
      */
     @Override
     public void updateProblemDetails(final Details details) {
-        informationPanel.setProblemDetails(details);
-        informationPanel.showDetailsView();
+        if (informationPanel != null) {
+            informationPanel.setProblemDetails(details);
+        }
     }
 
     /**

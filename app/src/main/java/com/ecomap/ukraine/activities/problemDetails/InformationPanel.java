@@ -28,8 +28,4 @@ public class InformationPanel {
         detailsContent.setProblemDetails(details);
     }
 
-    public void showDetailsView() {
-        detailsContent.showDetailsView();
-    }
-
 }

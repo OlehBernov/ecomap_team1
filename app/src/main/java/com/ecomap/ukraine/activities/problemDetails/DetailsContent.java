@@ -175,6 +175,7 @@ public class DetailsContent implements DetailsListener {
             addActivitiesInfo(details);
         }
         addPhotos(details);
+        showDetailsView();
     }
 
     public void putBriefInformation() {
@@ -184,7 +185,7 @@ public class DetailsContent implements DetailsListener {
     }
 
     public void showDetailsView() {
-        LinearLayout detailsView = (LinearLayout) activity.findViewById(R.id.details_content_root);
+        LinearLayout detailsView = (LinearLayout) detailsBaseInfoView.findViewById(R.id.details_content_root);
         if (isViewHaveChild(detailsView)) {
             detailsView.removeAllViews();
         }

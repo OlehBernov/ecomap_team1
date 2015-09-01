@@ -1,5 +1,7 @@
 package com.ecomap.ukraine.search;
 
+import android.os.Bundle;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -8,12 +10,15 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.ecomap.ukraine.R;
+import com.ecomap.ukraine.models.Details;
 import com.ecomap.ukraine.models.Problem;
 import com.ecomap.ukraine.models.Types.ProblemType;
 
 import java.util.List;
 
 public class ProblemAdapter extends RecyclerView.Adapter<ProblemAdapter.ViewHolder> {
+    private static final String PROBLEM_TAG = "Problem tag";
+
     private List<Problem> dataSet;
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
@@ -29,14 +34,13 @@ public class ProblemAdapter extends RecyclerView.Adapter<ProblemAdapter.ViewHold
             imageView = (ImageView)view.findViewById(R.id.search_item_type);
         }
 
-        public void setProblem(Problem problem) {
+        public void setProblem(final Problem problem) {
             this.problem = problem;
             textView.setText(problem.getTitle());
             imageView.setImageResource(getIconRes(problem.getProblemType()));
             view.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    //TODO implement onclick event
                 }
             });
         }
