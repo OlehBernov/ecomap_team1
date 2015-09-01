@@ -43,7 +43,7 @@ public class JSONFields {
     /**
      * Longitude of problem localization.
      */
-    public static final String LONGITUDE = "Longitude";
+    public static final String LONGITUDE = "Longtitude";
 
     /**
      * Description of the problem.

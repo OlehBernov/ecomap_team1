@@ -165,7 +165,7 @@ public class JSONParser {
                     commentObject.optInt(JSONFields.COMMENT_USERS_ID, -1),
                     contentObject.getString(JSONFields.COMMENT_CORE),
                     commentObject.getString(JSONFields.PROBLEM_ACTIVITY_DATE),
-                    contentObject.getString(JSONFields.USER_NAME)
+                    contentObject.optString(JSONFields.USER_NAME, "")
             );
 
             problemActivities.add(currentProblemActivity);
