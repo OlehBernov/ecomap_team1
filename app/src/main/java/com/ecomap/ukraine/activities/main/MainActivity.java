@@ -161,9 +161,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    public static boolean isAnonymousUser() {
-        return User.getInstance().getId() < 0;
-    }
+
 
     /**
      * Controls the position of the filter7 window on the screen.
@@ -202,7 +200,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void openChooseProblemLocationActivity(View view) {
-        if (isAnonymousUser()) {
+        if (AccountManager.isAnonymousUser()) {
             setNotAuthorizeDialog(ALERT_MESSAGE);
         } else {
             Intent intent = new Intent(this, ChooseProblemLocationActivity.class);
@@ -247,10 +245,10 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void logOut(MenuItem item) {
-        User.reset();
-        setUserInformation(User.getInstance());
+        setUserInformation(User.ANONYM_USER);
+        AccountManager.setUserState(User.ANONYM_USER);
         AccountManager.getInstance(getApplicationContext()).
-                putUserToPreferences(User.getInstance(), "");
+                putUserToPreferences(User.ANONYM_USER, "");
     }
 
     public void signUp(MenuItem item) {
@@ -274,7 +272,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        setUserInformation(User.getInstance());
+        setUserInformation(AccountManager.getUserState());
         if (isSettingsRequest(requestCode)) {
             Fragment fragment = getSupportFragmentManager().findFragmentByTag(MAP_TAG);
             if(fragment != null) {
@@ -302,7 +300,7 @@ public class MainActivity extends AppCompatActivity {
         setUpDrawerLayout();
         setupFilter();
 
-        setUserInformation(User.getInstance());
+        setUserInformation(AccountManager.getUserState());
 
         slidingUpPanelLayout = (SlidingUpPanelLayout) findViewById(R.id.sliding_layout);
         slidingUpPanelLayout.setAnchorPoint(ANCHOR_POINT);
@@ -389,7 +387,7 @@ public class MainActivity extends AppCompatActivity {
         TextView userName = (TextView) findViewById(R.id.navigation_user_name);
         TextView email = (TextView) findViewById(R.id.navigation_email);
         userName.setText(user.getName() + " " + user.getSurname());
-        if(!isAnonymousUser()) {
+        if(!AccountManager.isAnonymousUser()) {
             email.setText(user.getEmail());
         }
         else {

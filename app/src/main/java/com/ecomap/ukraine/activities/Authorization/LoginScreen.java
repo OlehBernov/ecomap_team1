@@ -79,6 +79,7 @@ public class LoginScreen extends AppCompatActivity implements LogInListener {
     @Override
     public void setLogInResult(final User user) {
         logInButton.setEnabled(true);
+        AccountManager.setUserState(user);
         if (user != null) {
             openMainActivity();
         } else {

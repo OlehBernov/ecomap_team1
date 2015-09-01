@@ -62,9 +62,9 @@ public class AddProblemClient {
      */
     public void addProblemDescription(final NewProblemData problemData) {
         HashMap<String, String> params = new HashMap<>();
-        final String userId = problemData.getUserId();
-        final String userName = problemData.getUserName();
-        final String userSurname = problemData.getUserSurname();
+        final String userId = String.valueOf(problemData.getUser().getId());
+        final String userName = problemData.getUser().getName();
+        final String userSurname = problemData.getUser().getSurname();
 
         params.put(JSONFields.TITLE, problemData.getTitle());
         params.put(JSONFields.CONTENT, problemData.getContent());

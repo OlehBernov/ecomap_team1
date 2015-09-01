@@ -9,11 +9,9 @@ import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonArrayRequest;
-import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.ecomap.ukraine.R;
-import com.ecomap.ukraine.activities.main.MainActivity;
+import com.ecomap.ukraine.account.manager.AccountManager;
 import com.ecomap.ukraine.details.convertion.JSONFields;
 import com.ecomap.ukraine.details.convertion.JSONParser;
 import com.ecomap.ukraine.details.manager.DetailsRequestReceiver;
@@ -71,7 +69,7 @@ public class DetaisClient {
             protected Map<String, String> getParams() {
                 Map<String, String> params = new HashMap<>();
                 params.put(JSONFields.PROBLEM_ID, problemID);
-                if(!MainActivity.isAnonymousUser()) {
+                if(!AccountManager.isAnonymousUser()) {
                     params.put(JSONFields.USER_ID, userID);
                     params.put(JSONFields.USER_NAME, userName);
                     params.put(JSONFields.USER_SURNAME, userSurname);

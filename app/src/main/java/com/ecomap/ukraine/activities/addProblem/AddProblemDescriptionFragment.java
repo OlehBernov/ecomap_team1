@@ -41,7 +41,7 @@ import butterknife.InjectView;
  * Fragment for posting description of new problem
  */
 public class AddProblemDescriptionFragment extends Fragment implements AddProblemListener,
-                                                                       ProblemListener {
+        ProblemListener {
 
     private static final String PLEASE_WAIT = "Please wait...";
     /**
@@ -57,8 +57,8 @@ public class AddProblemDescriptionFragment extends Fragment implements AddProble
 
     private AddProblemManager addProblemManager;
     private DataManager dataManager;
-    private String userName = User.getInstance().getName();
-    private String userSurname = User.getInstance().getSurname();
+    private String userName = AccountManager.getUserState().getName();
+    private String userSurname = AccountManager.getUserState().getSurname();
 
     @InjectView(R.id.problemTitle) EditText problemTitle;
     @InjectView(R.id.problemDescription) EditText problemDescription;
@@ -88,7 +88,7 @@ public class AddProblemDescriptionFragment extends Fragment implements AddProble
         boolean isProblemValid = Validator.addProblemValidation(problemTitle);
         if (!isProblemValid) {
             Toast.makeText(activity.getApplicationContext(), INPUT_PROBLEM_DATA, Toast.LENGTH_LONG)
-                 .show();
+                    .show();
             return;
         }
         setChooseNameDialog();
@@ -136,6 +136,7 @@ public class AddProblemDescriptionFragment extends Fragment implements AddProble
         super.onDestroy();
         addProblemManager.removeAddProblemListener(this);
     }
+
 
     /**
      * Show progres dialog when problem posting
@@ -198,6 +199,7 @@ public class AddProblemDescriptionFragment extends Fragment implements AddProble
         startActivity(intent);
         activity.finish();
         dataManager.removeProblemListener(this);
+
     }
 
     /**
@@ -219,9 +221,8 @@ public class AddProblemDescriptionFragment extends Fragment implements AddProble
                 .setProposal(solution)
                 .setPosition(new LatLng(latitude, longitude))
                 .setType(type)
-                .setUserId(String.valueOf(User.getInstance().getId()))
-                .setUserName(userName)
-                .setUserSurname(userSurname)
+                .setUser(new User(AccountManager.getUserState().getId(),
+                        userName, userSurname, "", "", "", ""))
                 .setPhotos(bitmapPhotos)
                 .setPhotoDescriptions(photoDescriptions)
                 .build();

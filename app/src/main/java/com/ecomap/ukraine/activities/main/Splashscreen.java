@@ -127,8 +127,8 @@ public class SplashScreen extends Activity implements ProblemListener {
         intent = new Intent(this, LoginScreen.class);
         AccountManager.getInstance(getApplicationContext());
         AccountManager.getUserFromPreference();
-        user = User.getInstance();
-        if(MainActivity.isAnonymousUser()) {
+        user = AccountManager.getUserState();
+        if(AccountManager.isAnonymousUser()) {
             intent = new Intent(this, LoginScreen.class);
         }
         else {
@@ -157,24 +157,24 @@ public class SplashScreen extends Activity implements ProblemListener {
                 .contentColorRes(R.color.log_in_content)
                 .negativeColorRes(R.color.log_in_content)
                 .titleColorRes(R.color.log_in_title)
-          .cancelable(false)
+                .cancelable(false)
                 .positiveText(RETRY)
                 .negativeText(CANCEL).callback(
-                        new MaterialDialog.ButtonCallback() {
-                            @Override
-                            public void onPositive(MaterialDialog dialog) {
-                                super.onPositive(dialog);
-                                smoothProgressBar.setVisibility(View.VISIBLE);
-                                manager.getAllProblems();
-                            }
+                new MaterialDialog.ButtonCallback() {
+                    @Override
+                    public void onPositive(MaterialDialog dialog) {
+                        super.onPositive(dialog);
+                        smoothProgressBar.setVisibility(View.VISIBLE);
+                        manager.getAllProblems();
+                    }
 
-                            @Override
-                            public void onNegative(MaterialDialog dialog) {
-                                super.onNegative(dialog);
-                                dialog.cancel();
-                                System.exit(0);
-                            }
-                        })
+                    @Override
+                    public void onNegative(MaterialDialog dialog) {
+                        super.onNegative(dialog);
+                        dialog.cancel();
+                        System.exit(0);
+                    }
+                })
                 .show();
     }
 

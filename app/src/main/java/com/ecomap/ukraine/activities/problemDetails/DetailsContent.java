@@ -20,6 +20,7 @@ import android.widget.TableRow;
 import android.widget.TextView;
 
 import com.ecomap.ukraine.R;
+import com.ecomap.ukraine.account.manager.AccountManager;
 import com.ecomap.ukraine.activities.BitmapResizer;
 import com.ecomap.ukraine.activities.main.IconRenderer;
 import com.ecomap.ukraine.details.manager.DetailsListener;
@@ -49,6 +50,7 @@ public class DetailsContent extends LinearLayout implements DetailsListener {
     private static int[] STARS_ID = {R.id.star1, R.id.star2, R.id.star3, R.id.star4, R.id.star5};
 
     private Problem problem;
+    private User user;
     private ImageView markerIcon;
     private TextView problemTitle;
     private TextView problemStatus;
@@ -83,6 +85,7 @@ public class DetailsContent extends LinearLayout implements DetailsListener {
 
     public void setProblemContent(final Problem problem, final DetailsSettings detailsSettings) {
         this.problem = problem;
+        this.user = AccountManager.getUserState();
 
         layoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         detailsContentView = layoutInflater.inflate(R.layout.details_content_layout, null, false);
@@ -114,7 +117,6 @@ public class DetailsContent extends LinearLayout implements DetailsListener {
         voteIcon.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                User user = User.getInstance();
                 String problemID = String.valueOf(problem.getProblemId());
                 String userId = String.valueOf(user.getId());
                 String userName = user.getName();
@@ -127,7 +129,6 @@ public class DetailsContent extends LinearLayout implements DetailsListener {
         sendComment.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                User user = User.getInstance();
                 int problemID = problem.getProblemId();
                 String userId = String.valueOf(user.getId());
                 String content = "Test comment";
@@ -241,7 +242,6 @@ public class DetailsContent extends LinearLayout implements DetailsListener {
         if (problemActivities == null) {
             return;
         }
-        User user = User.getInstance();
         for (int i = problemActivities.size() - 1; i >= 0; i--) {
             if (isProblemLikedBefore(problemActivities.get(i), user)) {
                 voteIcon.setEnabled(false);

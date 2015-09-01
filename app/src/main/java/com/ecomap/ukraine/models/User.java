@@ -8,6 +8,8 @@ public class User implements Serializable{
 
     private static final String DEFAULT_NAME = "Anonym";
 
+    public static final User ANONYM_USER =  new User(-1, DEFAULT_NAME, "", "", "", "", "");
+
     private static User instance;
 
     private int id;
@@ -24,8 +26,8 @@ public class User implements Serializable{
 
     private String email;
 
-    private User(int id, String name, String surname, String role, String iat,
-                 String token, String email) {
+    public User(int id, String name, String surname, String role, String iat,
+                String token, String email) {
         this.id = id;
         this.name = name;
         this.surname = surname;
@@ -35,22 +37,6 @@ public class User implements Serializable{
         this.email = email;
     }
 
-    public static User newInstance(int id, String name, String surname, String role, String iat,
-                                   String token, String email) {
-        instance = new User(id, name, surname, role, iat, token, email);
-        return instance;
-    }
-
-    public static User getInstance() {
-        if (instance == null) {
-            instance = setDefaultInstance();
-        }
-        return instance;
-    }
-
-    public static void reset() {
-        setDefaultInstance();
-    }
 
     public int getId() {
         return id;
@@ -80,8 +66,4 @@ public class User implements Serializable{
         return email;
     }
 
-    private static User setDefaultInstance() {
-        instance = new User(-1, DEFAULT_NAME, "", "", "", "", "");
-        return instance;
-    }
 }

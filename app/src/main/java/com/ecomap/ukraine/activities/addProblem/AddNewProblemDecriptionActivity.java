@@ -28,6 +28,7 @@ import android.widget.TableLayout;
 import android.widget.TableRow;
 
 import com.ecomap.ukraine.R;
+import com.ecomap.ukraine.account.manager.AccountManager;
 import com.ecomap.ukraine.activities.BitmapResizer;
 import com.ecomap.ukraine.activities.ExtraFieldNames;
 import com.ecomap.ukraine.activities.Keyboard;
@@ -57,9 +58,7 @@ public class AddNewProblemDecriptionActivity extends AppCompatActivity {
     private static final String USER_PHOTOS = "Number of photos";
     private static final String DESCRIPTION = "Description";
     private static final String USER = "User";
-
     protected final String TAG = getClass().getSimpleName();
-
     private Uri currentPhotoUri;
     private List<Uri> userPhotos;
     private TableLayout photoDescriptionLayout;
@@ -71,6 +70,7 @@ public class AddNewProblemDecriptionActivity extends AppCompatActivity {
         if (userPhotos == null) {
             return null;
         }
+
         int userPhotoSize = (int) getResources().getDimension(R.dimen.edit_text_add_photo);
         for (Uri userPhoto : userPhotos) {
             String userPhotoPath = userPhoto.getPath();
@@ -120,7 +120,7 @@ public class AddNewProblemDecriptionActivity extends AppCompatActivity {
 
         if (id == R.id.action_confirm_problem) {
             AddProblemDescriptionFragment.getInstance(getBitmapsPhoto(), descriptions, this)
-                                         .postProblemValidation();
+                    .postProblemValidation();
             return true;
         }
 
@@ -146,7 +146,7 @@ public class AddNewProblemDecriptionActivity extends AppCompatActivity {
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
 
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager(), titles,
-                                                        NUMBER_OF_TUBS, this);
+                NUMBER_OF_TUBS, this);
         pager = (ViewPager) findViewById(R.id.pager);
         pager.setAdapter(adapter);
 
@@ -183,8 +183,8 @@ public class AddNewProblemDecriptionActivity extends AppCompatActivity {
         }
         if (isUserSaved(savedInstanceState)) {
             User user = (User) savedInstanceState.getSerializable(USER);
-            User.newInstance(user.getId(), user.getName(), user.getSurname(), user.getRole(),
-                    user.getIat(), user.getToken(), user.getEmail());
+            AccountManager.setUserState(new User(user.getId(), user.getName(), user.getSurname(),
+                    user.getRole(), user.getIat(), user.getToken(), user.getEmail()));
         }
     }
 
@@ -214,17 +214,15 @@ public class AddNewProblemDecriptionActivity extends AppCompatActivity {
         if (descriptions != null) {
             outState.putStringArrayList(DESCRIPTION, new ArrayList<>(descriptions));
         }
-        if (!isAnonymousUser()) {
-            outState.putSerializable(USER, User.getInstance());
+        if (!AccountManager.isAnonymousUser()) {
+            outState.putSerializable(USER, AccountManager.getUserState());
         }
     }
 
-    private boolean isAnonymousUser() {
-        return User.getInstance().getId() < 0;
-    }
+
 
     private boolean isUserSaved(Bundle savedInstanceState) {
-        return isAnonymousUser() && savedInstanceState.containsKey(USER);
+        return AccountManager.isAnonymousUser() && savedInstanceState.containsKey(USER);
     }
 
     private boolean isDescriptionsSaved(Bundle savedInstanceState) {
@@ -348,6 +346,7 @@ public class AddNewProblemDecriptionActivity extends AppCompatActivity {
 
     private ImageView buildUserPhoto(final String photoPath) {
         int photoSize = (int) getResources().getDimension(R.dimen.edit_text_add_photo);
+
         Bitmap photoBitmap = BitmapResizer.changePhotoOrientation(photoPath, photoSize);
         TableRow.LayoutParams imageParams =
                 new TableRow.LayoutParams(photoBitmap.getWidth(),

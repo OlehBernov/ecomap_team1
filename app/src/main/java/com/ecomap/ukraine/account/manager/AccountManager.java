@@ -11,16 +11,19 @@ import java.util.HashSet;
 import java.util.Set;
 
 public class AccountManager implements LogInListenerNotifier,
-                                       LogRequestReceiver {
+        LogRequestReceiver {
+
 
     private static AccountManager instance;
     private Set<LogInListener> logInListeners = new HashSet<>();
     private LogInClient logInClient;
     private static Context context;
+    private static User userState;
 
     private AccountManager(final Context context) {
         AccountManager.context = context;
         logInClient = new LogInClient(this, context);
+        userState = User.ANONYM_USER;
     }
 
     public static AccountManager getInstance(final Context context) {
@@ -30,8 +33,21 @@ public class AccountManager implements LogInListenerNotifier,
         return instance;
     }
 
+    public static User getUserState () {
+        return userState;
+    }
+
+    public static void setUserState (User user) {
+        userState = user;
+    }
+
+    public static boolean isAnonymousUser() {
+        return userState.getId() < 0;
+    }
+
     @Override
     public void setLogInRequestResult(final User user) {
+
         sendLogInResult(user);
     }
 
@@ -80,6 +96,6 @@ public class AccountManager implements LogInListenerNotifier,
         String userName = userPreference.getString(ExtraFieldNames.USER_NAME, "");
         String userSurname = userPreference.getString(ExtraFieldNames.USER_SURNAME, "");
         String email = userPreference.getString(ExtraFieldNames.LOGIN, "");
-        User.newInstance(userID, userName, userSurname, "", "", "", email);
+        setUserState(new User(userID, userName, userSurname, "", "", "", email));
     }
 }

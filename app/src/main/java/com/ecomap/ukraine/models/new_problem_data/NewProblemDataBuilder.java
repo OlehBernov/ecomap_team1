@@ -16,9 +16,7 @@ public class NewProblemDataBuilder {
     private  String proposal;
     private  String type;
     private  LatLng position;
-    private  String userId;
-    private  String userName;
-    private  String userSurname;
+    private  User user;
     private  List<Bitmap> bitmaps;
     private  List<String> photoDescriptions;
 
@@ -51,18 +49,8 @@ public class NewProblemDataBuilder {
         return this;
     }
 
-    public NewProblemDataBuilder setUserId (String userId) {
-        this.userId = userId;
-        return this;
-    }
-
-    public NewProblemDataBuilder setUserName (String userName) {
-        this.userName = userName;
-        return this;
-    }
-
-    public NewProblemDataBuilder setUserSurname (String userSurname) {
-        this.userSurname = userSurname;
+    public NewProblemDataBuilder setUser (User user) {
+        this.user = user;
         return this;
     }
 
@@ -78,7 +66,7 @@ public class NewProblemDataBuilder {
 
     public NewProblemData build () {
         return new NewProblemData(title, content, proposal, type,
-                position, userId, userName, userSurname, bitmaps, photoDescriptions);
+                position, user, bitmaps, photoDescriptions);
     }
 
 

@@ -16,9 +16,7 @@ public class NewProblemData {
     private final String proposal;
     private final String type;
     private final LatLng position;
-    private final String userId;
-    private final String userName;
-    private final String userSurname;
+    private  User user;
     private final List<Bitmap> bitmaps;
     private final List<String> photoDescriptions;
 
@@ -28,9 +26,7 @@ public class NewProblemData {
             final String proposal,
             final String type,
             final LatLng position,
-            final String userId,
-            final String userName,
-            final String userSurname,
+            final User user,
             final List<Bitmap> bitmaps,
             final List<String> photoDescriptions) {
 
@@ -39,9 +35,7 @@ public class NewProblemData {
         this.proposal = proposal;
         this.type = type;
         this.position = position;
-        this.userId = userId;
-        this.userName = userName;
-        this.userSurname = userSurname;
+        this.user = user;
         this.bitmaps = bitmaps;
         this.photoDescriptions = photoDescriptions;
     }
@@ -66,16 +60,8 @@ public class NewProblemData {
         return position;
     }
 
-    public String getUserId() {
-        return userId;
-    }
-
-    public String getUserName() {
-        return userName;
-    }
-
-    public String getUserSurname() {
-        return userSurname;
+    public User getUser() {
+        return user;
     }
 
     public List<Bitmap> getPhotos() {
@@ -86,3 +72,4 @@ public class NewProblemData {
         return photoDescriptions;
     }
 }
+
