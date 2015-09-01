@@ -1,6 +1,8 @@
 package com.ecomap.ukraine.search;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -9,8 +11,12 @@ import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.LinearLayout;
 
 import com.ecomap.ukraine.R;
+import com.ecomap.ukraine.activities.main.FragmentEcoMap;
+import com.ecomap.ukraine.activities.problemDetails.DetailsContent;
 import com.ecomap.ukraine.data.manager.DataManager;
 import com.ecomap.ukraine.data.manager.ProblemListener;
 import com.ecomap.ukraine.models.Details;
@@ -24,10 +30,19 @@ import java.util.List;
  */
 public class Search extends AppCompatActivity
         implements SearchView.OnQueryTextListener, ProblemListener {
+
+    static final String PROBLEM_EXTRA = "Problem"; //package private
+
     private RecyclerView recyclerView;
     private RecyclerView.LayoutManager layoutManager;
     private ProblemAdapter adapter;
     private List<Problem> problems;
+
+    public void showProblemInformation(Problem problem) {
+        Intent intent = new Intent(this, ProblemDetailsActivity.class);
+        intent.putExtra(PROBLEM_EXTRA, problem);
+        startActivity(intent);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -98,14 +113,12 @@ public class Search extends AppCompatActivity
         layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
         final List<Problem> problems = new ArrayList<>(this.problems);
-        adapter = new ProblemAdapter(problems);
+        adapter = new ProblemAdapter(problems, this);
         recyclerView.setAdapter(adapter);
     }
 
-    public void getProblemDetails(int problemId) {
-        DataManager.getInstance(this).getProblemDetail(problemId);
+    @Override
+    public void updateProblemDetails(Details details) {
     }
 
-    @Override
-    public void updateProblemDetails(Details details) {}
 }

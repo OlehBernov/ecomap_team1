@@ -8,18 +8,14 @@ import com.ecomap.ukraine.details.client.DetaisClient;
 import java.util.HashSet;
 import java.util.Set;
 
-/**
- * Created by Andriy on 26.08.2015.
- */
+
 public class DetailsManager implements DetailsRequestReceiver, DetailsNotifier {
 
     private static DetailsManager instance;
     private Set<DetailsListener> detailsListeners = new HashSet<>();
     private DetaisClient detaisClient;
-    private static Context context;
 
     private DetailsManager(final Context context) {
-        DetailsManager.context = context;
         detaisClient = new DetaisClient(this, context);
     }
 
@@ -43,8 +39,6 @@ public class DetailsManager implements DetailsRequestReceiver, DetailsNotifier {
             listener.onCommentAdded();
         }
     }
-
-
 
     @Override
     public void registerDetailsListener(DetailsListener listener) {

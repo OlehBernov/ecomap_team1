@@ -33,6 +33,8 @@ public class AddProblemClient {
      */
     private static final String POST_PHOTO_URL = "http://ecomap.org/api/photo/";
 
+    protected final String TAG = getClass().getSimpleName();
+
     /**
      * Application context.
      */
@@ -75,37 +77,31 @@ public class AddProblemClient {
         params.put(JSONFields.USER_SURNAME, userSurname);
 
         MultipartRequest multipartRequest = new MultipartRequest(POST_PROBLEM_URL, new Response.Listener<String>() {
-
             @Override
             public void onResponse(String response) {
-                Log.d("response", response);
                 if (problemData.getPhotos() != null) {
                     try {
                         JSONParser jsonParser = new JSONParser();
                         String addedProblemID = jsonParser.parseAddedProblemInformation(response);
-                        addPhotosToProblem(userId, userName, userSurname,
+                        AddProblemClient.this.addPhotosToProblem(userId, userName, userSurname,
                                 problemData.getPhotoDescriptions(), addedProblemID,
                                 problemData.getPhotos());
                     } catch (JSONException e) {
-                        Log.e("JSONException", "JSONException in parsing json from new problem");
+                        Log.e(TAG, "JSONException in parsing json from new problem");
                     }
                 } else {
                     addProblemRequestReceiver.onSuccesProblemPosting();
                 }
             }
-
         }, new Response.ErrorListener() {
-
             @Override
             public void onErrorResponse(VolleyError error) {
-                Log.e("Volley Request Error", error.getLocalizedMessage());
+                Log.e(TAG, error.getLocalizedMessage());
                 addProblemRequestReceiver.onFailedProblemPosting();
             }
-
         }, null, params, 0);
 
         RequestQueueWrapper.getInstance(context).addToRequestQueue(multipartRequest);
-
     }
 
     /**
@@ -115,7 +111,6 @@ public class AddProblemClient {
                                   final String userSurname, final String description,
                                   final String problemID, Bitmap photo, final int count, final int size) {
 
-
         HashMap<String, String> params = new HashMap<>();
         params.put(JSONFields.USER_ID, userID);
         params.put(JSONFields.USER_NAME, userName);
@@ -123,24 +118,20 @@ public class AddProblemClient {
         params.put(JSONFields.DESCRIPTION, description);
         MultipartRequest multipartRequest = new MultipartRequest(POST_PHOTO_URL + problemID + "/",
                 new Response.Listener<String>() {
-
                     @Override
                     public void onResponse(String response) {
-                        Log.d("response", response);
                         if (count == size) {
                             addProblemRequestReceiver.onSuccesPhotoPosting();
                         }
                     }
                 }, new Response.ErrorListener() {
-
             @Override
             public void onErrorResponse(VolleyError error) {
-                Log.e("Volley Request Error", error.getLocalizedMessage());
+                Log.e(TAG, error.getLocalizedMessage());
                 if (count == size) {
                     addProblemRequestReceiver.onFailedPhotoPosting();
                 }
             }
-
         }, photo, params, count);
 
         RequestQueueWrapper.getInstance(context).addToRequestQueue(multipartRequest);

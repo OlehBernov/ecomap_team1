@@ -14,17 +14,11 @@ public class BitmapResizer {
 
     private static final int DEGREE_90 = 90;
 
-    private Context context;
-
-    public BitmapResizer(final Context context) {
-        this.context = context;
-    }
-
-    public Bitmap resizeBitmap(final Bitmap bitmap, final int bounds) {
+    public static Bitmap resizeBitmap(final Bitmap bitmap, final int bounds, final Context context) {
         int width = bitmap.getWidth();
         int height = bitmap.getHeight();
-        int bounding = dpToPx(bounds);
-        float yScale = ((float) bounding) / height;
+        int bounding = dpToPx(bounds, context);
+        float yScale = (float) bounding / height;
 
         Matrix matrix = new Matrix();
         matrix.postScale(yScale, yScale);
@@ -32,7 +26,7 @@ public class BitmapResizer {
         return Bitmap.createBitmap(bitmap, 0, 0, width, height, matrix, true);
     }
 
-    public Bitmap scalePhoto(final String photoPath, final int bounds) {
+    public static Bitmap scalePhoto(final String photoPath, final int bounds) {
         BitmapFactory.Options bmOptions = new BitmapFactory.Options();
         bmOptions.inJustDecodeBounds = true;
         BitmapFactory.decodeFile(photoPath, bmOptions);
@@ -47,9 +41,8 @@ public class BitmapResizer {
         return BitmapFactory.decodeFile(photoPath, bmOptions);
     }
 
-    public Bitmap changePhotoOrientation(String photoPath, int bounds) {
-        BitmapResizer bitmapResizer = new BitmapResizer(context);
-        Bitmap photoBitmap = bitmapResizer.scalePhoto(photoPath, bounds);
+    public static Bitmap changePhotoOrientation(String photoPath, int bounds) {
+        Bitmap photoBitmap = BitmapResizer.scalePhoto(photoPath, bounds);
         ExifInterface exifInterface;
         try {
             exifInterface = new ExifInterface(photoPath);
@@ -70,7 +63,7 @@ public class BitmapResizer {
         }
     }
 
-    private int dpToPx(final int dp) {
+    private static int dpToPx(final int dp, final Context context) {
         float density = context.getResources().getDisplayMetrics().density;
         return Math.round((float) dp * density);
     }

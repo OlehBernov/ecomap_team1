@@ -9,7 +9,7 @@ public class JSONParser {
 
     private static final String NULL_ARGUMENT = "Argument is null";
 
-    public User parseUserInformation(final String userInformationJson)
+    public static User parseUserInformation(final String userInformationJson)
             throws JSONException {
 
         if (userInformationJson == null) {
@@ -30,7 +30,7 @@ public class JSONParser {
         return user;
     }
 
-    public User parseRegistrationInformation(final String registrationUserInformationJson,
+    public static User parseRegistrationInformation(final String registrationUserInformationJson,
                                              final String email)
             throws JSONException {
         if (registrationUserInformationJson == null) {

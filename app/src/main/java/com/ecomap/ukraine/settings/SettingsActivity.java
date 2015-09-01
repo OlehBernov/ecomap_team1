@@ -17,9 +17,9 @@ import com.ecomap.ukraine.activities.ExtraFieldNames;
 import com.ecomap.ukraine.activities.main.MainActivity;
 import com.ecomap.ukraine.data.manager.DataManager;
 
-public class Settings extends AppCompatActivity {
+public class SettingsActivity extends AppCompatActivity {
 
-    private static final String SETTINGS = "Settings";
+    private static final String SETTINGS = "SettingsActivity";
     private static final String EVERY_TIME = "Updating time <br/><font color='grey'>Every time</font>";
     private static final String ONCE_A_DAY = "Updating time <br/><font color='grey'>Once a day</font>";
     private static final String ONCE_A_WEEK = "Updating time <br/><font color='grey'>Once a week</font>";
@@ -44,11 +44,10 @@ public class Settings extends AppCompatActivity {
                 .alwaysCallSingleChoiceCallback()
                 .itemsCallbackSingleChoice(updateTime.getId(), new MaterialDialog.ListCallbackSingleChoice() {
                     @Override
-                    public boolean onSelection(MaterialDialog dialog, View view, int which,
-                                               CharSequence text) {
+                    public boolean onSelection(MaterialDialog dialog, View view1, int which, CharSequence text) {
                         updateTime = UpdateTime.values()[which];
-                        updateTimeButton.setText(Html.fromHtml(getUpdateTimeTitle(which)));
-                        saveUpdateTimeToSharedPreferences();
+                        updateTimeButton.setText(Html.fromHtml(SettingsActivity.this.getUpdateTimeTitle(which)));
+                        SettingsActivity.this.saveUpdateTimeToSharedPreferences();
                         return true;
                     }
                 })
@@ -66,11 +65,10 @@ public class Settings extends AppCompatActivity {
                 .alwaysCallSingleChoiceCallback()
                 .itemsCallbackSingleChoice(mapType.getId(), new MaterialDialog.ListCallbackSingleChoice() {
                     @Override
-                    public boolean onSelection(MaterialDialog dialog, View view, int which,
-                                               CharSequence text) {
+                    public boolean onSelection(MaterialDialog dialog, View view1, int which, CharSequence text) {
                         mapType = MapType.values()[which];
-                        mapTypeButton.setText(Html.fromHtml(getMapTypeTitle(which)));
-                        saveMapTypeToSharedPreferences();
+                        mapTypeButton.setText(Html.fromHtml(SettingsActivity.this.getMapTypeTitle(which)));
+                        SettingsActivity.this.saveMapTypeToSharedPreferences();
                         return true;
                     }
                 })
@@ -145,7 +143,7 @@ public class Settings extends AppCompatActivity {
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                onBackPressed();
+                SettingsActivity.this.onBackPressed();
             }
         });
     }

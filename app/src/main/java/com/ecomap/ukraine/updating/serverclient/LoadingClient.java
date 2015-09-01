@@ -25,6 +25,8 @@ public class LoadingClient {
      */
     private static final String ALL_PROBLEMS_URL = "http://ecomap.org/api/problems/";
 
+    protected final String TAG = getClass().getSimpleName();
+
     /**
      * Application context.
      */
@@ -58,9 +60,9 @@ public class LoadingClient {
                     public void onResponse(String response) {
                         try {
                             problemRequestReceiver.setAllProblemsRequestResult(
-                                    new JSONParser().parseBriefProblems(response));
+                                    JSONParser.parseBriefProblems(response));
                         } catch (JSONException e) {
-                            Log.e("exception", "JSONException in LoadingClient");
+                            Log.e(TAG, "JSONException in LoadingClient");
                             problemRequestReceiver.setAllProblemsRequestResult(null);
                         }
                     }
@@ -80,23 +82,24 @@ public class LoadingClient {
      * @param problemId id of concrete problem
      */
     public void getProblemDetail(final int problemId) {
-        StringRequest stringRequest = new StringRequest(Request.Method.GET, ALL_PROBLEMS_URL
-                + problemId,
+        StringRequest stringRequest = new StringRequest(
+                Request.Method.GET,
+                ALL_PROBLEMS_URL + problemId,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
                         try {
-                            Details details = new JSONParser().parseDetailedProblem(response);
+                            Details details = JSONParser.parseDetailedProblem(response);
                             problemRequestReceiver.setProblemDetailsRequestResult(details);
                         } catch (JSONException e) {
-                            Log.e("exception", "JSONException in getProblemDetail");
+                            Log.e(TAG, "JSONException in getProblemDetail");
                             problemRequestReceiver.setProblemDetailsRequestResult(null);
                         }
                     }
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Log.e("error response", "onErrorResponse in getProblemDetail");
+                Log.e(TAG, "onErrorResponse in getProblemDetail");
                 problemRequestReceiver.setProblemDetailsRequestResult(null);
             }
         });

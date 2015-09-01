@@ -30,7 +30,7 @@ import com.ecomap.ukraine.activities.Authorization.LoginScreen;
 import com.ecomap.ukraine.activities.Authorization.SignupActivity;
 import com.ecomap.ukraine.details.manager.DetailsManager;
 import com.ecomap.ukraine.search.Search;
-import com.ecomap.ukraine.settings.Settings;
+import com.ecomap.ukraine.settings.SettingsActivity;
 import com.ecomap.ukraine.activities.addProblem.ChooseProblemLocationActivity;
 import com.ecomap.ukraine.filter.FilterContract;
 import com.ecomap.ukraine.filter.FilterManager;
@@ -260,7 +260,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void openSettings(MenuItem item) {
-        Intent intent = new Intent(this, Settings.class);
+        Intent intent = new Intent(this, SettingsActivity.class);
         startActivityForResult(intent, SETTINGS_REQUEST_CODE);
         menuDrawer.closeDrawers();
     }
@@ -347,7 +347,7 @@ public class MainActivity extends AppCompatActivity {
         SharedPreferences.Editor editor = settings.edit();
         FilterState filterState = buildFiltersState();
         try {
-            editor.putString(FILTERS_STATE, new FilterStateConverter().convertToJson(filterState));
+            editor.putString(FILTERS_STATE, FilterStateConverter.convertToJson(filterState));
         } catch (JSONException e) {
             Log.e("JSONException", "onDestroy");
         }

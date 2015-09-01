@@ -10,9 +10,7 @@ import org.json.JSONException;
 import java.util.HashSet;
 import java.util.Set;
 
-/**
- * Created by Andriy on 01.08.2015.
- */
+
 public class FilterManager implements FilterListenersNotifier {
 
     private static final String FILTERS_STATE = "Filters state";
@@ -21,10 +19,14 @@ public class FilterManager implements FilterListenersNotifier {
      * Holds the Singleton global instance of FilterManager.
      */
     private static FilterManager instance;
+
+    protected final String TAG = getClass().getSimpleName();
+
     /**
      * Set of problem listeners.
      */
     public Set<FilterListener> filterListeners = new HashSet<>();
+
     /**
      * Activity which callback filter-manager
      */
@@ -83,17 +85,13 @@ public class FilterManager implements FilterListenersNotifier {
         }
     }
 
-   
-
-
     /**
      * This method use to get  filter state for filter manager
      *
      * @param filterState this filterState gets for filter manager
      */
-        public void getFilterState (final FilterState filterState) {
-            sendFilterState(filterState);
-
+    public void getFilterState(final FilterState filterState) {
+        sendFilterState(filterState);
     }
 
     /**
@@ -108,14 +106,14 @@ public class FilterManager implements FilterListenersNotifier {
         FilterState filterState;
         if (filterStateJson != null) {
             try {
-                filterState = new FilterStateConverter().convertToFilterState(filterStateJson);
+                filterState = FilterStateConverter.convertToFilterState(filterStateJson);
             } catch (JSONException e) {
                 filterState = null;
-                Log.e("JSONException", "convert filter");
+                Log.e(TAG, "convert filter");
             }
         } else {
             filterState = null;
-            Log.e("JSONException", "filter null");
+            Log.e(TAG, "filter null");
         }
         return filterState;
     }

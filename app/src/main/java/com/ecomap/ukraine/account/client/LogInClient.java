@@ -26,6 +26,8 @@ public class LogInClient {
 
     private static final String REGISTRATION_URL = "http://ecomap.org/api/register/";
 
+    protected final String TAG = getClass().getSimpleName();
+
     private Context context;
 
     private LogRequestReceiver logRequestReceiver;
@@ -53,11 +55,11 @@ public class LogInClient {
                     @Override
                     public void onResponse(String response) {
                         try {
-                            User user = new JSONParser().parseUserInformation(response);
+                            User user = JSONParser.parseUserInformation(response);
                             logRequestReceiver.setLogInRequestResult(user);
                             logRequestReceiver.putUserToPreferences(user, password);
                         } catch (JSONException e) {
-                            Log.e("exception", "JSONException in LogInUser");
+                            Log.e(TAG, "JSONException in LogInUser");
                             logRequestReceiver.setLogInRequestResult(null);
                         }
                     }
@@ -69,8 +71,7 @@ public class LogInClient {
         }) {
             @Override
             public Map<String, String> getHeaders() throws AuthFailureError {
-                Map<String, String> params = new HashMap<>();
-                return params;
+                return new HashMap<>();
             }
 
             @Override
@@ -85,26 +86,25 @@ public class LogInClient {
         RequestQueueWrapper.getInstance(context).addToRequestQueue(stringRequest);
     }
 
-
     /**
-     * @param firstname user firstname
-     * @param lastname  user surname
-     * @param email     user email
-     * @param password  acount password
+     * @param name     user name
+     * @param surname  user surname
+     * @param email    user email
+     * @param password account password
      */
 
-    public void postRegistration(final String firstname, final String lastname,
+    public void postRegistration(final String name, final String surname,
                                  final String email, final String password) {
         StringRequest stringRequest = new StringRequest(Request.Method.POST, REGISTRATION_URL,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
                         try {
-                            User user = new JSONParser().parseRegistrationInformation(response, email);
+                            User user = JSONParser.parseRegistrationInformation(response, email);
                             logRequestReceiver.setLogInRequestResult(user);
                             logRequestReceiver.putUserToPreferences(user, password);
                         } catch (JSONException e) {
-                            Log.e("exception", "JSONException in Registration");
+                            Log.e(TAG, "JSONException in Registration");
                             logRequestReceiver.setLogInRequestResult(null);
                         }
                     }
@@ -112,14 +112,14 @@ public class LogInClient {
             @Override
             public void onErrorResponse(VolleyError volleyError) {
                 logRequestReceiver.setLogInRequestResult(null);
-                Log.e("error response", "onErrorResponse in postRegistration");
+                Log.e(TAG, "onErrorResponse in postRegistration");
             }
         }) {
             @Override
             protected Map<String, String> getParams() {
                 Map<String, String> params = new HashMap<>();
-                params.put(JSONFields.FIRST_NAME, firstname);
-                params.put(JSONFields.LAST_NAME, lastname);
+                params.put(JSONFields.FIRST_NAME, name);
+                params.put(JSONFields.LAST_NAME, surname);
                 params.put(JSONFields.EMAIL, email);
                 params.put(JSONFields.PASSWORD, password);
                 return params;

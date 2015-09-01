@@ -1,5 +1,6 @@
 package com.ecomap.ukraine.search;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.RecyclerView;
@@ -17,15 +18,14 @@ import com.ecomap.ukraine.models.Types.ProblemType;
 import java.util.List;
 
 public class ProblemAdapter extends RecyclerView.Adapter<ProblemAdapter.ViewHolder> {
-    private static final String PROBLEM_TAG = "Problem tag";
 
     private List<Problem> dataSet;
+    private Search search;
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
         private TextView textView;
         private ImageView imageView;
         private View view;
-        private Problem problem;
 
         public ViewHolder(View view) {
             super(view);
@@ -34,13 +34,13 @@ public class ProblemAdapter extends RecyclerView.Adapter<ProblemAdapter.ViewHold
             imageView = (ImageView)view.findViewById(R.id.search_item_type);
         }
 
-        public void setProblem(final Problem problem) {
-            this.problem = problem;
+        public void setProblem(final Problem problem, final Search search) {
             textView.setText(problem.getTitle());
             imageView.setImageResource(getIconRes(problem.getProblemType()));
             view.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    search.showProblemInformation(problem);
                 }
             });
         }
@@ -75,8 +75,9 @@ public class ProblemAdapter extends RecyclerView.Adapter<ProblemAdapter.ViewHold
 
     }
 
-    public ProblemAdapter(List<Problem> dataSet) {
+    public ProblemAdapter(List<Problem> dataSet, Search search) {
         this.dataSet = dataSet;
+        this.search = search;
     }
 
     @Override
@@ -90,7 +91,7 @@ public class ProblemAdapter extends RecyclerView.Adapter<ProblemAdapter.ViewHold
     @Override
     public void onBindViewHolder(ViewHolder viewHolder, int index) {
         Problem problemPlate = dataSet.get(index);
-        viewHolder.setProblem(problemPlate);
+        viewHolder.setProblem(problemPlate, search);
     }
 
     @Override

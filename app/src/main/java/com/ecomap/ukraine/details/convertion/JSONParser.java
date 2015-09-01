@@ -1,17 +1,14 @@
 package com.ecomap.ukraine.details.convertion;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-/**
- * Created by Andriy on 29.08.2015.
- */
+
 public class JSONParser {
 
-    public JSONObject generateCommentObj  (final String userID,
-                                          final String userName, final String userSurname,
-                                          final String content) throws JSONException {
+    public static JSONObject generateCommentObj (final String userID,
+                                                 final String userName, final String userSurname,
+                                                 final String content) throws JSONException {
         JSONObject dataJson = new JSONObject();
         JSONObject resultJson = new JSONObject();
 

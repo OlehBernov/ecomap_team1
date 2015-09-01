@@ -3,12 +3,12 @@ package com.ecomap.ukraine.validation;
 
 class ValidationRequirements {
 
-    public static int MIN_NAME_LENGTH = 3;
-    public static int MAX_NAME_LENGTH = 45;
-    public static int MIN_SURNAME_LENGTH = 3;
-    public static int MAX_SURNAME_LENGTH = 45;
-    public static int MIN_PASSWORD_LENGTH = 3;
-    public static int MAX_PASSWORD_LENGTH = 45;
+    public static final int MIN_NAME_LENGTH = 3;
+    public static final int MAX_NAME_LENGTH = 45;
+    public static final int MIN_SURNAME_LENGTH = 3;
+    public static final int MAX_SURNAME_LENGTH = 45;
+    public static final int MIN_PASSWORD_LENGTH = 3;
+    public static final int MAX_PASSWORD_LENGTH = 45;
 
     public static final String NAME_FIELD_EMPTY = "Please fill out name field";
 

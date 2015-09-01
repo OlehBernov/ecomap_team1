@@ -39,10 +39,9 @@ public class Problem implements ClusterItem, Serializable {
      */
     private String date;
 
-    /**
-     * position of the problem
-     */
-    private LatLng position;
+    private double latitude;
+
+    private double longitude;
 
     /**
      * Constructor of class
@@ -63,7 +62,8 @@ public class Problem implements ClusterItem, Serializable {
         this.problemType = problemType;
         this.title = title;
         this.date = date;
-        this.position = new LatLng(latitude, longitude);
+        this.latitude = latitude;
+        this.longitude = longitude;
     }
 
     /**
@@ -106,7 +106,15 @@ public class Problem implements ClusterItem, Serializable {
      */
     @Override
     public LatLng getPosition() {
-        return position;
+        return new LatLng(latitude, longitude);
+    }
+
+    public double getLatitude() {
+        return latitude;
+    }
+
+    public double getLongitude() {
+        return longitude;
     }
 
 }

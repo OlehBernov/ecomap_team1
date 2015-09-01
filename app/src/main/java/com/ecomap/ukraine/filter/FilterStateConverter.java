@@ -18,7 +18,7 @@ public class FilterStateConverter {
 
     private static final String DATE_TEMPLATE = "dd-MM-yyyy";
 
-    public String convertToJson(final FilterState filterState) throws JSONException {
+    public static String convertToJson(final FilterState filterState) throws JSONException {
 
         JSONObject filterStateJson = new JSONObject();
         filterStateJson.put(FilterContract.FOREST_DESTRUCTION,
@@ -53,7 +53,7 @@ public class FilterStateConverter {
         return filterStateJson.toString();
     }
 
-    public FilterState convertToFilterState(final String filterStateJson)
+    public static FilterState convertToFilterState(final String filterStateJson)
             throws JSONException {
 
         JSONObject filterStateJsonObject = new JSONObject(filterStateJson);

@@ -113,11 +113,13 @@
                                 android:layout_height="match_parent"
                                 android:layout_gravity="right">
 
-                                <include
-                                    android:id="@+id/details_layout"
-                                    layout="@layout/details_layout"
+                                <com.ecomap.ukraine.activities.problemDetails.DetailsContent
+                                    xmlns:android="http://schemas.android.com/apk/res/android"
+                                    android:id="@+id/panel_details_content"
                                     android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"/>
+                                    android:layout_height="wrap_content">
+
+                                </com.ecomap.ukraine.activities.problemDetails.DetailsContent>
 
                             </ScrollView>
 

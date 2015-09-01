@@ -17,9 +17,8 @@ public class UserPhotoFullScreen extends AppCompatActivity {
         setContentView(R.layout.activity_user_photo_full_screen);
         ImageView userPhoto = (ImageView) findViewById(R.id.user_photo);
         String photoPath = getIntent().getStringExtra(ExtraFieldNames.PHOTO);
-        BitmapResizer bitmapResizer = new BitmapResizer(getApplicationContext());
         int screenWidth = getResources().getDisplayMetrics().widthPixels;
-        Bitmap photoBitmap = bitmapResizer.changePhotoOrientation(photoPath, screenWidth);
+        Bitmap photoBitmap = BitmapResizer.changePhotoOrientation(photoPath, screenWidth);
         userPhoto.setImageBitmap(photoBitmap);
     }
 

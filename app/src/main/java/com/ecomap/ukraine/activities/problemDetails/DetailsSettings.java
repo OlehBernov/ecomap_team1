@@ -185,7 +185,7 @@ public class DetailsSettings {
                 fab.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        new Refresher().setRefreshTask(activity, problem);
+                        Refresher.setRefreshTask(activity, problem);
                     }
                 });
             }

@@ -8,7 +8,7 @@ import com.ecomap.ukraine.R;
 
 public class Validator {
 
-    public boolean registrationValidation(final EditText name, final EditText surname,
+    public static boolean registrationValidation(final EditText name, final EditText surname,
                                           final EditText email, final EditText password,
                                           final EditText passwordConfirmation) {
         return nameValidation(name)
@@ -18,11 +18,24 @@ public class Validator {
                & passwordConfirmation(password, passwordConfirmation);
     }
 
-    public boolean logInValid(final EditText email, final EditText password) {
+    public static boolean logInValid(final EditText email, final EditText password) {
         return emailValidation(email) & passwordValidation(password);
     }
 
-    private boolean nameValidation(final EditText nameField) {
+    public static boolean addProblemValidation(final EditText problemTitle) {
+        if(problemTitle == null) {
+            return false;
+        }
+        String title = problemTitle.getText().toString();
+        if (title.isEmpty()) {
+            problemTitle.setError(ValidationRequirements.Title_FIELD_EMPTY);
+            return false;
+        }
+
+        return true;
+    }
+
+    private static boolean nameValidation(final EditText nameField) {
         String name = nameField.getText().toString();
         if (name.isEmpty()) {
             nameField.setError(ValidationRequirements.NAME_FIELD_EMPTY);
@@ -37,7 +50,7 @@ public class Validator {
         return true;
     }
 
-    private boolean surnameValidation(final EditText surnameField) {
+    private static boolean surnameValidation(final EditText surnameField) {
         String surname = surnameField.getText().toString();
         if (surname.isEmpty()) {
             surnameField.setError(ValidationRequirements.SURNAME_FIELD_EMPTY);
@@ -52,7 +65,7 @@ public class Validator {
         return true;
     }
 
-    private boolean emailValidation(final EditText emailField) {
+    private static boolean emailValidation(final EditText emailField) {
         String email = emailField.getText().toString();
         if (email.isEmpty()) {
             emailField.setError(ValidationRequirements.EMAIL_FIELD_EMPTY);
@@ -64,7 +77,7 @@ public class Validator {
         return true;
     }
 
-    private boolean passwordValidation(final EditText passwordField) {
+    private static boolean passwordValidation(final EditText passwordField) {
         String password = passwordField.getText().toString();
         if (password.isEmpty()) {
             passwordField.setError(ValidationRequirements.PASSWORD_FIELD_EMPTY);
@@ -79,7 +92,7 @@ public class Validator {
         return true;
     }
 
-    private boolean passwordConfirmation(final EditText passwordField,
+    private static boolean passwordConfirmation(final EditText passwordField,
                                          final EditText passwordConfirmationField) {
         String passwordConfirmation = passwordConfirmationField.getText().toString();
         String password = passwordField.getText().toString();
@@ -91,20 +104,6 @@ public class Validator {
             passwordConfirmationField.setHint(R.string.confirm_password);
             return false;
         }
-        return true;
-    }
-
-    public boolean addProblemValidation(final EditText problemTitle) {
-
-        if(problemTitle == null) {
-            return false;
-        }
-        String title = problemTitle.getText().toString();
-        if (title.isEmpty()) {
-            problemTitle.setError(ValidationRequirements.Title_FIELD_EMPTY);
-            return false;
-        }
-
         return true;
     }
 

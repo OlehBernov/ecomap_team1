@@ -48,14 +48,14 @@ public class MultipartRequest extends Request<String> {
         if (file != null) {
             this.file = file;
         }
-        this.counter = count;
+        counter = count;
         this.params = params;
         buildMultipartEntity();
     }
 
     @Override
     public Map<String, String> getHeaders() throws AuthFailureError {
-        return params != null ? params : super.getHeaders();
+        return (params != null) ? params : super.getHeaders();
     }
 
     @Override

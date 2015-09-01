@@ -1,12 +1,12 @@
 package com.ecomap.ukraine.activities.problemDetails;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.support.v4.content.res.ResourcesCompat;
+import android.util.AttributeSet;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -37,7 +37,7 @@ import com.squareup.picasso.Transformation;
 
 import java.util.List;
 
-public class DetailsContent implements DetailsListener {
+public class DetailsContent extends LinearLayout implements DetailsListener {
 
     private static final String RESOLVED = "resolved";
     private static final String UNSOLVED = "unsolved";
@@ -45,12 +45,10 @@ public class DetailsContent implements DetailsListener {
     private static final String POSITION = "position";
     private static final String WRONG_TEXT = "null";
     private static final String PHOTOS_TITLE = "Photo:";
-
     private static final int STAR_NUMBER = 5;
-
     private static int[] STARS_ID = {R.id.star1, R.id.star2, R.id.star3, R.id.star4, R.id.star5};
+
     private Problem problem;
-    private Activity activity;
     private ImageView markerIcon;
     private TextView problemTitle;
     private TextView problemStatus;
@@ -67,36 +65,38 @@ public class DetailsContent implements DetailsListener {
     private DetailsManager detailsManager;
     private View view;
     private View detailsContentView;
-    private View detailsBaseInfoView;
-
     private LayoutInflater layoutInflater;
 
-    public DetailsContent(LinearLayout rootView, final Problem problem, final Activity activity,
-                          DetailsSettings detailsSettings) {
+    public DetailsContent(Context context) {
+        this(context, null);
+    }
 
+    public DetailsContent(Context context, AttributeSet attrs) {
+        this(context, attrs, 0);
+    }
+
+    public DetailsContent(Context context, AttributeSet attrs, int defStyleAttr) {
+        super(context, attrs, defStyleAttr);
+        this.context = context;
+        inflate(context, R.layout.details_base_info, this);
+    }
+
+    public void setProblemContent(final Problem problem, final DetailsSettings detailsSettings) {
         this.problem = problem;
-        this.activity = activity;
 
-        layoutInflater = activity.getLayoutInflater();
+        layoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         detailsContentView = layoutInflater.inflate(R.layout.details_content_layout, null, false);
-        detailsBaseInfoView = layoutInflater.inflate(R.layout.details_base_info, null, false);
 
-        context = activity.getApplicationContext();
         detailsManager = DetailsManager.getInstance(context);
         detailsManager.removeAllDetailsListener();
         detailsManager.registerDetailsListener(this);
 
-        markerIcon = (ImageView) detailsBaseInfoView.findViewById(R.id.markerIcon);
-        problemTitle = (TextView) detailsBaseInfoView.findViewById(R.id.title_of_problem);
-        problemStatus = (TextView) detailsBaseInfoView.findViewById(R.id.status_of_problem);
-        userInformation = (TextView) detailsBaseInfoView.findViewById(R.id.user);
-        voteIcon = (ImageView) detailsBaseInfoView.findViewById(R.id.like);
-        votesNumber = (TextView) detailsBaseInfoView.findViewById(R.id.number_of_likes);
-
-        if (isViewHaveChild(rootView)) {
-            rootView.removeAllViews();
-        }
-        rootView.addView(detailsBaseInfoView);
+        markerIcon = (ImageView) findViewById(R.id.markerIcon);
+        problemTitle = (TextView) findViewById(R.id.title_of_problem);
+        problemStatus = (TextView) findViewById(R.id.status_of_problem);
+        userInformation = (TextView) findViewById(R.id.user);
+        voteIcon = (ImageView) findViewById(R.id.like);
+        votesNumber = (TextView) findViewById(R.id.number_of_likes);
 
         activitiesLayout = (TableLayout) detailsContentView.findViewById(R.id.activities);
         addComment = (EditText) detailsContentView.findViewById(R.id.add_comment);
@@ -111,7 +111,7 @@ public class DetailsContent implements DetailsListener {
         }
 
         voteIcon.setEnabled(true);
-        voteIcon.setOnClickListener(new View.OnClickListener() {
+        voteIcon.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
                 User user = User.getInstance();
@@ -124,7 +124,7 @@ public class DetailsContent implements DetailsListener {
         });
 
         Button sendComment = (Button) detailsContentView.findViewById(R.id.send_comment);
-        sendComment.setOnClickListener(new View.OnClickListener() {
+        sendComment.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
                 User user = User.getInstance();
@@ -146,13 +146,13 @@ public class DetailsContent implements DetailsListener {
 
     @Override
     public void onVoteAdded() {
-        new Refresher().setRefreshTask(activity, problem);
+        Refresher.setRefreshTask(context, problem);
         voteIcon.setEnabled(false);
     }
 
     @Override
     public void onCommentAdded() {
-        new Refresher().setRefreshTask(activity, problem);
+        Refresher.setRefreshTask(context, problem);
         commentText.setText("");
     }
 
@@ -161,7 +161,7 @@ public class DetailsContent implements DetailsListener {
             setErrorScreen();
             return;
         }
-
+        clearDetailsPanel();
         view = detailsContentView;
         putDetailsOnPanel(details);
 
@@ -185,7 +185,7 @@ public class DetailsContent implements DetailsListener {
     }
 
     public void showDetailsView() {
-        LinearLayout detailsView = (LinearLayout) detailsBaseInfoView.findViewById(R.id.details_content_root);
+        LinearLayout detailsView = (LinearLayout) findViewById(R.id.details_content_root);
         if (isViewHaveChild(detailsView)) {
             detailsView.removeAllViews();
         }
@@ -197,7 +197,7 @@ public class DetailsContent implements DetailsListener {
         showDetailsView();
     }
 
-    private boolean isCreationActivity(ProblemActivity problemActivity) {
+    private boolean isCreationActivity(final ProblemActivity problemActivity) {
         return (problemActivity.getActivityType() == ActivityType.CREATE)
                 && (problemActivity.getProblemId() == problem.getProblemId());
     }
@@ -207,8 +207,16 @@ public class DetailsContent implements DetailsListener {
      */
     private void clearDetailsPanel() {
         for (int i = 0; i < STAR_NUMBER; i++) {
-            ImageView star = (ImageView) detailsBaseInfoView.findViewById(STARS_ID[i]);
+            ImageView star = (ImageView) findViewById(STARS_ID[i]);
             star.setBackgroundResource(R.drawable.ic_star_border_black_24dp);
+        }
+        descriptionFiled.setText("");
+        proposalFiled.setText("");
+        if (isViewHaveChild(photoContainer)) {
+            photoContainer.removeAllViews();
+        }
+        if (isViewHaveChild(activitiesLayout)) {
+            activitiesLayout.removeAllViews();
         }
     }
 
@@ -228,7 +236,7 @@ public class DetailsContent implements DetailsListener {
         return userName + " " + day + "/" + month + "/" + year + " " + hour + ":" + minutes;
     }
 
-    private void addActivitiesInfo(final com.ecomap.ukraine.models.Details details) {
+    private void addActivitiesInfo(final Details details) {
         List<ProblemActivity> problemActivities = details.getProblemActivities();
         if (problemActivities == null) {
             return;
@@ -341,7 +349,7 @@ public class DetailsContent implements DetailsListener {
     private void putDetailsOnPanel(final Details details) {
         votesNumber.setText(String.valueOf(details.getVotes()));
         for (int i = 0; i < details.getSeverity(); i++) {
-            ImageView star = (ImageView) detailsBaseInfoView.findViewById(STARS_ID[i]);
+            ImageView star = (ImageView) findViewById(STARS_ID[i]);
             star.setBackgroundResource(R.drawable.ic_star_black_48dp);
         }
         String description = details.getContent();
@@ -354,7 +362,7 @@ public class DetailsContent implements DetailsListener {
         }
     }
 
-    private boolean isTextValid(String text) {
+    private boolean isTextValid(final String text) {
         return !text.equals(WRONG_TEXT);
     }
 
@@ -373,7 +381,7 @@ public class DetailsContent implements DetailsListener {
      *
      * @param details details of problem
      */
-    private void addPhotos(final com.ecomap.ukraine.models.Details details) {
+    private void addPhotos(final Details details) {
         final List<Photo> photos = details.getPhotos();
         if (photos == null) {
             hidePhotosBlock();
@@ -390,10 +398,10 @@ public class DetailsContent implements DetailsListener {
             photoPreview.addHorizontalBlock(photoView);
             photoView.setId(position++);
             loadPhotoToView(photo, photoView);
-            photoView.setOnClickListener(new View.OnClickListener() {
+            photoView.setOnClickListener(new OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    openPhotoSlidePager(v.getId(), photos);
+                    DetailsContent.this.openPhotoSlidePager(v.getId(), photos);
                 }
             });
         }
@@ -408,9 +416,8 @@ public class DetailsContent implements DetailsListener {
         Transformation transformation = new Transformation() {
             @Override
             public Bitmap transform(Bitmap source) {
-                BitmapResizer bitmapResizer = new BitmapResizer(context);
                 int photoSize = (int) context.getResources().getDimension(R.dimen.small_photo_size);
-                Bitmap resizedBitmap = bitmapResizer.resizeBitmap(source, photoSize);
+                Bitmap resizedBitmap = BitmapResizer.resizeBitmap(source, photoSize, context);
                 if (resizedBitmap != source) {
                     source.recycle();
                 }
@@ -431,13 +438,13 @@ public class DetailsContent implements DetailsListener {
                 .into(photoView);
     }
 
-    private boolean isViewHaveChild(ViewGroup view) {
+    private boolean isViewHaveChild(final ViewGroup view) {
         return (view != null) && (view.getChildCount() > 0);
     }
 
     private void openPhotoSlidePager(final int position, final List<Photo> photos) {
         ProblemPhotoSlidePager.setContent(photos);
-        Intent intent = new Intent(activity, ProblemPhotoSlidePager.class);
+        Intent intent = new Intent(context, ProblemPhotoSlidePager.class);
         intent.putExtra(POSITION, position);
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         context.startActivity(intent);
@@ -449,7 +456,7 @@ public class DetailsContent implements DetailsListener {
         photoContainer.removeAllViews();
     }
 
-    private boolean isProblemLikedBefore(ProblemActivity problemActivity, User user) {
+    private boolean isProblemLikedBefore(final ProblemActivity problemActivity, final User user) {
         return (problemActivity.getUserId() == user.getId())
                 && (problemActivity.getActivityType().getId() == ActivityType.LIKE.getId());
     }

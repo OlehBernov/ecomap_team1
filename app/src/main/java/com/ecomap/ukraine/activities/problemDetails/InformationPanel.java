@@ -1,8 +1,6 @@
 package com.ecomap.ukraine.activities.problemDetails;
 
 import android.app.Activity;
-import android.support.v4.app.FragmentManager;
-import android.widget.LinearLayout;
 
 import com.ecomap.ukraine.R;
 import com.ecomap.ukraine.models.Details;
@@ -10,18 +8,32 @@ import com.ecomap.ukraine.models.Problem;
 
 public class InformationPanel {
 
+    private static InformationPanel instance;
+
     private DetailsContent detailsContent;
+
+    private Activity activity;
 
     /**
      * Constructor
      *
      * @param activity callback activity
-     * @param problem  clicked problem
      */
-    public InformationPanel(final Activity activity, final Problem problem) {
-        LinearLayout rootView = (LinearLayout) activity.findViewById(R.id.details_linear_layout_root);
+    private InformationPanel(final Activity activity) {
+        detailsContent = (DetailsContent) activity.findViewById(R.id.panel_details_content);
+        this.activity = activity;
+    }
+
+    public static InformationPanel getInstance(Activity activity) {
+        if (instance == null) {
+            instance = new InformationPanel(activity);
+        }
+        return instance;
+    }
+
+    public void setBaseProblem(final Problem problem) {
         DetailsSettings detailsSettings = new DetailsSettings(activity, problem);
-        detailsContent = new DetailsContent(rootView, problem, activity, detailsSettings);
+        detailsContent.setProblemContent(problem, detailsSettings);
     }
 
     public void setProblemDetails(Details details) {

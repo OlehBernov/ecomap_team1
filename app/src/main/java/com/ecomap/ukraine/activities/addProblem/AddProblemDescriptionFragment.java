@@ -85,12 +85,10 @@ public class AddProblemDescriptionFragment extends Fragment implements AddProble
      * Validation of data of new problem
      */
     public void postProblemValidation () {
-        boolean isProblemValid;
-        isProblemValid = new Validator().addProblemValidation(problemTitle);
+        boolean isProblemValid = Validator.addProblemValidation(problemTitle);
         if (!isProblemValid) {
-            Toast.makeText(activity
-                           .getApplicationContext(), INPUT_PROBLEM_DATA, Toast.LENGTH_LONG)
-                           .show();
+            Toast.makeText(activity.getApplicationContext(), INPUT_PROBLEM_DATA, Toast.LENGTH_LONG)
+                 .show();
             return;
         }
         setChooseNameDialog();
@@ -123,10 +121,9 @@ public class AddProblemDescriptionFragment extends Fragment implements AddProble
 
         ButterKnife.inject(this, v);
 
-        Keyboard keyboard = new Keyboard(activity);
-        keyboard.setOnFocusChangeListener(problemTitle);
-        keyboard.setOnFocusChangeListener(problemDescription);
-        keyboard.setOnFocusChangeListener(problemSolution);
+        Keyboard.setOnFocusChangeListener(problemTitle);
+        Keyboard.setOnFocusChangeListener(problemDescription);
+        Keyboard.setOnFocusChangeListener(problemSolution);
 
         return v;
     }
@@ -139,7 +136,6 @@ public class AddProblemDescriptionFragment extends Fragment implements AddProble
         super.onDestroy();
         addProblemManager.removeAddProblemListener(this);
     }
-
 
     /**
      * Show progres dialog when problem posting
@@ -202,7 +198,6 @@ public class AddProblemDescriptionFragment extends Fragment implements AddProble
         startActivity(intent);
         activity.finish();
         dataManager.removeProblemListener(this);
-
     }
 
     /**

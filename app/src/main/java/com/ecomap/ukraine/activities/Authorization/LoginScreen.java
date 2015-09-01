@@ -1,6 +1,5 @@
 package com.ecomap.ukraine.activities.Authorization;
 
-import android.content.ComponentName;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -41,27 +40,25 @@ public class LoginScreen extends AppCompatActivity implements LogInListener {
     private static final String LOGIN_MESSAGE = "Please wait...";
     private static final String LOGIN_TITLE = "Log in";
     private static final String FAILE_TITLE = "Log in failed.";
-    private final static String SIGN_UP = "Sign up";
-    private final static String CANCEL = "Cancel";
+    private static final String SIGN_UP = "Sign up";
+    private static final String CANCEL = "Cancel";
+
     protected final String TAG = getClass().getSimpleName();
-    @InjectView(R.id.input_email_log)
-    EditText emailText;
-    @InjectView(R.id.input_password_log)
-    EditText passwordText;
-    @InjectView(R.id.btn_log_in)
-    Button logInButton;
+
+    @InjectView(R.id.input_email_log) EditText emailText;
+    @InjectView(R.id.input_password_log) EditText passwordText;
+    @InjectView(R.id.btn_log_in) Button logInButton;
+
     private AccountManager accountManager;
     private CallbackManager callbackManager;
     private MaterialDialog logInProgress;
 
     public void login() {
-        boolean isLogInValid;
-        isLogInValid = new Validator().logInValid(emailText, passwordText);
-        if (!isLogInValid) {
+        if (!Validator.logInValid(emailText, passwordText)) {
             return;
         }
-        logInButton.setEnabled(false);
 
+        logInButton.setEnabled(false);
         logInProgress = new MaterialDialog.Builder(this)
                 .title(LOGIN_TITLE)
                 .content(LOGIN_MESSAGE)
@@ -121,14 +118,13 @@ public class LoginScreen extends AppCompatActivity implements LogInListener {
         emailText.setText(sharedPreferences.getString(ExtraFieldNames.LOGIN, ""));
         passwordText.setText(sharedPreferences.getString(ExtraFieldNames.PASSWORD, ""));
 
-        Keyboard keyboard = new Keyboard(this);
-        keyboard.setOnFocusChangeListener(emailText);
-        keyboard.setOnFocusChangeListener(passwordText);
+        Keyboard.setOnFocusChangeListener(emailText);
+        Keyboard.setOnFocusChangeListener(passwordText);
 
         logInButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                login();
+                LoginScreen.this.login();
             }
         });
 
@@ -157,7 +153,7 @@ public class LoginScreen extends AppCompatActivity implements LogInListener {
                 new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        openMainActivity();
+                        LoginScreen.this.openMainActivity();
                     }
                 }
         );
@@ -168,7 +164,7 @@ public class LoginScreen extends AppCompatActivity implements LogInListener {
                     @Override
                     public void onClick(View v) {
                         Intent signUpIntent = new Intent(LoginScreen.this, SignupActivity.class);
-                        startActivityForResult(signUpIntent, 1);
+                        LoginScreen.this.startActivityForResult(signUpIntent, 1);
                     }
                 }
         );

@@ -57,7 +57,9 @@ public class AddNewProblemDecriptionActivity extends AppCompatActivity {
     private static final String USER_PHOTOS = "Number of photos";
     private static final String DESCRIPTION = "Description";
     private static final String USER = "User";
+
     protected final String TAG = getClass().getSimpleName();
+
     private Uri currentPhotoUri;
     private List<Uri> userPhotos;
     private TableLayout photoDescriptionLayout;
@@ -69,11 +71,10 @@ public class AddNewProblemDecriptionActivity extends AppCompatActivity {
         if (userPhotos == null) {
             return null;
         }
-        BitmapResizer bitmapResizer = new BitmapResizer(getApplicationContext());
         int userPhotoSize = (int) getResources().getDimension(R.dimen.edit_text_add_photo);
         for (Uri userPhoto : userPhotos) {
             String userPhotoPath = userPhoto.getPath();
-            photoBitmaps.add(bitmapResizer.scalePhoto(userPhotoPath, userPhotoSize));
+            photoBitmaps.add(BitmapResizer.scalePhoto(userPhotoPath, userPhotoSize));
         }
         return photoBitmaps;
     }
@@ -155,7 +156,7 @@ public class AddNewProblemDecriptionActivity extends AppCompatActivity {
         tabs.setCustomTabColorizer(new SlidingTabLayout.TabColorizer() {
             @Override
             public int getIndicatorColor(int position) {
-                return getResources().getColor(R.color.tabsScrollColor);
+                return AddNewProblemDecriptionActivity.this.getResources().getColor(R.color.tabsScrollColor);
             }
         });
 
@@ -251,7 +252,7 @@ public class AddNewProblemDecriptionActivity extends AppCompatActivity {
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                onBackPressed();
+                AddNewProblemDecriptionActivity.this.onBackPressed();
             }
         });
     }
@@ -327,8 +328,7 @@ public class AddNewProblemDecriptionActivity extends AppCompatActivity {
                 (int) getResources().getDimension(R.dimen.description_bottom_padding)
         );
 
-        Keyboard keyboard = new Keyboard(this);
-        keyboard.setOnFocusChangeListener(photoDescription);
+        Keyboard.setOnFocusChangeListener(photoDescription);
 
         if (!descriptions.get(id).equals("")) {
             photoDescription.setText(descriptions.get(id));
@@ -347,10 +347,8 @@ public class AddNewProblemDecriptionActivity extends AppCompatActivity {
     }
 
     private ImageView buildUserPhoto(final String photoPath) {
-        BitmapResizer bitmapResizer = new BitmapResizer(getApplicationContext());
         int photoSize = (int) getResources().getDimension(R.dimen.edit_text_add_photo);
-
-        Bitmap photoBitmap = bitmapResizer.changePhotoOrientation(photoPath, photoSize);
+        Bitmap photoBitmap = BitmapResizer.changePhotoOrientation(photoPath, photoSize);
         TableRow.LayoutParams imageParams =
                 new TableRow.LayoutParams(photoBitmap.getWidth(),
                         photoBitmap.getHeight());
@@ -360,7 +358,7 @@ public class AddNewProblemDecriptionActivity extends AppCompatActivity {
         photoView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                showFullSizePhoto(photoPath);
+                AddNewProblemDecriptionActivity.this.showFullSizePhoto(photoPath);
             }
         });
 
@@ -402,7 +400,7 @@ public class AddNewProblemDecriptionActivity extends AppCompatActivity {
         deleteButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                deleteBlock(v.getId());
+                AddNewProblemDecriptionActivity.this.deleteBlock(v.getId());
             }
         });
     }

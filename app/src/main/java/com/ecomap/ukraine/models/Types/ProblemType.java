@@ -11,7 +11,6 @@ public enum ProblemType {
     POACHING(6),
     OTHER(7);
 
-
     private int id;
 
     ProblemType(int id) {

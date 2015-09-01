@@ -13,15 +13,13 @@ import org.json.JSONObject;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
-/**
- * Created by Andriy on 31.08.2015.
- */
-public class PostCommentTask extends AsyncTask<JSONObject, Void, Void> {
+public class PostCommentTask extends AsyncTask<JSONObject, Void, Boolean> {
 
     private static final String POST_COMMENT_URL = "http://ecomap.org/api/comment/";
 
-    private  int problemID;
-    private Boolean onResponse = false;
+    protected final String TAG = getClass().getSimpleName();
+
+    private int problemID;
     private Context context;
     private DetailsRequestReceiver detailsRequestReceiver;
 
@@ -30,14 +28,13 @@ public class PostCommentTask extends AsyncTask<JSONObject, Void, Void> {
         this.problemID = problemID;
         this.context = context;
         this.detailsRequestReceiver = detailsRequestReceiver;
-
     }
 
     @Override
-    protected Void doInBackground(JSONObject ... request) {
+    protected Boolean doInBackground(JSONObject ... request) {
         URL url;
         HttpURLConnection connection;
-
+        boolean result = false;
         try {
             url = new URL(POST_COMMENT_URL + problemID);
             connection = (HttpURLConnection) url.openConnection();
@@ -49,25 +46,25 @@ public class PostCommentTask extends AsyncTask<JSONObject, Void, Void> {
             connection.getOutputStream().write(request[0].toString().getBytes("UTF-8"));
 
             if (connection.getResponseCode() == HttpURLConnection.HTTP_OK) {
-                onResponse = true;
+                result = true;
                 Toast.makeText(context,
                         R.string.success_post_comment, Toast.LENGTH_LONG).show();
             } else {
-                Log.e("error response", "onErrorResponse in postComment");
+                Log.e(TAG, "onErrorResponse in postComment");
                 Toast.makeText(context,
                         R.string.error_of_connection, Toast.LENGTH_LONG).show();
             }
             connection.disconnect();
-            return null;
+            return result;
         } catch (Exception e) {
-           Log.e("exception", "Exception in postComment");
+           Log.e(TAG, "Exception in postComment");
        }
-        return null;
+        return result;
     }
 
     @Override
-    protected void onPostExecute(Void result) {
-        if(onResponse) {
+    protected void onPostExecute(Boolean result) {
+        if(result) {
             detailsRequestReceiver.onCommentAdded();
         }
     }

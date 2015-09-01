@@ -36,7 +36,7 @@ public class JSONParser {
      * @return List of Problem objects with brief information about problems.
      * @throws JSONException if argument do not correct.
      */
-    public List<Problem> parseBriefProblems(final String briefProblemsJson)
+    public static List<Problem> parseBriefProblems(final String briefProblemsJson)
             throws JSONException {
 
         if (briefProblemsJson == null) {
@@ -64,7 +64,7 @@ public class JSONParser {
      * concrete problem.
      * @throws JSONException if argument do not correct.
      */
-    public Details parseDetailedProblem(final String detailedProblemJson)
+    public static Details parseDetailedProblem(final String detailedProblemJson)
             throws JSONException {
 
         if (detailedProblemJson == null) {
@@ -108,7 +108,7 @@ public class JSONParser {
      * concrete problem.
      * @throws JSONException if argument do not correct.
      */
-    private Problem getBasicDescription(final JSONObject problemJsonObject)
+    private static Problem getBasicDescription(final JSONObject problemJsonObject)
             throws JSONException {
         Problem problem;
 
@@ -137,7 +137,7 @@ public class JSONParser {
      * @return List with ProblemActivity objects.
      * @throws JSONException if argument do not correct.
      */
-    private List<ProblemActivity> getProblemActivities(final JSONArray problemActivitiesArray)
+    private static List<ProblemActivity> getProblemActivities(final JSONArray problemActivitiesArray)
             throws JSONException {
 
         List<ProblemActivity> problemActivities = new ArrayList<>();
@@ -181,7 +181,7 @@ public class JSONParser {
      * @return List of Photo objects.
      * @throws JSONException if argument do not correct.
      */
-    private List<Photo> getPhotos(final JSONArray photosArray)
+    private static List<Photo> getPhotos(final JSONArray photosArray)
             throws JSONException {
 
         List<Photo> photos = new ArrayList<>();

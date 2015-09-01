@@ -2,8 +2,6 @@ package com.ecomap.ukraine.updating.convertion;
 
 /**
  * Field names in JSON, which comes from the server.
- *
- * @author Kyrychenko Oleksandr
  */
 public class JSONFields {
 
@@ -43,9 +41,9 @@ public class JSONFields {
     public static final String LATITUDE = "Latitude";
 
     /**
-     * Longtitude of problem localization.
+     * Longitude of problem localization.
      */
-    public static final String LONGITUDE = "Longtitude";
+    public static final String LONGITUDE = "Longitude";
 
     /**
      * Description of the problem.
@@ -71,7 +69,6 @@ public class JSONFields {
      * Votes of problem.
      */
     public static final String VOTES = "Votes";
-
 
     /**
      * Problem activity type id.

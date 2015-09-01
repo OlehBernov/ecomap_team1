@@ -13,7 +13,6 @@ import java.util.Set;
 public class AccountManager implements LogInListenerNotifier,
                                        LogRequestReceiver {
 
-
     private static AccountManager instance;
     private Set<LogInListener> logInListeners = new HashSet<>();
     private LogInClient logInClient;
@@ -69,9 +68,9 @@ public class AccountManager implements LogInListenerNotifier,
         logInClient.postLogIn(password, login);
     }
 
-    public void registerUser(final String firstname, final String lastname,
+    public void registerUser(final String name, final String surname,
                              final String email, final String password) {
-        logInClient.postRegistration(firstname, lastname, email, password);
+        logInClient.postRegistration(name, surname, email, password);
     }
 
     public static void getUserFromPreference () {

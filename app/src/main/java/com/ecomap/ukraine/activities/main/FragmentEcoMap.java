@@ -57,13 +57,14 @@ public class FragmentEcoMap extends android.support.v4.app.Fragment
     private static final String LATITUDE = "latitude";
     private static final String LONGITUDE = "longitude";
     private static final String ZOOM = "zoom";
+
     private static List<Problem> problems;
+    private static ClusterManager<Problem> clusterManager;
 
     private MapView mapView;
     private GoogleMap googleMap;
     private DataManager dataManager;
     private int mapType;
-    private static ClusterManager<Problem> clusterManager;
 
     /**
      * Filter dataManager instance
@@ -91,7 +92,7 @@ public class FragmentEcoMap extends android.support.v4.app.Fragment
         if (filterState == null) {
             filterState = filterManager.getFilterStateFromPreference();
         }
-            setupClusterManager(filterState);
+        setupClusterManager(filterState);
     }
 
     /**
@@ -159,8 +160,6 @@ public class FragmentEcoMap extends android.support.v4.app.Fragment
 
         filterManager = FilterManager.getInstance(getActivity());
         filterManager.registerFilterListener(this);
-
-        getActivity().getActionBar();
 
         MapsInitializer.initialize(getActivity().getApplicationContext());
 
@@ -237,7 +236,8 @@ public class FragmentEcoMap extends android.support.v4.app.Fragment
     @Override
     public boolean onClusterItemClick(final Problem problem) {
         if (!((MainActivity) getActivity()).problemAddingMenu) {
-            informationPanel = new InformationPanel(getActivity(), problem);
+            informationPanel = InformationPanel.getInstance(getActivity());
+            informationPanel.setBaseProblem(problem);
             dataManager.getProblemDetail(problem.getProblemId());
             moveCameraToProblem(problem);
             return true;
@@ -251,7 +251,6 @@ public class FragmentEcoMap extends android.support.v4.app.Fragment
                 googleMap.getCameraPosition().zoom + 2));
         return true;
     }
-
 
     /**
      * Sets up the map if it is possible to do so (i.e., the Google Play services APK is correctly

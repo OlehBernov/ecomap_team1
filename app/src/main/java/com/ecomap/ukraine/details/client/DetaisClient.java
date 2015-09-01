@@ -28,13 +28,12 @@ import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
 
-/**
- * Created by Andriy on 26.08.2015.
- */
+
 public class DetaisClient {
 
     private static final String POST_VOTE_URL = "http://ecomap.org/api/vote";
 
+    protected final String TAG = getClass().getSimpleName();
 
     private Context context;
 
@@ -44,7 +43,7 @@ public class DetaisClient {
      * Constructor
      *
      * @param detailsRequestReceiver receive request result
-     * @param context appication context
+     * @param context application context
      */
     public DetaisClient(final DetailsRequestReceiver detailsRequestReceiver, final Context context) {
         this.detailsRequestReceiver = detailsRequestReceiver;
@@ -59,14 +58,15 @@ public class DetaisClient {
                     public void onResponse(String response) {
                         detailsRequestReceiver.onVoteAdded();
                     }
-                }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError volleyError) {
-                Log.e("error response", "onErrorResponse in postVote");
-                Toast.makeText(context,
-                        R.string.error_of_connection, Toast.LENGTH_LONG).show();
-            }
-        }) {
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError volleyError) {
+                        Log.e(TAG, "onErrorResponse in postVote");
+                        Toast.makeText(context,
+                                R.string.error_of_connection, Toast.LENGTH_LONG).show();
+                    }
+                }) {
             @Override
             protected Map<String, String> getParams() {
                 Map<String, String> params = new HashMap<>();
@@ -94,10 +94,10 @@ public class DetaisClient {
                             final String content) {
         JSONObject dataJSON;
         try {
-            dataJSON = new JSONParser().generateCommentObj(
-                   userID, userName, userSurname, content);
+            dataJSON = JSONParser.generateCommentObj(
+                    userID, userName, userSurname, content);
         } catch (JSONException e) {
-            Log.e("exception", "JSONException in postComment");
+            Log.e(TAG, "JSONException in postComment");
             return;
         }
 

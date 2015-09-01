@@ -13,7 +13,7 @@ public class ExtraFieldNames {
     public static final String UPDATE_TIME = "Update time";
     public static final String MAP_TYPE = "Map type";
     public static final String MAP_TYPE_ID = "Map type id";
-    public static final String SETTINGS_PREFERENCES = "Settings";
+    public static final String SETTINGS_PREFERENCES = "SettingsActivity";
     public static final String LOGIN = "LOGIN";
     public static final String PASSWORD = "PASSWORD";
     public static final String USER_ID = "USER_ID";
