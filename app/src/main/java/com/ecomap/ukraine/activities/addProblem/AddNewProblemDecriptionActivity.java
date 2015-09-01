@@ -183,6 +183,7 @@ public class AddNewProblemDecriptionActivity extends AppCompatActivity {
         }
         if (isUserSaved(savedInstanceState)) {
             User user = (User) savedInstanceState.getSerializable(USER);
+            AccountManager.getInstance(getApplicationContext());
             AccountManager.setUserState(new User(user.getId(), user.getName(), user.getSurname(),
                     user.getRole(), user.getIat(), user.getToken(), user.getEmail()));
         }
