@@ -83,7 +83,7 @@ public class AddProblemClient {
                     try {
                         JSONParser jsonParser = new JSONParser();
                         String addedProblemID = jsonParser.parseAddedProblemInformation(response);
-                        AddProblemClient.this.addPhotosToProblem(userId, userName, userSurname,
+                        addPhotosToProblem(userId, userName, userSurname,
                                 problemData.getPhotoDescriptions(), addedProblemID,
                                 problemData.getPhotos());
                     } catch (JSONException e) {

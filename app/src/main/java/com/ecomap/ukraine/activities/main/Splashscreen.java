@@ -123,7 +123,7 @@ public class SplashScreen extends Activity implements ProblemListener {
 
         startLoading = System.currentTimeMillis();
 
-        Context context = this.getApplicationContext();
+        Context context = getApplicationContext();
         intent = new Intent(this, LoginScreen.class);
         AccountManager.getInstance(getApplicationContext());
         AccountManager.getUserFromPreference();

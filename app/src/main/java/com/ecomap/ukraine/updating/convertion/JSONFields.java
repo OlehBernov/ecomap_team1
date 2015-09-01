@@ -137,4 +137,6 @@ public class JSONFields {
 
     public static final String PHOTOS_PATH = "http://ecomap.org/photos/large/";
 
+    public static final String WRONG_TEXT = "null";
+
 }

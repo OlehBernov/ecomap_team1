@@ -125,7 +125,7 @@ public class LoginScreen extends AppCompatActivity implements LogInListener {
         logInButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                LoginScreen.this.login();
+                login();
             }
         });
 
@@ -154,7 +154,7 @@ public class LoginScreen extends AppCompatActivity implements LogInListener {
                 new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        LoginScreen.this.openMainActivity();
+                        openMainActivity();
                     }
                 }
         );
@@ -165,7 +165,7 @@ public class LoginScreen extends AppCompatActivity implements LogInListener {
                     @Override
                     public void onClick(View v) {
                         Intent signUpIntent = new Intent(LoginScreen.this, SignupActivity.class);
-                        LoginScreen.this.startActivityForResult(signUpIntent, 1);
+                        startActivityForResult(signUpIntent, 1);
                     }
                 }
         );
