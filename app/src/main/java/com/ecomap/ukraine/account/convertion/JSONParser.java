@@ -5,10 +5,19 @@ import com.ecomap.ukraine.models.User;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+/**
+ * Performs converting JSON to entities.
+ */
 public class JSONParser {
 
     private static final String NULL_ARGUMENT = "Argument is null";
 
+    /**
+     * Converts information about identified user from JSON to User objects.
+     * @param userInformationJson information about identified user from server.
+     * @return User object
+     * @throws JSONException if argument do not correct.
+     */
     public static User parseUserInformation(final String userInformationJson)
             throws JSONException {
 
@@ -30,6 +39,13 @@ public class JSONParser {
         return user;
     }
 
+    /**
+     * Converts information about registered user from JSON to User objects.
+     * @param registrationUserInformationJson information about registered user from server.
+     * @param email email of registered user
+     * @return User object
+     * @throws JSONException if argument do not correct.
+     */
     public static User  parseRegistrationInformation(final String registrationUserInformationJson,
                                                      final String email)
             throws JSONException {

@@ -18,18 +18,37 @@ import org.json.JSONException;
 
 import java.util.HashMap;
 import java.util.Map;
-
+/**
+ * Performs identification on server.
+ */
 
 public class LogInClient {
 
+    /**
+     * Address of the server on which LoginClient post
+     * information for identification on server.
+     */
     private static final String LOG_IN_URL = "http://ecomap.org/api/login/";
 
+    /**
+     * Address of the server on which LoginClient post
+     * information for registration on server.
+     */
     private static final String REGISTRATION_URL = "http://ecomap.org/api/register/";
 
+    /**
+     * TAG with name of class
+     */
     protected final String TAG = getClass().getSimpleName();
 
+    /**
+     * Application context
+     */
     private Context context;
 
+    /**
+     * Request receiver.
+     */
     private LogRequestReceiver logRequestReceiver;
 
     /**

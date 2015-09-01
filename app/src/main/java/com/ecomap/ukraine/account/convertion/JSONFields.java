@@ -1,5 +1,8 @@
 package com.ecomap.ukraine.account.convertion;
 
+/**
+ * Field names in JSON, which comes on the server.
+ */
 public class JSONFields {
 
     public static final String USER_ID = "id";
