@@ -43,7 +43,6 @@ public class DetailsContent extends LinearLayout implements DetailsListener {
     private static final String UNSOLVED = "unsolved";
     private static final String TRANSFORMATION = "transformation";
     private static final String POSITION = "position";
-    private static final String WRONG_TEXT = "null";
     private static final String PHOTOS_TITLE = "Photo:";
     private static final int STAR_NUMBER = 5;
     private static int[] STARS_ID = {R.id.star1, R.id.star2, R.id.star3, R.id.star4, R.id.star5};
@@ -78,18 +77,20 @@ public class DetailsContent extends LinearLayout implements DetailsListener {
     public DetailsContent(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         this.context = context;
+        init();
+    }
+
+    private void init() {
         inflate(context, R.layout.details_base_info, this);
+        layoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        detailsContentView = layoutInflater.inflate(R.layout.details_content_layout, null, false);
+        detailsManager = DetailsManager.getInstance(context);
+        detailsManager.removeAllDetailsListener();
+        detailsManager.registerDetailsListener(this);
     }
 
     public void setProblemContent(final Problem problem, final DetailsSettings detailsSettings) {
         this.problem = problem;
-
-        layoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        detailsContentView = layoutInflater.inflate(R.layout.details_content_layout, null, false);
-
-        detailsManager = DetailsManager.getInstance(context);
-        detailsManager.removeAllDetailsListener();
-        detailsManager.registerDetailsListener(this);
 
         markerIcon = (ImageView) findViewById(R.id.markerIcon);
         problemTitle = (TextView) findViewById(R.id.title_of_problem);
@@ -353,17 +354,9 @@ public class DetailsContent extends LinearLayout implements DetailsListener {
             star.setBackgroundResource(R.drawable.ic_star_black_48dp);
         }
         String description = details.getContent();
-        if (isTextValid(description)) {
-            descriptionFiled.setText(description);
-        }
+        descriptionFiled.setText(description);
         String proposal = details.getProposal();
-        if (isTextValid(proposal)) {
-            proposalFiled.setText(proposal);
-        }
-    }
-
-    private boolean isTextValid(final String text) {
-        return !text.equals(WRONG_TEXT);
+        proposalFiled.setText(proposal);
     }
 
     private void setProblemStatus(final ProblemStatus problemStatus) {

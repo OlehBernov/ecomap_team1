@@ -46,8 +46,8 @@ public class SettingsActivity extends AppCompatActivity {
                     @Override
                     public boolean onSelection(MaterialDialog dialog, View view1, int which, CharSequence text) {
                         updateTime = UpdateTime.values()[which];
-                        updateTimeButton.setText(Html.fromHtml(SettingsActivity.this.getUpdateTimeTitle(which)));
-                        SettingsActivity.this.saveUpdateTimeToSharedPreferences();
+                        updateTimeButton.setText(Html.fromHtml(getUpdateTimeTitle(which)));
+                        saveUpdateTimeToSharedPreferences();
                         return true;
                     }
                 })
@@ -67,8 +67,8 @@ public class SettingsActivity extends AppCompatActivity {
                     @Override
                     public boolean onSelection(MaterialDialog dialog, View view1, int which, CharSequence text) {
                         mapType = MapType.values()[which];
-                        mapTypeButton.setText(Html.fromHtml(SettingsActivity.this.getMapTypeTitle(which)));
-                        SettingsActivity.this.saveMapTypeToSharedPreferences();
+                        mapTypeButton.setText(Html.fromHtml(getMapTypeTitle(which)));
+                        saveMapTypeToSharedPreferences();
                         return true;
                     }
                 })
@@ -143,7 +143,7 @@ public class SettingsActivity extends AppCompatActivity {
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                SettingsActivity.this.onBackPressed();
+                onBackPressed();
             }
         });
     }

@@ -138,7 +138,7 @@ public class AddProblemDescriptionFragment extends Fragment implements AddProble
     }
 
     /**
-     * Show progres dialog when problem posting
+     * Show progress dialog when problem posting
      */
     private void showProgressDialog() {
         new MaterialDialog.Builder(activity)

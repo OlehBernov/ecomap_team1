@@ -48,6 +48,7 @@ public class AddNewProblemDecriptionActivity extends AppCompatActivity {
     private static final int GALLERY_PHOTO = 2;
     private static final int ADD_PHOTO_ITEM = 1;
     private static final int NUMBER_OF_TUBS = 2;
+
     private static final String DATE_TEMPLATE = "MMdd_HHmmss";
     private static final String PHOTO_FORMAT = ".jpg";
     private static final String FILE_NAME_BEGINNING = "JPEG_";
@@ -104,7 +105,6 @@ public class AddNewProblemDecriptionActivity extends AppCompatActivity {
     public void getPhotoFromGallery(View view) {
         Intent galleryIntent = new Intent(
                 Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-
         startActivityForResult(galleryIntent, GALLERY_PHOTO);
     }
 
@@ -156,7 +156,7 @@ public class AddNewProblemDecriptionActivity extends AppCompatActivity {
         tabs.setCustomTabColorizer(new SlidingTabLayout.TabColorizer() {
             @Override
             public int getIndicatorColor(int position) {
-                return AddNewProblemDecriptionActivity.this.getResources().getColor(R.color.tabsScrollColor);
+                return getResources().getColor(R.color.tabsScrollColor);
             }
         });
 
@@ -252,7 +252,7 @@ public class AddNewProblemDecriptionActivity extends AppCompatActivity {
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                AddNewProblemDecriptionActivity.this.onBackPressed();
+                onBackPressed();
             }
         });
     }
@@ -358,7 +358,7 @@ public class AddNewProblemDecriptionActivity extends AppCompatActivity {
         photoView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                AddNewProblemDecriptionActivity.this.showFullSizePhoto(photoPath);
+                showFullSizePhoto(photoPath);
             }
         });
 
@@ -400,7 +400,7 @@ public class AddNewProblemDecriptionActivity extends AppCompatActivity {
         deleteButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                AddNewProblemDecriptionActivity.this.deleteBlock(v.getId());
+                deleteBlock(v.getId());
             }
         });
     }

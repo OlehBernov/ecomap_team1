@@ -105,7 +105,7 @@ public class SignupActivity extends AppCompatActivity implements LogInListener {
         signUpButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                SignupActivity.this.signUp();
+                signUp();
             }
         });
 
@@ -113,7 +113,7 @@ public class SignupActivity extends AppCompatActivity implements LogInListener {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(SignupActivity.this, LoginScreen.class);
-                SignupActivity.this.startActivityForResult(intent, 1);
+                startActivityForResult(intent, 1);
             }
         });
     }

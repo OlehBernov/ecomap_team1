@@ -11,12 +11,13 @@ import java.util.HashSet;
 import java.util.Set;
 
 public class AccountManager implements LogInListenerNotifier,
-                                       LogRequestReceiver {
+        LogRequestReceiver {
 
     private static AccountManager instance;
+    private static Context context;
+
     private Set<LogInListener> logInListeners = new HashSet<>();
     private LogInClient logInClient;
-    private static Context context;
 
     private AccountManager(final Context context) {
         AccountManager.context = context;
@@ -28,6 +29,16 @@ public class AccountManager implements LogInListenerNotifier,
             instance = new AccountManager(context);
         }
         return instance;
+    }
+
+    public static void getUserFromPreference() {
+        SharedPreferences userPreference = context.
+                getSharedPreferences(ExtraFieldNames.USER_INFO, Context.MODE_PRIVATE);
+        int userID = userPreference.getInt(ExtraFieldNames.USER_ID, -1);
+        String userName = userPreference.getString(ExtraFieldNames.USER_NAME, "");
+        String userSurname = userPreference.getString(ExtraFieldNames.USER_SURNAME, "");
+        String email = userPreference.getString(ExtraFieldNames.LOGIN, "");
+        User.newInstance(userID, userName, userSurname, "", "", "", email);
     }
 
     @Override
@@ -73,13 +84,4 @@ public class AccountManager implements LogInListenerNotifier,
         logInClient.postRegistration(name, surname, email, password);
     }
 
-    public static void getUserFromPreference () {
-        SharedPreferences userPreference = context.
-                getSharedPreferences(ExtraFieldNames.USER_INFO, Context.MODE_PRIVATE);
-        int userID = userPreference.getInt(ExtraFieldNames.USER_ID, -1);
-        String userName = userPreference.getString(ExtraFieldNames.USER_NAME, "");
-        String userSurname = userPreference.getString(ExtraFieldNames.USER_SURNAME, "");
-        String email = userPreference.getString(ExtraFieldNames.LOGIN, "");
-        User.newInstance(userID, userName, userSurname, "", "", "", email);
-    }
 }

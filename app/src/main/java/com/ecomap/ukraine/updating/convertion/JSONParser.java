@@ -80,20 +80,22 @@ public class JSONParser {
         problemActivities = getProblemActivities(detailedProblemArray
                 .getJSONArray(JSONFields.PROBLEM_ACTIVITY_POSITION));
 
+        String problemContent = problemDetails.getString(JSONFields.PROBLEM_CONTENT);
+        String proposal = problemDetails.getString(JSONFields.PROPOSAL);
         Details details;
         details = new Details(
                 problemDetails.optInt(JSONFields.ID, -1),
                 problemDetails.optInt(JSONFields.SEVERITY, -1),
                 problemDetails.optInt(JSONFields.MODERATION, -1),
                 problemDetails.optInt(JSONFields.VOTES, -1),
-                problemDetails.getString(JSONFields.PROBLEM_CONTENT),
-                problemDetails.getString(JSONFields.PROPOSAL),
+                problemContent.equals(JSONFields.WRONG_TEXT) ? "" : problemContent,
+                proposal.equals(JSONFields.WRONG_TEXT) ? "" : proposal,
                 problemDetails.getString(JSONFields.TITLE),
                 problemActivities,
                 getPhotos(detailedProblemArray
                         .getJSONArray(JSONFields.PHOTOS_POSITION)),
                 String.valueOf(System.currentTimeMillis())
-        );
+                );
 
         return details;
     }

@@ -31,7 +31,7 @@ public class JSONParser {
     }
 
     public static User parseRegistrationInformation(final String registrationUserInformationJson,
-                                             final String email)
+                                                    final String email)
             throws JSONException {
         if (registrationUserInformationJson == null) {
             throw new JSONException(NULL_ARGUMENT);
