@@ -57,8 +57,8 @@ public class AddProblemDescriptionFragment extends Fragment implements AddProble
 
     private AddProblemManager addProblemManager;
     private DataManager dataManager;
-    private String userName = AccountManager.getUserState().getName();
-    private String userSurname = AccountManager.getUserState().getSurname();
+    private String userName;
+    private String userSurname;
 
     @InjectView(R.id.problemTitle) EditText problemTitle;
     @InjectView(R.id.problemDescription) EditText problemDescription;
@@ -114,7 +114,9 @@ public class AddProblemDescriptionFragment extends Fragment implements AddProble
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.tab_1, container, false);
-
+        AccountManager.getInstance(getActivity().getApplicationContext());
+        userName = AccountManager.getUserState().getName();
+        userSurname = AccountManager.getUserState().getSurname();
         activity = getActivity();
         addProblemManager = AddProblemManager.getInstance(activity.getApplicationContext());
         dataManager = DataManager.getInstance(activity.getApplicationContext());
