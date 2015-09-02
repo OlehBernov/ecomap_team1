@@ -28,6 +28,7 @@ import java.util.Map;
  */
 public class MultipartRequest extends Request<String> {
 
+    private static final int QUALITY_OF_COMPRESION = 50;
     private final Response.Listener<String> listener;
     private final HashMap<String, String> params;
     private HttpEntity httpEntity;
@@ -53,16 +54,29 @@ public class MultipartRequest extends Request<String> {
         buildMultipartEntity();
     }
 
+    /**
+     * Get headers of request
+     * @return headers of request
+     */
     @Override
     public Map<String, String> getHeaders() throws AuthFailureError {
         return (params != null) ? params : super.getHeaders();
     }
 
+    /**
+     * Get request body content type
+     * @return content type of request body
+     */
     @Override
     public String getBodyContentType() {
         return httpEntity.getContentType().getValue();
     }
 
+    /**
+     * Gets request body in bytes
+     * @return request body in bytes array
+     * @throws IOException exception of conversion
+     */
     @Override
     public byte[] getBody() throws AuthFailureError {
         ByteArrayOutputStream bos = new ByteArrayOutputStream();
@@ -75,6 +89,10 @@ public class MultipartRequest extends Request<String> {
 
     }
 
+    /**
+     * Parse response from server
+     * @param response response from server
+     */
     @Override
     protected Response<String> parseNetworkResponse(NetworkResponse response) {
         String parsed;
@@ -86,17 +104,24 @@ public class MultipartRequest extends Request<String> {
         return Response.success(parsed, HttpHeaderParser.parseCacheHeaders(response));
     }
 
+    /**
+     * Receive response from server
+     * @param response response from server
+     */
     @Override
     protected void deliverResponse(String response) {
         listener.onResponse(response);
     }
 
+    /**
+     * Builds httpEntity for request
+     */
     private void buildMultipartEntity() {
         builder.setMode(HttpMultipartMode.BROWSER_COMPATIBLE);
 
         if (file != null) {
             ByteArrayOutputStream bos = new ByteArrayOutputStream();
-            file.compress(Bitmap.CompressFormat.JPEG, 50, bos);
+            file.compress(Bitmap.CompressFormat.JPEG, QUALITY_OF_COMPRESION, bos);
             builder.addPart("file[" + counter + "]", new ByteArrayBody(bos.toByteArray(), "image_" + counter));
         }
         builder.setCharset(chars);

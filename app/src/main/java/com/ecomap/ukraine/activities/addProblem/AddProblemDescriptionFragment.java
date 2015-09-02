@@ -216,6 +216,7 @@ public class AddProblemDescriptionFragment extends Fragment implements AddProble
         String type = String.valueOf(spinner.getSelectedItemId() + 1);
         showProgressDialog();
         NewProblemData problemData = new NewProblemDataBuilder()
+                .setdefaultData()
                 .setTitle(title)
                 .setContent(description)
                 .setProposal(solution)
