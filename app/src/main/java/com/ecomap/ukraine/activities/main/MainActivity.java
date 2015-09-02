@@ -137,7 +137,7 @@ public class MainActivity extends AppCompatActivity {
     /**
      * Called when the user selects an item from the options menu
      * @param item menu item
-     * @return
+     * @return result of action
      */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {

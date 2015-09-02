@@ -66,6 +66,10 @@ public class AddNewProblemDecriptionActivity extends AppCompatActivity {
     private List<String> descriptions;
     private ViewPager pager;
 
+    /**
+     * Gets list of bitmaps from list of uri for posting photos
+     * @return
+     */
     public List<Bitmap> getBitmapsPhoto() {
         List<Bitmap> photoBitmaps = new ArrayList<>();
         if (userPhotos == null) {
@@ -80,10 +84,16 @@ public class AddNewProblemDecriptionActivity extends AppCompatActivity {
         return photoBitmaps;
     }
 
+    /**
+     * Add photo to layout
+     */
     public void addPhoto(View v) {
         pager.setCurrentItem(ADD_PHOTO_ITEM);
     }
 
+    /**
+     * Gets photo from camera
+     */
     public void getPhotoFromCamera(View view) {
         Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
@@ -102,18 +112,32 @@ public class AddNewProblemDecriptionActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Gets photos from galery
+     */
     public void getPhotoFromGallery(View view) {
         Intent galleryIntent = new Intent(
                 Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
         startActivityForResult(galleryIntent, GALLERY_PHOTO);
     }
 
+    /**
+     * Inflate the menu, this adds items to the action bar if it is present.
+     *
+     * @param menu activity menu
+     * @return result of action
+     */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_add_problem, menu);
         return true;
     }
 
+    /**
+     * Called when the user selects an item from the options menu
+     * @param item menu item
+     * @return result of action
+     */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
@@ -127,6 +151,9 @@ public class AddNewProblemDecriptionActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    /**
+     * Called when the activity has detected the user's press of the back key.
+     */
     @Override
     public void onBackPressed() {
         super.onBackPressed();
@@ -135,6 +162,12 @@ public class AddNewProblemDecriptionActivity extends AppCompatActivity {
         finish();
     }
 
+    /**
+     * Initialize activity
+     *
+     * @param savedInstanceState Contains the data it most recently
+     *                           supplied in onSaveInstanceState(Bundle)
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -163,6 +196,10 @@ public class AddNewProblemDecriptionActivity extends AppCompatActivity {
         tabs.setViewPager(pager);
     }
 
+    /**
+     * Called when the activity is being re-initialized from a previously saved state
+     * @param savedInstanceState the data most recently supplied in onSaveInstanceState(Bundle).
+     */
     @Override
     protected void onRestoreInstanceState(@NonNull Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
@@ -189,6 +226,12 @@ public class AddNewProblemDecriptionActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Called when an activity you launched exits.
+     * @param requestCode The integer request code originally supplied to startActivityForResult().
+     * @param resultCode The integer result code returned by the child activity through its setResult().
+     * @param data An Intent, which can return result data to the caller.
+     */
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -199,6 +242,10 @@ public class AddNewProblemDecriptionActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Called to retrieve per-instance state from an activity before being killed.
+     * @param outState Bundle in which to place your saved state
+     */
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
@@ -221,15 +268,21 @@ public class AddNewProblemDecriptionActivity extends AppCompatActivity {
     }
 
 
-
+    /**
+     * Check if user was saved in savedInstanceState
+     */
     private boolean isUserSaved(Bundle savedInstanceState) {
         return AccountManager.isAnonymousUser() && savedInstanceState.containsKey(USER);
     }
-
+    /**
+     * Check if description was saved in savedInstanceState
+     */
     private boolean isDescriptionsSaved(Bundle savedInstanceState) {
         return (descriptions == null) && savedInstanceState.containsKey(DESCRIPTION);
     }
-
+    /**
+     * Check if photo was saved in savedInstanceState
+     */
     private boolean isPhotosSaved(Bundle savedInstanceState) {
         return (userPhotos == null) && savedInstanceState.containsKey(USER_PHOTOS);
     }
@@ -256,17 +309,25 @@ public class AddNewProblemDecriptionActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * Check if camera are available
+     */
     private boolean isCameraPhoto(int requestCode, int resultCode) {
         return (requestCode == CAMERA_PHOTO)
                 && (resultCode == RESULT_OK);
     }
-
+    /**
+     * Check if gelery are available
+     */
     private boolean isGalleryPhoto(int requestCode, int resultCode, Intent data) {
         return (requestCode == GALLERY_PHOTO)
                 && (resultCode == RESULT_OK)
                 && (data != null);
     }
 
+    /**
+     * Add photo to layout from galery
+     */
     private void processGalleryPhoto(Intent data) {
         Uri selectedImage = data.getData();
         String[] filePathColumn = {MediaStore.Images.Media.DATA};
@@ -282,7 +343,9 @@ public class AddNewProblemDecriptionActivity extends AppCompatActivity {
 
         addPhotosToView();
     }
-
+    /**
+     * Add photo to layout from camera
+     */
     private void processCameraPhoto() {
         String photoPath = currentPhotoUri.getPath();
         savePhoto(photoPath);
@@ -290,10 +353,16 @@ public class AddNewProblemDecriptionActivity extends AppCompatActivity {
         addPhotosToView();
     }
 
+    /**
+     * Check if layout have child
+     */
     private boolean isActivityLayoutHaveChild() {
         return (photoDescriptionLayout != null) && (photoDescriptionLayout.getChildCount() > 0);
     }
 
+    /**
+     * Add photo to view
+     */
     private void addPhotosToView() {
         if (isActivityLayoutHaveChild()) {
             photoDescriptionLayout.removeAllViews();
@@ -309,6 +378,9 @@ public class AddNewProblemDecriptionActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Builds edit text with photo description
+     */
     private EditText buildPhotoDescription(int id) {
         EditText photoDescription = new EditText(getApplicationContext());
         photoDescription.setHint(DESCRIPTION_HINT);
@@ -336,6 +408,9 @@ public class AddNewProblemDecriptionActivity extends AppCompatActivity {
         return photoDescription;
     }
 
+    /**
+     * Set parametrs to photo description edit text
+     */
     private TableRow.LayoutParams setPhotoDescriptionParams() {
         TableRow.LayoutParams photoDescriptionParams = new TableRow.LayoutParams(TableRow.LayoutParams.MATCH_PARENT,
                 ViewGroup.LayoutParams.MATCH_PARENT, 1f);
@@ -345,6 +420,11 @@ public class AddNewProblemDecriptionActivity extends AppCompatActivity {
         return photoDescriptionParams;
     }
 
+    /**
+     * Builds user photo from photoPath
+     * @param photoPath path to user photo
+     * @return usert photo
+     */
     private ImageView buildUserPhoto(final String photoPath) {
         int photoSize = (int) getResources().getDimension(R.dimen.edit_text_add_photo);
 
@@ -365,12 +445,20 @@ public class AddNewProblemDecriptionActivity extends AppCompatActivity {
         return photoView;
     }
 
+    /**
+     * Show full size of photo
+     * @param photoPath path to photo
+     */
     private void showFullSizePhoto(String photoPath) {
         Intent intent = new Intent(this, UserPhotoFullScreen.class);
         intent.putExtra(ExtraFieldNames.PHOTO, photoPath);
         startActivity(intent);
     }
 
+    /**
+     * Sets delete button
+     * @param buttonId if of delete button
+     */
     private void setDeleteButton(int buttonId) {
         ImageButton deleteButton = new ImageButton(getApplicationContext());
         deleteButton.setLayoutParams(setDeleteButtonParams());
@@ -387,6 +475,11 @@ public class AddNewProblemDecriptionActivity extends AppCompatActivity {
         photoDescriptionLayout.addView(buttonLayout);
     }
 
+    /**
+     * Sets parametrs for delete button
+     * @return parametrs for delete button
+
+     */
     private RelativeLayout.LayoutParams setDeleteButtonParams() {
         RelativeLayout.LayoutParams buttonParams =
                 new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,
@@ -395,6 +488,11 @@ public class AddNewProblemDecriptionActivity extends AppCompatActivity {
 
         return buttonParams;
     }
+
+    /**
+     * Add listener on deleteButton
+     * @param deleteButton current delete button
+     */
 
     private void addListenerOnDeleteButton(ImageButton deleteButton) {
         deleteButton.setOnClickListener(new View.OnClickListener() {
@@ -405,6 +503,10 @@ public class AddNewProblemDecriptionActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * Delete block from layout
+     * @param buttonId id of delete button
+     */
     private void deleteBlock(int buttonId) {
         userPhotos.remove(buttonId);
         descriptions.remove(buttonId);
@@ -412,6 +514,10 @@ public class AddNewProblemDecriptionActivity extends AppCompatActivity {
         addPhotosToView();
     }
 
+    /**
+     * Save photo to uri list
+     * @param photoPath path to photo
+     */
     private void savePhoto(String photoPath) {
         if (userPhotos == null) {
             userPhotos = new ArrayList<>();
@@ -423,6 +529,9 @@ public class AddNewProblemDecriptionActivity extends AppCompatActivity {
         descriptions.add("");
     }
 
+    /**
+     * Create file with image
+     */
     private File createImageFile() throws IOException {
         String timeStamp = new SimpleDateFormat(DATE_TEMPLATE, Locale.ENGLISH).format(new Date());
         String imageFileName = FILE_NAME_BEGINNING + timeStamp + "_";
