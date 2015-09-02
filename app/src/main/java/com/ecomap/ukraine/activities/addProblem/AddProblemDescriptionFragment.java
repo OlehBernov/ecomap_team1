@@ -7,6 +7,7 @@ import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -44,6 +45,7 @@ public class AddProblemDescriptionFragment extends Fragment implements AddProble
         ProblemListener {
 
     private static final String PLEASE_WAIT = "Please wait...";
+
     /**
      * Holds the Singleton global instance of AddProblemDescriptionFragment.
      */
@@ -64,6 +66,7 @@ public class AddProblemDescriptionFragment extends Fragment implements AddProble
     @InjectView(R.id.problemDescription) EditText problemDescription;
     @InjectView(R.id.problemSolution) EditText problemSolution;
     @InjectView(R.id.spinner) Spinner spinner;
+
     /**
      * Returns Singleton instance of AddProblemDescriptionFragment
      */
@@ -138,7 +141,6 @@ public class AddProblemDescriptionFragment extends Fragment implements AddProble
         super.onDestroy();
         addProblemManager.removeAddProblemListener(this);
     }
-
 
     /**
      * Show progress dialog when problem posting
@@ -235,7 +237,7 @@ public class AddProblemDescriptionFragment extends Fragment implements AddProble
     }
 
     /**
-     * Set dialog of choise user name
+     * Sets dialog of user name selection
      */
     private void setChooseNameDialog() {
         new MaterialDialog.Builder(activity)

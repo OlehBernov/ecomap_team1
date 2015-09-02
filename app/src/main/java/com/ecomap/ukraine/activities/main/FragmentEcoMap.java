@@ -52,6 +52,7 @@ public class FragmentEcoMap extends android.support.v4.app.Fragment
     private static final MapType DEFAULT_MAP_TYPE = MapType.MAP_TYPE_NORMAL;
     private static final int MAP_TYPE_MORMAL_ID = MapType.MAP_TYPE_NORMAL.getId();
     private static final int MAP_TYPE_HYBRID_ID = MapType.MAP_TYPE_HYBRID.getId();
+
      /**
      * The name of the preference to retrieve.
      */
@@ -252,6 +253,7 @@ public class FragmentEcoMap extends android.support.v4.app.Fragment
 
     /**
      * Action with click on cluster
+     *
      * @param cluster clicked cluster
      * @return result of action
      */
@@ -303,6 +305,7 @@ public class FragmentEcoMap extends android.support.v4.app.Fragment
 
     /**
      * Change camera position to clicked marker
+     *
      * @param problem clicked marker
      */
     private void moveCameraToProblem(final Problem problem) {
@@ -317,6 +320,7 @@ public class FragmentEcoMap extends android.support.v4.app.Fragment
 
     /**
      * Change camera position to user location
+     *
      * @param myLocation user location
      */
     private void moveCameraToMyLocation(final Location myLocation) {
@@ -330,7 +334,8 @@ public class FragmentEcoMap extends android.support.v4.app.Fragment
     }
 
     /**
-     * Setup base parametrs on cluster manager
+     * Setup base parameters on cluster manager
+     *
      * @param filterState state of filter
      */
     private void setupClusterManager(final FilterState filterState) {

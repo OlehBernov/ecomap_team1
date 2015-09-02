@@ -247,7 +247,7 @@ public class SlidingTabLayout extends HorizontalScrollView {
         private int mScrollState;
 
         /**
-         * Action on scrol tab
+         * Action on scroll tab
          */
         @Override
         public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
@@ -288,7 +288,7 @@ public class SlidingTabLayout extends HorizontalScrollView {
             }
         }
         /**
-         * Action on scrol tab
+         * Action on scroll tab
          */
         @Override
         public void onPageScrollStateChanged(int state) {

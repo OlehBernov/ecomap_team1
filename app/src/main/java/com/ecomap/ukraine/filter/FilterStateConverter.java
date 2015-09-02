@@ -13,11 +13,20 @@ import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 
-
+/**
+* Performs convertion of the filter state to JSON format for saving to shared preferences,
+* converts JSON to FilterState object.
+*/
 public class FilterStateConverter {
 
     private static final String DATE_TEMPLATE = "dd-MM-yyyy";
 
+	/**
+	* Converts filter state to JSON format.
+	*
+	* @params filterState state of the filters.
+	* @return filter state in JSON format.
+	*/
     public static String convertToJson(final FilterState filterState) throws JSONException {
 
         JSONObject filterStateJson = new JSONObject();
@@ -53,6 +62,12 @@ public class FilterStateConverter {
         return filterStateJson.toString();
     }
 
+	/**
+	* Converts JSON to FilterState object.
+	*
+	* @params filterStateJson saved filter state in JSON format.
+	* @return object of the filter state.
+	*/
     public static FilterState convertToFilterState(final String filterStateJson)
             throws JSONException {
 

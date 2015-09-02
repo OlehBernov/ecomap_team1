@@ -84,6 +84,7 @@ public class LoginScreen extends AppCompatActivity implements LogInListener {
 
     /**
      * Receive from server identified user.
+     *
      * @param user identified user.
      */
     @Override
@@ -100,6 +101,7 @@ public class LoginScreen extends AppCompatActivity implements LogInListener {
 
     /**
      * Called when an activity you launched exits.
+     *
      * @param requestCode The integer request code originally supplied to startActivityForResult().
      * @param resultCode The integer result code returned by the child activity through its setResult().
      * @param data An Intent, which can return result data to the caller.
@@ -265,7 +267,8 @@ public class LoginScreen extends AppCompatActivity implements LogInListener {
     }
 
     /**
-     * Generates randoom password
+     * Generates random password
+     *
      * @param id user id
      * @return generated password
      */

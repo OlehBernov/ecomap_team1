@@ -21,7 +21,7 @@ public class Photo {
     /**
      * id of user who added this photo
      */
-    private int userId;
+    private int userId; //TODO delete this field
 
     /**
      * status of this photo

@@ -9,10 +9,13 @@ import com.ecomap.ukraine.R;
 import com.ecomap.ukraine.activities.BitmapResizer;
 import com.ecomap.ukraine.activities.ExtraFieldNames;
 
+/**
+ * Contains
+ */
 public class UserPhotoFullScreen extends AppCompatActivity {
 
     /**
-     * Initialize activity
+     * Sets user photo on full screen mode.
      *
      * @param savedInstanceState Contains the data it most recently
      *                           supplied in onSaveInstanceState(Bundle)

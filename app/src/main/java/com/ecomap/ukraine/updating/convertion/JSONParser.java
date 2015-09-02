@@ -18,8 +18,6 @@ import java.util.List;
 
 /**
  * Performs converting JSON to entities.
- *
- * @author Kyrychenko Oleksandr
  */
 public class JSONParser {
 

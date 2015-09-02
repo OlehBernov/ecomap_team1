@@ -14,6 +14,7 @@ public class JSONParser {
 
     /**
      * Converts information about identified user from JSON to User objects.
+     *
      * @param userInformationJson information about identified user from server.
      * @return User object
      * @throws JSONException if argument do not correct.
@@ -41,6 +42,7 @@ public class JSONParser {
 
     /**
      * Converts information about registered user from JSON to User objects.
+     *
      * @param registrationUserInformationJson information about registered user from server.
      * @param email email of registered user
      * @return User object

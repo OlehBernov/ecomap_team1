@@ -18,6 +18,9 @@ import com.ecomap.ukraine.models.Problem;
 
 import java.util.List;
 
+/**
+ * Activity which displays problem details after click on recycle view element.
+ */
 public class ProblemDetailsActivity extends AppCompatActivity implements ProblemListener {
 
     private DetailsContent detailsContent;

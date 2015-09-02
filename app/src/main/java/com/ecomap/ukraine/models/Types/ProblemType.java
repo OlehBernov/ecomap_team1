@@ -1,6 +1,8 @@
 package com.ecomap.ukraine.models.Types;
 
-
+/**
+ * Possible problem types.
+ */
 public enum ProblemType {
 
     FOREST_DESTRUCTION(1),
@@ -13,10 +15,20 @@ public enum ProblemType {
 
     private int id;
 
+    /**
+     * Constructor.
+     *
+     * @param id problem type id.
+     */
     ProblemType(int id) {
         this.id = id;
     }
 
+    /**
+     * Return problem type according to problem type is.
+     * @param id problem type id.
+     * @return problem type.
+     */
     public static ProblemType getProblemType(int id) {
         for (ProblemType type : ProblemType.values()) {
             if (type.id == id) {
@@ -26,6 +38,11 @@ public enum ProblemType {
         return OTHER;
     }
 
+    /**
+     * Returns id of the problem type.
+     *
+     * @return problem type id.
+     */
     public int getId() {
         return id;
     }

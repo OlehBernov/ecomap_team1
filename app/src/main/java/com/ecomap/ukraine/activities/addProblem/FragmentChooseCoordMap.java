@@ -38,8 +38,8 @@ public class FragmentChooseCoordMap extends android.support.v4.app.Fragment {
     private LatLng markerPosition;
 
     /**
-     * Gets position of mareker
-     * @return position of mareker
+     * Gets position of marker
+     * @return position of marker
      */
     public LatLng getMarkerPosition() {
         return markerPosition;
@@ -120,7 +120,7 @@ public class FragmentChooseCoordMap extends android.support.v4.app.Fragment {
     }
 
     /**
-     * Moves camera to intial position
+     * Moves camera to initial position
      */
     private void moveCameraToInitialPosition() {
         CameraPosition cameraPosition = new CameraPosition
@@ -160,6 +160,7 @@ public class FragmentChooseCoordMap extends android.support.v4.app.Fragment {
 
     /**
      * Move camera to user location
+     *
      * @param myLocation user location
      */
     private void moveCameraToMyLocation(Location myLocation) {
