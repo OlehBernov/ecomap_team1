@@ -103,6 +103,10 @@ public class SplashScreen extends Activity implements ProblemListener {
         }
     }
 
+    /**
+     * Updates current problem details from server
+     * @param details details of concrete problem.
+     */
     @Override
     public void updateProblemDetails(final Details details) {
 
