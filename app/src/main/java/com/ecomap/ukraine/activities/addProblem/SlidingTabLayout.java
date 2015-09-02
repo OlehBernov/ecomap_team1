@@ -17,7 +17,9 @@ import android.widget.TextView;
 
 import com.ecomap.ukraine.R;
 
-
+/**
+ * Layout that contains tabs fragments
+ */
 public class SlidingTabLayout extends HorizontalScrollView {
 
     private static final int TITLE_OFFSET_DIPS = 24;
@@ -33,6 +35,9 @@ public class SlidingTabLayout extends HorizontalScrollView {
     private SparseArray<String> contentDescriptions = new SparseArray<>();
     private ViewPager.OnPageChangeListener viewPagerPageChangeListener;
 
+    /**
+     * Constructors block
+     */
     public SlidingTabLayout(Context context) {
         this(context, null);
     }
@@ -112,6 +117,9 @@ public class SlidingTabLayout extends HorizontalScrollView {
         }
     }
 
+    /**
+     * Sets content description
+     */
     public void setContentDescription(int i, String desc) {
         contentDescriptions.put(i, desc);
     }
@@ -140,6 +148,9 @@ public class SlidingTabLayout extends HorizontalScrollView {
         return textView;
     }
 
+    /**
+     * Called when the view is attached to a window.
+     */
     @Override
     protected void onAttachedToWindow() {
         super.onAttachedToWindow();
@@ -149,6 +160,9 @@ public class SlidingTabLayout extends HorizontalScrollView {
         }
     }
 
+    /**
+     * Initialize tab fragment
+     */
     private void populateTabStrip() {
         final PagerAdapter adapter = viewPager.getAdapter();
         final View.OnClickListener tabClickListener = new TabClickListener();
@@ -195,6 +209,9 @@ public class SlidingTabLayout extends HorizontalScrollView {
         }
     }
 
+    /**
+     * Action of scrolling tab
+     */
     private void scrollToTab(int tabIndex, int positionOffset) {
         final int tabStripChildCount = tabStrip.getChildCount();
         if ((tabStripChildCount == 0) || (tabIndex < 0) || (tabIndex >= tabStripChildCount)) {
@@ -223,9 +240,15 @@ public class SlidingTabLayout extends HorizontalScrollView {
 
     }
 
+    /**
+     * Initialize on page change listener
+     */
     private class InternalViewPagerListener implements ViewPager.OnPageChangeListener {
         private int mScrollState;
 
+        /**
+         * Action on scrol tab
+         */
         @Override
         public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
             int tabStripChildCount = tabStrip.getChildCount();
@@ -247,6 +270,10 @@ public class SlidingTabLayout extends HorizontalScrollView {
             }
         }
 
+        /**
+         * Set tab by position
+         * @param position tab position
+         */
         @Override
         public void onPageSelected(int position) {
             if (mScrollState == ViewPager.SCROLL_STATE_IDLE) {
@@ -260,7 +287,9 @@ public class SlidingTabLayout extends HorizontalScrollView {
                 viewPagerPageChangeListener.onPageSelected(position);
             }
         }
-
+        /**
+         * Action on scrol tab
+         */
         @Override
         public void onPageScrollStateChanged(int state) {
             mScrollState = state;
@@ -272,6 +301,9 @@ public class SlidingTabLayout extends HorizontalScrollView {
 
     }
 
+    /**
+     * Action on click on tab title
+     */
     private class TabClickListener implements View.OnClickListener {
         @Override
         public void onClick(View v) {

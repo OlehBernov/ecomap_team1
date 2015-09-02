@@ -37,10 +37,17 @@ public class FragmentChooseCoordMap extends android.support.v4.app.Fragment {
     private MapView mapView;
     private LatLng markerPosition;
 
+    /**
+     * Gets position of mareker
+     * @return position of mareker
+     */
     public LatLng getMarkerPosition() {
         return markerPosition;
     }
 
+    /**
+     * Initialize view
+     */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -112,6 +119,9 @@ public class FragmentChooseCoordMap extends android.support.v4.app.Fragment {
         return rootView;
     }
 
+    /**
+     * Moves camera to intial position
+     */
     private void moveCameraToInitialPosition() {
         CameraPosition cameraPosition = new CameraPosition
                 .Builder()
@@ -136,6 +146,9 @@ public class FragmentChooseCoordMap extends android.support.v4.app.Fragment {
         }
     }
 
+    /**
+     * Setup map
+     */
     private void setUpMap() {
         googleMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
         UiSettings settings = googleMap.getUiSettings();
@@ -145,6 +158,10 @@ public class FragmentChooseCoordMap extends android.support.v4.app.Fragment {
 
     }
 
+    /**
+     * Move camera to user location
+     * @param myLocation user location
+     */
     private void moveCameraToMyLocation(Location myLocation) {
         CameraPosition cameraPosition = new CameraPosition
                 .Builder()

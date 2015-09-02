@@ -9,6 +9,9 @@ import android.util.TypedValue;
 import android.view.View;
 import android.widget.LinearLayout;
 
+/**
+ * Tab fragment layout
+ */
 class SlidingTabStrip extends LinearLayout {
 
     private static final int DEFAULT_BOTTOM_BORDER_THICKNESS_DIPS = 0;
@@ -26,6 +29,9 @@ class SlidingTabStrip extends LinearLayout {
     private float mSelectionOffset;
     private SlidingTabLayout.TabColorizer mCustomTabColorizer;
 
+    /**
+     * Constructors block
+     */
     SlidingTabStrip(Context context) {
         this(context, null);
     }
@@ -54,6 +60,9 @@ class SlidingTabStrip extends LinearLayout {
         mSelectedIndicatorPaint = new Paint();
     }
 
+    /**
+     * On draw tab
+     */
     @Override
     protected void onDraw(Canvas canvas) {
         final int height = getHeight();
@@ -114,6 +123,9 @@ class SlidingTabStrip extends LinearLayout {
         return Color.rgb((int) r, (int) g, (int) b);
     }
 
+    /**
+     * Set colors of tab
+     */
     private static class SimpleTabColorizer implements SlidingTabLayout.TabColorizer {
         private int[] mIndicatorColors;
 
