@@ -31,7 +31,7 @@ public class AccountManager implements LogInListenerNotifier,
     private LogInClient logInClient;
 
     /**
-     * Aplication context
+     * Application context
      */
     private static Context context;
 
@@ -42,6 +42,7 @@ public class AccountManager implements LogInListenerNotifier,
 
     /**
      * Constructor
+     *
      * @param context application context
      */
     private AccountManager(final Context context) {
@@ -94,6 +95,7 @@ public class AccountManager implements LogInListenerNotifier,
 
     /**
      * Puts user information to Shared Preferences
+     *
      * @param user user information
      * @param password user password
      */
@@ -110,7 +112,7 @@ public class AccountManager implements LogInListenerNotifier,
     }
 
     /**
-     * Adds the specified listener to the set of loginlisteners. If it is already
+     * Adds the specified listener to the set of login listeners. If it is already
      * registered, it is not added a second time.
      *
      * @param listener the LogInListener to add.
@@ -121,7 +123,7 @@ public class AccountManager implements LogInListenerNotifier,
     }
 
     /**
-     * Remove the specified listener from the set of loginlisteners.
+     * Remove the specified listener from the set of login listeners.
      *
      * @param listener the LogInListener to remove.
      */
@@ -132,7 +134,7 @@ public class AccountManager implements LogInListenerNotifier,
 
     /**
      * Sends request result to listeners
-     * @param user
+     * @param user logged user.
      */
     @Override
     public void sendLogInResult(final User user) {
@@ -143,6 +145,7 @@ public class AccountManager implements LogInListenerNotifier,
 
     /**
      * Identify user on server
+     *
      * @param password user password
      * @param login user login
      */
@@ -152,6 +155,7 @@ public class AccountManager implements LogInListenerNotifier,
 
     /**
      * Register user on server
+     *
      * @param name user name
      * @param surname user surname
      * @param email user email

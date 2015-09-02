@@ -17,15 +17,26 @@ import com.ecomap.ukraine.activities.ExtraFieldNames;
 import com.ecomap.ukraine.activities.main.MainActivity;
 import com.ecomap.ukraine.data.manager.DataManager;
 
+/**
+* Activity for 
+*/
 public class SettingsActivity extends AppCompatActivity {
 
+    /**
+	* Title of the SettingsActivity activity.
+	*/
     private static final String SETTINGS = "SettingsActivity";
+
     private static final String EVERY_TIME = "Updating time <br/><font color='grey'>Every time</font>";
+
     private static final String ONCE_A_DAY = "Updating time <br/><font color='grey'>Once a day</font>";
+
     private static final String ONCE_A_WEEK = "Updating time <br/><font color='grey'>Once a week</font>";
+
     private static final String ONCE_A_MONTH = "Updating time <br/><font color='grey'>Once a month</font>";
 
     private static final String NORMAL_MAP_TYPE = "Map type <br/><font color='grey'>Normal map type</font>";
+
     private static final String VIEW_FROM_SATELLITE = "Map type <br/><font color='grey'>View from satellite</font>";
 
     private Button updateTimeButton;
@@ -34,6 +45,11 @@ public class SettingsActivity extends AppCompatActivity {
     private UpdateTime updateTime;
     private MapType mapType = MapType.MAP_TYPE_NORMAL;
 
+	/**
+	* Opens window for choosing updating time for the application data.
+	*
+	* @param view view.
+	*/
     public void openChoosingTimeWindow(View view) {
         new MaterialDialog.Builder(this)
                 .title(R.string.updating_time)
@@ -55,6 +71,11 @@ public class SettingsActivity extends AppCompatActivity {
                 .show();
     }
 
+	/**
+	* Opens window for choosing map time for the application data.
+	*
+	* @param view view.
+	*/
     public void openChoosingMapTypeWindow(View view) {
         new MaterialDialog.Builder(this)
                 .title(R.string.map_type)
@@ -98,6 +119,11 @@ public class SettingsActivity extends AppCompatActivity {
         setMapTypeTitle(settings);
     }
 
+	/**
+	* Sets the hint about current updating time mode on updating time mode choosing button.
+	*
+	* @param settings shared preferences for gets saved current updating time mode.
+	*/
     private void setUpdateTimeTitle(SharedPreferences settings) {
         int updateTimeValue = settings.getInt(ExtraFieldNames.UPDATE_TIME,
                 UpdateTime.ONCE_A_WEEK.getId());
@@ -106,6 +132,11 @@ public class SettingsActivity extends AppCompatActivity {
         updateTimeButton.setText(Html.fromHtml(getUpdateTimeTitle(updateTimeValue)));
     }
 
+	/**
+	* Sets the hint about current map type mode on map type choosing button.
+	*
+	* @param settings shared preferences for gets saved current map type.
+	*/
     private void setMapTypeTitle(SharedPreferences settings) {
         int mapTypeValue = settings.getInt(ExtraFieldNames.MAP_TYPE, MapType.MAP_TYPE_NORMAL.getId());
         mapType = MapType.values()[mapTypeValue];
@@ -113,6 +144,9 @@ public class SettingsActivity extends AppCompatActivity {
         mapTypeButton.setText(Html.fromHtml(getMapTypeTitle(mapTypeValue)));
     }
 
+	/**
+	* Performs saving chose updating time mode to sharedPreferences.
+	*/
     private void saveUpdateTimeToSharedPreferences() {
         SharedPreferences settings =
                 getSharedPreferences(ExtraFieldNames.SETTINGS_PREFERENCES, 0);
@@ -121,6 +155,9 @@ public class SettingsActivity extends AppCompatActivity {
         editor.apply();
     }
 
+	/**
+	* Performs saving chose map type to sharedPreferences.
+	*/
     private void saveMapTypeToSharedPreferences() {
         SharedPreferences settings =
                 getSharedPreferences(ExtraFieldNames.SETTINGS_PREFERENCES, 0);
@@ -129,6 +166,9 @@ public class SettingsActivity extends AppCompatActivity {
         editor.apply();
     }
 
+	/**
+	* Sets the toolbar on activity.
+	*/
     private void setupToolbar() {
         Toolbar toolbar = (Toolbar) findViewById(R.id.tool_bar);
         toolbar.setTitle(SETTINGS);
@@ -148,6 +188,12 @@ public class SettingsActivity extends AppCompatActivity {
         });
     }
 
+	/**
+	* Returns name of the updating time mode.
+	*
+	* @param id id of the updating time mode.
+	* @return name of the updating time mode.
+	*/
     private String getUpdateTimeTitle(int id) {
         switch (id) {
             case 0:
@@ -163,6 +209,12 @@ public class SettingsActivity extends AppCompatActivity {
         }
     }
 
+	/**
+	* Returns name of the map type.
+	*
+	* @param id id of the map type.
+	* @return name of the map type.
+	*/
     private String getMapTypeTitle(int id) {
         switch (id) {
             case 0:

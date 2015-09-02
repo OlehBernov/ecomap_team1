@@ -102,19 +102,25 @@ public class Problem implements ClusterItem, Serializable {
     }
 
     /**
+     * provides access to problem latitude.
+     */
+    public double getLatitude() {
+        return latitude;
+    }
+
+    /**
+     * provides acces to problem longtitude.
+     */
+    public double getLongitude() {
+        return longitude;
+    }
+
+    /**
      * provides access to position
      */
     @Override
     public LatLng getPosition() {
         return new LatLng(latitude, longitude);
-    }
-
-    public double getLatitude() {
-        return latitude;
-    }
-
-    public double getLongitude() {
-        return longitude;
     }
 
 }

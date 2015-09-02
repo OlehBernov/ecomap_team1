@@ -75,7 +75,7 @@ public class Filter {
     }
 
     /**
-     * Filtration by solwed state
+     * Filtration by solved state
      *
      * @param filterState rules of filtration
      * @param problem     problem under filtration
@@ -117,7 +117,7 @@ public class Filter {
     }
 
     /**
-     * Show problem if it is unsolwed and filter allows to show unsolwed problem
+     * Show problem if it is unsolved and filter allows to show unsolved problem
      *
      * @param filterState rules of filtration
      * @param problem     problem under filtration

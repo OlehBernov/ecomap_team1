@@ -7,7 +7,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 
 /**
- * Adapter beetween activity and tabs fragments
+ * Adapter between activity and tabs fragments
  */
 public class ViewPagerAdapter extends FragmentStatePagerAdapter {
 
@@ -28,7 +28,7 @@ public class ViewPagerAdapter extends FragmentStatePagerAdapter {
 
     /**
      * Get tab activity by position
-     * @param position posiion of tab
+     * @param position position of tab
      * @return tab activity
      */
     @Override
@@ -50,9 +50,9 @@ public class ViewPagerAdapter extends FragmentStatePagerAdapter {
     }
 
     /**
-     * Gets title of tabe from position
-     * @param position posiion of tab
-     * @return tite
+     * Gets title of tab from position
+     * @param position position of tab
+     * @return title
      */
     @Override
     public CharSequence getPageTitle(int position) {

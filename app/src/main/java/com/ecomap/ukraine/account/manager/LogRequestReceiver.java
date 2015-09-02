@@ -16,6 +16,7 @@ public interface LogRequestReceiver {
 
     /**
      * Puts user information to Shared Preferences
+     *
      * @param user user information
      * @param password user password
      */

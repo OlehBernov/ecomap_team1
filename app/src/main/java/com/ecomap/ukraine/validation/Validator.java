@@ -6,11 +6,27 @@ import android.widget.EditText;
 
 import com.ecomap.ukraine.R;
 
+/**
+ * Performs field validation.
+ */
 public class Validator {
 
+    /**
+     * Performs validation of registration fields.
+     *
+     * @param name user name field.
+     * @param surname user surname field.
+     * @param email user email field.
+     * @param password user password field.
+     * @param passwordConfirmation password confirmation field.
+     * @return whether the all registration fields is valid.
+     */
     public static boolean registrationValidation(final EditText name, final EditText surname,
-                                          final EditText email, final EditText password,
-                                          final EditText passwordConfirmation) {
+                                                 final EditText email, final EditText password,
+                                                 final EditText passwordConfirmation) {
+
+        /*Performs validation on all fields.
+         Allows show error messages on all wrong field each time. */
         return nameValidation(name)
                & surnameValidation(surname)
                & emailValidation(email)
@@ -18,10 +34,23 @@ public class Validator {
                & passwordConfirmation(password, passwordConfirmation);
     }
 
+    /**
+     * Performs validation of log in fields.
+     *
+     * @param email user email field.
+     * @param password user password field.
+     * @return whether the log in field is valid.
+     */
     public static boolean logInValid(final EditText email, final EditText password) {
         return emailValidation(email) & passwordValidation(password);
     }
 
+    /**
+     * Performs validation of new user problem.
+     *
+     * @param problemTitle problem title field.
+     * @return whether the new problem content is valid.
+     */
     public static boolean addProblemValidation(final EditText problemTitle) {
         if(problemTitle == null) {
             return false;
@@ -35,6 +64,12 @@ public class Validator {
         return true;
     }
 
+    /**
+     * Performs validation of user name field.
+     *
+     * @param nameField user name field.
+     * @return whether the user name field is valid.
+     */
     private static boolean nameValidation(final EditText nameField) {
         String name = nameField.getText().toString();
         if (name.isEmpty()) {
@@ -50,6 +85,12 @@ public class Validator {
         return true;
     }
 
+    /**
+     * Performs validation of user surname.
+     *
+     * @param surnameField user surname field.
+     * @return whether the user surname is valid.
+     */
     private static boolean surnameValidation(final EditText surnameField) {
         String surname = surnameField.getText().toString();
         if (surname.isEmpty()) {
@@ -65,6 +106,12 @@ public class Validator {
         return true;
     }
 
+    /**
+     * Performs user password validation.
+     *
+     * @param emailField user email field.
+     * @return whether the user email is valid.
+     */
     private static boolean emailValidation(final EditText emailField) {
         String email = emailField.getText().toString();
         if (email.isEmpty()) {
@@ -77,6 +124,12 @@ public class Validator {
         return true;
     }
 
+    /**
+     * Performs user password validation.
+     *
+     * @param passwordField user password field.
+     * @return whether the user password is valid.
+     */
     private static boolean passwordValidation(final EditText passwordField) {
         String password = passwordField.getText().toString();
         if (password.isEmpty()) {
@@ -92,6 +145,13 @@ public class Validator {
         return true;
     }
 
+    /**
+     * Performs validation of password confirmation.
+     *
+     * @param passwordField user password field.
+     * @param passwordConfirmationField password confirmation field.
+     * @return whether the passwords matches.
+     */
     private static boolean passwordConfirmation(final EditText passwordField,
                                          final EditText passwordConfirmationField) {
         String passwordConfirmation = passwordConfirmationField.getText().toString();

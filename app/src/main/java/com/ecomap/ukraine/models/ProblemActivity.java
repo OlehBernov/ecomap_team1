@@ -20,7 +20,7 @@ public class ProblemActivity {
     private int problemActivityId;
 
     /**
-     * represend type of current problemActivity
+     * Represent type of current problemActivity
      */
     private ActivityType activityType;
 

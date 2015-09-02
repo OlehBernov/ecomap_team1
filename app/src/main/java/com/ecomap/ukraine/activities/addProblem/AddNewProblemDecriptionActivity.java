@@ -198,6 +198,7 @@ public class AddNewProblemDecriptionActivity extends AppCompatActivity {
 
     /**
      * Called when the activity is being re-initialized from a previously saved state
+     *
      * @param savedInstanceState the data most recently supplied in onSaveInstanceState(Bundle).
      */
     @Override
@@ -228,6 +229,7 @@ public class AddNewProblemDecriptionActivity extends AppCompatActivity {
 
     /**
      * Called when an activity you launched exits.
+     *
      * @param requestCode The integer request code originally supplied to startActivityForResult().
      * @param resultCode The integer result code returned by the child activity through its setResult().
      * @param data An Intent, which can return result data to the caller.
@@ -244,6 +246,7 @@ public class AddNewProblemDecriptionActivity extends AppCompatActivity {
 
     /**
      * Called to retrieve per-instance state from an activity before being killed.
+     *
      * @param outState Bundle in which to place your saved state
      */
     @Override
@@ -267,19 +270,20 @@ public class AddNewProblemDecriptionActivity extends AppCompatActivity {
         }
     }
 
-
     /**
      * Check if user was saved in savedInstanceState
      */
     private boolean isUserSaved(Bundle savedInstanceState) {
         return AccountManager.isAnonymousUser() && savedInstanceState.containsKey(USER);
     }
+
     /**
      * Check if description was saved in savedInstanceState
      */
     private boolean isDescriptionsSaved(Bundle savedInstanceState) {
         return (descriptions == null) && savedInstanceState.containsKey(DESCRIPTION);
     }
+
     /**
      * Check if photo was saved in savedInstanceState
      */
@@ -316,8 +320,9 @@ public class AddNewProblemDecriptionActivity extends AppCompatActivity {
         return (requestCode == CAMERA_PHOTO)
                 && (resultCode == RESULT_OK);
     }
+
     /**
-     * Check if gelery are available
+     * Check if gallery are available
      */
     private boolean isGalleryPhoto(int requestCode, int resultCode, Intent data) {
         return (requestCode == GALLERY_PHOTO)
@@ -326,7 +331,7 @@ public class AddNewProblemDecriptionActivity extends AppCompatActivity {
     }
 
     /**
-     * Add photo to layout from galery
+     * Add photo to layout from gallery
      */
     private void processGalleryPhoto(Intent data) {
         Uri selectedImage = data.getData();
@@ -343,6 +348,7 @@ public class AddNewProblemDecriptionActivity extends AppCompatActivity {
 
         addPhotosToView();
     }
+
     /**
      * Add photo to layout from camera
      */
@@ -409,7 +415,7 @@ public class AddNewProblemDecriptionActivity extends AppCompatActivity {
     }
 
     /**
-     * Set parametrs to photo description edit text
+     * Set parameters to photo description edit text
      */
     private TableRow.LayoutParams setPhotoDescriptionParams() {
         TableRow.LayoutParams photoDescriptionParams = new TableRow.LayoutParams(TableRow.LayoutParams.MATCH_PARENT,
@@ -422,8 +428,9 @@ public class AddNewProblemDecriptionActivity extends AppCompatActivity {
 
     /**
      * Builds user photo from photoPath
+     *
      * @param photoPath path to user photo
-     * @return usert photo
+     * @return user photo
      */
     private ImageView buildUserPhoto(final String photoPath) {
         int photoSize = (int) getResources().getDimension(R.dimen.edit_text_add_photo);
@@ -447,6 +454,7 @@ public class AddNewProblemDecriptionActivity extends AppCompatActivity {
 
     /**
      * Show full size of photo
+     *
      * @param photoPath path to photo
      */
     private void showFullSizePhoto(String photoPath) {
@@ -457,6 +465,7 @@ public class AddNewProblemDecriptionActivity extends AppCompatActivity {
 
     /**
      * Sets delete button
+     *
      * @param buttonId if of delete button
      */
     private void setDeleteButton(int buttonId) {
@@ -476,8 +485,9 @@ public class AddNewProblemDecriptionActivity extends AppCompatActivity {
     }
 
     /**
-     * Sets parametrs for delete button
-     * @return parametrs for delete button
+     * Sets parameters for delete button
+     *
+     * @return parameters for delete button
 
      */
     private RelativeLayout.LayoutParams setDeleteButtonParams() {
@@ -491,6 +501,7 @@ public class AddNewProblemDecriptionActivity extends AppCompatActivity {
 
     /**
      * Add listener on deleteButton
+     *
      * @param deleteButton current delete button
      */
 
@@ -505,6 +516,7 @@ public class AddNewProblemDecriptionActivity extends AppCompatActivity {
 
     /**
      * Delete block from layout
+     *
      * @param buttonId id of delete button
      */
     private void deleteBlock(int buttonId) {
@@ -516,6 +528,7 @@ public class AddNewProblemDecriptionActivity extends AppCompatActivity {
 
     /**
      * Save photo to uri list
+     *
      * @param photoPath path to photo
      */
     private void savePhoto(String photoPath) {

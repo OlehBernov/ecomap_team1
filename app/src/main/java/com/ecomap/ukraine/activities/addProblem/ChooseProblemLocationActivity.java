@@ -35,6 +35,7 @@ public class ChooseProblemLocationActivity extends AppCompatActivity {
         startActivity(mainIntent);
         finish();
     }
+
     /**
      * Calls when pressed custom back button
      */
