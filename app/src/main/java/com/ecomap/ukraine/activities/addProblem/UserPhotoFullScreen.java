@@ -11,6 +11,12 @@ import com.ecomap.ukraine.activities.ExtraFieldNames;
 
 public class UserPhotoFullScreen extends AppCompatActivity {
 
+    /**
+     * Initialize activity
+     *
+     * @param savedInstanceState Contains the data it most recently
+     *                           supplied in onSaveInstanceState(Bundle)
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
