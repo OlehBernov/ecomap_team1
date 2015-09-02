@@ -75,6 +75,10 @@ public class IconRenderer extends DefaultClusterRenderer<Problem> {
         super.onBeforeClusterItemRendered(problem, markerOptions);
     }
 
+    /**
+     * Get cluster text
+     * @param bucket number of markers in cluster
+     */
     @Override
     protected String getClusterText(int bucket) {
         return String.valueOf(bucket);

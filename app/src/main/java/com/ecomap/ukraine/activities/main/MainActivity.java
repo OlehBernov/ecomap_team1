@@ -134,6 +134,11 @@ public class MainActivity extends AppCompatActivity {
         return true;
     }
 
+    /**
+     * Called when the user selects an item from the options menu
+     * @param item menu item
+     * @return
+     */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (drawerToggle.onOptionsItemSelected(item)) {
@@ -142,6 +147,9 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    /**
+     * Called when the activity has detected the user's press of the back key.
+     */
     @Override
     public void onBackPressed() {
         if (filterLayout.isDrawerOpen(GravityCompat.END)) {
@@ -180,6 +188,10 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Changed button state on filter layout
+     * @param view
+     */
     public void switchCheckButtonState(View view) {
         CheckBox checkBox = (CheckBox) view;
         if (checkBox.isChecked()) {
@@ -195,10 +207,18 @@ public class MainActivity extends AppCompatActivity {
         dialogDateFrom.show(getSupportFragmentManager(), DATE_FROM_TAG);
     }
 
+    /**
+     * Changed date state on filter layout
+     * @param view date view
+     */
     public void dateToChoosing(View view) {
         dialogDateTo.show(getSupportFragmentManager(), DATE_TO_TAG);
     }
 
+    /**
+     * Opens ChooseProblemLocationActivity on Click
+     * @param view view that was cliced
+     */
     public void openChooseProblemLocationActivity(View view) {
         if (AccountManager.isAnonymousUser()) {
             setNotAuthorizeDialog(ALERT_MESSAGE);
@@ -209,6 +229,10 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Set dialog when user are not authorized
+     * @param message
+     */
     public  void setNotAuthorizeDialog(final String message) {
         new MaterialDialog.Builder(activity)
                 .title(R.string.Caution)
@@ -238,37 +262,61 @@ public class MainActivity extends AppCompatActivity {
                 .show();
     }
 
+    /**
+     * Opens Login activity
+     * @param item menu item which was clicked
+     */
     public void logIn(MenuItem item) {
         Intent intent = new Intent(this, LoginScreen.class);
         startActivityForResult(intent, LOG_IN_REQUEST_CODE);
         menuDrawer.closeDrawers();
     }
 
+    /**
+     * Log out user
+     * @param item menu item which was clicked
+     */
     public void logOut(MenuItem item) {
         setUserInformation(User.ANONYM_USER);
         AccountManager.setUserState(User.ANONYM_USER);
         AccountManager.getInstance(getApplicationContext()).
                 putUserToPreferences(User.ANONYM_USER, "");
     }
-
+    /**
+     * Opens SignUp activity
+     * @param item menu item which was clicked
+     */
     public void signUp(MenuItem item) {
         Intent intent = new Intent(this, SignupActivity.class);
         startActivityForResult(intent, SIGN_UP_REQUEST_CODE);
         menuDrawer.closeDrawers();
     }
 
+    /**
+     * Opens Setting activity
+     * @param item menu item which was clicked
+     */
     public void openSettings(MenuItem item) {
         Intent intent = new Intent(this, SettingsActivity.class);
         startActivityForResult(intent, SETTINGS_REQUEST_CODE);
         menuDrawer.closeDrawers();
     }
-
+    /**
+     * Opens Search activity
+     * @param item menu item which was clicked
+     */
     public void openSearch(MenuItem item) {
         Intent intent = new Intent(this, Search.class);
         startActivity(intent);
         menuDrawer.closeDrawers();
     }
 
+    /**
+     * Called when an activity you launched exits.
+     * @param requestCode The integer request code originally supplied to startActivityForResult().
+     * @param resultCode The integer result code returned by the child activity through its setResult().
+     * @param data An Intent, which can return result data to the caller.
+     */
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -337,6 +385,9 @@ public class MainActivity extends AppCompatActivity {
         drawerToggle.onConfigurationChanged(newConfig);
     }
 
+    /**
+     * The final call you receive before your activity is destroyed.
+     */
     @Override
     protected void onDestroy() {
         super.onDestroy();
@@ -378,11 +429,19 @@ public class MainActivity extends AppCompatActivity {
         dateToView.setText(formattedDate);
     }
 
+    /**
+     * Set uncheked state on checkbox
+     * @param view current checkbox
+     */
     private void setFilterOn(View view) {
         CheckBox checkBox = (CheckBox) view;
         checkBox.setChecked(false);
     }
 
+    /**
+     * Sets user information on drawer
+     * @param user user state
+     */
     private void setUserInformation(User user) {
         TextView userName = (TextView) findViewById(R.id.navigation_user_name);
         TextView email = (TextView) findViewById(R.id.navigation_email);
@@ -395,6 +454,9 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Create choose date dialog
+     */
     private void createDateFromPickerDialog() {
         CalendarDatePickerDialog.OnDateSetListener dateFromListener =
                 new CalendarDatePickerDialog.OnDateSetListener() {
@@ -490,6 +552,9 @@ public class MainActivity extends AppCompatActivity {
         ab.setDisplayHomeAsUpEnabled(true);
     }
 
+    /**
+     * Setup drawer layout
+     */
     private void setUpDrawerLayout() {
         DrawerLayout drawerLayout = (DrawerLayout) findViewById(R.id.drawer);
         drawerLayout.setDescendantFocusability(ViewGroup.FOCUS_BLOCK_DESCENDANTS);
@@ -498,6 +563,11 @@ public class MainActivity extends AppCompatActivity {
                 R.string.drawer_close);
     }
 
+    /**
+     * Gets filter state from filter drawer
+     * @param id checkbox id
+     * @return change state of checkbox
+     */
     private boolean getFilterState(int id) {
         CheckBox checkBox = (CheckBox) findViewById(id);
         return checkBox.isChecked();
@@ -512,6 +582,9 @@ public class MainActivity extends AppCompatActivity {
         setFiltersState(filterState);
     }
 
+    /**
+     * Sets date of filtration
+     */
     private void setDate() {
         SimpleDateFormat dateFormat = new SimpleDateFormat(DATE_TEMPLATE, Locale.ENGLISH);
         try {
@@ -531,6 +604,10 @@ public class MainActivity extends AppCompatActivity {
         setDateOnScreen(calendarDateFrom, calendarDateTo);
     }
 
+    /**
+     * Sets filter state on drawer
+     * @param filtersState state of filter
+     */
     private void setFiltersState(FilterState filtersState) {
         if (filtersState != null) {
             if (filtersState.isFilterOn(FilterContract.FOREST_DESTRUCTION)) {
@@ -566,6 +643,9 @@ public class MainActivity extends AppCompatActivity {
         setDate();
     }
 
+    /**
+     * Handles when filter drawer are closed
+     */
     private class FilterDrawerListener extends DrawerLayout.SimpleDrawerListener {
         @Override
         public void onDrawerClosed(View view) {

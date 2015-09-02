@@ -24,6 +24,9 @@ import com.ecomap.ukraine.validation.Validator;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 
+/**
+ * Activity which represent registration on server
+ */
 public class SignupActivity extends AppCompatActivity implements LogInListener {
 
     private static final String CREATING_ACCOUNT = "Creating Account...";
@@ -47,6 +50,9 @@ public class SignupActivity extends AppCompatActivity implements LogInListener {
     private AccountManager accountManager;
     private MaterialDialog signUpProgress;
 
+    /**
+     * Register user on server
+     */
     public void signUp() {
         boolean isRegistrationValid;
         isRegistrationValid = Validator.registrationValidation(nameText, surnameText, emailText,
@@ -75,6 +81,12 @@ public class SignupActivity extends AppCompatActivity implements LogInListener {
         accountManager.registerUser(name, surname, email, password);
     }
 
+    /**
+     * Initialize activity
+     *
+     * @param savedInstanceState Contains the data it most recently
+     *                           supplied in onSaveInstanceState(Bundle)
+     */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -118,12 +130,19 @@ public class SignupActivity extends AppCompatActivity implements LogInListener {
         });
     }
 
+    /**
+     * Called when the activity has detected the user's press of the back key.
+     */
     @Override
     public void onBackPressed() {
         super.onBackPressed();
         finish();
     }
 
+    /**
+     * Receive from server identified user.
+     * @param user identified user.
+     */
     @Override
     public void setLogInResult(final User user) {
         accountManager.removeLogInListener(this);
@@ -137,6 +156,9 @@ public class SignupActivity extends AppCompatActivity implements LogInListener {
         }
     }
 
+    /**
+     * Show dialog of failed registration.
+     */
     private void showFailureDialog() {
         new MaterialDialog.Builder(this)
                 .title(SIGN_UP_TITLE)
@@ -166,6 +188,9 @@ public class SignupActivity extends AppCompatActivity implements LogInListener {
                 .show();
     }
 
+    /**
+     * Opens Main activity
+     */
     private void openMainActivity() {
         Intent mainIntent = new Intent(this, MainActivity.class);
         mainIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);

@@ -9,7 +9,7 @@ import com.ecomap.ukraine.models.User;
 public interface LogInListener {
 
     /**
-     * Send to listeners identified user.
+     * Receive from server identified user.
      *
      * @param user identified user.
      */

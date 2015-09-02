@@ -1,6 +1,5 @@
 package com.ecomap.ukraine.activities.main;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.location.Location;
@@ -38,6 +37,9 @@ import com.google.maps.android.clustering.ClusterManager;
 
 import java.util.List;
 
+/**
+ * Represent map functionality
+ */
 public class FragmentEcoMap extends android.support.v4.app.Fragment
         implements ProblemListener, FilterListener,
         ClusterManager.OnClusterItemClickListener<Problem>,
@@ -210,6 +212,9 @@ public class FragmentEcoMap extends android.support.v4.app.Fragment
         putAllProblemsOnMap(filterState);
     }
 
+    /**
+     * Sets renderer on map
+     */
     @Override
     public void setRenderer () {
         clusterManager.setRenderer(new IconRenderer(getActivity(), googleMap, clusterManager));
@@ -245,6 +250,11 @@ public class FragmentEcoMap extends android.support.v4.app.Fragment
         return false;
     }
 
+    /**
+     * Action with click on cluster
+     * @param cluster clicked cluster
+     * @return result of action
+     */
     @Override
     public boolean onClusterClick(Cluster<Problem> cluster) {
         googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(cluster.getPosition(),
@@ -291,6 +301,10 @@ public class FragmentEcoMap extends android.support.v4.app.Fragment
         googleMap.moveCamera(cameraUpdate);
     }
 
+    /**
+     * Change camera position to clicked marker
+     * @param problem clicked marker
+     */
     private void moveCameraToProblem(final Problem problem) {
         CameraPosition cameraPosition = new CameraPosition
                 .Builder()
@@ -301,6 +315,10 @@ public class FragmentEcoMap extends android.support.v4.app.Fragment
         googleMap.animateCamera(cameraUpdate);
     }
 
+    /**
+     * Change camera position to user location
+     * @param myLocation user location
+     */
     private void moveCameraToMyLocation(final Location myLocation) {
         CameraPosition cameraPosition = new CameraPosition
                 .Builder()
@@ -311,6 +329,10 @@ public class FragmentEcoMap extends android.support.v4.app.Fragment
         googleMap.animateCamera(cameraUpdate);
     }
 
+    /**
+     * Setup base parametrs on cluster manager
+     * @param filterState state of filter
+     */
     private void setupClusterManager(final FilterState filterState) {
         List<Problem> filteredProblems = new Filter().filterProblem(problems, filterState);
         clusterManager =
@@ -322,6 +344,9 @@ public class FragmentEcoMap extends android.support.v4.app.Fragment
         clusterManager.addItems(filteredProblems);
     }
 
+    /**
+     * Sets map type
+     */
     private void setMapType() {
         if(mapType == MAP_TYPE_MORMAL_ID) {
             googleMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);

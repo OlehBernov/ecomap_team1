@@ -35,6 +35,9 @@ import java.util.Random;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 
+/**
+ * Activity which represent identification on server
+ */
 public class LoginScreen extends AppCompatActivity implements LogInListener {
 
     private static final String LOGIN_MESSAGE = "Please wait...";
@@ -53,6 +56,9 @@ public class LoginScreen extends AppCompatActivity implements LogInListener {
     private CallbackManager callbackManager;
     private MaterialDialog logInProgress;
 
+    /**
+     * Identify on server
+     */
     public void login() {
         if (!Validator.logInValid(emailText, passwordText)) {
             return;
@@ -76,6 +82,10 @@ public class LoginScreen extends AppCompatActivity implements LogInListener {
         accountManager.logInUser(password, email);
     }
 
+    /**
+     * Receive from server identified user.
+     * @param user identified user.
+     */
     @Override
     public void setLogInResult(final User user) {
         logInButton.setEnabled(true);
@@ -88,12 +98,21 @@ public class LoginScreen extends AppCompatActivity implements LogInListener {
         }
     }
 
+    /**
+     * Called when an activity you launched exits.
+     * @param requestCode The integer request code originally supplied to startActivityForResult().
+     * @param resultCode The integer result code returned by the child activity through its setResult().
+     * @param data An Intent, which can return result data to the caller.
+     */
     @Override
     public void onActivityResult(final int requestCode, final int resultCode, final Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         callbackManager.onActivityResult(requestCode, resultCode, data);
     }
 
+    /**
+     * Called when the activity has detected the user's press of the back key.
+     */
     @Override
     public void onBackPressed() {
         super.onBackPressed();
@@ -171,11 +190,17 @@ public class LoginScreen extends AppCompatActivity implements LogInListener {
         );
     }
 
+    /**
+     * The final call you receive before your activity is destroyed.
+     */
     public void onDestroy() {
         super.onDestroy();
         accountManager.removeLogInListener(this);
     }
 
+    /**
+     * Show dialog of failed registration.
+     */
     private void showFailureDialog() {
         new MaterialDialog.Builder(this)
                 .title(FAILE_TITLE)
@@ -207,6 +232,9 @@ public class LoginScreen extends AppCompatActivity implements LogInListener {
                 .show();
     }
 
+    /**
+     * Opens Main activity
+     */
     private void openMainActivity() {
         Intent mainIntent = new Intent(this, MainActivity.class);
         mainIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -214,6 +242,10 @@ public class LoginScreen extends AppCompatActivity implements LogInListener {
         finish();
     }
 
+    /**
+     * Registration via facebook
+     * @param loginResult
+     */
     private void facebookLogIn(final LoginResult loginResult) {
         GraphRequest request = GraphRequest.newMeRequest(loginResult.getAccessToken(),
                 new GraphRequest.GraphJSONObjectCallback() {
@@ -232,6 +264,11 @@ public class LoginScreen extends AppCompatActivity implements LogInListener {
         request.executeAsync();
     }
 
+    /**
+     * Generates randoom password
+     * @param id user id
+     * @return generated password
+     */
     private long generatePassword(final String id) {
         long input = Long.getLong(id);
         return new Random(input + 1).nextLong();
