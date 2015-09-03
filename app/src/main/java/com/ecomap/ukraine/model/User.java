@@ -5,7 +5,7 @@ import java.io.Serializable;
 /**
  * Represents user atributes
  */
-public class User implements Serializable{
+public class User {
 
     /**
      * Default user name

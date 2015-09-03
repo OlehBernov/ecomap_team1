@@ -58,6 +58,7 @@ public class AddProblemDescriptionFragment extends Fragment implements AddProble
 
     private AddProblemManager addProblemManager;
     private DataManager dataManager;
+    private AccountManager accountManager;
     private String userName;
     private String userSurname;
 
@@ -116,9 +117,9 @@ public class AddProblemDescriptionFragment extends Fragment implements AddProble
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.tab_1, container, false);
-        AccountManager.getInstance(getActivity().getApplicationContext());
-        userName = AccountManager.getUserState().getName();
-        userSurname = AccountManager.getUserState().getSurname();
+        accountManager = AccountManager.getInstance(v.getContext());
+        userName = accountManager.getUserFromPreference().getName();
+        userSurname = accountManager.getUserFromPreference().getSurname();
         activity = getActivity();
         addProblemManager = AddProblemManager.getInstance(activity.getApplicationContext());
         dataManager = DataManager.getInstance(activity.getApplicationContext());
@@ -225,7 +226,7 @@ public class AddProblemDescriptionFragment extends Fragment implements AddProble
                 .setProposal(solution)
                 .setPosition(new LatLng(latitude, longitude))
                 .setType(type)
-                .setUser(new User(AccountManager.getUserState().getId(),
+                .setUser(new User(accountManager.getUserFromPreference().getId(),
                         userName, userSurname, "", "", "", ""))
                 .setPhotos(bitmapPhotos)
                 .setPhotoDescriptions(photoDescriptions)

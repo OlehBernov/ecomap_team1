@@ -95,7 +95,8 @@ public class DetailsContent extends LinearLayout implements DetailsListener {
 
     public void setProblemContent(final Problem problem, final DetailsSettings detailsSettings) {
         this.problem = problem;
-        this.user = AccountManager.getUserState();
+        AccountManager accountManager = AccountManager.getInstance(this.context);
+        this.user = accountManager.getUserFromPreference();
 
         markerIcon = (ImageView) findViewById(R.id.markerIcon);
         problemTitle = (TextView) findViewById(R.id.title_of_problem);

@@ -33,12 +33,8 @@ public class AccountManager implements LogInListenerNotifier,
     /**
      * Application context
      */
-    private static Context context;
+    private  Context context;
 
-    /**
-     * Represent identification state of user
-     */
-    private static User userState;
 
     /**
      * Constructor
@@ -46,9 +42,8 @@ public class AccountManager implements LogInListenerNotifier,
      * @param context application context
      */
     private AccountManager(final Context context) {
-        AccountManager.context = context;
+        this.context = context;
         logInClient = new LogInClient(this, context);
-        userState = User.ANONYM_USER;
     }
 
     /**
@@ -61,25 +56,14 @@ public class AccountManager implements LogInListenerNotifier,
         return instance;
     }
 
-    /**
-     * Returns state of user
-     */
-    public static User getUserState () {
-        return userState;
-    }
 
-    /**
-     * Sets state of user
-     */
-    public static void setUserState (User user) {
-        userState = user;
-    }
 
     /**
      * Checks if user is anonym
      */
-    public static boolean isAnonymousUser() {
-        return userState.getId() < 0;
+    public  boolean isAnonymousUser() {
+        User user = getUserFromPreference();
+        return user.getId() < 0;
     }
 
     /**
@@ -169,13 +153,13 @@ public class AccountManager implements LogInListenerNotifier,
     /**
      * Gets user information from Shared Preferences
      */
-    public static void getUserFromPreference () {
+    public User getUserFromPreference () {
         SharedPreferences userPreference = context.
                 getSharedPreferences(ExtraFieldNames.USER_INFO, Context.MODE_PRIVATE);
         int userID = userPreference.getInt(ExtraFieldNames.USER_ID, -1);
         String userName = userPreference.getString(ExtraFieldNames.USER_NAME, "");
         String userSurname = userPreference.getString(ExtraFieldNames.USER_SURNAME, "");
         String email = userPreference.getString(ExtraFieldNames.LOGIN, "");
-        setUserState(new User(userID, userName, userSurname, "", "", "", email));
+        return new User(userID, userName, userSurname, "", "", "", email);
     }
 }

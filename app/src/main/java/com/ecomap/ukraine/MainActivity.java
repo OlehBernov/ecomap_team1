@@ -119,6 +119,8 @@ public class MainActivity extends AppCompatActivity {
      */
     private FilterManager filterManager;
 
+    private AccountManager accountManager;
+
     private CharSequence previousTitle;
 
     /**
@@ -220,7 +222,7 @@ public class MainActivity extends AppCompatActivity {
      * @param view view that was cliced
      */
     public void openChooseProblemLocationActivity(View view) {
-        if (AccountManager.isAnonymousUser()) {
+        if (accountManager.isAnonymousUser()) {
             setNotAuthorizeDialog(ALERT_MESSAGE);
         } else {
             Intent intent = new Intent(this, ChooseProblemLocationActivity.class);
@@ -234,7 +236,7 @@ public class MainActivity extends AppCompatActivity {
      * @param message
      */
     public  void setNotAuthorizeDialog(final String message) {
-        new MaterialDialog.Builder(activity)
+        new MaterialDialog.Builder(this)
                 .title(R.string.Caution)
                 .content(message)
                 .backgroundColorRes(R.color.log_in_dialog)
@@ -249,8 +251,8 @@ public class MainActivity extends AppCompatActivity {
                     public void onPositive(MaterialDialog dialog) {
                         super.onPositive(dialog);
                         Intent mainIntent = new Intent(activity, LoginActivity.class);
-                        activity.startActivity(mainIntent);
-                        activity.finish();
+                        startActivity(mainIntent);
+                        finish();
                     }
 
                     @Override
@@ -278,9 +280,7 @@ public class MainActivity extends AppCompatActivity {
      */
     public void logOut(MenuItem item) {
         setUserInformation(User.ANONYM_USER);
-        AccountManager.setUserState(User.ANONYM_USER);
-        AccountManager.getInstance(getApplicationContext()).
-                putUserToPreferences(User.ANONYM_USER, "");
+        accountManager. putUserToPreferences(User.ANONYM_USER, "");
     }
     /**
      * Opens SignUp activity
@@ -320,7 +320,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        setUserInformation(AccountManager.getUserState());
+        setUserInformation(accountManager.getUserFromPreference());
         if (isSettingsRequest(requestCode)) {
             Fragment fragment = getSupportFragmentManager().findFragmentByTag(MAP_TAG);
             if(fragment != null) {
@@ -344,11 +344,12 @@ public class MainActivity extends AppCompatActivity {
 
         filterLayout = (DrawerLayout) findViewById(R.id.drawer2);
         filterManager = FilterManager.getInstance(this);
+        accountManager = AccountManager.getInstance(this);
         setupToolbar();
         setUpDrawerLayout();
         setupFilter();
 
-        setUserInformation(AccountManager.getUserState());
+        setUserInformation(accountManager.getUserFromPreference());
 
         slidingUpPanelLayout = (SlidingUpPanelLayout) findViewById(R.id.sliding_layout);
         slidingUpPanelLayout.setAnchorPoint(ANCHOR_POINT);
@@ -446,7 +447,7 @@ public class MainActivity extends AppCompatActivity {
         TextView userName = (TextView) findViewById(R.id.navigation_user_name);
         TextView email = (TextView) findViewById(R.id.navigation_email);
         userName.setText(user.getName() + " " + user.getSurname());
-        if(!AccountManager.isAnonymousUser()) {
+        if(!accountManager.isAnonymousUser()) {
             email.setText(user.getEmail());
         }
         else {

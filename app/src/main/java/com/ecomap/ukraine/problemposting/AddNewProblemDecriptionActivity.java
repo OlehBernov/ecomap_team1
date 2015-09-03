@@ -219,12 +219,6 @@ public class AddNewProblemDecriptionActivity extends AppCompatActivity {
             descriptions = savedInstanceState.getStringArrayList(DESCRIPTION);
             addPhotosToView();
         }
-        if (isUserSaved(savedInstanceState)) {
-            User user = (User) savedInstanceState.getSerializable(USER);
-            AccountManager.getInstance(getApplicationContext());
-            AccountManager.setUserState(new User(user.getId(), user.getName(), user.getSurname(),
-                    user.getRole(), user.getIat(), user.getToken(), user.getEmail()));
-        }
     }
 
     /**
@@ -265,16 +259,6 @@ public class AddNewProblemDecriptionActivity extends AppCompatActivity {
         if (descriptions != null) {
             outState.putStringArrayList(DESCRIPTION, new ArrayList<>(descriptions));
         }
-        if (!AccountManager.isAnonymousUser()) {
-            outState.putSerializable(USER, AccountManager.getUserState());
-        }
-    }
-
-    /**
-     * Check if user was saved in savedInstanceState
-     */
-    private boolean isUserSaved(Bundle savedInstanceState) {
-        return AccountManager.isAnonymousUser() && savedInstanceState.containsKey(USER);
     }
 
     /**

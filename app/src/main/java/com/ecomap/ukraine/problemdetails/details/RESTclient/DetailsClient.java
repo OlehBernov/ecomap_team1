@@ -65,7 +65,8 @@ public class DetailsClient {
             protected Map<String, String> getParams() {
                 Map<String, String> params = new HashMap<>();
                 params.put(JSONFields.PROBLEM_ID, problemID);
-                if(!AccountManager.isAnonymousUser()) {
+                AccountManager accountManager = AccountManager.getInstance(context);
+                if(!accountManager.isAnonymousUser()) {
                     params.put(JSONFields.USER_ID, userID);
                     params.put(JSONFields.USER_NAME, userName);
                     params.put(JSONFields.USER_SURNAME, userSurname);

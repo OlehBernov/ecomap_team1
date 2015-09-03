@@ -126,10 +126,11 @@ public class SplashScreenActivity extends Activity implements ProblemListener {
 
         Context context = getApplicationContext();
         intent = new Intent(this, LoginActivity.class);
-        AccountManager.getInstance(getApplicationContext());
-        AccountManager.getUserFromPreference();
-        user = AccountManager.getUserState();
-        if(AccountManager.isAnonymousUser()) {
+
+        AccountManager accountManager = AccountManager.getInstance(getApplicationContext());
+        user = accountManager.getUserFromPreference();
+
+        if(accountManager.isAnonymousUser()) {
             intent = new Intent(this, LoginActivity.class);
         }
         else {
