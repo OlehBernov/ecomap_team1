@@ -12,12 +12,14 @@ import java.io.IOException;
 /**
  * Performs photo resizing.
  */
-public class BitmapResizer {
+public final class BitmapResizer {
 
     /**
      * Rotation degree for horizontal photo.
      */
     private static final int DEGREE_90 = 90;
+
+    private BitmapResizer(){}
 
     /**
      * Changes bitmap size according to bounds.

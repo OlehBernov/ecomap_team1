@@ -9,7 +9,9 @@ import com.ecomap.ukraine.R;
 /**
  * Performs field validation.
  */
-public class Validator {
+public final class Validator {
+
+    private Validator(){}
 
     /**
      * Performs validation of registration fields.

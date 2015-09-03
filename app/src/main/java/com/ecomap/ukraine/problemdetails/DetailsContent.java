@@ -387,7 +387,7 @@ public class DetailsContent extends LinearLayout implements DetailsListener {
         if (isViewHaveChild(photoContainer)) {
             photoContainer.removeAllViews();
         }
-        BasicContentLayout photoPreview = new BasicContentLayout(photoContainer, context);
+        BasicContentLayout photoPreview = new BasicContentLayout(photoContainer);
         int position = 0;
         for (final Photo photo : photos) {
             ImageView photoView = new ImageView(context);

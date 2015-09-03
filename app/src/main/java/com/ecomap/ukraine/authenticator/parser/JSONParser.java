@@ -8,9 +8,11 @@ import org.json.JSONObject;
 /**
  * Performs converting JSON to entities.
  */
-public class JSONParser {
+public final class JSONParser {
 
     private static final String NULL_ARGUMENT = "Argument is null";
+
+    private JSONParser(){}
 
     /**
      * Converts information about identified user from JSON to User objects.

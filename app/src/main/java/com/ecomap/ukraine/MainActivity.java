@@ -24,13 +24,12 @@ import android.widget.TextView;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.codetroopers.betterpickers.calendardatepicker.CalendarDatePickerDialog;
-import com.ecomap.ukraine.R;
 import com.ecomap.ukraine.map.FragmentEcoMap;
 import com.ecomap.ukraine.authenticator.LoginActivity;
 import com.ecomap.ukraine.authenticator.SignupActivity;
 import com.ecomap.ukraine.authenticator.manager.AccountManager;
 import com.ecomap.ukraine.problemdetails.details.manager.DetailsManager;
-import com.ecomap.ukraine.problemsearch.Search;
+import com.ecomap.ukraine.problemsearch.SearchActivity;
 import com.ecomap.ukraine.problemposting.ChooseProblemLocationActivity;
 import com.ecomap.ukraine.settings.SettingsActivity;
 import com.ecomap.ukraine.filter.FilterContract;
@@ -303,11 +302,11 @@ public class MainActivity extends AppCompatActivity {
         menuDrawer.closeDrawers();
     }
     /**
-     * Opens Search activity
+     * Opens SearchActivity activity
      * @param item menu item which was clicked
      */
     public void openSearch(MenuItem item) {
-        Intent intent = new Intent(this, Search.class);
+        Intent intent = new Intent(this, SearchActivity.class);
         startActivity(intent);
         menuDrawer.closeDrawers();
     }

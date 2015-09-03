@@ -135,15 +135,4 @@ public class JSONFields {
      */
     public static final int PROBLEM_ACTIVITY_POSITION = 2;
 
-    /**
-     * Path to photos on server.
-     */
-    public static final String PHOTOS_PATH = "http://ecomap.org/photos/large/";
-
-    /**
-     * Text which contains some information field of problem.
-     * Such text string will replace to empty string.
-     */
-    public static final String WRONG_TEXT = "null";
-
 }

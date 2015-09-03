@@ -7,23 +7,9 @@ import android.view.inputmethod.InputMethodManager;
 /**
  * Performs keyboard hiding, when view lose the focus.
  */
-public class Keyboard {
+public final class Keyboard {
 
-    private static View.OnFocusChangeListener focusChangeListener = new View.OnFocusChangeListener() {
-
-        /**
-         * Performs when view lose the focus.
-         *
-         * @param view target view.
-         * @param hasFocus indicates whether a view has focus.
-         */
-        @Override
-        public void onFocusChange(View view, boolean hasFocus) {
-            if (!hasFocus) {
-                hideKeyboard(view);
-            }
-        }
-    };
+    private Keyboard(){}
 
     /**
      * Sets onFocusChangeListener to view.
@@ -31,7 +17,21 @@ public class Keyboard {
      * @param view view which interact with keyboard.
      */
     public static void setOnFocusChangeListener(View view) {
-        view.setOnFocusChangeListener(focusChangeListener);
+        view.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+
+            /**
+             * Performs when view lose the focus.
+             *
+             * @param view target view.
+             * @param hasFocus indicates whether a view has focus.
+             */
+            @Override
+            public void onFocusChange(View view, boolean hasFocus) {
+                if (!hasFocus) {
+                    hideKeyboard(view);
+                }
+            }
+        });
     }
 
     /**

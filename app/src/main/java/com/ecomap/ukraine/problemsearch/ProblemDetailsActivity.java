@@ -72,7 +72,7 @@ public class ProblemDetailsActivity extends AppCompatActivity implements Problem
         setContentView(R.layout.activity_problem_details);
         setUpToolbar();
 
-        problem = (Problem) getIntent().getSerializableExtra(Search.PROBLEM_EXTRA);
+        problem = (Problem) getIntent().getSerializableExtra(SearchActivity.PROBLEM_EXTRA);
         detailsContent = (DetailsContent) findViewById(R.id.search_details_content);
         detailsContent.setProblemContent(problem, null);
 

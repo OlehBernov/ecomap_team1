@@ -19,13 +19,26 @@ import java.util.List;
 /**
  * Performs converting JSON to entities.
  */
-public class JSONParser {
+public final class JSONParser {
 
     /**
      * Message which will written in exception,
      * if Parser get null argument.
      */
     private static final String NULL_ARGUMENT = "Argument is null";
+
+    /**
+     * Text which contains some information field of problem.
+     * Such text string will replace to empty string.
+     */
+    public static final String WRONG_TEXT = "null";
+
+    /**
+     * Path to photos on server.
+     */
+    public static final String PHOTOS_PATH = "http://ecomap.org/photos/large/";
+
+    private JSONParser(){}
 
     /**
      * Converts brief information from JSON to List of Problem objects.
@@ -86,8 +99,8 @@ public class JSONParser {
                 problemDetails.optInt(JSONFields.SEVERITY, -1),
                 problemDetails.optInt(JSONFields.MODERATION, -1),
                 problemDetails.optInt(JSONFields.VOTES, -1),
-                problemContent.equals(JSONFields.WRONG_TEXT) ? "" : problemContent,
-                proposal.equals(JSONFields.WRONG_TEXT) ? "" : proposal,
+                problemContent.equals(WRONG_TEXT) ? "" : problemContent,
+                proposal.equals(WRONG_TEXT) ? "" : proposal,
                 problemDetails.getString(JSONFields.TITLE),
                 problemActivities,
                 getPhotos(detailedProblemArray
@@ -195,7 +208,7 @@ public class JSONParser {
                     photoObject.optInt(JSONFields.ID, -1),
                     photoObject.optInt(JSONFields.PHOTO_USERS_ID, -1),
                     photoObject.optInt(JSONFields.PHOTO_STATUS, -1),
-                    JSONFields.PHOTOS_PATH + photoObject.getString(JSONFields.LINK),
+                    PHOTOS_PATH + photoObject.getString(JSONFields.LINK),
                     photoObject.getString(JSONFields.PHOTO_DESCRIPTION)
             );
             photos.add(currentPhoto);

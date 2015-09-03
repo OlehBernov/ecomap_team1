@@ -25,7 +25,7 @@
             android:id="@+id/navigation_item_4"
             android:icon="@drawable/ic_search_black_24dp"
             android:onClick="openSearch"
-            android:title="@string/search"/>
+            android:title="@string/searchActivity"/>
 
         <item
             android:id="@+id/navigation_item_5"

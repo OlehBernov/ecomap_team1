@@ -81,8 +81,7 @@ public class AddProblemClient {
             public void onResponse(String response) {
                 if (problemData.getPhotos() != null) {
                     try {
-                        JSONParser jsonParser = new JSONParser();
-                        String addedProblemID = jsonParser.parseAddedProblemInformation(response);
+                        String addedProblemID = JSONParser.parseAddedProblemInformation(response);
                         addPhotosToProblem(userId, userName, userSurname,
                                 problemData.getPhotoDescriptions(), addedProblemID,
                                 problemData.getPhotos());

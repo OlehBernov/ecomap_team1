@@ -1,10 +1,8 @@
 package com.ecomap.ukraine.helper;
 
-import android.content.Context;
 import android.view.View;
 import android.view.ViewTreeObserver;
 import android.widget.LinearLayout;
-import android.widget.TextView;
 
 
 public class BasicContentLayout {
@@ -13,14 +11,12 @@ public class BasicContentLayout {
     private static final int DEFAULT_LEFT_MARGIN = 25;
 
     private LinearLayout rootLayout;
-    private Context context;
     private int numberOfBlocks;
     private int currentLayoutHeight;
     private int getCurrentLayoutWidth;
 
-    public BasicContentLayout(final LinearLayout rootLayout, final Context context) {
+    public BasicContentLayout(final LinearLayout rootLayout) {
         this.rootLayout = rootLayout;
-        this.context = context;
         numberOfBlocks = rootLayout.getChildCount();
         setViewTreeObserver();
     }
@@ -41,22 +37,6 @@ public class BasicContentLayout {
     public void addHorizontalBlock(final View view, final int margin) {
         rootLayout.addView(view, numberOfBlocks, getHorizontalLayoutParams(margin));
         numberOfBlocks++;
-    }
-
-    public void addText(final String text) {
-        addText(text, numberOfBlocks);
-    }
-
-    public void addText(final String text, final int position) {
-        TextView newTextView = new TextView(context);
-        newTextView.append(text);
-        LinearLayout newView = new LinearLayout(context);
-        newView.addView(newTextView);
-        addVerticalBlock(newView, position);
-    }
-
-    public View getResultView() {
-        return rootLayout;
     }
 
     private void setViewTreeObserver() {

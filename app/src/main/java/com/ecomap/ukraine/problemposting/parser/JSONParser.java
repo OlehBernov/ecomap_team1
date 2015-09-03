@@ -6,9 +6,11 @@ import org.json.JSONObject;
 /**
  * Performs converting JSON to entities.
  */
-public class JSONParser {
+public final class JSONParser {
 
-    public String parseAddedProblemInformation(final String addedProblemJSON) throws JSONException {
+    private JSONParser(){}
+
+    public static String parseAddedProblemInformation(final String addedProblemJSON) throws JSONException {
         if (addedProblemJSON == null) {
             throw new JSONException(JSONFields.NULL_ARGUMENT);
         }

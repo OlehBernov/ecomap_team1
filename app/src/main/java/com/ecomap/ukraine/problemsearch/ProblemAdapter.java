@@ -16,7 +16,7 @@ import java.util.List;
 public class ProblemAdapter extends RecyclerView.Adapter<ProblemAdapter.ViewHolder> {
 
     private List<Problem> dataSet;
-    private Search search;
+    private SearchActivity searchActivity;
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
         private TextView textView;
@@ -30,13 +30,13 @@ public class ProblemAdapter extends RecyclerView.Adapter<ProblemAdapter.ViewHold
             imageView = (ImageView)view.findViewById(R.id.search_item_type);
         }
 
-        public void setProblem(final Problem problem, final Search search) {
+        public void setProblem(final Problem problem, final SearchActivity searchActivity) {
             textView.setText(problem.getTitle());
             imageView.setImageResource(getIconRes(problem.getProblemType()));
             view.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    search.showProblemInformation(problem);
+                    searchActivity.showProblemInformation(problem);
                 }
             });
         }
@@ -71,9 +71,9 @@ public class ProblemAdapter extends RecyclerView.Adapter<ProblemAdapter.ViewHold
 
     }
 
-    public ProblemAdapter(List<Problem> dataSet, Search search) {
+    public ProblemAdapter(List<Problem> dataSet, SearchActivity searchActivity) {
         this.dataSet = dataSet;
-        this.search = search;
+        this.searchActivity = searchActivity;
     }
 
     @Override
@@ -87,7 +87,7 @@ public class ProblemAdapter extends RecyclerView.Adapter<ProblemAdapter.ViewHold
     @Override
     public void onBindViewHolder(ViewHolder viewHolder, int index) {
         Problem problemPlate = dataSet.get(index);
-        viewHolder.setProblem(problemPlate, search);
+        viewHolder.setProblem(problemPlate, searchActivity);
     }
 
     @Override

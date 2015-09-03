@@ -4,7 +4,9 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 
-public class JSONParser {
+public final class JSONParser {
+
+    private JSONParser(){}
 
     public static JSONObject generateCommentObj (final String userID,
                                                  final String userName, final String userSurname,

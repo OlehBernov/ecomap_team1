@@ -1,5 +1,8 @@
 package com.ecomap.ukraine.updateproblem.manager;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
+import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.util.Log;
@@ -9,6 +12,7 @@ import com.ecomap.ukraine.database.DBHelper;
 import com.ecomap.ukraine.model.Details;
 import com.ecomap.ukraine.model.Problem;
 import com.ecomap.ukraine.updateproblem.RESTclient.LoadingClient;
+import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 
 import java.util.Collection;
 import java.util.List;

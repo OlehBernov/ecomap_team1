@@ -23,7 +23,7 @@ import java.util.List;
 /**
  * Created by Oleh on 8/31/2015.
  */
-public class Search extends AppCompatActivity
+public class SearchActivity extends AppCompatActivity
         implements SearchView.OnQueryTextListener, ProblemListener {
 
     static final String PROBLEM_EXTRA = "Problem"; //package private
