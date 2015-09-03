@@ -14,7 +14,8 @@ import android.view.ViewGroup;
 import com.ecomap.ukraine.R;
 import com.ecomap.ukraine.helper.ExtraFieldNames;
 import com.ecomap.ukraine.MainActivity;
-import com.ecomap.ukraine.problemdetails.InformationPanel;
+import com.ecomap.ukraine.problemdetails.DetailsContent;
+import com.ecomap.ukraine.problemdetails.DetailsSettings;
 import com.ecomap.ukraine.updateproblem.manager.DataManager;
 import com.ecomap.ukraine.updateproblem.manager.ProblemListener;
 import com.ecomap.ukraine.filter.Filter;
@@ -49,9 +50,7 @@ public class FragmentEcoMap extends android.support.v4.app.Fragment
     private static final float INITIAL_ZOOM = 4.5f;
     private static final float ON_MARKER_CLICK_ZOOM = 12;
     private static final float ON_MY_POSITION_CLICK_ZOOM = 15;
-    private static final MapType DEFAULT_MAP_TYPE = MapType.MAP_TYPE_NORMAL;
-    private static final int MAP_TYPE_MORMAL_ID = MapType.MAP_TYPE_NORMAL.getId();
-    private static final int MAP_TYPE_HYBRID_ID = MapType.MAP_TYPE_HYBRID.getId();
+    private static final int MAP_TYPE_NORMAL_ID = MapType.MAP_TYPE_NORMAL.getId();
 
      /**
      * The name of the preference to retrieve.
@@ -68,16 +67,9 @@ public class FragmentEcoMap extends android.support.v4.app.Fragment
     private GoogleMap googleMap;
     private DataManager dataManager;
     private int mapType;
-
-    /**
-     * Filter dataManager instance
-     */
     private FilterManager filterManager;
-    private InformationPanel informationPanel;
+    private DetailsContent detailsContent;
 
-    /**
-     * Constructor
-     */
     public FragmentEcoMap() {
     }
 
@@ -112,7 +104,9 @@ public class FragmentEcoMap extends android.support.v4.app.Fragment
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         dataManager = DataManager.getInstance(getActivity().getApplicationContext());
-        dataManager.registerProblemListener(this);
+      //  dataManager.registerProblemListener(this);
+
+        detailsContent = (DetailsContent) getActivity().findViewById(R.id.panel_details_content);
 
         View rootView = inflater.inflate(R.layout.fragement_map, container, false);
         mapView = (MapView) rootView.findViewById(R.id.mapView);
@@ -201,6 +195,7 @@ public class FragmentEcoMap extends android.support.v4.app.Fragment
         FragmentEcoMap.problems = problems;
         putAllProblemsOnMap(null);
         setRenderer();
+        dataManager.removeProblemListener(this);
     }
 
     /**
@@ -228,9 +223,8 @@ public class FragmentEcoMap extends android.support.v4.app.Fragment
      */
     @Override
     public void updateProblemDetails(final Details details) {
-        if (informationPanel != null) {
-            informationPanel.setProblemDetails(details);
-        }
+        detailsContent.setProblemDetails(details);
+        dataManager.removeProblemListener(this);
     }
 
     /**
@@ -242,8 +236,9 @@ public class FragmentEcoMap extends android.support.v4.app.Fragment
     @Override
     public boolean onClusterItemClick(final Problem problem) {
         if (!((MainActivity) getActivity()).problemAddingMenu) {
-            informationPanel = InformationPanel.getInstance(getActivity());
-            informationPanel.setBaseProblem(problem);
+            dataManager.registerProblemListener(this);
+            DetailsSettings detailsSettings = new DetailsSettings(getActivity(), problem);
+            detailsContent.setProblemContent(problem, detailsSettings);
             dataManager.getProblemDetail(problem.getProblemId());
             moveCameraToProblem(problem);
             return true;
@@ -286,6 +281,8 @@ public class FragmentEcoMap extends android.support.v4.app.Fragment
         settings.setMapToolbarEnabled(false);
         googleMap.setMyLocationEnabled(true);
         settings.setMyLocationButtonEnabled(true);
+
+        dataManager.registerProblemListener(this);
         dataManager.getAllProblems();
 
         CameraPosition cameraPosition = new CameraPosition
@@ -353,7 +350,7 @@ public class FragmentEcoMap extends android.support.v4.app.Fragment
      * Sets map type
      */
     private void setMapType() {
-        if(mapType == MAP_TYPE_MORMAL_ID) {
+        if(mapType == MAP_TYPE_NORMAL_ID) {
             googleMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
         } else {
             googleMap.setMapType(GoogleMap.MAP_TYPE_HYBRID);

@@ -15,9 +15,7 @@ import com.ecomap.ukraine.R;
 import com.ecomap.ukraine.helper.ExtraFieldNames;
 import com.ecomap.ukraine.updateproblem.manager.DataManager;
 
-/**
-* Activity for 
-*/
+// TODO: change on standard
 public class SettingsActivity extends AppCompatActivity {
 
     /**

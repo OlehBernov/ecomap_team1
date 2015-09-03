@@ -20,7 +20,7 @@ interface ProblemListenersNotifier {
     void registerProblemListener(final ProblemListener listener);
 
     /**
-     * Removes the specified listener from the set of problemaListeners.
+     * Removes the specified listener from the set of problemListeners.
      *
      * @param listener the ProblemListener to remove.
      */
