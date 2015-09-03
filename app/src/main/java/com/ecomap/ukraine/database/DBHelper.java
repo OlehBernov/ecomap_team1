@@ -6,13 +6,13 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
-import com.ecomap.ukraine.models.Details;
-import com.ecomap.ukraine.models.Photo;
-import com.ecomap.ukraine.models.Problem;
-import com.ecomap.ukraine.models.ProblemActivity;
-import com.ecomap.ukraine.models.Types.ActivityType;
-import com.ecomap.ukraine.models.Types.ProblemStatus;
-import com.ecomap.ukraine.models.Types.ProblemType;
+import com.ecomap.ukraine.model.Details;
+import com.ecomap.ukraine.model.Photo;
+import com.ecomap.ukraine.model.Problem;
+import com.ecomap.ukraine.model.ProblemActivity;
+import com.ecomap.ukraine.model.ActivityType;
+import com.ecomap.ukraine.model.ProblemStatus;
+import com.ecomap.ukraine.model.ProblemType;
 
 import java.util.ArrayList;
 import java.util.List;

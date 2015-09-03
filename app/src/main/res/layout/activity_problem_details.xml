@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="com.ecomap.ukraine.search.ProblemDetailsActivity">
+    tools:context="com.ecomap.ukraine.problemsearch.ProblemDetailsActivity">
 
     <android.support.v7.widget.Toolbar
         android:id="@+id/problem_details_toolbar"
@@ -23,12 +23,12 @@
         android:layout_height="match_parent"
         android:layout_gravity="right">
 
-        <com.ecomap.ukraine.activities.problemDetails.DetailsContent
+        <com.ecomap.ukraine.problemdetails.DetailsContent
             android:id="@+id/search_details_content"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-        </com.ecomap.ukraine.activities.problemDetails.DetailsContent>
+        </com.ecomap.ukraine.problemdetails.DetailsContent>
 
     </ScrollView>
 

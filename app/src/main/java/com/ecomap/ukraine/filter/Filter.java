@@ -1,8 +1,8 @@
 package com.ecomap.ukraine.filter;
 
-import com.ecomap.ukraine.models.Problem;
-import com.ecomap.ukraine.models.Types.ProblemStatus;
-import com.ecomap.ukraine.models.Types.ProblemType;
+import com.ecomap.ukraine.model.Problem;
+import com.ecomap.ukraine.model.ProblemStatus;
+import com.ecomap.ukraine.model.ProblemType;
 
 import java.util.ArrayList;
 import java.util.Calendar;

@@ -1,7 +1,6 @@
 package com.ecomap.ukraine.settings;
 
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
@@ -13,9 +12,8 @@ import android.widget.Button;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.ecomap.ukraine.R;
-import com.ecomap.ukraine.activities.ExtraFieldNames;
-import com.ecomap.ukraine.activities.main.MainActivity;
-import com.ecomap.ukraine.data.manager.DataManager;
+import com.ecomap.ukraine.helper.ExtraFieldNames;
+import com.ecomap.ukraine.updateproblem.manager.DataManager;
 
 /**
 * Activity for 
