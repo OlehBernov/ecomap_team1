@@ -19,11 +19,6 @@ public class Photo {
     private int photoId;
 
     /**
-     * id of user who added this photo
-     */
-    private int userId; //TODO delete this field
-
-    /**
      * status of this photo
      */
     private int status;
@@ -42,16 +37,14 @@ public class Photo {
      * Constructor of class
      *
      * @param photoId     id of current problem
-     * @param userId      id of user who added this photo
      * @param status      status of this photo
      * @param link        link to this photo
      * @param description description of this photo
      */
-    public Photo(int problemId, int photoId, int userId, int status, String link,
+    public Photo(int problemId, int photoId, int status, String link,
                  String description) {
         this.problemId = problemId;
         this.photoId = photoId;
-        this.userId = userId;
         this.status = status;
         this.link = link;
         this.description = description;
@@ -65,13 +58,6 @@ public class Photo {
      * provides access to photoId
      */
     public int getPhotoId() {
-        return photoId;
-    }
-
-    /**
-     * provides access to photoId
-     */
-    public int getUserId() {
         return photoId;
     }
 

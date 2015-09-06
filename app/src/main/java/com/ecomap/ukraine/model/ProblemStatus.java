@@ -38,7 +38,7 @@ public enum ProblemStatus {
                 return status;
             }
         }
-        return null; //TODO change to default enum constant
+        return UNSOLVED;
     }
 
     /**

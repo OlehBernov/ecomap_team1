@@ -57,8 +57,6 @@ class DBContract {
 
         public static final String PHOTO_ID = "Photo_ID";
 
-        public static final String PHOTO_USERS_ID = "Users_Id";
-
         public static final String PHOTO_STATUS = "Status";
 
         public static final String LINK = "Link";

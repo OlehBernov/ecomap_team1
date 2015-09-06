@@ -32,7 +32,7 @@ public class DBHelper extends SQLiteOpenHelper {
             "DROP TABLE IF EXISTS " + DBContract.Problems.TABLE_NAME;
 
     private static final String DB_NAME = "Problems.db";
-    private static final int DB_VERSION = 2;
+    private static final int DB_VERSION = 3;
     private static final String TEXT_TYPE = " TEXT";
     private static final String INT_TYPE = " INTEGER";
     private static final String REAL_TYPE = " REAL";
@@ -53,7 +53,6 @@ public class DBHelper extends SQLiteOpenHelper {
             = "CREATE TABLE " + DBContract.Photos.TABLE_NAME + " (" +
             DBContract.Photos.PROBLEM_ID + INT_TYPE + COMMA_SEP +
             DBContract.Photos.PHOTO_ID + INT_TYPE + COMMA_SEP +
-            DBContract.Photos.PHOTO_USERS_ID + INT_TYPE + COMMA_SEP +
             DBContract.Photos.PHOTO_STATUS + INT_TYPE + COMMA_SEP +
             DBContract.Photos.LINK + TEXT_TYPE + COMMA_SEP +
             DBContract.Photos.PHOTO_DESCRIPTION + TEXT_TYPE + ")";
@@ -221,7 +220,6 @@ public class DBHelper extends SQLiteOpenHelper {
             values = new ContentValues();
             values.put(DBContract.Photos.PROBLEM_ID, photo.getProblemId());
             values.put(DBContract.Photos.PHOTO_ID, photo.getPhotoId());
-            values.put(DBContract.Photos.PHOTO_USERS_ID, photo.getUserId());
             values.put(DBContract.Photos.PHOTO_STATUS, photo.getStatus());
             values.put(DBContract.Photos.LINK, photo.getLink());
             values.put(DBContract.Photos.PHOTO_DESCRIPTION, photo.getDescription());
@@ -351,9 +349,8 @@ public class DBHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = getWritableDatabase();
 
         String[] projection = {
-                DBContract.Photos.PHOTO_ID, DBContract.Photos.PHOTO_USERS_ID,
-                DBContract.Photos.PHOTO_STATUS, DBContract.Photos.LINK,
-                DBContract.Photos.PHOTO_DESCRIPTION,
+                DBContract.Photos.PHOTO_ID, DBContract.Photos.PHOTO_STATUS,
+                DBContract.Photos.LINK, DBContract.Photos.PHOTO_DESCRIPTION,
         };
         String selection = DBContract.Photos.PROBLEM_ID + " = ?";
         String[] selectionArgs = new String[]{String.valueOf(problemId)};
@@ -446,7 +443,6 @@ public class DBHelper extends SQLiteOpenHelper {
             Photo photo = new Photo(
                     problemId,
                     cursor.getInt(cursor.getColumnIndex(DBContract.Photos.PHOTO_ID)),
-                    cursor.getInt(cursor.getColumnIndex(DBContract.Photos.PHOTO_USERS_ID)),
                     cursor.getInt(cursor.getColumnIndex(DBContract.Photos.PHOTO_STATUS)),
                     cursor.getString(cursor.getColumnIndex(DBContract.Photos.LINK)),
                     cursor.getString(cursor.getColumnIndex(DBContract.Photos.PHOTO_DESCRIPTION))

@@ -206,7 +206,6 @@ public final class JSONParser {
             currentPhoto = new Photo(
                     photoObject.optInt(JSONFields.PROBLEMS_ID, -1),
                     photoObject.optInt(JSONFields.ID, -1),
-                    photoObject.optInt(JSONFields.PHOTO_USERS_ID, -1),
                     photoObject.optInt(JSONFields.PHOTO_STATUS, -1),
                     PHOTOS_PATH + photoObject.getString(JSONFields.LINK),
                     photoObject.getString(JSONFields.PHOTO_DESCRIPTION)

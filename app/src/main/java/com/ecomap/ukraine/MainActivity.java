@@ -233,7 +233,7 @@ public class MainActivity extends AppCompatActivity {
 
     /**
      * Set dialog when user are not authorized
-     * @param message
+     * @param message how to solve the problem
      */
     public  void setNotAuthorizeDialog(final String message) {
         new MaterialDialog.Builder(this)
@@ -252,7 +252,6 @@ public class MainActivity extends AppCompatActivity {
                         super.onPositive(dialog);
                         Intent mainIntent = new Intent(activity, LoginActivity.class);
                         startActivity(mainIntent);
-                        finish();
                     }
 
                     @Override

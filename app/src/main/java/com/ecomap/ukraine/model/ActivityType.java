@@ -9,8 +9,6 @@ public enum ActivityType {
      * Creation activity.
      */
     CREATE(1),
-    //TODO delete unused types
-    UNKNOWN(2),
 
     /**
      * User like.
@@ -26,8 +24,6 @@ public enum ActivityType {
      * Problem comment.
      */
     COMMENT(5),
-
-    UNKNOWN2(6),
 
     /**
      * Default type for unknown activity.

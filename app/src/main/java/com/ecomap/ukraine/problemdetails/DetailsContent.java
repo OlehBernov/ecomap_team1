@@ -330,16 +330,12 @@ public class DetailsContent extends LinearLayout implements DetailsListener {
         switch (activityType) {
             case CREATE:
                 return ResourcesCompat.getDrawable(context.getResources(), R.drawable.ic_done_black_36dp, null);
-            case UNKNOWN:
-                return ResourcesCompat.getDrawable(context.getResources(), R.drawable.type1, null);
             case LIKE:
                 return ResourcesCompat.getDrawable(context.getResources(), R.drawable.like_iconq, null);
             case PHOTO:
                 return ResourcesCompat.getDrawable(context.getResources(), R.drawable.ic_photo_camera_black_36dp, null);
             case COMMENT:
                 return ResourcesCompat.getDrawable(context.getResources(), R.drawable.comment3, null);
-            case UNKNOWN2:
-                return ResourcesCompat.getDrawable(context.getResources(), R.drawable.type1, null);
             default:
                 return ResourcesCompat.getDrawable(context.getResources(), R.drawable.type1, null);
         }
