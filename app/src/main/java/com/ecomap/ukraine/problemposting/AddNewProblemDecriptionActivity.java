@@ -85,9 +85,9 @@ public class AddNewProblemDecriptionActivity extends AppCompatActivity {
     }
 
     /**
-     * Add photo to layout
+     * Open tab with add photo fuctionality
      */
-    public void addPhoto(View v) {
+    public void openAddPhotoPage(View v) {
         pager.setCurrentItem(ADD_PHOTO_ITEM);
     }
 
