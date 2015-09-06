@@ -157,7 +157,7 @@ public class AccountManager implements LogInListenerNotifier,
         SharedPreferences userPreference = context.
                 getSharedPreferences(ExtraFieldNames.USER_INFO, Context.MODE_PRIVATE);
         int userID = userPreference.getInt(ExtraFieldNames.USER_ID, -1);
-        String userName = userPreference.getString(ExtraFieldNames.USER_NAME, "");
+        String userName = userPreference.getString(ExtraFieldNames.USER_NAME, "Anonym");
         String userSurname = userPreference.getString(ExtraFieldNames.USER_SURNAME, "");
         String email = userPreference.getString(ExtraFieldNames.LOGIN, "");
         return new User(userID, userName, userSurname, "", "", "", email);
