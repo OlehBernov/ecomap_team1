@@ -25,7 +25,8 @@ public enum ProblemType {
     }
 
     /**
-     * Return problem type according to problem type is.
+     * Return problem type according to problem type id.
+     *
      * @param id problem type id.
      * @return problem type.
      */

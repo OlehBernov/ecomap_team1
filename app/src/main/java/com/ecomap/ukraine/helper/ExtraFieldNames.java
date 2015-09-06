@@ -27,26 +27,6 @@ public class ExtraFieldNames {
     public static final String POSITION = "position";
 
     /**
-     * Name of update time field for saving to shared preferences.
-     */
-    public static final String UPDATE_TIME = "Update time";
-
-    /**
-     * Name of map type field for saving to shared preferences.
-     */
-    public static final String MAP_TYPE = "Map type";
-
-    /**
-     * Name of map type id field for saving to shared preferences.
-     */
-    public static final String MAP_TYPE_ID = "Map type id";
-
-    /**
-     * Name of shared preferences of settings activity.
-     */
-    public static final String SETTINGS_PREFERENCES = "SettingsActivity";
-
-    /**
      * Name of map type id field for saving to shared preferences.
      */
     public static final String LOGIN = "LOGIN";

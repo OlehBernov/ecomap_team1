@@ -5,8 +5,10 @@ import android.content.SharedPreferences;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -104,8 +106,6 @@ public class FragmentEcoMap extends android.support.v4.app.Fragment
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         dataManager = DataManager.getInstance(getActivity().getApplicationContext());
-      //  dataManager.registerProblemListener(this);
-
         detailsContent = (DetailsContent) getActivity().findViewById(R.id.panel_details_content);
 
         View rootView = inflater.inflate(R.layout.fragement_map, container, false);
@@ -160,9 +160,9 @@ public class FragmentEcoMap extends android.support.v4.app.Fragment
 
         MapsInitializer.initialize(getActivity().getApplicationContext());
 
-        SharedPreferences mapTypePreference = getActivity().getApplicationContext()
-                .getSharedPreferences(ExtraFieldNames.MAP_TYPE, Context.MODE_PRIVATE);
-        mapType = mapTypePreference.getInt(ExtraFieldNames.MAP_TYPE_ID, 0);
+        String mapTypeSharedPreferences = getResources().getString(R.string.map_type);
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
+        mapType = Integer.valueOf(sharedPreferences.getString(mapTypeSharedPreferences, "0"));
         setUpMapIfNeeded();
 
         return rootView;

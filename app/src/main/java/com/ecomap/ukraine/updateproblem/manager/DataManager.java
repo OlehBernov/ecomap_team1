@@ -1,18 +1,15 @@
 package com.ecomap.ukraine.updateproblem.manager;
 
-import android.animation.Animator;
-import android.animation.AnimatorListenerAdapter;
-import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.util.Log;
+import android.preference.PreferenceManager;
 
-import com.ecomap.ukraine.settings.UpdateTime;
+import com.ecomap.ukraine.R;
 import com.ecomap.ukraine.database.DBHelper;
 import com.ecomap.ukraine.model.Details;
 import com.ecomap.ukraine.model.Problem;
+import com.ecomap.ukraine.settings.UpdateTime;
 import com.ecomap.ukraine.updateproblem.RESTclient.LoadingClient;
-import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 
 import java.util.Collection;
 import java.util.List;
@@ -35,7 +32,10 @@ public class DataManager implements ProblemListenersNotifier,
      */
     private static DataManager instance;
 
-    private static long updateTime = UpdateTime.ONCE_A_WEEK.getTimeInMilliseconds();
+    /**
+     * Default period of all problems and problem details updating.
+     */
+    private String DEFAULT_UPDATE_PERIOD = "2";
 
     /**
      * Set of problem listeners.
@@ -76,11 +76,6 @@ public class DataManager implements ProblemListenersNotifier,
             instance = new DataManager(context);
         }
         return instance;
-    }
-
-    public static void setUpdateTime(UpdateTime updateTime) {
-        DataManager.updateTime = updateTime.getTimeInMilliseconds();
-        Log.e("update", "" + updateTime.getId());
     }
 
     /**
@@ -179,17 +174,6 @@ public class DataManager implements ProblemListenersNotifier,
     }
 
     /**
-     * Saves time of the last database update
-     * to the SharedPreferences.
-     */
-    private void saveUpdateTime() {
-        SharedPreferences settings = context.getSharedPreferences(TIME, 0);
-        SharedPreferences.Editor editor = settings.edit();
-        editor.putLong(TIME, System.currentTimeMillis());
-        editor.apply();
-    }
-
-    /**
      * This method is used to made request for all problems.
      * Initiates the updateAllProblems of brief information of the problem in the database,
      * if it is missing or obsolete.
@@ -209,20 +193,11 @@ public class DataManager implements ProblemListenersNotifier,
         }
     }
 
-    /**
-     * Checks the need to update.
-     *
-     * @param lastUpdateTime time of the last database update.
-     * @return the need to update.
-     */
-    private boolean isUpdateTime(final long lastUpdateTime) {
-        return (System.currentTimeMillis() - lastUpdateTime) >= updateTime;
-    }
-
     public void refreshAllProblem() {
         loadingClient.getAllProblems();
     }
 
+    //TODO: add to navigation
     public void refreshAllProblems() {
         SharedPreferences settings = context.getSharedPreferences(TIME, 0);
         SharedPreferences.Editor editor = settings.edit();
@@ -234,6 +209,42 @@ public class DataManager implements ProblemListenersNotifier,
     public void refreshProblemDetails(int problemId) {
         currentProblemId = problemId;
         loadingClient.getProblemDetail(problemId);
+    }
+
+    /**
+     * Saves time of the last database update
+     * to the SharedPreferences.
+     */
+    private void saveUpdateTime() {
+        SharedPreferences settings = context.getSharedPreferences(TIME, 0);
+        SharedPreferences.Editor editor = settings.edit();
+        editor.putLong(TIME, System.currentTimeMillis());
+        editor.apply();
+    }
+
+    /**
+     * Checks the need to update.
+     *
+     * @param lastUpdateTime time of the last database update.
+     * @return the need to update.
+     */
+    private boolean isUpdateTime(final long lastUpdateTime) {
+        return (System.currentTimeMillis() - lastUpdateTime) >= getUpdatingPeriod();
+    }
+
+    /**
+     * Returns updating period which was set in Settings.
+     *
+     * @return current updating period.
+     */
+    private long getUpdatingPeriod() {
+        String updatingTime = context.getResources().getString(R.string.updating_time);
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
+        int updateTimeId = Integer.valueOf(sharedPreferences.getString(updatingTime,
+                DEFAULT_UPDATE_PERIOD));
+        UpdateTime up = UpdateTime.getUpdateTimeType(updateTimeId);
+
+        return up.getTimeInMilliseconds();
     }
 
 }

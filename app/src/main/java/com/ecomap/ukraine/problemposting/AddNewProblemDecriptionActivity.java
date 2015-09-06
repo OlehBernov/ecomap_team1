@@ -28,11 +28,9 @@ import android.widget.TableLayout;
 import android.widget.TableRow;
 
 import com.ecomap.ukraine.R;
-import com.ecomap.ukraine.authenticator.manager.AccountManager;
 import com.ecomap.ukraine.helper.BitmapResizer;
 import com.ecomap.ukraine.helper.ExtraFieldNames;
 import com.ecomap.ukraine.helper.Keyboard;
-import com.ecomap.ukraine.model.User;
 
 import java.io.File;
 import java.io.IOException;
@@ -58,7 +56,6 @@ public class AddNewProblemDecriptionActivity extends AppCompatActivity {
     private static final String CAMERA_URI = "Camera Uri";
     private static final String USER_PHOTOS = "Number of photos";
     private static final String DESCRIPTION = "Description";
-    private static final String USER = "User";
     protected final String TAG = getClass().getSimpleName();
     private Uri currentPhotoUri;
     private List<Uri> userPhotos;
@@ -67,8 +64,9 @@ public class AddNewProblemDecriptionActivity extends AppCompatActivity {
     private ViewPager pager;
 
     /**
-     * Gets list of bitmaps from list of uri for posting photos
-     * @return
+     * Gets list of bitmaps from list of uri for posting photos.
+     *
+     * @return list of bitmaps of user photos related to the problem.
      */
     public List<Bitmap> getBitmapsPhoto() {
         List<Bitmap> photoBitmaps = new ArrayList<>();
@@ -85,14 +83,16 @@ public class AddNewProblemDecriptionActivity extends AppCompatActivity {
     }
 
     /**
-     * Open tab with add photo fuctionality
+     * Open tab with add photo functionality.
      */
     public void openAddPhotoPage(View v) {
         pager.setCurrentItem(ADD_PHOTO_ITEM);
     }
 
     /**
-     * Gets photo from camera
+     * Starts Camera application to take the photo.
+     *
+     * @param view button, which related to this action.
      */
     public void getPhotoFromCamera(View view) {
         Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
@@ -113,7 +113,9 @@ public class AddNewProblemDecriptionActivity extends AppCompatActivity {
     }
 
     /**
-     * Gets photos from galery
+     * Starts Gallery application to get the photo.
+     *
+     * @param view button, which related to this action.
      */
     public void getPhotoFromGallery(View view) {
         Intent galleryIntent = new Intent(
@@ -135,6 +137,7 @@ public class AddNewProblemDecriptionActivity extends AppCompatActivity {
 
     /**
      * Called when the user selects an item from the options menu
+     *
      * @param item menu item
      * @return result of action
      */
@@ -262,14 +265,20 @@ public class AddNewProblemDecriptionActivity extends AppCompatActivity {
     }
 
     /**
-     * Check if description was saved in savedInstanceState
+     * Check if description was saved in savedInstanceState.
+     *
+     * @param savedInstanceState the data most recently supplied in onSaveInstanceState(Bundle).
+     * @return whether the description was saved.
      */
     private boolean isDescriptionsSaved(Bundle savedInstanceState) {
         return (descriptions == null) && savedInstanceState.containsKey(DESCRIPTION);
     }
 
     /**
-     * Check if photo was saved in savedInstanceState
+     * Check if photo was saved in savedInstanceState.
+     *
+     * @param savedInstanceState the data most recently supplied in onSaveInstanceState(Bundle).
+     * @return whether the photo was saved.
      */
     private boolean isPhotosSaved(Bundle savedInstanceState) {
         return (userPhotos == null) && savedInstanceState.containsKey(USER_PHOTOS);
@@ -298,7 +307,11 @@ public class AddNewProblemDecriptionActivity extends AppCompatActivity {
     }
 
     /**
-     * Check if camera are available
+     *Checks if in onActivityResult returned photo from Camera application.
+     *
+     * @param requestCode The integer request code originally supplied to startActivityForResult().
+     * @param resultCode  The integer result code returned by the child activity through its setResult().
+     * @return whether returned photo from Camera.
      */
     private boolean isCameraPhoto(int requestCode, int resultCode) {
         return (requestCode == CAMERA_PHOTO)
@@ -306,7 +319,12 @@ public class AddNewProblemDecriptionActivity extends AppCompatActivity {
     }
 
     /**
-     * Check if gallery are available
+     * Checks if in onActivityResult returned photo from Gallery.
+     *
+     * @param requestCode The integer request code originally supplied to startActivityForResult().
+     * @param resultCode  The integer result code returned by the child activity through its setResult().
+     * @param data        Intent which may contains photo from Gallery.
+     * @return whether returned photo from Gallery.
      */
     private boolean isGalleryPhoto(int requestCode, int resultCode, Intent data) {
         return (requestCode == GALLERY_PHOTO)
@@ -315,7 +333,10 @@ public class AddNewProblemDecriptionActivity extends AppCompatActivity {
     }
 
     /**
-     * Add photo to layout from gallery
+     * Gets photo from Intent, which returned from Gallery.
+     * Saves photo and adds it to other user photo on view.
+     *
+     * @param data Intent, which returned from Gallery.
      */
     private void processGalleryPhoto(Intent data) {
         Uri selectedImage = data.getData();
@@ -334,7 +355,8 @@ public class AddNewProblemDecriptionActivity extends AppCompatActivity {
     }
 
     /**
-     * Add photo to layout from camera
+     * Saves photo, which returned from Camera application
+     * and adds it to other user photo on view.
      */
     private void processCameraPhoto() {
         String photoPath = currentPhotoUri.getPath();
@@ -344,17 +366,19 @@ public class AddNewProblemDecriptionActivity extends AppCompatActivity {
     }
 
     /**
-     * Check if layout have child
+     * Checks existance of user photos on view.
+     *
+     * @return whether the user photos exists on view.
      */
-    private boolean isActivityLayoutHaveChild() {
+    private boolean isPhotoLayoutHaveChild() {
         return (photoDescriptionLayout != null) && (photoDescriptionLayout.getChildCount() > 0);
     }
 
     /**
-     * Add photo to view
+     * Sets all saved user photos on view.
      */
     private void addPhotosToView() {
-        if (isActivityLayoutHaveChild()) {
+        if (isPhotoLayoutHaveChild()) {
             photoDescriptionLayout.removeAllViews();
         }
 
@@ -369,7 +393,10 @@ public class AddNewProblemDecriptionActivity extends AppCompatActivity {
     }
 
     /**
-     * Builds edit text with photo description
+     * Creates EditText for photo description.
+     *
+     * @param id photo id.
+     * @return EditText for photo description.
      */
     private EditText buildPhotoDescription(int id) {
         EditText photoDescription = new EditText(getApplicationContext());
@@ -399,7 +426,7 @@ public class AddNewProblemDecriptionActivity extends AppCompatActivity {
     }
 
     /**
-     * Set parameters to photo description edit text
+     * Set parameters to photo description EditText.
      */
     private TableRow.LayoutParams setPhotoDescriptionParams() {
         TableRow.LayoutParams photoDescriptionParams = new TableRow.LayoutParams(TableRow.LayoutParams.MATCH_PARENT,
@@ -448,9 +475,9 @@ public class AddNewProblemDecriptionActivity extends AppCompatActivity {
     }
 
     /**
-     * Sets delete button
+     * Creates button for deleting concrete user photo from view.
      *
-     * @param buttonId if of delete button
+     * @param buttonId id of concrete photo (button).
      */
     private void setDeleteButton(int buttonId) {
         ImageButton deleteButton = new ImageButton(getApplicationContext());
@@ -460,7 +487,7 @@ public class AddNewProblemDecriptionActivity extends AppCompatActivity {
                 R.drawable.ic_clear_black_18dp));
         deleteButton.setBackgroundColor(getResources().getColor(R.color.white));
         deleteButton.setLayoutParams(setDeleteButtonParams());
-        addListenerOnDeleteButton(deleteButton);
+        addListenerToDeleteButton(deleteButton);
 
         RelativeLayout buttonLayout = new RelativeLayout(getApplicationContext());
         buttonLayout.addView(deleteButton);
@@ -469,10 +496,9 @@ public class AddNewProblemDecriptionActivity extends AppCompatActivity {
     }
 
     /**
-     * Sets parameters for delete button
+     * Sets parameters for delete button.
      *
-     * @return parameters for delete button
-
+     * @return parameters for delete button.
      */
     private RelativeLayout.LayoutParams setDeleteButtonParams() {
         RelativeLayout.LayoutParams buttonParams =
@@ -484,13 +510,18 @@ public class AddNewProblemDecriptionActivity extends AppCompatActivity {
     }
 
     /**
-     * Add listener on deleteButton
+     * Add listener to deleteButton.
      *
-     * @param deleteButton current delete button
+     * @param deleteButton delete button.
      */
-
-    private void addListenerOnDeleteButton(ImageButton deleteButton) {
+    private void addListenerToDeleteButton(ImageButton deleteButton) {
         deleteButton.setOnClickListener(new View.OnClickListener() {
+
+            /**
+             * Begins user photo deleting.
+             *
+             * @param v delete button.
+             */
             @Override
             public void onClick(View v) {
                 deleteBlock(v.getId());
@@ -499,9 +530,9 @@ public class AddNewProblemDecriptionActivity extends AppCompatActivity {
     }
 
     /**
-     * Delete block from layout
+     * Deletes block from user photos view.
      *
-     * @param buttonId id of delete button
+     * @param buttonId id of photo (button).
      */
     private void deleteBlock(int buttonId) {
         userPhotos.remove(buttonId);
@@ -511,9 +542,9 @@ public class AddNewProblemDecriptionActivity extends AppCompatActivity {
     }
 
     /**
-     * Save photo to uri list
+     * Adds new user photo to uri list.
      *
-     * @param photoPath path to photo
+     * @param photoPath path to photo.
      */
     private void savePhoto(String photoPath) {
         if (userPhotos == null) {
@@ -527,7 +558,9 @@ public class AddNewProblemDecriptionActivity extends AppCompatActivity {
     }
 
     /**
-     * Create file with image
+     * Creates file for saving photo from Camera application.
+     *
+     * @return created file.
      */
     private File createImageFile() throws IOException {
         String timeStamp = new SimpleDateFormat(DATE_TEMPLATE, Locale.ENGLISH).format(new Date());

@@ -65,6 +65,21 @@ public enum UpdateTime {
         return id;
     }
 
+    /**
+     * Return type of updating time according to problem type id.
+     *
+     * @param id update time id.
+     * @return update time type.
+     */
+    public static UpdateTime getUpdateTimeType(int id) {
+        for (UpdateTime type : UpdateTime.values()) {
+            if (type.id == id) {
+                return type;
+            }
+        }
+        return ONCE_A_WEEK;
+    }
+
 	/**
 	* Transforms updating time mode id to time in milliseconds for this mode.
 	*
