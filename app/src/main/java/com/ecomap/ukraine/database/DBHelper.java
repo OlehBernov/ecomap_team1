@@ -6,13 +6,10 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
-import com.ecomap.ukraine.model.Details;
-import com.ecomap.ukraine.model.Photo;
-import com.ecomap.ukraine.model.Problem;
-import com.ecomap.ukraine.model.ProblemActivity;
-import com.ecomap.ukraine.model.ActivityType;
-import com.ecomap.ukraine.model.ProblemStatus;
-import com.ecomap.ukraine.model.ProblemType;
+import com.ecomap.ukraine.models.Details;
+import com.ecomap.ukraine.models.Photo;
+import com.ecomap.ukraine.models.Problem;
+import com.ecomap.ukraine.models.ProblemActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -97,7 +94,9 @@ public class DBHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = getWritableDatabase();
         db.execSQL(DBHelper.DELETE_FROM + DBContract.Problems.TABLE_NAME);
         setAllProblems(problems);
-    }    @Override
+    }
+
+    @Override
     public void onCreate(SQLiteDatabase db) {
         db.execSQL(CREATE_PROBLEMS_TABLE);
         db.execSQL(CREATE_DETAILS_TABLE);
@@ -127,7 +126,9 @@ public class DBHelper extends SQLiteOpenHelper {
                 DBContract.ProblemActivity.PROBLEM_ID + " = ?",
                 new String[]{"" + problemId});
         setProblemDetails(details);
-    }    @Override
+    }
+
+    @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         db.execSQL(DELETE_PHOTOS_TABLE);
         db.execSQL(DELETE_DETAILS_TABLE);
@@ -167,6 +168,107 @@ public class DBHelper extends SQLiteOpenHelper {
 
         List<Photo> photos = details.getPhotos();
         setPhotos(photos);
+    }
+
+    /**
+     * Returns list of all problems that are currently in the database.
+     *
+     * @return list of problems.
+     */
+    public List<Problem> getAllProblems() {
+        SQLiteDatabase db = getWritableDatabase();
+        Cursor cursor = db.query(DBContract.Problems.TABLE_NAME, null, null, null, null, null, null);
+        List<Problem> problems = null;
+        if (cursor.moveToFirst()) {
+            problems = buildAllProblemList(cursor);
+        }
+        return problems;
+    }
+
+    /**
+     * Sets brief information about all problems into the database.
+     *
+     * @param problems server response to all problems request.
+     */
+    public void setAllProblems(final List<Problem> problems) {
+        if (problems == null) {
+            return;
+        }
+        SQLiteDatabase db = getWritableDatabase();
+        ContentValues contentValues = new ContentValues();
+        for (Problem problem : problems) {
+            contentValues.put(DBContract.Problems.ID, problem.getProblemId());
+            contentValues.put(DBContract.Problems.PROBLEM_STATUS, problem.getStatus().getId());
+            contentValues.put(DBContract.Problems.PROBLEM_TYPES_ID, problem.getProblemType().getId());
+            contentValues.put(DBContract.Problems.PROBLEM_TITLE, problem.getTitle());
+            contentValues.put(DBContract.Problems.PROBLEM_DATE, problem.getDate());
+            contentValues.put(DBContract.Problems.LATITUDE, problem.getPosition().latitude);
+            contentValues.put(DBContract.Problems.LONGITUDE, problem.getPosition().longitude);
+            db.insert(DBContract.Problems.TABLE_NAME, null, contentValues);
+            contentValues.clear();
+        }
+    }
+
+    /**
+     * Returns problem details that are currently in the database.
+     *
+     * @param problemId id of required problem.
+     * @return problem details.
+     */
+    public Details getProblemDetails(final int problemId) {
+        if (problemId < 0) {
+            return null;
+        }
+
+        List<Photo> photos = getProblemPhotos(problemId);
+        List<ProblemActivity> problemActivities = getProblemActivities(problemId);
+
+        String[] projection = {
+                DBContract.Details.PROBLEM_CONTENT, DBContract.Details.PROPOSAL,
+                DBContract.Details.TITLE, DBContract.Details.MODERATION,
+                DBContract.Details.SEVERITY, DBContract.Details.VOTES,
+                DBContract.Details.LAST_UPDATE
+        };
+        String selection = DBContract.Details.PROBLEM_ID + " = ?";
+        String[] selectionArgs = new String[]{String.valueOf(problemId)};
+
+        SQLiteDatabase db = getWritableDatabase();
+        Cursor cursor = db.query(DBContract.Details.TABLE_NAME, projection, selection,
+                selectionArgs, null, null, null);
+
+        Details details = null;
+        if (cursor.moveToFirst()) {
+            details = buildProblemDetails(problemId, cursor, problemActivities, photos);
+        }
+
+        return details;
+    }
+
+    /**
+     * Returns time of the last updateAllProblems of the information
+     * about concrete problem.
+     *
+     * @param problemId id of required problem.
+     * @return time of the last updateAllProblems.
+     */
+    public String getLastUpdateTime(final int problemId) {
+        if (problemId < 0) {
+            return null;
+        }
+
+        SQLiteDatabase db = getWritableDatabase();
+        String[] projection = {DBContract.Details.LAST_UPDATE};
+        String selection = DBContract.Details.PROBLEM_ID + " = ?";
+        String[] selectionArgs = new String[]{String.valueOf(problemId)};
+
+        Cursor cursor = db.query(DBContract.Details.TABLE_NAME, projection,
+                selection, selectionArgs, null, null, null);
+
+        if (cursor.moveToFirst()) {
+            return cursor.getString(cursor.getColumnIndex(DBContract.Details.LAST_UPDATE));
+        } else {
+            return null;
+        }
     }
 
     /**
@@ -230,45 +332,6 @@ public class DBHelper extends SQLiteOpenHelper {
     }
 
     /**
-     * Returns list of all problems that are currently in the database.
-     *
-     * @return list of problems.
-     */
-    public List<Problem> getAllProblems() {
-        SQLiteDatabase db = getWritableDatabase();
-        Cursor cursor = db.query(DBContract.Problems.TABLE_NAME, null, null, null, null, null, null);
-        List<Problem> problems = null;
-        if (cursor.moveToFirst()) {
-            problems = buildAllProblemList(cursor);
-        }
-        return problems;
-    }
-
-    /**
-     * Sets brief information about all problems into the database.
-     *
-     * @param problems server response to all problems request.
-     */
-    public void setAllProblems(final List<Problem> problems) {
-        if (problems == null) {
-            return;
-        }
-        SQLiteDatabase db = getWritableDatabase();
-        ContentValues contentValues = new ContentValues();
-        for (Problem problem : problems) {
-            contentValues.put(DBContract.Problems.ID, problem.getProblemId());
-            contentValues.put(DBContract.Problems.PROBLEM_STATUS, problem.getStatus().getId());
-            contentValues.put(DBContract.Problems.PROBLEM_TYPES_ID, problem.getProblemType().getId());
-            contentValues.put(DBContract.Problems.PROBLEM_TITLE, problem.getTitle());
-            contentValues.put(DBContract.Problems.PROBLEM_DATE, problem.getDate());
-            contentValues.put(DBContract.Problems.LATITUDE, problem.getPosition().latitude);
-            contentValues.put(DBContract.Problems.LONGITUDE, problem.getPosition().longitude);
-            db.insert(DBContract.Problems.TABLE_NAME, null, contentValues);
-            contentValues.clear();
-        }
-    }
-
-    /**
      * Builds list of all problems.
      *
      * @param cursor contains query result.
@@ -286,8 +349,8 @@ public class DBHelper extends SQLiteOpenHelper {
 
             Problem problem = new Problem(
                     cursor.getInt(cursor.getColumnIndex(DBContract.Problems.ID)),
-                    ProblemStatus.getProblemStatus(problemStatusId),
-                    ProblemType.getProblemType(problemTypeId),
+                    Problem.ProblemStatus.getProblemStatus(problemStatusId),
+                    Problem.ProblemType.getProblemType(problemTypeId),
                     cursor.getString(cursor.getColumnIndex(DBContract.Problems.PROBLEM_TITLE)),
                     cursor.getString(cursor.getColumnIndex(DBContract.Problems.PROBLEM_DATE)),
                     cursor.getDouble(cursor.getColumnIndex(DBContract.Problems.LATITUDE)),
@@ -298,41 +361,6 @@ public class DBHelper extends SQLiteOpenHelper {
         }
 
         return problems;
-    }
-
-    /**
-     * Returns problem details that are currently in the database.
-     *
-     * @param problemId id of required problem.
-     * @return problem details.
-     */
-    public Details getProblemDetails(final int problemId) {
-        if (problemId < 0) {
-            return null;
-        }
-
-        List<Photo> photos = getProblemPhotos(problemId);
-        List<ProblemActivity> problemActivities = getProblemActivities(problemId);
-
-        String[] projection = {
-                DBContract.Details.PROBLEM_CONTENT, DBContract.Details.PROPOSAL,
-                DBContract.Details.TITLE, DBContract.Details.MODERATION,
-                DBContract.Details.SEVERITY, DBContract.Details.VOTES,
-                DBContract.Details.LAST_UPDATE
-        };
-        String selection = DBContract.Details.PROBLEM_ID + " = ?";
-        String[] selectionArgs = new String[]{String.valueOf(problemId)};
-
-        SQLiteDatabase db = getWritableDatabase();
-        Cursor cursor = db.query(DBContract.Details.TABLE_NAME, projection, selection,
-                selectionArgs, null, null, null);
-
-        Details details = null;
-        if (cursor.moveToFirst()) {
-            details = buildProblemDetails(problemId, cursor, problemActivities, photos);
-        }
-
-        return details;
     }
 
     /**
@@ -468,7 +496,7 @@ public class DBHelper extends SQLiteOpenHelper {
         for (int i = 0; i < cursor.getCount(); i++) {
 
             int activityTypeId = cursor.getInt(cursor.getColumnIndex(DBContract.ProblemActivity.ACTIVITY_TYPES_ID));
-            ActivityType activityTypeEnum = ActivityType.getActivityType(activityTypeId);
+            ProblemActivity.ActivityType activityTypeEnum = ProblemActivity.ActivityType.getActivityType(activityTypeId);
 
             ProblemActivity problemActivity = new ProblemActivity(
                     problemId,
@@ -486,37 +514,6 @@ public class DBHelper extends SQLiteOpenHelper {
 
         return problemActivities;
     }
-
-    /**
-     * Returns time of the last updateAllProblems of the information
-     * about concrete problem.
-     *
-     * @param problemId id of required problem.
-     * @return time of the last updateAllProblems.
-     */
-    public String getLastUpdateTime(final int problemId) {
-        if (problemId < 0) {
-            return null;
-        }
-
-        SQLiteDatabase db = getWritableDatabase();
-        String[] projection = {DBContract.Details.LAST_UPDATE};
-        String selection = DBContract.Details.PROBLEM_ID + " = ?";
-        String[] selectionArgs = new String[]{String.valueOf(problemId)};
-
-        Cursor cursor = db.query(DBContract.Details.TABLE_NAME, projection,
-                selection, selectionArgs, null, null, null);
-
-        if (cursor.moveToFirst()) {
-            return cursor.getString(cursor.getColumnIndex(DBContract.Details.LAST_UPDATE));
-        } else {
-            return null;
-        }
-    }
-
-
-
-
 
 }
 

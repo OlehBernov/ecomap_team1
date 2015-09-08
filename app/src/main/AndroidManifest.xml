@@ -29,24 +29,24 @@
             android:value="@string/facebook_app_id" />
 
         <activity
-            android:name=".problemposting.AddNewProblemDecriptionActivity"
+            android:name=".ui.activities.AddNewProblemDecriptionActivity"
             android:label="@string/app_name"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustPan" >
         </activity>
         <activity
-            android:name=".problemposting.ChooseProblemLocationActivity"
+            android:name=".ui.activities.ChooseProblemLocationActivity"
             android:label="@string/app_name"
             android:screenOrientation="portrait" >
         </activity>
         <activity
-            android:name=".authenticator.LoginActivity"
+            android:name=".ui.activities.LoginActivity"
             android:label="@string/app_name"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustPan" >
         </activity>
         <activity
-            android:name=".SplashScreenActivity"
+            android:name=".ui.activities.SplashScreenActivity"
             android:label="@string/app_name"
             android:noHistory="true"
             android:screenOrientation="portrait" >
@@ -59,12 +59,12 @@
 
         <!-- Main activity -->
         <activity
-            android:name=".MainActivity"
+            android:name=".ui.activities.MainActivity"
             android:label="@string/app_name"
             android:screenOrientation="portrait" >
         </activity>
         <activity
-            android:name=".authenticator.SignupActivity"
+            android:name=".ui.activities.SignupActivity"
             android:label="@string/app_name"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustPan" >
@@ -75,27 +75,27 @@
             android:label="@string/app_name"
             android:theme="@android:style/Theme.Translucent.NoTitleBar" />
         <activity
-            android:name=".problemdetails.ProblemPhotoSlidePager"
+            android:name=".ui.fragments.ProblemPhotoSlidePager"
             android:label="@string/title_activity_problem_photo_slide_pager"
             android:screenOrientation="portrait" >
         </activity>
         <activity
-            android:name=".problemposting.UserPhotoFullScreen"
+            android:name=".ui.activities.UserPhotoFullScreenActivity"
             android:label="@string/title_activity_user_photo_full_screen"
             android:screenOrientation="portrait" >
         </activity>
         <activity
-            android:name=".settings.SettingsActivity"
+            android:name=".ui.activities.SettingsActivity"
             android:label="@string/title_activity_settings"
             android:screenOrientation="portrait" >
         </activity>
         <activity
-            android:name=".problemsearch.SearchActivity"
+            android:name=".ui.activities.SearchActivity"
             android:label="@string/app_name"
             android:screenOrientation="portrait" >
         </activity>
         <activity
-            android:name=".problemsearch.ProblemDetailsActivity"
+            android:name=".ui.activities.ProblemDetailsActivity"
             android:label="@string/title_activity_problem_details"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustPan">

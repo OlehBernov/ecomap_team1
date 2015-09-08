@@ -15,7 +15,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"/>
 
-        <com.ecomap.ukraine.problemposting.SlidingTabLayout
+        <com.ecomap.ukraine.ui.SlidingTabLayout
             android:id="@+id/tabs"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

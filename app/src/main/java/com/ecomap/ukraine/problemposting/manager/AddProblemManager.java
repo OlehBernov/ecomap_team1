@@ -2,8 +2,8 @@ package com.ecomap.ukraine.problemposting.manager;
 
 import android.content.Context;
 
-import com.ecomap.ukraine.problemposting.RESTclient.AddProblemClient;
-import com.ecomap.ukraine.model.newproblem.NewProblemData;
+import com.ecomap.ukraine.models.ProblemForPosting;
+import com.ecomap.ukraine.problemposting.sync.AddProblemClient;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -40,7 +40,7 @@ public class AddProblemManager implements AddProblemRequestReceiver, AddProblemN
     /**
      * Post new problem on server
      */
-    public void addProblem(final NewProblemData problemData) {
+    public void addProblem(final ProblemForPosting problemData) {
 
         addProblemClient.addProblemDescription(problemData);
     }
