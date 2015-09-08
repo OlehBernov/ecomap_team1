@@ -9,13 +9,19 @@ public interface FilterListenersNotifier {
      *
      * @param listener the FilterListener to add.
      */
-    void registerFilterListener(final FilterListener listener);
+    void registerFilterListener(FilterListener listener);
 
     /**
-     * Removes the specified listener from the set of problemaListeners.
+     * Removes the specified listener from the set of problemListeners.
      *
      * @param listener the FilterListener to remove.
      */
-    void removeFilterListener(final FilterListener listener);
+    void removeFilterListener(FilterListener listener);
 
+    /**
+     *
+     *
+     * @param filterState
+     */
+    void sendFilterState(FilterState filterState);
 }

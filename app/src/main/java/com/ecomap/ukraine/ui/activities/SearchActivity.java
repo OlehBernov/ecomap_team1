@@ -10,8 +10,13 @@ import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 
 import com.ecomap.ukraine.R;
+import com.ecomap.ukraine.filtration.Filter;
+import com.ecomap.ukraine.filtration.FilterListener;
+import com.ecomap.ukraine.filtration.FilterManager;
+import com.ecomap.ukraine.filtration.FilterState;
 import com.ecomap.ukraine.ui.adapters.ProblemAdapter;
 import com.ecomap.ukraine.problemupdate.manager.DataManager;
 import com.ecomap.ukraine.problemupdate.manager.ProblemListener;
@@ -30,9 +35,10 @@ public class SearchActivity extends AppCompatActivity
     public static final String PROBLEM_EXTRA = "Problem";
 
     private RecyclerView recyclerView;
-    private RecyclerView.LayoutManager layoutManager;
     private ProblemAdapter adapter;
     private List<Problem> problems;
+    private List<Problem> unfilteredProblems;
+    private FilterManager filterManager;
 
     public void showProblemInformation(Problem problem) {
         Intent intent = new Intent(this, ProblemDetailsActivity.class);
@@ -51,11 +57,18 @@ public class SearchActivity extends AppCompatActivity
     private void setUpToolbar() {
         Toolbar toolbar = (Toolbar) findViewById(R.id.search_toolbar);
         setSupportActionBar(toolbar);
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onBackPressed();
+            }
+        });
     }
 
     private void requestProblemsList() {
         DataManager dataManager = DataManager.getInstance(this);
         dataManager.registerProblemListener(this);
+        filterManager = FilterManager.getInstance(this);
         dataManager.getAllProblems();
     }
 
@@ -98,15 +111,15 @@ public class SearchActivity extends AppCompatActivity
 
     @Override
     public void updateAllProblems(List<Problem> problems) {
-        this.problems = problems;
-        setUpRecyclerView();
+        unfilteredProblems = problems;
+        showProblemList();
         DataManager.getInstance(this).removeProblemListener(this);
     }
 
     private void setUpRecyclerView() {
         recyclerView = (RecyclerView) findViewById(R.id.my_recycler_view);
         recyclerView.setHasFixedSize(true);
-        layoutManager = new LinearLayoutManager(this);
+        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
         final List<Problem> problems = new ArrayList<>(this.problems);
         adapter = new ProblemAdapter(problems, this);
@@ -115,6 +128,12 @@ public class SearchActivity extends AppCompatActivity
 
     @Override
     public void updateProblemDetails(Details details) {
+    }
+
+    private void showProblemList() {
+        FilterState filterState = filterManager.getCurrentFilterState();
+        problems = new Filter().filterProblem(unfilteredProblems, filterState);
+        setUpRecyclerView();
     }
 
 }

@@ -19,7 +19,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
  * Provides updates of the database.
  */
 public class DataManager implements ProblemListenersNotifier,
-        ProblemRequestReceiver {
+                                    ProblemRequestReceiver {
 
     /**
      * The name of the preference to retrieve.

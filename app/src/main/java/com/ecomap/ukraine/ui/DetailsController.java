@@ -44,14 +44,18 @@ public class DetailsController {
     private FloatingActionButton fab;
     private TextView titleView;
 
+    private DetailsContent detailsContent;
     private Problem problem;
 
     private int fabState;
     private float currentOffset;
     private boolean isScrollDisable;
 
-    public DetailsController(Activity activity, Problem problem) {
+    public DetailsController(Activity activity, Problem problem, DetailsContent detailsContent) {
         this.activity = activity;
+        this.detailsContent = detailsContent;
+
+        detailsContent.setProblemContent(problem);
 
         slidingUpPanelLayout = (SlidingUpPanelLayout) activity.findViewById(R.id.sliding_layout);
         toolbar = (Toolbar) activity.findViewById(R.id.toolbar);
@@ -65,9 +69,11 @@ public class DetailsController {
 
         slidingUpPanelLayout.setAnchorPoint(ANCHOR_POINT);
         slidingUpPanelLayout.setPanelState(SlidingUpPanelLayout.PanelState.ANCHORED);
+
+        setSlidingControl();
     }
 
-    public void perform() {
+    public void setSlidingControl() {
         slidingUpPanelLayout.setPanelSlideListener(new SlidingUpPanelLayout.PanelSlideListener() {
             public static final int TRANSPARENT_WHITE_COLOR = 0x00ffffff;
 
@@ -114,7 +120,6 @@ public class DetailsController {
             public void onPanelHidden(View view) {
             }
 
-
             public void backgroundResolver(final float v) {
                 float anchor = slidingUpPanelLayout.getAnchorPoint();
                 int alpha = (int) (255 * Math.max((COLLAPSE_OFFSET - v)
@@ -147,7 +152,7 @@ public class DetailsController {
                         }
                     });
                 } else {
-                    final DrawerLayout drawerLayout = (DrawerLayout) activity.findViewById(R.id.drawer);
+                    final DrawerLayout drawerLayout = (DrawerLayout) detailsContent.findViewById(R.id.drawer);
                     toolbar.setNavigationOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {

@@ -212,7 +212,6 @@
                             android:onClick="switchCheckButtonState"
                             android:text="@string/resolved"/>
 
-
                     </RelativeLayout>
 
                     <RelativeLayout

@@ -238,8 +238,7 @@ public class FragmentEcoMap extends android.support.v4.app.Fragment
     public boolean onClusterItemClick(final Problem problem) {
         if (!((MainActivity) getActivity()).problemAddingMenu) {
             dataManager.registerProblemListener(this);
-            DetailsController detailsController = new DetailsController(getActivity(), problem);
-            detailsContent.setProblemContent(problem, detailsController);
+            new DetailsController(getActivity(), problem, detailsContent);
             dataManager.getProblemDetail(problem.getProblemId());
             moveCameraToProblem(problem);
             return true;
@@ -248,6 +247,7 @@ public class FragmentEcoMap extends android.support.v4.app.Fragment
     }
 
     // TODO refactor and change names../
+    // TODO: but this is overridden method
     @Override
     public boolean onClusterClick(Cluster<Problem> cluster) {
         googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(getClusterCenter(cluster),

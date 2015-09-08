@@ -2,7 +2,6 @@ package com.ecomap.ukraine.ui.activities;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -13,36 +12,22 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
-import android.widget.CheckBox;
 import android.widget.TextView;
 
 import com.afollestad.materialdialogs.MaterialDialog;
-import com.codetroopers.betterpickers.calendardatepicker.CalendarDatePickerDialog;
 import com.ecomap.ukraine.R;
-import com.ecomap.ukraine.ui.fragments.FragmentEcoMap;
 import com.ecomap.ukraine.authentication.manager.AccountManager;
-import com.ecomap.ukraine.problemdetails.manager.DetailsManager;
-import com.ecomap.ukraine.filtration.FilterContract;
 import com.ecomap.ukraine.filtration.FilterManager;
-import com.ecomap.ukraine.filtration.FilterState;
-import com.ecomap.ukraine.filtration.FilterStateConverter;
 import com.ecomap.ukraine.models.User;
+import com.ecomap.ukraine.problemdetails.manager.DetailsManager;
+import com.ecomap.ukraine.ui.fragments.FilterFragment;
+import com.ecomap.ukraine.ui.fragments.FragmentEcoMap;
 import com.sothree.slidinguppanel.SlidingUpPanelLayout;
-
-import org.json.JSONException;
-
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.HashMap;
-import java.util.Locale;
-import java.util.Map;
 
 
 /**
@@ -52,73 +37,32 @@ import java.util.Map;
  */
 public class MainActivity extends AppCompatActivity {
 
-    /**
-     * Name of the filter window.
-     */
     private static final String FILTER = "Filter";
-
-    private static final String DATE_FROM_TAG = "Date from tag";
-
-    private static final String DATE_TO_TAG = "Date to tag";
-
-    private static final String FILTERS_STATE = "Filters state";
-
-    private static final String DATE_TEMPLATE = "dd-MM-yyyy";
-
-    private static final String DEFAULT_DATE_FROM = "01-01-1990";
-
-    private static final String DEFAULT_DATE_TO = "31-12-2030";
-
     private static final float ANCHOR_POINT = 0.3f;
-
     private static final String ALERT_MESSAGE =
             "To append a problem you must first be authorized. Authorize?";
-
     private static final String MAP_TAG = "Map tag";
-
     private static final String OK = "OK";
-
     private static final String CANCEL = "Cancel";
 
     private static final int LOG_IN_REQUEST_CODE = 1;
-
     private static final int SIGN_UP_REQUEST_CODE = 2;
-
     private static final int SETTINGS_REQUEST_CODE = 3;
 
     public ActionBarDrawerToggle drawerToggle;
-
-    public boolean problemAddingMenu;
-
     private DrawerLayout filterLayout;
-
     private Toolbar toolbar;
-
-    private CalendarDatePickerDialog dialogDateFrom;
-
-    private CalendarDatePickerDialog dialogDateTo;
-
-    private Calendar calendarDateFrom;
-
-    private Calendar calendarDateTo;
-
     private SlidingUpPanelLayout slidingUpPanelLayout;
-
     private Menu menu;
-
     private Activity activity = this;
-
     private DrawerLayout menuDrawer;
-
-    /**
-     * Filter manager instance
-     */
     private FilterManager filterManager;
-
     private AccountManager accountManager;
-
     private CharSequence previousTitle;
     private DrawerLayout drawerLayout;
+    private FilterFragment filterFragment;
+
+    public boolean problemAddingMenu;
 
     /**
      * Inflate the menu, this adds items to the action bar if it is present.
@@ -135,6 +79,7 @@ public class MainActivity extends AppCompatActivity {
 
     /**
      * Called when the user selects an item from the options menu
+     *
      * @param item menu item
      * @return result of action
      */
@@ -147,38 +92,12 @@ public class MainActivity extends AppCompatActivity {
     }
 
     /**
-     * Called when the activity has detected the user's press of the back key.
-     */
-    @Override
-    public void onBackPressed() {
-        if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
-            drawerLayout.closeDrawer(GravityCompat.START);
-        } else if (filterLayout.isDrawerOpen(GravityCompat.END)) {
-            menu.findItem(R.id.action_find_location)
-                    .setIcon(R.drawable.ic_filter_list_white_36dp);
-            filterLayout.closeDrawer(GravityCompat.END);
-            toolbar.setTitle(previousTitle);
-        } else if (isInformationalPanelExpanded()) {
-            slidingUpPanelLayout.setPanelState(SlidingUpPanelLayout
-                    .PanelState.ANCHORED);
-        } else if (isInformationalPanelCollapsed()) {
-            slidingUpPanelLayout.setPanelState(SlidingUpPanelLayout
-                    .PanelState.HIDDEN);
-            DetailsManager.getInstance(getApplicationContext()).removeAllDetailsListener();
-        } else {
-            super.onBackPressed();
-        }
-    }
-
-
-
-    /**
      * Controls the position of the filter7 window on the screen.
      */
     public void showFilter(MenuItem item) {
         if (!filterLayout.isDrawerOpen(GravityCompat.END)) {
             item.setIcon(R.drawable.ic_arrow_forward_white_36dp);
-            setDate();
+            filterFragment.setDate();
             filterLayout.openDrawer(GravityCompat.END);
             previousTitle = toolbar.getTitle();
             toolbar.setTitle(FILTER);
@@ -190,35 +109,31 @@ public class MainActivity extends AppCompatActivity {
     }
 
     /**
-     * Changed button state on filter layout
-     * @param view
+     * Changed checkBox state on filter layout.
+     *
+     * @param view view of the checkBox
      */
     public void switchCheckButtonState(View view) {
-        CheckBox checkBox = (CheckBox) view;
-        if (checkBox.isChecked()) {
-            checkBox.setChecked(true);
-        } else {
-            checkBox.setChecked(false);
-        }
-
-        filterManager.getFilterState(buildFiltersState());
+        filterFragment.switchCheckButtonState(view);
     }
 
     public void dateFromChoosing(View view) {
-        dialogDateFrom.show(getSupportFragmentManager(), DATE_FROM_TAG);
+        filterFragment.dateFromChoosing(getSupportFragmentManager());
     }
 
     /**
      * Changed date state on filter layout
+     *
      * @param view date view
      */
     public void dateToChoosing(View view) {
-        dialogDateTo.show(getSupportFragmentManager(), DATE_TO_TAG);
+        filterFragment.dateToChoosing(getSupportFragmentManager());
     }
 
     /**
      * Opens ChooseProblemLocationActivity on Click
-     * @param view view that was cliced
+     *
+     * @param view view that was clicked
      */
     public void openChooseProblemLocationActivity(View view) {
         if (accountManager.isAnonymousUser()) {
@@ -232,9 +147,10 @@ public class MainActivity extends AppCompatActivity {
 
     /**
      * Set dialog when user are not authorized
+     *
      * @param message how to solve the problem
      */
-    public  void setNotAuthorizeDialog(final String message) {
+    public void setNotAuthorizeDialog(final String message) {
         new MaterialDialog.Builder(this)
                 .title(R.string.Caution)
                 .content(message)
@@ -264,6 +180,7 @@ public class MainActivity extends AppCompatActivity {
 
     /**
      * Opens Login activity
+     *
      * @param item menu item which was clicked
      */
     public void logIn(MenuItem item) {
@@ -274,14 +191,17 @@ public class MainActivity extends AppCompatActivity {
 
     /**
      * Log out user
+     *
      * @param item menu item which was clicked
      */
     public void logOut(MenuItem item) {
         setUserInformation(User.ANONYM_USER);
-        accountManager. putUserToPreferences(User.ANONYM_USER, "");
+        accountManager.putUserToPreferences(User.ANONYM_USER, "");
     }
+
     /**
      * Opens SignUp activity
+     *
      * @param item menu item which was clicked
      */
     public void signUp(MenuItem item) {
@@ -292,6 +212,7 @@ public class MainActivity extends AppCompatActivity {
 
     /**
      * Opens Setting activity
+     *
      * @param item menu item which was clicked
      */
     public void openSettings(MenuItem item) {
@@ -299,8 +220,10 @@ public class MainActivity extends AppCompatActivity {
         startActivityForResult(intent, SETTINGS_REQUEST_CODE);
         menuDrawer.closeDrawers();
     }
+
     /**
      * Opens SearchActivity activity
+     *
      * @param item menu item which was clicked
      */
     public void openSearch(MenuItem item) {
@@ -311,9 +234,10 @@ public class MainActivity extends AppCompatActivity {
 
     /**
      * Called when an activity you launched exits.
+     *
      * @param requestCode The integer request code originally supplied to startActivityForResult().
-     * @param resultCode The integer result code returned by the child activity through its setResult().
-     * @param data An Intent, which can return result data to the caller.
+     * @param resultCode  The integer result code returned by the child activity through its setResult().
+     * @param data        An Intent, which can return result data to the caller.
      */
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -321,10 +245,34 @@ public class MainActivity extends AppCompatActivity {
         setUserInformation(accountManager.getUserFromPreference());
         if (isSettingsRequest(requestCode)) {
             Fragment fragment = getSupportFragmentManager().findFragmentByTag(MAP_TAG);
-            if(fragment != null) {
+            if (fragment != null) {
                 getSupportFragmentManager().beginTransaction().remove(fragment).commit();
             }
             addMapFragment();
+        }
+    }
+
+    /**
+     * Called when the activity has detected the user's press of the back key.
+     */
+    @Override
+    public void onBackPressed() {
+        if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
+            drawerLayout.closeDrawer(GravityCompat.START);
+        } else if (filterLayout.isDrawerOpen(GravityCompat.END)) {
+            menu.findItem(R.id.action_find_location)
+                    .setIcon(R.drawable.ic_filter_list_white_36dp);
+            filterLayout.closeDrawer(GravityCompat.END);
+            toolbar.setTitle(previousTitle);
+        } else if (isInformationalPanelExpanded()) {
+            slidingUpPanelLayout.setPanelState(SlidingUpPanelLayout
+                    .PanelState.ANCHORED);
+        } else if (isInformationalPanelCollapsed()) {
+            slidingUpPanelLayout.setPanelState(SlidingUpPanelLayout
+                    .PanelState.HIDDEN);
+            DetailsManager.getInstance(getApplicationContext()).removeAllDetailsListener();
+        } else {
+            super.onBackPressed();
         }
     }
 
@@ -338,15 +286,17 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        setupToolbar();
+
         menuDrawer = (DrawerLayout) findViewById(R.id.drawer);
+        setUpDrawerLayout();
 
         filterLayout = (DrawerLayout) findViewById(R.id.drawer2);
+        filterLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
+        filterLayout.setDrawerListener(new FilterDrawerListener());
         filterManager = FilterManager.getInstance(this);
-        accountManager = AccountManager.getInstance(this);
-        setupToolbar();
-        setUpDrawerLayout();
-        setupFilter();
 
+        accountManager = AccountManager.getInstance(this);
         setUserInformation(accountManager.getUserFromPreference());
 
         slidingUpPanelLayout = (SlidingUpPanelLayout) findViewById(R.id.sliding_layout);
@@ -354,12 +304,8 @@ public class MainActivity extends AppCompatActivity {
         slidingUpPanelLayout.setDragView(R.id.sliding_linear_layout);
 
         addMapFragment();
-
-        createDateFromPickerDialog();
-        createDateToPickerDialog();
-
+        addFilterFragment();
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
-        filterLayout.setDrawerListener(new FilterDrawerListener());
     }
 
     /**
@@ -390,16 +336,18 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        filterFragment.saveState();
+    }
 
-        SharedPreferences settings = getApplicationContext().getSharedPreferences(FILTERS_STATE, 0);
-        SharedPreferences.Editor editor = settings.edit();
-        FilterState filterState = buildFiltersState();
-        try {
-            editor.putString(FILTERS_STATE, FilterStateConverter.convertToJson(filterState));
-        } catch (JSONException e) {
-            Log.e("JSONException", "onDestroy");
-        }
-        editor.apply();
+    /**
+     * Sets filter fragment on filter view.
+     */
+    private void addFilterFragment() {
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        filterFragment = FilterFragment.newInstance();
+        fragmentManager.beginTransaction()
+                .replace(R.id.filter_container, filterFragment, MAP_TAG)
+                .commit();
     }
 
     private boolean isSettingsRequest(int requestCode) {
@@ -416,118 +364,20 @@ public class MainActivity extends AppCompatActivity {
                 == SlidingUpPanelLayout.PanelState.EXPANDED;
     }
 
-    private void setDateOnScreen(Calendar dateFrom, Calendar dateTo) {
-        SimpleDateFormat dateFormat = new SimpleDateFormat(DATE_TEMPLATE, Locale.ENGLISH);
-
-        TextView dateFromView = (TextView) findViewById(R.id.date_from);
-        String formattedDate = dateFormat.format(dateFrom.getTime());
-        dateFromView.setText(formattedDate);
-
-        TextView dateToView = (TextView) findViewById(R.id.date_to);
-        formattedDate = dateFormat.format(dateTo.getTime());
-        dateToView.setText(formattedDate);
-    }
-
-    /**
-     * Set uncheked state on checkbox
-     * @param view current checkbox
-     */
-    private void setFilterOn(View view) {
-        CheckBox checkBox = (CheckBox) view;
-        checkBox.setChecked(false);
-    }
-
     /**
      * Sets user information on drawer
+     *
      * @param user user state
      */
     private void setUserInformation(User user) {
         TextView userName = (TextView) findViewById(R.id.navigation_user_name);
         TextView email = (TextView) findViewById(R.id.navigation_email);
         userName.setText(user.getName() + " " + user.getSurname());
-        if(!accountManager.isAnonymousUser()) {
+        if (!accountManager.isAnonymousUser()) {
             email.setText(user.getEmail());
-        }
-        else {
+        } else {
             email.setText("");
         }
-    }
-
-    /**
-     * Create choose date dialog
-     */
-    private void createDateFromPickerDialog() {
-        CalendarDatePickerDialog.OnDateSetListener dateFromListener =
-                new CalendarDatePickerDialog.OnDateSetListener() {
-                    @Override
-                    public void onDateSet(CalendarDatePickerDialog dialog, int year,
-                                          int monthOfYear, int dayOfMonth) {
-                        Calendar date = Calendar.getInstance();
-                        date.set(Calendar.YEAR, year);
-                        date.set(Calendar.MONTH, monthOfYear);
-                        date.set(Calendar.DAY_OF_MONTH, dayOfMonth);
-
-                        if (isValidDates(date, calendarDateTo)) {
-                            calendarDateFrom = date;
-                            setDate();
-                            filterManager.getFilterState(buildFiltersState());
-                        }
-                    }
-                };
-
-        dialogDateFrom = new CalendarDatePickerDialog();
-        dialogDateFrom.setOnDateSetListener(dateFromListener);
-    }
-
-    private boolean isValidDates(Calendar dateFrom, Calendar dateTo) {
-        return dateTo.after(dateFrom);
-    }
-
-    private void createDateToPickerDialog() {
-        CalendarDatePickerDialog.OnDateSetListener dateToListener =
-                new CalendarDatePickerDialog.OnDateSetListener() {
-                    @Override
-                    public void onDateSet(CalendarDatePickerDialog dialog, int year,
-                                          int monthOfYear, int dayOfMonth) {
-                        Calendar date = Calendar.getInstance();
-                        date.set(Calendar.YEAR, year);
-                        date.set(Calendar.MONTH, monthOfYear);
-                        date.set(Calendar.DAY_OF_MONTH, dayOfMonth);
-
-                        if (isValidDates(calendarDateFrom, date)) {
-                            calendarDateTo = date;
-                            setDate();
-                            filterManager.getFilterState(buildFiltersState());
-                        }
-                    }
-                };
-
-        dialogDateTo = new CalendarDatePickerDialog();
-        dialogDateTo.setOnDateSetListener(dateToListener);
-    }
-
-    private FilterState buildFiltersState() {
-        Map<String, Boolean> filterStateValues = new HashMap<>();
-        filterStateValues.put(FilterContract.FOREST_DESTRUCTION,
-                getFilterState(R.id.forestry_issues));
-        filterStateValues.put(FilterContract.RUBBISH_DUMP,
-                getFilterState(R.id.rubbish_dump));
-        filterStateValues.put(FilterContract.ILLEGAL_BUILDING,
-                getFilterState(R.id.illegal_building));
-        filterStateValues.put(FilterContract.WATER_POLLUTION,
-                getFilterState(R.id.water_pollution));
-        filterStateValues.put(FilterContract.THREAD_TO_BIODIVERSITY,
-                getFilterState(R.id.biodiversity));
-        filterStateValues.put(FilterContract.POACHING,
-                getFilterState(R.id.poaching));
-        filterStateValues.put(FilterContract.OTHER,
-                getFilterState(R.id.other));
-        filterStateValues.put(FilterContract.RESOLVED,
-                getFilterState(R.id.ButtonResolved));
-        filterStateValues.put(FilterContract.UNSOLVED,
-                getFilterState(R.id.ButtonUnsolved));
-
-        return new FilterState(filterStateValues, calendarDateFrom, calendarDateTo);
     }
 
     /**
@@ -546,9 +396,9 @@ public class MainActivity extends AppCompatActivity {
     private void setupToolbar() {
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        final ActionBar ab = getSupportActionBar();
-        assert ab != null;
-        ab.setDisplayHomeAsUpEnabled(true);
+        final ActionBar actionBar = getSupportActionBar();
+        assert actionBar != null;
+        actionBar.setDisplayHomeAsUpEnabled(true);
     }
 
     /**
@@ -563,86 +413,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     /**
-     * Gets filter state from filter drawer
-     * @param id checkbox id
-     * @return change state of checkbox
-     */
-    private boolean getFilterState(int id) {
-        CheckBox checkBox = (CheckBox) findViewById(id);
-        return checkBox.isChecked();
-    }
-
-    /**
-     * Adds google map
-     */
-    private void setupFilter() {
-        filterLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
-        FilterState filterState = filterManager.getFilterStateFromPreference();
-        setFiltersState(filterState);
-    }
-
-    /**
-     * Sets date of filtration
-     */
-    private void setDate() {
-        SimpleDateFormat dateFormat = new SimpleDateFormat(DATE_TEMPLATE, Locale.ENGLISH);
-        try {
-            if (calendarDateFrom == null) {
-                calendarDateFrom = Calendar.getInstance();
-                calendarDateFrom.setTime(dateFormat.parse(DEFAULT_DATE_FROM));
-            }
-            if (calendarDateTo == null) {
-                calendarDateTo = Calendar.getInstance();
-                calendarDateTo.setTime(dateFormat.parse(DEFAULT_DATE_TO));
-            }
-        } catch (ParseException e) {
-            Log.e("parseException", "setDate to");
-            return;
-        }
-
-        setDateOnScreen(calendarDateFrom, calendarDateTo);
-    }
-
-    /**
-     * Sets filter state on drawer
-     * @param filtersState state of filter
-     */
-    private void setFiltersState(FilterState filtersState) {
-        if (filtersState != null) {
-            if (filtersState.isFilterOn(FilterContract.FOREST_DESTRUCTION)) {
-                setFilterOn(findViewById(R.id.forestry_issues));
-            }
-            if (filtersState.isFilterOn(FilterContract.RUBBISH_DUMP)) {
-                setFilterOn(findViewById(R.id.rubbish_dump));
-            }
-            if (filtersState.isFilterOn(FilterContract.ILLEGAL_BUILDING)) {
-                setFilterOn(findViewById(R.id.illegal_building));
-            }
-            if (filtersState.isFilterOn(FilterContract.WATER_POLLUTION)) {
-                setFilterOn(findViewById(R.id.water_pollution));
-            }
-            if (filtersState.isFilterOn(FilterContract.THREAD_TO_BIODIVERSITY)) {
-                setFilterOn(findViewById(R.id.biodiversity));
-            }
-            if (filtersState.isFilterOn(FilterContract.POACHING)) {
-                setFilterOn(findViewById(R.id.poaching));
-            }
-            if (filtersState.isFilterOn(FilterContract.OTHER)) {
-                setFilterOn(findViewById(R.id.other));
-            }
-            if (filtersState.isFilterOn(FilterContract.RESOLVED)) {
-                setFilterOn(findViewById(R.id.ButtonResolved));
-            }
-            if (filtersState.isFilterOn(FilterContract.UNSOLVED)) {
-                setFilterOn(findViewById(R.id.ButtonUnsolved));
-            }
-            calendarDateFrom = filtersState.getDateFrom();
-            calendarDateTo = filtersState.getDateTo();
-        }
-        setDate();
-    }
-
-    /**
      * Handles when filter drawer are closed
      */
     private class FilterDrawerListener extends DrawerLayout.SimpleDrawerListener {
@@ -651,4 +421,5 @@ public class MainActivity extends AppCompatActivity {
             filterManager.setRenderer();
         }
     }
+
 }

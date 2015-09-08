@@ -8,7 +8,7 @@ public interface FilterListener {
      *
      * @param filterState state of filter
      */
-    void updateFilterState(final FilterState filterState);
+    void updateFilterState(FilterState filterState);
 
     void setRenderer();
 

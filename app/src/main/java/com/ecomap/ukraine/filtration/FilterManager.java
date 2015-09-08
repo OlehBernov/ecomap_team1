@@ -1,9 +1,10 @@
 package com.ecomap.ukraine.filtration;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.util.Log;
+
+import com.ecomap.ukraine.util.ExtraFieldNames;
 
 import org.json.JSONException;
 
@@ -12,8 +13,6 @@ import java.util.Set;
 
 
 public class FilterManager implements FilterListenersNotifier {
-
-    private static final String FILTERS_STATE = "Filters state";
 
     /**
      * Holds the Singleton global instance of FilterManager.
@@ -25,26 +24,31 @@ public class FilterManager implements FilterListenersNotifier {
     /**
      * Set of problem listeners.
      */
-    public Set<FilterListener> filterListeners = new HashSet<>();
+    private Set<FilterListener> filterListeners = new HashSet<>();
 
     /**
      * Activity which callback filter-manager
      */
-    private Activity activity;
+    private Context context;
+
+    /**
+     * The latest version of filter settings.
+     */
+    private FilterState currentFilterState;
 
     /**
      * Filter manager constructor.
      */
-    private FilterManager(final Activity activity) {
-        this.activity = activity;
+    private FilterManager(final Context context) {
+        this.context = context;
     }
 
     /**
      * Returns Singleton instance of FilterManger
      */
-    public static FilterManager getInstance(final Activity activity) {
+    public static FilterManager getInstance(final Context context) {
         if (instance == null) {
-            instance = new FilterManager(activity);
+            instance = new FilterManager(context);
         }
         return instance;
     }
@@ -60,7 +64,7 @@ public class FilterManager implements FilterListenersNotifier {
     }
 
     /**
-     * Removes the specified listener from the set of problemaListeners.
+     * Removes the specified listener from the set of problemListeners.
      *
      * @param listener the FilterListener to remove.
      */
@@ -73,7 +77,9 @@ public class FilterManager implements FilterListenersNotifier {
      *
      * @param filterState this filterState sends to all listeners
      */
+    @Override
     public void sendFilterState(final FilterState filterState) {
+        currentFilterState = filterState;
         for (FilterListener listener : filterListeners) {
             listener.updateFilterState(filterState);
         }
@@ -90,7 +96,7 @@ public class FilterManager implements FilterListenersNotifier {
      *
      * @param filterState this filterState gets for filter manager
      */
-    public void getFilterState(final FilterState filterState) {
+    public void updateFilterState(final FilterState filterState) {
         sendFilterState(filterState);
     }
 
@@ -100,9 +106,9 @@ public class FilterManager implements FilterListenersNotifier {
      * @return filter state
      */
     public FilterState getFilterStateFromPreference() {
-        SharedPreferences settings = activity.getApplicationContext()
-                .getSharedPreferences(FILTERS_STATE, Context.MODE_PRIVATE);
-        String filterStateJson = settings.getString(FILTERS_STATE, null);
+        SharedPreferences settings = context
+                                     .getSharedPreferences(ExtraFieldNames.FILTERS_STATE, Context.MODE_PRIVATE);
+        String filterStateJson = settings.getString(ExtraFieldNames.FILTERS_STATE, null);
         FilterState filterState;
         if (filterStateJson != null) {
             try {
@@ -116,6 +122,14 @@ public class FilterManager implements FilterListenersNotifier {
             Log.e(TAG, "filter null");
         }
         return filterState;
+    }
+
+    public FilterState getCurrentFilterState() {
+        if (currentFilterState != null) {
+            return currentFilterState;
+        } else {
+            return getFilterStateFromPreference();
+        }
     }
 
 }

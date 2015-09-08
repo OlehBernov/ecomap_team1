@@ -61,7 +61,6 @@ public class DetailsContent extends LinearLayout implements DetailsListener {
     private ExpandableTextView descriptionFiled;
     private ExpandableTextView proposalFiled;
     private TableLayout activitiesLayout;
-    private EditText addComment;
     private LinearLayout photoContainer;
     private Context context;
     private DetailsManager detailsManager;
@@ -83,7 +82,7 @@ public class DetailsContent extends LinearLayout implements DetailsListener {
         init();
     }
 
-    public void setProblemContent(final Problem problem, final DetailsController detailsController) {
+    public void setProblemContent(final Problem problem) {
         this.problem = problem;
         AccountManager accountManager = AccountManager.getInstance(context);
         user = accountManager.getUserFromPreference();
@@ -96,16 +95,11 @@ public class DetailsContent extends LinearLayout implements DetailsListener {
         votesNumber = (TextView) findViewById(R.id.number_of_likes);
 
         activitiesLayout = (TableLayout) detailsContentView.findViewById(R.id.activities);
-        addComment = (EditText) detailsContentView.findViewById(R.id.add_comment);
         commentText = (EditText) detailsContentView.findViewById(R.id.add_comment);
 
         photoContainer = (LinearLayout) detailsContentView.findViewById(R.id.small_photo_conteiner);
         descriptionFiled = (ExpandableTextView) detailsContentView.findViewById(R.id.description_field);
         proposalFiled = (ExpandableTextView) detailsContentView.findViewById(R.id.proposal_field);
-
-        if (detailsController != null) {
-            detailsController.perform();
-        }
 
         voteIcon.setEnabled(true);
         voteIcon.setOnClickListener(new OnClickListener() {

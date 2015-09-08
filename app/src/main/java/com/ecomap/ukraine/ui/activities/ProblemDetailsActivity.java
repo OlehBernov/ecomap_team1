@@ -74,7 +74,7 @@ public class ProblemDetailsActivity extends AppCompatActivity implements Problem
 
         problem = (Problem) getIntent().getSerializableExtra(SearchActivity.PROBLEM_EXTRA);
         detailsContent = (DetailsContent) findViewById(R.id.search_details_content);
-        detailsContent.setProblemContent(problem, null);
+        detailsContent.setProblemContent(problem);
 
         DataManager dataManager = DataManager.getInstance(this);
         dataManager.registerProblemListener(this);
