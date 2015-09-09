@@ -336,7 +336,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        filterFragment.saveState();
+        filterFragment.saveState(this);
     }
 
     /**

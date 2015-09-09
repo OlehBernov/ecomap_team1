@@ -1,5 +1,6 @@
 package com.ecomap.ukraine.ui.fragments;
 
+import android.app.Activity;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -118,14 +119,15 @@ public class FilterFragment extends android.support.v4.app.Fragment {
     }
 
     /**
-     * Saves current state of filter fields to SharedPreferneces.
+     * Saves current state of filter fields to SharedPreferences.
      */
-    public void saveState() {
-        SharedPreferences settings = getActivity().getSharedPreferences(ExtraFieldNames.FILTERS_STATE, 0);
+    public void saveState(Activity activity) {
+        SharedPreferences settings = activity.getSharedPreferences(ExtraFieldNames.FILTERS_STATE, 0);
         SharedPreferences.Editor editor = settings.edit();
         FilterState filterState = buildFiltersState();
         try {
-            editor.putString(ExtraFieldNames.FILTERS_STATE, FilterStateConverter.convertToJson(filterState));
+            editor.putString(ExtraFieldNames.FILTERS_STATE,
+                             FilterStateConverter.convertToJson(filterState));
         } catch (JSONException e) {
             Log.e("JSONException", "onDestroy");
         }

@@ -56,7 +56,7 @@ public class LogInClient {
      * Constructor
      *
      * @param logRequestReceiver receive request result
-     * @param context            appication context
+     * @param context            application context
      */
     public LogInClient(final LogRequestReceiver logRequestReceiver, final Context context) {
         this.logRequestReceiver = logRequestReceiver;
@@ -112,7 +112,6 @@ public class LogInClient {
      * @param email    user email
      * @param password account password
      */
-
     public void postRegistration(final String name, final String surname,
                                  final String email, final String password) {
         StringRequest stringRequest = new StringRequest(Request.Method.POST, REGISTRATION_URL,

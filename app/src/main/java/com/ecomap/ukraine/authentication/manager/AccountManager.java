@@ -14,7 +14,7 @@ import java.util.Set;
  * Coordinates the work of the identification client and activities.
  */
 public class AccountManager implements LogInListenerNotifier,
-        LogRequestReceiver {
+                                       LogRequestReceiver {
 
     /**
      * Holds the Singleton global instance of AccountManager.
@@ -73,7 +73,6 @@ public class AccountManager implements LogInListenerNotifier,
      */
     @Override
     public void setLogInRequestResult(final User user) {
-
         sendLogInResult(user);
     }
 

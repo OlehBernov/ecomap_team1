@@ -19,9 +19,9 @@ public interface FilterListenersNotifier {
     void removeFilterListener(FilterListener listener);
 
     /**
+     * Sends FilterState object to listeners.
      *
-     *
-     * @param filterState
+     * @param filterState current filter state.
      */
     void sendFilterState(FilterState filterState);
 }

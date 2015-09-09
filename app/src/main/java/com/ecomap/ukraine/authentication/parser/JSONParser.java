@@ -51,8 +51,7 @@ public final class JSONParser {
      * @throws JSONException if argument do not correct.
      */
     public static User parseRegistrationInformation(final String registrationUserInformationJson,
-                                                    final String email)
-            throws JSONException {
+                                                    final String email) throws JSONException {
         if (registrationUserInformationJson == null) {
             throw new JSONException(NULL_ARGUMENT);
         }
