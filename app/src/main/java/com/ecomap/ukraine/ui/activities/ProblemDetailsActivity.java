@@ -9,7 +9,6 @@ import android.view.View;
 
 import com.ecomap.ukraine.R;
 import com.ecomap.ukraine.ui.DetailsContent;
-import com.ecomap.ukraine.util.Refresher;
 import com.ecomap.ukraine.problemupdate.manager.DataManager;
 import com.ecomap.ukraine.problemupdate.manager.ProblemListener;
 import com.ecomap.ukraine.models.Details;
@@ -49,7 +48,8 @@ public class ProblemDetailsActivity extends AppCompatActivity implements Problem
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         if (id == R.id.action_refresh) {
-            Refresher.setRefreshTask(this, problem);
+            DataManager.getInstance(this).
+                    refreshProblemDetails(problem.getProblemId());
             return true;
         }
         return super.onOptionsItemSelected(item);

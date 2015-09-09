@@ -22,8 +22,8 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.ecomap.ukraine.R;
-import com.ecomap.ukraine.util.Refresher;
 import com.ecomap.ukraine.models.Problem;
+import com.ecomap.ukraine.problemupdate.manager.DataManager;
 import com.ecomap.ukraine.ui.activities.ChooseProblemLocationActivity;
 import com.ecomap.ukraine.ui.activities.MainActivity;
 import com.sothree.slidinguppanel.SlidingUpPanelLayout;
@@ -199,7 +199,8 @@ public class DetailsController {
                             @Override
                             public void onAnimationEnd(Animator animation) {
                                 fab.setRotation(0);
-                                Refresher.setRefreshTask(activity, problem);
+                                DataManager.getInstance(activity).
+                                        refreshProblemDetails(problem.getProblemId());
                             }
                         });
                         animator.start();

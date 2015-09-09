@@ -2,6 +2,7 @@ package com.ecomap.ukraine.problemupdate.manager;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.os.AsyncTask;
 import android.preference.PreferenceManager;
 
 import com.ecomap.ukraine.R;
@@ -205,9 +206,16 @@ public class DataManager implements ProblemListenersNotifier,
         getAllProblems();
     }
 
-    public void refreshProblemDetails(int problemId) {
-        currentProblemId = problemId;
-        loadingClient.getProblemDetail(problemId);
+    public void refreshProblemDetails(final int problemId) {
+
+        new AsyncTask<Void, Void, Void>(){
+            @Override
+            protected Void doInBackground(Void... params) {
+                currentProblemId = problemId;
+                loadingClient.getProblemDetail(problemId);
+                return null;
+            }
+        }.execute();
     }
 
     /**

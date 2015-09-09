@@ -21,9 +21,9 @@ import android.widget.TextView;
 
 import com.ecomap.ukraine.R;
 import com.ecomap.ukraine.authentication.manager.AccountManager;
+import com.ecomap.ukraine.problemupdate.manager.DataManager;
 import com.ecomap.ukraine.util.BasicContentLayout;
 import com.ecomap.ukraine.util.BitmapResizer;
-import com.ecomap.ukraine.util.Refresher;
 import com.ecomap.ukraine.map.IconRenderer;
 import com.ecomap.ukraine.models.Details;
 import com.ecomap.ukraine.models.Photo;
@@ -51,6 +51,7 @@ public class DetailsContent extends LinearLayout implements DetailsListener {
 
     private Problem problem;
     private User user;
+    private DataManager dataManager;
     private ImageView markerIcon;
     private TextView problemTitle;
     private TextView problemStatus;
@@ -85,6 +86,7 @@ public class DetailsContent extends LinearLayout implements DetailsListener {
     public void setProblemContent(final Problem problem) {
         this.problem = problem;
         AccountManager accountManager = AccountManager.getInstance(context);
+        dataManager = DataManager.getInstance(context);
         user = accountManager.getUserFromPreference();
 
         markerIcon = (ImageView) findViewById(R.id.markerIcon);
@@ -135,13 +137,13 @@ public class DetailsContent extends LinearLayout implements DetailsListener {
 
     @Override
     public void onVoteAdded() {
-        Refresher.setRefreshTask(context, problem);
+       dataManager.refreshProblemDetails(problem.getProblemId());
         voteIcon.setEnabled(false);
     }
 
     @Override
     public void onCommentAdded() {
-        Refresher.setRefreshTask(context, problem);
+        dataManager.refreshProblemDetails(problem.getProblemId());
         commentText.setText("");
     }
 
