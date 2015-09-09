@@ -149,7 +149,7 @@ public class AddNewProblemDecriptionActivity extends AppCompatActivity {
         int id = item.getItemId();
 
         if (id == R.id.action_confirm_problem) {
-            AddProblemDescriptionFragment.getInstance(getBitmapsPhoto(), descriptions, this)
+            AddProblemDescriptionFragment.getInstance(getBitmapsPhoto(), descriptions)
                     .postProblemValidation();
             return true;
         }
@@ -185,7 +185,7 @@ public class AddNewProblemDecriptionActivity extends AppCompatActivity {
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
 
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager(), titles,
-                NUMBER_OF_TUBS, this);
+                NUMBER_OF_TUBS);
         pager = (ViewPager) findViewById(R.id.pager);
         pager.setAdapter(adapter);
 

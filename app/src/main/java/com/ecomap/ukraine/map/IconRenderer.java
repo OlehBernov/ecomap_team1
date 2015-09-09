@@ -31,6 +31,14 @@ public class IconRenderer extends DefaultClusterRenderer<Problem> {
      */
     private static final int MIN_CLUSTER_SIZE = 2;
 
+    private static final int SMALL_CLUSTER_SIZE = 10;
+
+    private static final int NORMAL_CLUSTER_SIZE = 50;
+
+    private static final int BIG_CLUSTER_SIZE = 100;
+
+    private static final int LARGE_CLUSTER_SIZE = 500;
+
     /**
      * Constructor
      *
@@ -165,13 +173,13 @@ public class IconRenderer extends DefaultClusterRenderer<Problem> {
      */
     private int getResourceIdForCluster(final int size) {
         int resId = 0;
-        if (size < 10) {
+        if (size < SMALL_CLUSTER_SIZE) {
             resId = R.drawable.m1;
-        } else if (size < 50) {
+        } else if (size < NORMAL_CLUSTER_SIZE) {
             resId = R.drawable.m2;
-        } else if (size < 100) {
+        } else if (size < BIG_CLUSTER_SIZE) {
             resId = R.drawable.m3;
-        } else if (size < 500) {
+        } else if (size < LARGE_CLUSTER_SIZE) {
             resId = R.drawable.m4;
         } else if (size < Integer.MAX_VALUE) {
             resId = R.drawable.m5;

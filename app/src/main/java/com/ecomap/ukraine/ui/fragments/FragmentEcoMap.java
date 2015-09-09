@@ -106,7 +106,7 @@ public class FragmentEcoMap extends android.support.v4.app.Fragment
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        dataManager = DataManager.getInstance(getActivity().getApplicationContext());
+        dataManager = DataManager.getInstance(getActivity());
         detailsContent = (DetailsContent) getActivity().findViewById(R.id.panel_details_content);
 
         View rootView = inflater.inflate(R.layout.fragement_map, container, false);
@@ -159,7 +159,7 @@ public class FragmentEcoMap extends android.support.v4.app.Fragment
         filterManager = FilterManager.getInstance(getActivity());
         filterManager.registerFilterListener(this);
 
-        MapsInitializer.initialize(getActivity().getApplicationContext());
+        MapsInitializer.initialize(getActivity());
 
         String mapTypeSharedPreferences = getResources().getString(R.string.map_type);
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
@@ -393,7 +393,7 @@ public class FragmentEcoMap extends android.support.v4.app.Fragment
     private void setupClusterManager(final FilterState filterState) {
         List<Problem> filteredProblems = new Filter().filterProblem(problems, filterState);
         clusterManager =
-                new ClusterManager<>(getActivity().getApplicationContext(), googleMap);
+                new ClusterManager<>(getActivity(), googleMap);
         googleMap.setOnCameraChangeListener(clusterManager);
         clusterManager.setOnClusterItemClickListener(this);
         clusterManager.setOnClusterClickListener(this);

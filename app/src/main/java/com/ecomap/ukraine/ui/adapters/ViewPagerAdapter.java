@@ -16,17 +16,13 @@ public class ViewPagerAdapter extends FragmentStatePagerAdapter {
 
     private String[] titles;
     private int numbOfTabs;
-    private Activity activity;
-
     /**
      * Constructor
      */
-    public ViewPagerAdapter(FragmentManager fragmentManager, String[] titles, int numbOfTabs,
-                            Activity activity) {
+    public ViewPagerAdapter(FragmentManager fragmentManager, String[] titles, int numbOfTabs) {
         super(fragmentManager);
         this.titles = titles;
         this.numbOfTabs = numbOfTabs;
-        this.activity = activity;
     }
 
     /**
@@ -37,7 +33,7 @@ public class ViewPagerAdapter extends FragmentStatePagerAdapter {
     @Override
     public Fragment getItem(int position) {
         if (position == 0) {
-            return AddProblemDescriptionFragment.getInstance(null, null, activity);
+            return AddProblemDescriptionFragment.getInstance(null, null);
         } else {
             return new AddPhotoFragment();
         }

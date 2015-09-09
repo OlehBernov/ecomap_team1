@@ -13,8 +13,14 @@ import org.json.JSONObject;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
+/**
+ * AsyncTask which post comment to server
+ */
 public class PostCommentTask extends AsyncTask<JSONObject, Void, Boolean> {
 
+    /**
+     * URL of posting comment
+     */
     private static final String POST_COMMENT_URL = "http://ecomap.org/api/comment/";
 
     protected final String TAG = getClass().getSimpleName();
@@ -23,6 +29,12 @@ public class PostCommentTask extends AsyncTask<JSONObject, Void, Boolean> {
     private Context context;
     private DetailsRequestReceiver detailsRequestReceiver;
 
+    /**
+     * Constructor
+     * @param problemID problem id
+     * @param context application context
+     * @param detailsRequestReceiver receiver of request
+     */
     public PostCommentTask (int problemID, Context context,
                             DetailsRequestReceiver detailsRequestReceiver) {
         this.problemID = problemID;
@@ -30,6 +42,11 @@ public class PostCommentTask extends AsyncTask<JSONObject, Void, Boolean> {
         this.detailsRequestReceiver = detailsRequestReceiver;
     }
 
+    /**
+     * Posting comment in background
+     * @param request body of request
+     * @return result of request
+     */
     @Override
     protected Boolean doInBackground(JSONObject ... request) {
         URL url;
@@ -62,6 +79,10 @@ public class PostCommentTask extends AsyncTask<JSONObject, Void, Boolean> {
         return result;
     }
 
+    /**
+     * Action after posting
+     * @param result result of request
+     */
     @Override
     protected void onPostExecute(Boolean result) {
         if(result) {

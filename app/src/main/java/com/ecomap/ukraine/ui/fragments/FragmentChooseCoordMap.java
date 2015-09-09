@@ -82,7 +82,7 @@ public class FragmentChooseCoordMap extends android.support.v4.app.Fragment {
             }
         });
 
-        MapsInitializer.initialize(getActivity().getApplicationContext());
+        MapsInitializer.initialize(getActivity());
         setUpMapIfNeeded();
         googleMap.setOnMarkerDragListener(new GoogleMap.OnMarkerDragListener() {
             @Override

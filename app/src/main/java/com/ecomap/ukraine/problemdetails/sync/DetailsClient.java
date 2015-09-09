@@ -44,6 +44,13 @@ public class DetailsClient {
         this.context = context;
     }
 
+    /**
+     * Post vote of problem on server
+     * @param problemID problem id
+     * @param userID user id
+     * @param userName user name
+     * @param userSurname user surname
+     */
     public void postVote(final String problemID, final String userID,
                          final String userName, final String userSurname) {
         StringRequest stringRequest = new StringRequest(Request.Method.POST, POST_VOTE_URL,
@@ -83,7 +90,14 @@ public class DetailsClient {
         RequestQueueWrapper.getInstance(context).addToRequestQueue(stringRequest);
     }
 
-
+    /**
+     * Post comment of problem on server using AsyncTask
+     * @param problemID problem id
+     * @param userID user id
+     * @param userName user name
+     * @param userSurname user surname
+     * @param content content of content
+     */
     public void postComment(final int problemID, final String userID,
                             final String userName, final String userSurname,
                             final String content) {

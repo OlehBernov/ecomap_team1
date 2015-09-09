@@ -50,7 +50,6 @@ public class AddProblemDescriptionFragment extends Fragment implements AddProble
     private static AddProblemDescriptionFragment instance;
     private static List<Bitmap> bitmapPhotos;
     private static List<String> photoDescriptions;
-    private static Activity activity;
 
     private static final String INPUT_PROBLEM_DATA = "Input problem data";
     private static final String POSTING = "Posting...";
@@ -70,15 +69,13 @@ public class AddProblemDescriptionFragment extends Fragment implements AddProble
      * Returns Singleton instance of AddProblemDescriptionFragment
      */
     public static AddProblemDescriptionFragment getInstance(List<Bitmap> bitmapPhotos,
-                                                            List<String> descriptions,
-                                                            Activity activity) {
+                                                            List<String> descriptions) {
         if (instance == null) {
             instance = new AddProblemDescriptionFragment();
         }
         if (bitmapPhotos != null) {
             AddProblemDescriptionFragment.bitmapPhotos = bitmapPhotos;
             AddProblemDescriptionFragment.photoDescriptions = descriptions;
-            AddProblemDescriptionFragment.activity = activity;
         }
         return instance;
     }
@@ -89,7 +86,7 @@ public class AddProblemDescriptionFragment extends Fragment implements AddProble
     public void postProblemValidation () {
         boolean isProblemValid = Validator.addProblemValidation(problemTitle);
         if (!isProblemValid) {
-            Toast.makeText(activity.getApplicationContext(), INPUT_PROBLEM_DATA, Toast.LENGTH_LONG)
+            Toast.makeText(getActivity(), INPUT_PROBLEM_DATA, Toast.LENGTH_LONG)
                     .show();
             return;
         }
@@ -99,12 +96,12 @@ public class AddProblemDescriptionFragment extends Fragment implements AddProble
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        dataManager = DataManager.getInstance(activity.getApplicationContext());
-        addProblemManager = AddProblemManager.getInstance(activity.getApplicationContext());
+        dataManager = DataManager.getInstance(getActivity());
+        addProblemManager = AddProblemManager.getInstance(getActivity());
     }
 
     public void successPosting(final int idOfMessage) {
-        Toast.makeText(activity.getApplicationContext(), idOfMessage, Toast.LENGTH_LONG).show();
+        Toast.makeText(getActivity(), idOfMessage, Toast.LENGTH_LONG).show();
         dataManager.registerProblemListener(this);
         dataManager.refreshAllProblem();
     }
@@ -119,9 +116,8 @@ public class AddProblemDescriptionFragment extends Fragment implements AddProble
         accountManager = AccountManager.getInstance(v.getContext());
         userName = accountManager.getUserFromPreference().getName();
         userSurname = accountManager.getUserFromPreference().getSurname();
-        activity = getActivity();
-        addProblemManager = AddProblemManager.getInstance(activity.getApplicationContext());
-        dataManager = DataManager.getInstance(activity.getApplicationContext());
+        addProblemManager = AddProblemManager.getInstance(getActivity());
+        dataManager = DataManager.getInstance(getActivity());
 
         ButterKnife.inject(this, v);
 
@@ -145,7 +141,7 @@ public class AddProblemDescriptionFragment extends Fragment implements AddProble
      * Show progress dialog when problem posting
      */
     private void showProgressDialog() {
-        new MaterialDialog.Builder(activity)
+        new MaterialDialog.Builder(getActivity())
                 .title(POSTING)
                 .content(PLEASE_WAIT)
                 .progress(true, 0)
@@ -166,7 +162,7 @@ public class AddProblemDescriptionFragment extends Fragment implements AddProble
 
     @Override
     public void onFailedProblemPosting() {
-        Toast.makeText(activity.getApplicationContext(), R.string.problem_post_error,
+        Toast.makeText(getActivity(), R.string.problem_post_error,
                 Toast.LENGTH_LONG).show();
     }
 
@@ -198,9 +194,9 @@ public class AddProblemDescriptionFragment extends Fragment implements AddProble
      */
     @Override
     public void updateAllProblems(final List<Problem> problems) {
-        Intent intent = new Intent(activity, MainActivity.class);
+        Intent intent = new Intent(getActivity(), MainActivity.class);
         startActivity(intent);
-        activity.finish();
+        getActivity().finish();
         dataManager.removeProblemListener(this);
 
     }
@@ -214,8 +210,8 @@ public class AddProblemDescriptionFragment extends Fragment implements AddProble
         String description = problemDescription.getText().toString();
 
         String solution = problemSolution.getText().toString();
-        double latitude = activity.getIntent().getDoubleExtra(ExtraFieldNames.LAT, 0);
-        double longitude = activity.getIntent().getDoubleExtra(ExtraFieldNames.LNG, 0);
+        double latitude = getActivity().getIntent().getDoubleExtra(ExtraFieldNames.LAT, 0);
+        double longitude = getActivity().getIntent().getDoubleExtra(ExtraFieldNames.LNG, 0);
         String type = String.valueOf(spinner.getSelectedItemId() + 1);
         showProgressDialog();
         ProblemForPosting problemData = new ProblemForPosting.Builder()
@@ -239,7 +235,7 @@ public class AddProblemDescriptionFragment extends Fragment implements AddProble
      * Sets dialog of user name selection
      */
     private void setChooseNameDialog() {
-        new MaterialDialog.Builder(activity)
+        new MaterialDialog.Builder(getActivity())
                 .title(R.string.Caution)
                 .content(R.string.post_problem_anonymously)
                 .backgroundColorRes(R.color.log_in_dialog)
