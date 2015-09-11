@@ -8,11 +8,11 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.ecomap.ukraine.R;
 import com.ecomap.ukraine.util.ExtraFieldNames;
 import com.ecomap.ukraine.models.Photo;
 import com.ecomap.ukraine.ui.adapters.PhotoPagerAdapter;
-import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -38,10 +38,12 @@ public class ProblemPhotoSlidePager extends FragmentActivity {
         for (Photo photo : photos) {
             View page = inflater.inflate(R.layout.activity_problem_photo_slide_pager, null);
             ImageView photoView = (ImageView) page.findViewById(R.id.problem_photo);
-            Picasso.with(getApplicationContext())
+
+            Glide.with(getApplicationContext())
                     .load(photo.getLink())
                     .placeholder(R.drawable.placeholder)
-                    .error(R.drawable.photo_error1)
+                    .error(R.drawable.placeholder)
+                    .fitCenter()
                     .into(photoView);
 
             String photoDescription = photo.getDescription();

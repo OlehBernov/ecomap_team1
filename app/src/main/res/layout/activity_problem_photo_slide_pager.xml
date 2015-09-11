@@ -9,7 +9,7 @@
     android:orientation="vertical">
 
     <ImageView
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/problem_photo"
         android:layout_gravity="center_horizontal"

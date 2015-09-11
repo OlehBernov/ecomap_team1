@@ -19,6 +19,9 @@ import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.bitmap_recycle.BitmapPool;
+import com.bumptech.glide.load.resource.bitmap.BitmapTransformation;
 import com.ecomap.ukraine.R;
 import com.ecomap.ukraine.authentication.manager.AccountManager;
 import com.ecomap.ukraine.models.ActivityType;
@@ -36,8 +39,8 @@ import com.ecomap.ukraine.problemdetails.manager.DetailsListener;
 import com.ecomap.ukraine.problemdetails.manager.DetailsManager;
 import com.ecomap.ukraine.ui.fragments.ProblemPhotoSlidePager;
 import com.ms.square.android.expandabletextview.ExpandableTextView;
-import com.squareup.picasso.Picasso;
-import com.squareup.picasso.Transformation;
+/*import com.squareup.picasso.Picasso;
+import com.squareup.picasso.Transformation;*/
 
 import java.util.List;
 
@@ -477,9 +480,10 @@ public class DetailsContent extends LinearLayout implements DetailsListener {
      * @param photoView view which will contain the photo.
      */
     private void loadPhotoToView(final Photo photo, final ImageView photoView) {
-        Transformation transformation = new Transformation() {
+        BitmapTransformation transformation = new  BitmapTransformation(context) {
             @Override
-            public Bitmap transform(Bitmap source) {
+            public Bitmap transform(BitmapPool pool, Bitmap source,
+                                    int outWidth, int outHeight) {
                 int photoSize = (int) context.getResources().getDimension(R.dimen.small_photo_size);
                 Bitmap resizedBitmap = BitmapResizer.resizeBitmap(source, photoSize, context);
                 if (resizedBitmap != source) {
@@ -489,15 +493,16 @@ public class DetailsContent extends LinearLayout implements DetailsListener {
             }
 
             @Override
-            public String key() {
+            public String getId() {
                 return TRANSFORMATION;
             }
+
         };
 
-        Picasso.with(context)
+        Glide.with(context)
                 .load(photo.getLink())
                 .placeholder(R.drawable.placeholder)
-                .error(R.drawable.photo_error1)
+                .error(R.drawable.placeholder)
                 .transform(transformation)
                 .into(photoView);
     }
