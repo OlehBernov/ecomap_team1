@@ -47,6 +47,7 @@
     <string name="error_of_connection">Error of connection. Try again</string>
     <string name="success_post_comment">Your comment was post successfully</string>
     <string name="empty_post_comment">Input field are empty. Please input something before posting</string>
+    <string name="anonym_post_comment">You can`t post comment when you are anonym user. </string>
 
     <string name="photos">Photos:</string>
     <string name="title_activity_photo_viewer">PhotoViewer</string>

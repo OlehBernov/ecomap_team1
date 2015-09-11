@@ -148,6 +148,11 @@ public class DetailsContent extends LinearLayout implements DetailsListener {
                 String content = commentText.getText().toString();
                 String userName = user.getName();
                 String userSurname = user.getSurname();
+                if (AccountManager.getInstance(v.getContext()).isAnonymousUser()) {
+                    Toast.makeText(context,
+                            R.string.anonym_post_comment, Toast.LENGTH_LONG).show();
+                    return;
+                }
                 if(content.isEmpty()) {
                     Toast.makeText(context,
                             R.string.empty_post_comment, Toast.LENGTH_LONG).show();

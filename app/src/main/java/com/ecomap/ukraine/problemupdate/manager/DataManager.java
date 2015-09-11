@@ -229,8 +229,8 @@ public class DataManager implements ProblemListenersNotifier,
         }
     }
 
-    public AllTop10Items getTop10Items () {
-        return dbHelper.getAllTop10Items();
+    public void getTop10Items () {
+        sendAllTop10Items(dbHelper.getAllTop10Items());
     }
 
     public void refreshAllProblem() {

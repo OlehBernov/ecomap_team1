@@ -52,7 +52,7 @@ public class Top10Activity extends AppCompatActivity implements ProblemListener 
         DataManager dataManager = DataManager.getInstance(this);
 
         dataManager.registerProblemListener(this);
-        this.allTop10Items = dataManager.getTop10Items();
+        dataManager.getTop10Items();
         dataManager.getAllProblems();
 
         super.onCreate(savedInstanceState);
@@ -122,6 +122,7 @@ public class Top10Activity extends AppCompatActivity implements ProblemListener 
 
     @Override
     public void updateTop10(AllTop10Items allTop10Items) {
+        this.allTop10Items = allTop10Items;
     }
 
     /**
