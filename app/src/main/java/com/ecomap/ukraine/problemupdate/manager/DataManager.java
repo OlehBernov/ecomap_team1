@@ -28,6 +28,8 @@ public class DataManager implements ProblemListenersNotifier,
      */
     private static final String TIME = "Time";
 
+    private static final String TOP_10_UPDATE_TIME = "Top_10_Update_time";
+
     /**
      * Holds the Singleton global instance of DataManager.
      */
@@ -135,7 +137,7 @@ public class DataManager implements ProblemListenersNotifier,
     public void setAllProblemsRequestResult(final List<Problem> problems) {
         if (problems != null) {
             dbHelper.updateAllProblems(problems);
-            saveUpdateTime();
+            saveUpdateTime(TIME);
             getAllProblems();
         } else {
             sendAllProblems(dbHelper.getAllProblems());
@@ -162,7 +164,7 @@ public class DataManager implements ProblemListenersNotifier,
     public void setTop10RequestResult (AllTop10Items allTop10Items) {
         if (allTop10Items != null) {
             dbHelper.updateTop10(allTop10Items);
-            saveUpdateTime();
+            saveUpdateTime(TOP_10_UPDATE_TIME);
             getTop10();
         } else {
             sendAllTop10Items(dbHelper.getAllTop10Items());
@@ -214,7 +216,7 @@ public class DataManager implements ProblemListenersNotifier,
 
     public void getTop10 () {
         SharedPreferences settings = context.getSharedPreferences(TIME, Context.MODE_PRIVATE);
-        long lastUpdateTime = settings.getLong(TIME, 0);
+        long lastUpdateTime = settings.getLong(TOP_10_UPDATE_TIME, 0);
         if (isUpdateTime(lastUpdateTime)) {
             loadingClient.getTop10();
         } else {
@@ -259,10 +261,10 @@ public class DataManager implements ProblemListenersNotifier,
      * Saves time of the last database update
      * to the SharedPreferences.
      */
-    private void saveUpdateTime() {
-        SharedPreferences settings = context.getSharedPreferences(TIME, 0);
+    private void saveUpdateTime(String preferenceKey) {
+        SharedPreferences settings = context.getSharedPreferences(preferenceKey, 0);
         SharedPreferences.Editor editor = settings.edit();
-        editor.putLong(TIME, System.currentTimeMillis());
+        editor.putLong(preferenceKey, System.currentTimeMillis());
         editor.apply();
     }
 
