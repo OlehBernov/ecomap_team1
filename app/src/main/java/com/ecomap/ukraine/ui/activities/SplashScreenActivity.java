@@ -144,9 +144,9 @@ public class SplashScreenActivity extends Activity implements ProblemListener {
         }
 
         manager = DataManager.getInstance(context);
-        manager.getTop10();
         manager.registerProblemListener(this);
         manager.getAllProblems();
+        manager.getTop10();
     }
 
     private long loadingTime(final long endLoading) {
