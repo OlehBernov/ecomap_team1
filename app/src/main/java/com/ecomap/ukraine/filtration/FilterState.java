@@ -45,21 +45,16 @@ public class FilterState {
         return !state.get(filterType);
     }
 
-    /**
-     * Returns the start date of filtration.
-     *
-     * @return start date of filtration.
-     */
+    public Map<String, Boolean> getState() {
+        return state;
+    }
+
     public Calendar getDateFrom() {
         return DateFrom;
     }
 
-    /**
-     * Returns the finish date of filtration.
-     *
-     * @return finish date of filtration.
-     */
     public Calendar getDateTo() {
         return DateTo;
     }
+
 }

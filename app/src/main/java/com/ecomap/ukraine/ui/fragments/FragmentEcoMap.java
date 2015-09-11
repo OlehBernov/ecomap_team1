@@ -89,7 +89,7 @@ public class FragmentEcoMap extends android.support.v4.app.Fragment
     public void putAllProblemsOnMap(FilterState filterState) {
         googleMap.clear();
         if (filterState == null) {
-            filterState = filterManager.getFilterStateFromPreference();
+            filterState = filterManager.getCurrentFilterState();
         }
         setupClusterManager(filterState);
     }

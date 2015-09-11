@@ -22,6 +22,8 @@ import java.util.List;
  */
 public class ProblemDetailsActivity extends AppCompatActivity implements ProblemListener {
 
+    private static final String PROBLEM_DETAILS_TITLE = "Problem Details";
+
     private DetailsContent detailsContent;
     private Problem problem;
 
@@ -102,6 +104,7 @@ public class ProblemDetailsActivity extends AppCompatActivity implements Problem
     private void setUpToolbar() {
         Toolbar toolbar = (Toolbar) findViewById(R.id.problem_details_toolbar);
         setSupportActionBar(toolbar);
+        toolbar.setTitle(PROBLEM_DETAILS_TITLE);
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

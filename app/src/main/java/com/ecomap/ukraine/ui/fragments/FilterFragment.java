@@ -21,14 +21,14 @@ import com.ecomap.ukraine.filtration.FilterState;
 import com.ecomap.ukraine.filtration.FilterStateConverter;
 import com.ecomap.ukraine.util.ExtraFieldNames;
 
-import org.json.JSONException;
-
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Set;
 
 public class FilterFragment extends android.support.v4.app.Fragment {
 
@@ -58,7 +58,7 @@ public class FilterFragment extends android.support.v4.app.Fragment {
         layoutView = inflater.inflate(R.layout.filter_content, container, false);
 
         filterManager = FilterManager.getInstance(getActivity().getApplicationContext());
-        FilterState filterState = filterManager.getFilterStateFromPreference();
+        FilterState filterState = filterManager.getCurrentFilterState();
         setFiltersState(filterState);
         createDateFromPickerDialog();
         createDateToPickerDialog();
@@ -125,12 +125,20 @@ public class FilterFragment extends android.support.v4.app.Fragment {
         SharedPreferences settings = activity.getSharedPreferences(ExtraFieldNames.FILTERS_STATE, 0);
         SharedPreferences.Editor editor = settings.edit();
         FilterState filterState = buildFiltersState();
-        try {
-            editor.putString(ExtraFieldNames.FILTERS_STATE,
-                             FilterStateConverter.convertToJson(filterState));
-        } catch (JSONException e) {
-            Log.e("JSONException", "onDestroy");
-        }
+
+        editor.putStringSet(ExtraFieldNames.FILTERS_STATE_SET,
+                            FilterStateConverter.convertToStringSet(filterState));
+
+        SimpleDateFormat dateFormat = new SimpleDateFormat(DATE_TEMPLATE, Locale.ENGLISH);
+
+        Calendar dateFrom = filterState.getDateFrom();
+        String formattedDateFrom = dateFormat.format(dateFrom.getTime());
+        editor.putString(FilterContract.DATE_FROM, formattedDateFrom);
+
+        Calendar dateTo = filterState.getDateTo();
+        String formattedDateTo = dateFormat.format(dateTo.getTime());
+        editor.putString(FilterContract.DATE_TO, formattedDateTo);
+
         editor.apply();
     }
 
