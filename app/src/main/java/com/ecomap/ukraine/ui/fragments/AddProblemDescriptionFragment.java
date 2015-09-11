@@ -18,6 +18,7 @@ import com.afollestad.materialdialogs.MaterialDialog;
 import com.ecomap.ukraine.R;
 import com.ecomap.ukraine.authentication.manager.AccountManager;
 import com.ecomap.ukraine.authentication.validator.Validator;
+import com.ecomap.ukraine.models.AllTop10Items;
 import com.ecomap.ukraine.models.Details;
 import com.ecomap.ukraine.models.Problem;
 import com.ecomap.ukraine.models.ProblemForPosting;
@@ -185,6 +186,11 @@ public class AddProblemDescriptionFragment extends Fragment implements AddProble
      */
     @Override
     public void updateProblemDetails(final Details details) {
+    }
+
+    @Override
+    public void updateTop10(AllTop10Items allTop10Items) {
+
     }
 
     /**

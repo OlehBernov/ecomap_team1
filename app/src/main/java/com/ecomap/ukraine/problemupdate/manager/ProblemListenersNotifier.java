@@ -1,5 +1,6 @@
 package com.ecomap.ukraine.problemupdate.manager;
 
+import com.ecomap.ukraine.models.AllTop10Items;
 import com.ecomap.ukraine.models.Details;
 import com.ecomap.ukraine.models.Problem;
 
@@ -35,5 +36,7 @@ interface ProblemListenersNotifier {
      * Send to listeners details of concrete problem.
      */
     void sendProblemDetails(final Details details);
+
+    void sendAllTop10Items(final AllTop10Items allTop10Items);
 
 }

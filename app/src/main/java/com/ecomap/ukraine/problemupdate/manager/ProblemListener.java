@@ -1,5 +1,6 @@
 package com.ecomap.ukraine.problemupdate.manager;
 
+import com.ecomap.ukraine.models.AllTop10Items;
 import com.ecomap.ukraine.models.Details;
 import com.ecomap.ukraine.models.Problem;
 
@@ -24,5 +25,7 @@ public interface ProblemListener {
      * @param details details of concrete problem.
      */
     void updateProblemDetails(final Details details);
+
+    void updateTop10(final AllTop10Items allTop10Items);
 
 }

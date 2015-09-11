@@ -135,4 +135,15 @@ public class JSONFields {
      */
     public static final int PROBLEM_ACTIVITY_POSITION = 2;
 
+
+    public static final String TOP_10_ITEM_ID = "Id";
+
+    public static final String TOP_10_TITLE= "Title";
+
+    public static final String TOP_10_VOTES = "Votes";
+
+    public static final String TOP_10_SEVERITY = "Severity";
+
+    public static final String TOP_10_COMMENTS = "value";
+
 }

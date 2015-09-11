@@ -2,12 +2,14 @@ package com.ecomap.ukraine.problemupdate;
 
 
 import com.ecomap.ukraine.models.ActivityType;
+import com.ecomap.ukraine.models.AllTop10Items;
 import com.ecomap.ukraine.models.Details;
 import com.ecomap.ukraine.models.Photo;
 import com.ecomap.ukraine.models.Problem;
 import com.ecomap.ukraine.models.ProblemActivity;
 import com.ecomap.ukraine.models.ProblemStatus;
 import com.ecomap.ukraine.models.ProblemType;
+import com.ecomap.ukraine.models.Top10Item;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -61,6 +63,24 @@ public final class JSONParser {
         }
 
         return briefProblems;
+    }
+
+    public static AllTop10Items parseAllTop10Items (final String allTop10ItemsJson)
+            throws JSONException {
+        if (allTop10ItemsJson == null) {
+            throw new JSONException(NULL_ARGUMENT);
+        }
+        JSONArray allTop10ItemsArray = new JSONArray(allTop10ItemsJson);
+        JSONArray top10VotesArray = allTop10ItemsArray.getJSONArray(0);
+        JSONArray top10SeverityArray = allTop10ItemsArray.getJSONArray(1);
+        JSONArray top10ComentArray = allTop10ItemsArray.getJSONArray(2);
+        List<Top10Item> top10VoteList = getTop10VoteList(top10VotesArray);
+        List<Top10Item> top10SeverityList = getTop10SeverityList(top10SeverityArray);
+        List<Top10Item> top10ComentList = getTop10ComentList(top10ComentArray);
+        AllTop10Items allTop10Items = new AllTop10Items(top10ComentList, top10SeverityList,
+                top10VoteList);
+
+        return allTop10Items;
     }
 
     /**
@@ -212,6 +232,54 @@ public final class JSONParser {
         }
 
         return photos;
+    }
+
+    private static List<Top10Item> getTop10VoteList (final JSONArray top10VotesArray)
+            throws JSONException{
+        List<Top10Item> top10VoteList = new ArrayList<>();
+        Top10Item currentTop10Item;
+        for (int i = 0; i < top10VotesArray.length(); i++) {
+            JSONObject currentItemObject = top10VotesArray.getJSONObject(i);
+            int itemId = currentItemObject.optInt(JSONFields.TOP_10_ITEM_ID, -1);
+            String title = currentItemObject.optString(JSONFields.TOP_10_TITLE, "");
+            int value = currentItemObject.optInt(JSONFields.TOP_10_VOTES, -1);
+            currentTop10Item = new Top10Item(itemId, title, value);
+            top10VoteList.add(currentTop10Item);
+        }
+
+        return top10VoteList;
+    }
+
+    private static List<Top10Item> getTop10SeverityList (final JSONArray top10SeverityArray)
+            throws JSONException{
+        List<Top10Item> top10SeverityList = new ArrayList<>();
+        Top10Item currentTop10Item;
+        for (int i = 0; i < top10SeverityArray.length(); i++) {
+            JSONObject currentItemObject = top10SeverityArray.getJSONObject(i);
+            int itemId = currentItemObject.optInt(JSONFields.TOP_10_ITEM_ID, -1);
+            String title = currentItemObject.optString(JSONFields.TOP_10_TITLE, "");
+            int value = currentItemObject.optInt(JSONFields.TOP_10_SEVERITY, -1);
+            currentTop10Item = new Top10Item(itemId, title, value);
+            top10SeverityList.add(currentTop10Item);
+        }
+
+        return top10SeverityList;
+    }
+
+    private static List<Top10Item> getTop10ComentList (final JSONArray top10ComentArray)
+            throws JSONException{
+        List<Top10Item> top10ComentList = new ArrayList<>();
+        Top10Item currentTop10Item;
+        for (int i = 0; i < top10ComentArray.length(); i++) {
+            JSONObject currentItemObject = top10ComentArray.getJSONObject(i);
+            int itemId = currentItemObject.optInt(JSONFields.TOP_10_ITEM_ID, -1);
+            String title = currentItemObject.optString(JSONFields.TOP_10_TITLE, "");
+            int value = currentItemObject.optInt(JSONFields.TOP_10_COMMENTS, -1);
+            currentTop10Item = new Top10Item(itemId, title, value);
+            top10ComentList.add(currentTop10Item);
+        }
+
+        return top10ComentList;
     }
 
 }

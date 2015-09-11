@@ -33,6 +33,12 @@
             android:onClick="openSettings"
             android:title="@string/settings"/>
 
+        <item
+            android:id="@+id/navigation_item_6"
+            android:icon="@drawable/icon_top_10s"
+            android:onClick="openTop10Activity"
+            android:title="@string/top10"/>
+
     </group>
 
 </menu>

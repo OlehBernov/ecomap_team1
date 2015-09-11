@@ -16,6 +16,7 @@ import com.ecomap.ukraine.R;
 import com.ecomap.ukraine.filtration.Filter;
 import com.ecomap.ukraine.filtration.FilterManager;
 import com.ecomap.ukraine.filtration.FilterState;
+import com.ecomap.ukraine.models.AllTop10Items;
 import com.ecomap.ukraine.models.Details;
 import com.ecomap.ukraine.models.Problem;
 import com.ecomap.ukraine.problemupdate.manager.DataManager;
@@ -74,6 +75,11 @@ public class SearchActivity extends AppCompatActivity
 
     @Override
     public void updateProblemDetails(Details details) {
+    }
+
+    @Override
+    public void updateTop10(AllTop10Items allTop10Items) {
+
     }
 
     @Override

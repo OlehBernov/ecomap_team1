@@ -11,6 +11,7 @@ import android.view.View;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.ecomap.ukraine.R;
 import com.ecomap.ukraine.authentication.manager.AccountManager;
+import com.ecomap.ukraine.models.AllTop10Items;
 import com.ecomap.ukraine.problemupdate.manager.DataManager;
 import com.ecomap.ukraine.problemupdate.manager.ProblemListener;
 import com.ecomap.ukraine.models.Details;
@@ -109,6 +110,11 @@ public class SplashScreenActivity extends Activity implements ProblemListener {
 
     }
 
+    @Override
+    public void updateTop10(AllTop10Items allTop10Items) {
+
+    }
+
     /**
      * Initialize activity
      *
@@ -138,6 +144,7 @@ public class SplashScreenActivity extends Activity implements ProblemListener {
         }
 
         manager = DataManager.getInstance(context);
+        manager.getTop10();
         manager.registerProblemListener(this);
         manager.getAllProblems();
     }

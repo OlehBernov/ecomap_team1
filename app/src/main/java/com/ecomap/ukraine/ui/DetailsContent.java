@@ -18,6 +18,7 @@ import android.widget.LinearLayout;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.bitmap_recycle.BitmapPool;
@@ -144,12 +145,17 @@ public class DetailsContent extends LinearLayout implements DetailsListener {
             public void onClick(View v) {
                 int problemID = problem.getProblemId();
                 String userId = String.valueOf(user.getId());
-                //TODO: empty comment validation
-                String content = "Test comment";
+                String content = commentText.getText().toString();
                 String userName = user.getName();
                 String userSurname = user.getSurname();
-                detailsManager.postComment(problemID, userId, userName,
-                        userSurname, content);
+                if(content.isEmpty()) {
+                    Toast.makeText(context,
+                            R.string.empty_post_comment, Toast.LENGTH_LONG).show();
+                }
+                else {
+                    detailsManager.postComment(problemID, userId, userName,
+                            userSurname, content);
+                }
             }
         });
 

@@ -7,6 +7,7 @@ import android.preference.PreferenceManager;
 
 import com.ecomap.ukraine.R;
 import com.ecomap.ukraine.database.DBHelper;
+import com.ecomap.ukraine.models.AllTop10Items;
 import com.ecomap.ukraine.models.Details;
 import com.ecomap.ukraine.models.Problem;
 import com.ecomap.ukraine.problemupdate.LoadingClient;
@@ -117,6 +118,13 @@ public class DataManager implements ProblemListenersNotifier,
         }
     }
 
+    @Override
+    public void sendAllTop10Items(final AllTop10Items allTop10Items) {
+        for (ProblemListener listener : problemListeners) {
+            listener.updateTop10(allTop10Items);
+        }
+    }
+
     /**
      * Receives server response to the request of all problems,
      * and put it into database.
@@ -147,6 +155,17 @@ public class DataManager implements ProblemListenersNotifier,
             getProblemDetail(details.getProblemId());
         } else {
             sendProblemDetails(dbHelper.getProblemDetails(currentProblemId));
+        }
+    }
+
+    @Override
+    public void setTop10RequestResult (AllTop10Items allTop10Items) {
+        if (allTop10Items != null) {
+            dbHelper.updateTop10(allTop10Items);
+            saveUpdateTime();
+            getTop10();
+        } else {
+            sendAllTop10Items(dbHelper.getAllTop10Items());
         }
     }
 
@@ -191,6 +210,25 @@ public class DataManager implements ProblemListenersNotifier,
                 sendAllProblems(problems);
             }
         }
+    }
+
+    public void getTop10 () {
+        SharedPreferences settings = context.getSharedPreferences(TIME, Context.MODE_PRIVATE);
+        long lastUpdateTime = settings.getLong(TIME, 0);
+        if (isUpdateTime(lastUpdateTime)) {
+            loadingClient.getTop10();
+        } else {
+            AllTop10Items allTop10Items = dbHelper.getAllTop10Items();
+            if (allTop10Items == null) {
+                loadingClient.getTop10();
+            } else {
+                sendAllTop10Items(allTop10Items);
+            }
+        }
+    }
+
+    public AllTop10Items getTop10Items () {
+        return dbHelper.getAllTop10Items();
     }
 
     public void refreshAllProblem() {

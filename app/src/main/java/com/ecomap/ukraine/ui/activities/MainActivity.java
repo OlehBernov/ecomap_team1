@@ -233,6 +233,12 @@ public class MainActivity extends AppCompatActivity {
         menuDrawer.closeDrawers();
     }
 
+    public void openTop10Activity(MenuItem item) {
+        Intent intent = new Intent(this, Top10Activity.class);
+        startActivity(intent);
+        menuDrawer.closeDrawers();
+    }
+
     /**
      * Called when an activity you launched exits.
      *

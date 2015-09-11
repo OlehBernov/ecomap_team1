@@ -8,6 +8,7 @@ import android.view.MenuItem;
 import android.view.View;
 
 import com.ecomap.ukraine.R;
+import com.ecomap.ukraine.models.AllTop10Items;
 import com.ecomap.ukraine.models.Details;
 import com.ecomap.ukraine.models.Problem;
 import com.ecomap.ukraine.problemupdate.manager.DataManager;
@@ -36,6 +37,11 @@ public class ProblemDetailsActivity extends AppCompatActivity implements Problem
     @Override
     public void updateProblemDetails(Details details) {
         detailsContent.setProblemDetails(details);
+    }
+
+    @Override
+    public void updateTop10(AllTop10Items allTop10Items) {
+
     }
 
     @Override

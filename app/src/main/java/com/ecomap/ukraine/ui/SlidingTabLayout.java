@@ -22,7 +22,7 @@ import com.ecomap.ukraine.R;
  */
 public class SlidingTabLayout extends HorizontalScrollView {
 
-    private static final int TITLE_OFFSET_DIPS = 24;
+    private static final int TITLE_OFFSET_DIPS = 14;
     private static final int TAB_VIEW_PADDING_DIPS = 16;
     private static final int TAB_VIEW_TEXT_SIZE_SP = 12;
 
@@ -204,8 +204,8 @@ public class SlidingTabLayout extends HorizontalScrollView {
                 tabView.setSelected(true);
             }
 
-            tabTitleView.setTextColor(getResources().getColorStateList(R.color.selector));
-            tabTitleView.setTextSize(14);
+            tabTitleView.setTextColor(getResources().getColorStateList(R.color.filter_background));
+            tabTitleView.setTextSize(12);
         }
     }
 

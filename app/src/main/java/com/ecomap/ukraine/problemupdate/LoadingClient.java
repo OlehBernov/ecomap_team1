@@ -8,6 +8,7 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
+import com.ecomap.ukraine.models.AllTop10Items;
 import com.ecomap.ukraine.models.Details;
 import com.ecomap.ukraine.problemupdate.manager.ProblemRequestReceiver;
 
@@ -23,6 +24,12 @@ public class LoadingClient {
      * information about all problems.
      */
     private static final String ALL_PROBLEMS_URL = "http://ecomap.org/api/problems/";
+
+    /**
+     * Address of the server from which LoadingClient gets
+     * information about top 10 problem
+     */
+    private static final String TOP_10_PROBLEMS_URL = "http://ecomap.org/api/getStats4/";
 
     protected final String TAG = getClass().getSimpleName();
 
@@ -100,6 +107,30 @@ public class LoadingClient {
             public void onErrorResponse(VolleyError error) {
                 Log.e(TAG, "onErrorResponse in getProblemDetail");
                 problemRequestReceiver.setProblemDetailsRequestResult(null);
+            }
+        });
+        RequestQueueWrapper.getInstance(context).addToRequestQueue(stringRequest);
+    }
+
+    public void getTop10 () {
+        StringRequest stringRequest = new StringRequest(
+                Request.Method.GET, TOP_10_PROBLEMS_URL ,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        try {
+                            AllTop10Items allTop10Items =
+                                    JSONParser.parseAllTop10Items(response);
+                            problemRequestReceiver.setTop10RequestResult(allTop10Items);
+                        } catch (JSONException e) {
+                            Log.e(TAG, "JSONException in getTop10");
+                            problemRequestReceiver.setTop10RequestResult(null);
+                        }
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.e(TAG, "onErrorResponse in getTop10");
             }
         });
         RequestQueueWrapper.getInstance(context).addToRequestQueue(stringRequest);

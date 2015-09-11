@@ -14,6 +14,7 @@ import android.view.ViewGroup;
 
 import com.ecomap.ukraine.R;
 import com.ecomap.ukraine.map.IconRenderer;
+import com.ecomap.ukraine.models.AllTop10Items;
 import com.ecomap.ukraine.ui.activities.MainActivity;
 import com.ecomap.ukraine.ui.DetailsContent;
 import com.ecomap.ukraine.ui.DetailsController;
@@ -196,6 +197,11 @@ public class FragmentEcoMap extends android.support.v4.app.Fragment
         FragmentEcoMap.problems = problems;
         putAllProblemsOnMap(null);
         setRenderer();
+    }
+
+    @Override
+    public void updateTop10(AllTop10Items allTop10Items) {
+
     }
 
     /**

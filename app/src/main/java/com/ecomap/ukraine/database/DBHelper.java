@@ -7,12 +7,14 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
 import com.ecomap.ukraine.models.ActivityType;
+import com.ecomap.ukraine.models.AllTop10Items;
 import com.ecomap.ukraine.models.Details;
 import com.ecomap.ukraine.models.Photo;
 import com.ecomap.ukraine.models.Problem;
 import com.ecomap.ukraine.models.ProblemActivity;
 import com.ecomap.ukraine.models.ProblemStatus;
 import com.ecomap.ukraine.models.ProblemType;
+import com.ecomap.ukraine.models.Top10Item;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,6 +32,12 @@ public class DBHelper extends SQLiteOpenHelper {
             "DROP TABLE IF EXISTS " + DBContract.Details.TABLE_NAME;
     private static final String DELETE_PROBLEMS_TABLE =
             "DROP TABLE IF EXISTS " + DBContract.Problems.TABLE_NAME;
+    private static final String DELETE_TopByVotes_TABLE =
+            "DROP TABLE IF EXISTS " + DBContract.TopByVotes.TABLE_NAME;
+    private static final String DELETE_TopByComments_TABLE =
+            "DROP TABLE IF EXISTS " + DBContract.TopByComments.TABLE_NAME;
+    private static final String DELETE_TopBySeverity_TABLE =
+            "DROP TABLE IF EXISTS " + DBContract.TopBySeverity.TABLE_NAME;
 
     private static final String DB_NAME = "Problems.db";
     private static final int DB_VERSION = 3;
@@ -78,6 +86,24 @@ public class DBHelper extends SQLiteOpenHelper {
             DBContract.Problems.LATITUDE + REAL_TYPE + COMMA_SEP +
             DBContract.Problems.LONGITUDE + REAL_TYPE + ")";
 
+    private static final String CREATE_TopByVotes_TABLE
+            = "CREATE TABLE " + DBContract.TopByVotes.TABLE_NAME + " (" +
+            DBContract.TopByVotes.PROBLEM_ID + INT_TYPE + COMMA_SEP +
+            DBContract.TopByVotes.PROBLEM_TITLE + TEXT_TYPE + COMMA_SEP +
+            DBContract.TopByVotes.PROBLEM_Votes + INT_TYPE + ")";
+
+    private static final String CREATE_TopByComments_TABLE
+            = "CREATE TABLE " + DBContract.TopByComments.TABLE_NAME + " (" +
+            DBContract.TopByComments.PROBLEM_ID + INT_TYPE + COMMA_SEP +
+            DBContract.TopByComments.PROBLEM_TITLE + TEXT_TYPE + COMMA_SEP +
+            DBContract.TopByComments.PROBLEM_COMMENTS + INT_TYPE + ")";
+
+    private static final String CREATE_TopBySeverity_TABLE
+            = "CREATE TABLE " + DBContract.TopBySeverity.TABLE_NAME + " (" +
+            DBContract.TopBySeverity.PROBLEM_ID + INT_TYPE + COMMA_SEP +
+            DBContract.TopBySeverity.PROBLEM_TITLE + TEXT_TYPE + COMMA_SEP +
+            DBContract.TopBySeverity.PROBLEM_SEVERITY + INT_TYPE + ")";
+
     private static final String DELETE_FROM = "DELETE FROM ";
 
     public DBHelper(final Context context) {
@@ -99,12 +125,28 @@ public class DBHelper extends SQLiteOpenHelper {
         setAllProblems(problems);
     }
 
+    public void updateTop10 (final AllTop10Items allTop10Items) {
+        if (allTop10Items == null) {
+            return;
+        }
+        SQLiteDatabase db = getWritableDatabase();
+        db.execSQL(DBHelper.DELETE_FROM + DBContract.TopByVotes.TABLE_NAME);
+        db.execSQL(DBHelper.DELETE_FROM + DBContract.TopByComments.TABLE_NAME);
+        db.execSQL(DBHelper.DELETE_FROM + DBContract.TopBySeverity.TABLE_NAME);
+        setTop10ByVotes(allTop10Items.getMostLikedProblems());
+        setTop10ByComments(allTop10Items.getMostPopularProblems());
+        setTop10BySeverity(allTop10Items.getMostImportantProblems());
+    }
+
     @Override
     public void onCreate(SQLiteDatabase db) {
         db.execSQL(CREATE_PROBLEMS_TABLE);
         db.execSQL(CREATE_DETAILS_TABLE);
         db.execSQL(CREATE_ACTIVITIES_TABLE);
         db.execSQL(CREATE_PHOTOS_TABLE);
+        db.execSQL(CREATE_TopByVotes_TABLE);
+        db.execSQL(CREATE_TopByComments_TABLE);
+        db.execSQL(CREATE_TopBySeverity_TABLE);
     }
 
     /**
@@ -137,7 +179,91 @@ public class DBHelper extends SQLiteOpenHelper {
         db.execSQL(DELETE_DETAILS_TABLE);
         db.execSQL(DELETE_ACTIVITIES_TABLE);
         db.execSQL(DELETE_PROBLEMS_TABLE);
+        db.execSQL(DELETE_TopByVotes_TABLE);
+        db.execSQL(DELETE_TopByComments_TABLE);
+        db.execSQL(DELETE_TopBySeverity_TABLE);
         onCreate(db);
+    }
+
+    public void setTop10ByVotes (final List<Top10Item> top10ByVotes) {
+        if (top10ByVotes == null) {
+            return;
+        }
+        SQLiteDatabase db = getWritableDatabase();
+        ContentValues contentValues = new ContentValues();
+        for (int i = 0; i < top10ByVotes.size(); i++) {
+            contentValues.put(DBContract.TopByVotes.PROBLEM_ID, top10ByVotes.get(i).getProblemID());
+            contentValues.put(DBContract.TopByVotes.PROBLEM_TITLE, top10ByVotes.get(i).getTitle());
+            contentValues.put(DBContract.TopByVotes.PROBLEM_Votes, top10ByVotes.get(i).getValue());
+            db.insert(DBContract.TopByVotes.TABLE_NAME, null, contentValues);
+            contentValues.clear();
+        }
+    }
+
+    public void setTop10ByComments (final List<Top10Item> top10ByComments) {
+        if (top10ByComments == null) {
+            return;
+        }
+        SQLiteDatabase db = getWritableDatabase();
+        ContentValues contentValues = new ContentValues();
+        for (int i = 0; i < top10ByComments.size(); i++) {
+            contentValues.put(DBContract.TopByComments.PROBLEM_ID, top10ByComments.get(i).getProblemID());
+            contentValues.put(DBContract.TopByComments.PROBLEM_TITLE, top10ByComments.get(i).getTitle());
+            contentValues.put(DBContract.TopByComments.PROBLEM_COMMENTS, top10ByComments.get(i).getValue());
+            db.insert(DBContract.TopByComments.TABLE_NAME, null, contentValues);
+            contentValues.clear();
+        }
+    }
+
+    public void setTop10BySeverity (final List<Top10Item> top10BySeverity) {
+        if (top10BySeverity == null) {
+            return;
+        }
+        SQLiteDatabase db = getWritableDatabase();
+        ContentValues contentValues = new ContentValues();
+        for (int i = 0; i < top10BySeverity.size(); i++) {
+            contentValues.put(DBContract.TopBySeverity.PROBLEM_ID, top10BySeverity.get(i).getProblemID());
+            contentValues.put(DBContract.TopBySeverity.PROBLEM_TITLE, top10BySeverity.get(i).getTitle());
+            contentValues.put(DBContract.TopBySeverity.PROBLEM_SEVERITY, top10BySeverity.get(i).getValue());
+            db.insert(DBContract.TopBySeverity.TABLE_NAME, null, contentValues);
+            contentValues.clear();
+        }
+    }
+
+    public List<Top10Item> getTop10ByVotes() {
+        SQLiteDatabase db = getWritableDatabase();
+        Cursor cursor = db.query(DBContract.TopByVotes.TABLE_NAME, null, null, null, null, null, null);
+        List<Top10Item> top10ItemList = null;
+        if (cursor.moveToFirst()) {
+            top10ItemList = buildTop10byVotesList(cursor);
+        }
+        return top10ItemList;
+    }
+
+    public List<Top10Item> getTop10ByComments() {
+        SQLiteDatabase db = getWritableDatabase();
+        Cursor cursor = db.query(DBContract.TopByComments.TABLE_NAME, null, null, null, null, null, null);
+        List<Top10Item> top10ItemList = null;
+        if (cursor.moveToFirst()) {
+            top10ItemList = buildTop10byCommentList(cursor);
+        }
+        return top10ItemList;
+    }
+
+    public List<Top10Item> getTop10BySeverity() {
+        SQLiteDatabase db = getWritableDatabase();
+        Cursor cursor = db.query(DBContract.TopBySeverity.TABLE_NAME, null, null, null, null, null, null);
+        List<Top10Item> top10ItemList = null;
+        if (cursor.moveToFirst()) {
+            top10ItemList = buildTop10bySeverityList(cursor);
+        }
+        return top10ItemList;
+    }
+
+    public AllTop10Items getAllTop10Items () {
+        AllTop10Items allTop10Items = new
+                AllTop10Items(getTop10ByComments(), getTop10BySeverity(), getTop10ByVotes());
+        return allTop10Items;
     }
 
     /**
@@ -332,6 +458,54 @@ public class DBHelper extends SQLiteOpenHelper {
             db.insert(DBContract.Photos.TABLE_NAME, null, values);
             values.clear();
         }
+    }
+
+    private List<Top10Item> buildTop10byVotesList(final Cursor cursor) {
+        List<Top10Item> top10ItemList = new ArrayList<>();
+        for (int i = 0; i < cursor.getCount(); i++) {
+            int problemID = cursor.getInt(cursor.getColumnIndex(DBContract.TopByVotes.
+                    PROBLEM_ID));
+            String problemTitle = cursor.getString(cursor.getColumnIndex(DBContract.TopByVotes.
+                    PROBLEM_TITLE));
+            int problemVotes = cursor.getInt(cursor.getColumnIndex(DBContract.TopByVotes.
+                    PROBLEM_Votes));
+            Top10Item top10Item = new Top10Item(problemID, problemTitle, problemVotes);
+            top10ItemList.add(top10Item);
+            cursor.moveToNext();
+        }
+        return top10ItemList;
+    }
+
+    private List<Top10Item> buildTop10byCommentList(final Cursor cursor) {
+        List<Top10Item> top10ItemList = new ArrayList<>();
+        for (int i = 0; i < cursor.getCount(); i++) {
+            int problemID = cursor.getInt(cursor.getColumnIndex(DBContract.TopByComments.
+                    PROBLEM_ID));
+            String problemTitle = cursor.getString(cursor.getColumnIndex(DBContract.TopByComments.
+                    PROBLEM_TITLE));
+            int problemComments = cursor.getInt(cursor.getColumnIndex(DBContract.TopByComments.
+                    PROBLEM_COMMENTS));
+            Top10Item top10Item = new Top10Item(problemID, problemTitle, problemComments);
+            top10ItemList.add(top10Item);
+            cursor.moveToNext();
+        }
+        return top10ItemList;
+    }
+
+    private List<Top10Item> buildTop10bySeverityList(final Cursor cursor) {
+        List<Top10Item> top10ItemList = new ArrayList<>();
+        for (int i = 0; i < cursor.getCount(); i++) {
+            int problemID = cursor.getInt(cursor.getColumnIndex(DBContract.TopBySeverity.
+                    PROBLEM_ID));
+            String problemTitle = cursor.getString(cursor.getColumnIndex(DBContract.TopBySeverity.
+                    PROBLEM_TITLE));
+            int problemVotes = cursor.getInt(cursor.getColumnIndex(DBContract.TopBySeverity.
+                    PROBLEM_SEVERITY));
+            Top10Item top10Item = new Top10Item(problemID, problemTitle, problemVotes);
+            top10ItemList.add(top10Item);
+            cursor.moveToNext();
+        }
+        return top10ItemList;
     }
 
     /**
