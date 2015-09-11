@@ -263,6 +263,9 @@ public class DBHelper extends SQLiteOpenHelper {
     public AllTop10Items getAllTop10Items () {
         AllTop10Items allTop10Items = new
                 AllTop10Items(getTop10ByComments(), getTop10BySeverity(), getTop10ByVotes());
+        if(allTop10Items.getMostLikedProblems() == null) {
+            return null;
+        }
         return allTop10Items;
     }
 

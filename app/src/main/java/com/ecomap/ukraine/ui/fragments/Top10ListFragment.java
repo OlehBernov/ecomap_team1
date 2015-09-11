@@ -55,10 +55,6 @@ public class Top10ListFragment extends Fragment implements AdapterView.OnItemCli
         return v;
     }
 
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-    }
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
