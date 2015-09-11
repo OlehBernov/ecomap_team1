@@ -39,7 +39,7 @@ public final class Keyboard {
      *
      * @param view view which interact with keyboard.
      */
-    private static void hideKeyboard(View view) {
+    public static void hideKeyboard(View view) {
         InputMethodManager inputMethodManager
                 = (InputMethodManager) view.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
         inputMethodManager.hideSoftInputFromWindow(view.getWindowToken(), 0);

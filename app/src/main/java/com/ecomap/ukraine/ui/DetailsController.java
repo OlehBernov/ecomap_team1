@@ -16,6 +16,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewTreeObserver;
 import android.view.animation.DecelerateInterpolator;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
@@ -26,6 +27,7 @@ import com.ecomap.ukraine.models.Problem;
 import com.ecomap.ukraine.problemupdate.manager.DataManager;
 import com.ecomap.ukraine.ui.activities.ChooseProblemLocationActivity;
 import com.ecomap.ukraine.ui.activities.MainActivity;
+import com.ecomap.ukraine.util.Keyboard;
 import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 
 public class DetailsController {
@@ -34,6 +36,8 @@ public class DetailsController {
     private static final int REFRESH_BUTTON = 2;
 
     private static final float COLLAPSE_OFFSET = 0.9F;
+    private static int MAIN_COLOR;
+    private static final int MAX_ALPHA = 255;
     private static float currentTitleAlpha = 1;
 
     private Activity activity;
@@ -43,6 +47,7 @@ public class DetailsController {
     private LinearLayout layout;
     private FloatingActionButton fab;
     private TextView titleView;
+    private boolean isKeyboardShown;
 
     private DetailsContent detailsContent;
     private Problem problem;
@@ -65,10 +70,28 @@ public class DetailsController {
 
         this.problem = problem;
 
-        toolbar.setBackgroundColor(0xff004d40);
+        MAIN_COLOR = activity.getResources().getColor(R.color.toolbar_teal);
+        toolbar.setBackgroundColor(MAIN_COLOR);
 
         slidingUpPanelLayout.setAnchorPoint(ANCHOR_POINT);
         slidingUpPanelLayout.setPanelState(SlidingUpPanelLayout.PanelState.ANCHORED);
+        final View rootView = activity.findViewById(R.id.root_view);
+        rootView.getViewTreeObserver()
+            .addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+                @Override
+                public void onGlobalLayout() {
+                    int heightDiff = rootView.getRootView().getHeight() - rootView.getHeight();
+                    if (heightDiff > 100) {
+                        if (!isKeyboardShown) {
+                            isKeyboardShown = true;
+                            newFabPosition(currentOffset);
+                        }
+                    } else if (isKeyboardShown) {
+                        isKeyboardShown = false;
+                        newFabPosition(currentOffset);
+                    }
+                }
+            });
 
         setSlidingControl();
     }
@@ -84,7 +107,7 @@ public class DetailsController {
                 animateMenuIcon(v);
                 newFabPosition(v);
                 if (v > slidingUpPanelLayout.getAnchorPoint()) {
-                    slidingUpPanelLayout.setCoveredFadeColor(0xff004d40);
+                    slidingUpPanelLayout.setCoveredFadeColor(MAIN_COLOR);
                     backgroundResolver(v);
                 }
                 if (v > COLLAPSE_OFFSET) {
@@ -110,8 +133,8 @@ public class DetailsController {
             @Override
             public void onPanelAnchored(View view) {
                 scrollView.setVerticalScrollBarEnabled(false);
-                slidingUpPanelLayout.setCoveredFadeColor(0x00000000);
-                scrollView.fullScroll(ScrollView.FOCUS_UP);
+                slidingUpPanelLayout.setCoveredFadeColor(TRANSPARENT_WHITE_COLOR);
+                scrollView.setScrollY(0);
                 setToolbarInitialState();
                 isScrollDisable = true;
             }
@@ -122,9 +145,9 @@ public class DetailsController {
 
             public void backgroundResolver(final float v) {
                 float anchor = slidingUpPanelLayout.getAnchorPoint();
-                int alpha = (int) (255 * Math.max((COLLAPSE_OFFSET - v)
+                int alpha = (int) (MAX_ALPHA * Math.max((COLLAPSE_OFFSET - v)
                         / (COLLAPSE_OFFSET - anchor), 0));
-                alpha = Math.min(alpha, 255);
+                alpha = Math.min(alpha, MAX_ALPHA);
                 layout = (LinearLayout) activity.findViewById(R.id.sliding_linear_layout);
                 toolbar.getBackground().setAlpha(alpha);
                 layout.getBackground().setAlpha(alpha);
@@ -163,66 +186,19 @@ public class DetailsController {
             }
 
             private void changeTitleTransparency(final float alpha) {
-                int alphaChanel = (int) (alpha * 255) * 0x01000000;
+                int alphaChanel = (int) (alpha * MAX_ALPHA) * 0x01000000;
                 int newColorCode = TRANSPARENT_WHITE_COLOR | alphaChanel;
                 toolbar.setTitleTextColor(newColorCode);
             }
 
             private void changeFilterIconTransparency(final float alpha) {
                 MenuItem item = toolbar.getMenu().findItem(R.id.action_find_location);
-                item.getIcon().setAlpha((int) (255 * alpha));
+                item.getIcon().setAlpha((int) (MAX_ALPHA * alpha));
             }
 
-            private void newFabPosition(final float v) {
-                float edgeY = convertToPixels(1 - v) + toolbar.getHeight();
-                float fabDefaultCenterY = (fab.getY() + (fab.getHeight() / 2)) - fab.getTranslationY();
-                if (edgeY < fabDefaultCenterY) {
-                    if (fabState != REFRESH_BUTTON) {
-                        morphToRefreshButton();
-                    }
-                    fab.setTranslationY(edgeY - fabDefaultCenterY);
-                } else {
-                    if (fabState != ADD_PROBLEM_BUTTON) {
-                        morphToAddButton();
-                    }
-                }
-            }
-
-            private void morphToRefreshButton() {
-                fab.setImageResource(R.drawable.ic_refresh_white_24dp);
-                fab.setBackgroundTintList(ColorStateList.valueOf(0xff440044));
-                fab.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        ObjectAnimator animator = ObjectAnimator.ofFloat(fab, "rotation", 360);
-                        animator.addListener(new AnimatorListenerAdapter() {
-                            @Override
-                            public void onAnimationEnd(Animator animation) {
-                                fab.setRotation(0);
-                                DataManager.getInstance(activity).
-                                        refreshProblemDetails(problem.getProblemId());
-                            }
-                        });
-                        animator.start();
-                    }
-                });
-            }
-
-            private void morphToAddButton() {
-                fab.setImageResource(R.drawable.ic_add_white_24dp);
-                fab.setBackgroundTintList(ColorStateList.valueOf(0xff004d40));
-                fab.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        activity.startActivity(
-                                new Intent(activity, ChooseProblemLocationActivity.class));
-                    }
-                });
-                fab.setTranslationY(0);
-            }
 
             private void setToolbarInitialState() {
-                toolbar.setBackgroundColor(0xff004d40);
+                toolbar.setBackgroundColor(MAIN_COLOR);
                 if (currentTitleAlpha != 1) {
                     ValueAnimator animator = ValueAnimator.ofFloat(currentTitleAlpha, 1);
                     animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
@@ -246,14 +222,11 @@ public class DetailsController {
                 titleView.setScaleY(1 - scale);
             }
 
-            private int convertToPixels(float value) {
-                return (int) (value * slidingUpPanelLayout.getHeight());
-            }
         });
 
         isScrollDisable = true;
 
-        scrollView.fullScroll(ScrollView.FOCUS_UP);
+        scrollView.setScrollY(0);
         scrollView.setVerticalScrollBarEnabled(false);
         scrollView.setOnTouchListener(new View.OnTouchListener() {
             float previousY;
@@ -267,6 +240,10 @@ public class DetailsController {
                 if (((scrollView.getScrollY() == 0) && draggingDown(event))
                         || (slidingUpPanelLayout.getPanelState()
                         != SlidingUpPanelLayout.PanelState.EXPANDED)) {
+                    if (isKeyboardShown) {
+                        Keyboard.hideKeyboard(scrollView);
+                        return false;
+                    }
                     slidingUpPanelLayout.onTouchEvent(remapToParentLayout(event));
                     return true;
                 }
@@ -296,5 +273,57 @@ public class DetailsController {
 
         });
 
+    }
+
+    private void newFabPosition(final float v) {
+        float edgeY = convertToPixels(1 - v) + toolbar.getHeight();
+        float fabDefaultCenterY = (fab.getY() + (fab.getHeight() / 2)) - fab.getTranslationY();
+        if (edgeY < fabDefaultCenterY) {
+            if (fabState != REFRESH_BUTTON) {
+                morphToRefreshButton();
+            }
+            fab.setY(edgeY - (fab.getHeight() / 2));
+        } else {
+            if (fabState != ADD_PROBLEM_BUTTON) {
+                morphToAddButton();
+            }
+        }
+    }
+
+    private void morphToRefreshButton() {
+        fab.setImageResource(R.drawable.ic_refresh_white_24dp);
+        fab.setBackgroundTintList(ColorStateList.valueOf(0xff440044));
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ObjectAnimator animator = ObjectAnimator.ofFloat(fab, "rotation", 360);
+                animator.addListener(new AnimatorListenerAdapter() {
+                    @Override
+                    public void onAnimationEnd(Animator animation) {
+                        fab.setRotation(0);
+                        DataManager.getInstance(activity).
+                                refreshProblemDetails(problem.getProblemId());
+                    }
+                });
+                animator.start();
+            }
+        });
+    }
+
+    private void morphToAddButton() {
+        fab.setImageResource(R.drawable.ic_add_white_24dp);
+        fab.setBackgroundTintList(ColorStateList.valueOf(MAIN_COLOR));
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                activity.startActivity(
+                        new Intent(activity, ChooseProblemLocationActivity.class));
+            }
+        });
+        fab.setTranslationY(0);
+    }
+
+    private int convertToPixels(float value) {
+        return (int) (value * slidingUpPanelLayout.getHeight());
     }
 }
