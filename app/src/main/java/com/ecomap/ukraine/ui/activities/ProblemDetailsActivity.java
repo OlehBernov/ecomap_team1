@@ -93,7 +93,7 @@ public class ProblemDetailsActivity extends AppCompatActivity implements Problem
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        DataManager.getInstance(this).registerProblemListener(this);
+        DataManager.getInstance(this).removeProblemListener(this);
     }
 
     /**
