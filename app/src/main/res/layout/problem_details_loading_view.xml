@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:minHeight="430dp"
+    android:orientation="vertical"
+    android:weightSum="1">
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/imageView7"
+        android:layout_centerHorizontal="true"
+        android:layout_gravity="center"
+        android:layout_marginTop="46dp"
+        android:paddingTop="100dp"
+        android:paddingBottom="10dp"
+        android:text="Problem details loading..."
+        android:textAppearance="?android:attr/textAppearanceLarge"/>
+
+    <fr.castorflex.android.smoothprogressbar.SmoothProgressBar
+        android:id="@+id/progress_bar"
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:indeterminate="true"
+        android:paddingLeft="20dp"
+        android:paddingRight="20dp"
+        app:spb_color="#000000"
+        app:spb_mirror_mode="true"
+        app:spb_progressiveStart_activated="false"
+        app:spb_progressiveStart_speed="1.5"
+        app:spb_progressiveStop_speed="5"
+        app:spb_reversed="true"
+        app:spb_sections_count="3"
+        app:spb_speed="1.0"
+        app:spb_stroke_separator_length="8dp"
+        app:spb_stroke_width="4dp"/>
+
+</LinearLayout>

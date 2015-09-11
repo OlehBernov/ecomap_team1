@@ -1,4 +1,4 @@
-package com.ecomap.ukraine.problemupdate.parser;
+package com.ecomap.ukraine.problemupdate;
 
 /**
  * Field names in JSON, which comes from the server.

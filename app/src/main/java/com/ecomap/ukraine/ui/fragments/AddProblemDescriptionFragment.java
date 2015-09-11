@@ -17,18 +17,18 @@ import android.widget.Toast;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.ecomap.ukraine.R;
 import com.ecomap.ukraine.authentication.manager.AccountManager;
+import com.ecomap.ukraine.authentication.validator.Validator;
+import com.ecomap.ukraine.models.Details;
+import com.ecomap.ukraine.models.Problem;
 import com.ecomap.ukraine.models.ProblemForPosting;
-import com.ecomap.ukraine.util.ExtraFieldNames;
-import com.ecomap.ukraine.util.Keyboard;
-import com.ecomap.ukraine.ui.activities.MainActivity;
+import com.ecomap.ukraine.models.User;
 import com.ecomap.ukraine.problemposting.manager.AddProblemListener;
 import com.ecomap.ukraine.problemposting.manager.AddProblemManager;
 import com.ecomap.ukraine.problemupdate.manager.DataManager;
 import com.ecomap.ukraine.problemupdate.manager.ProblemListener;
-import com.ecomap.ukraine.models.Details;
-import com.ecomap.ukraine.models.Problem;
-import com.ecomap.ukraine.models.User;
-import com.ecomap.ukraine.authentication.validator.Validator;
+import com.ecomap.ukraine.ui.activities.MainActivity;
+import com.ecomap.ukraine.util.ExtraFieldNames;
+import com.ecomap.ukraine.util.Keyboard;
 import com.google.android.gms.maps.model.LatLng;
 
 import java.util.List;
@@ -40,7 +40,7 @@ import butterknife.InjectView;
  * Fragment for posting description of new problem
  */
 public class AddProblemDescriptionFragment extends Fragment implements AddProblemListener,
-        ProblemListener {
+                                                                       ProblemListener {
 
     private static final String PLEASE_WAIT = "Please wait...";
 
@@ -83,10 +83,10 @@ public class AddProblemDescriptionFragment extends Fragment implements AddProble
     /**
      * Validation of data of new problem
      */
-    public void postProblemValidation () {
+    public void postProblemValidation(Activity activity) {
         boolean isProblemValid = Validator.addProblemValidation(problemTitle);
         if (!isProblemValid) {
-            Toast.makeText(getActivity(), INPUT_PROBLEM_DATA, Toast.LENGTH_LONG)
+            Toast.makeText(activity, INPUT_PROBLEM_DATA, Toast.LENGTH_LONG)
                     .show();
             return;
         }
@@ -198,7 +198,6 @@ public class AddProblemDescriptionFragment extends Fragment implements AddProble
         startActivity(intent);
         getActivity().finish();
         dataManager.removeProblemListener(this);
-
     }
 
     /**

@@ -1,5 +1,6 @@
-package com.ecomap.ukraine.authentication.parser;
+package com.ecomap.ukraine.authentication;
 
+import com.ecomap.ukraine.authentication.JSONFields;
 import com.ecomap.ukraine.models.User;
 
 import org.json.JSONException;

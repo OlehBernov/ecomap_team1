@@ -1,4 +1,4 @@
-package com.ecomap.ukraine.problemdetails.sync;
+package com.ecomap.ukraine.problemdetails;
 
 import android.content.Context;
 import android.util.Log;
@@ -11,10 +11,8 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.ecomap.ukraine.R;
 import com.ecomap.ukraine.authentication.manager.AccountManager;
-import com.ecomap.ukraine.problemdetails.parser.JSONFields;
-import com.ecomap.ukraine.problemdetails.parser.JSONParser;
 import com.ecomap.ukraine.problemdetails.manager.DetailsRequestReceiver;
-import com.ecomap.ukraine.problemupdate.sync.RequestQueueWrapper;
+import com.ecomap.ukraine.problemupdate.RequestQueueWrapper;
 
 import org.json.JSONException;
 import org.json.JSONObject;

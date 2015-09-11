@@ -1,4 +1,4 @@
-package com.ecomap.ukraine.problemdetails.sync;
+package com.ecomap.ukraine.problemdetails;
 
 import android.content.Context;
 import android.os.AsyncTask;

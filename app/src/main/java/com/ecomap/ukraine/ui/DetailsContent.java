@@ -21,6 +21,8 @@ import android.widget.TextView;
 
 import com.ecomap.ukraine.R;
 import com.ecomap.ukraine.authentication.manager.AccountManager;
+import com.ecomap.ukraine.models.ActivityType;
+import com.ecomap.ukraine.models.ProblemStatus;
 import com.ecomap.ukraine.problemupdate.manager.DataManager;
 import com.ecomap.ukraine.util.BasicContentLayout;
 import com.ecomap.ukraine.util.BitmapResizer;
@@ -39,6 +41,9 @@ import com.squareup.picasso.Transformation;
 
 import java.util.List;
 
+/**
+ * View, which represent information about problem details.
+ */
 public class DetailsContent extends LinearLayout implements DetailsListener {
 
     private static final String RESOLVED = "resolved";
@@ -83,6 +88,11 @@ public class DetailsContent extends LinearLayout implements DetailsListener {
         init();
     }
 
+    /**
+     * Sets base problem information to relevant places on view.
+     *
+     * @param problem problem instance.
+     */
     public void setProblemContent(final Problem problem) {
         this.problem = problem;
         AccountManager accountManager = AccountManager.getInstance(context);
@@ -105,6 +115,11 @@ public class DetailsContent extends LinearLayout implements DetailsListener {
 
         voteIcon.setEnabled(true);
         voteIcon.setOnClickListener(new OnClickListener() {
+            /**
+             * Adds like to the current problem. Prepares data for posting to server.
+             *
+             * @param v "like" button.
+             */
             @Override
             public void onClick(View v) {
                 String problemID = String.valueOf(problem.getProblemId());
@@ -117,10 +132,16 @@ public class DetailsContent extends LinearLayout implements DetailsListener {
 
         Button sendComment = (Button) detailsContentView.findViewById(R.id.send_comment);
         sendComment.setOnClickListener(new OnClickListener() {
+            /**
+             * Adds comment to the current problem. Prepares data for posting to server.
+             *
+             * @param v "send comment" button.
+             */
             @Override
             public void onClick(View v) {
                 int problemID = problem.getProblemId();
                 String userId = String.valueOf(user.getId());
+                //TODO: empty comment validation
                 String content = "Test comment";
                 String userName = user.getName();
                 String userSurname = user.getSurname();
@@ -130,23 +151,34 @@ public class DetailsContent extends LinearLayout implements DetailsListener {
         });
 
         clearDetailsPanel();
-        setErrorScreen();
+        setDetailsLoadingScreen();
         votesNumber.setText("");
         putBriefInformation();
     }
 
+    /**
+     * Performs when vote added to current problem.
+     */
     @Override
     public void onVoteAdded() {
-       dataManager.refreshProblemDetails(problem.getProblemId());
+        dataManager.refreshProblemDetails(problem.getProblemId());
         voteIcon.setEnabled(false);
     }
 
+    /**
+     * Performs when comment added to current problem.
+     */
     @Override
     public void onCommentAdded() {
         dataManager.refreshProblemDetails(problem.getProblemId());
         commentText.setText("");
     }
 
+    /**
+     * Sets datailed problem information to relevant places on view.
+     *
+     * @param details problem details instance.
+     */
     public void setProblemDetails(final Details details) {
         if (details == null) {
             setErrorScreen();
@@ -158,7 +190,7 @@ public class DetailsContent extends LinearLayout implements DetailsListener {
 
         if (details.getProblemActivities() != null) {
             for (ProblemActivity problemActivity : details.getProblemActivities()) {
-                if (isCreationActivity(problemActivity)) {
+                if (isCreatorActivity(problemActivity)) {
                     userInformation.setText(getPostInformation(problemActivity));
                     break;
                 }
@@ -169,12 +201,18 @@ public class DetailsContent extends LinearLayout implements DetailsListener {
         showDetailsView();
     }
 
+    /**
+     * Sets brief problem information on DetailsContent view header.
+     */
     public void putBriefInformation() {
         problemTitle.setText(problem.getTitle());
         setProblemStatus(problem.getStatus());
         markerIcon.setImageResource(IconRenderer.getResourceIdForMarker(problem.getProblemType()));
     }
 
+    /**
+     * Puts on screen DetailsContent view (connection error view, loading view, details information).
+     */
     public void showDetailsView() {
         LinearLayout detailsView = (LinearLayout) findViewById(R.id.details_content_root);
         if (isViewHaveChild(detailsView)) {
@@ -183,6 +221,9 @@ public class DetailsContent extends LinearLayout implements DetailsListener {
         detailsView.addView(view);
     }
 
+    /**
+     * Initiates the view.
+     */
     private void init() {
         inflate(context, R.layout.details_base_info, this);
         layoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -192,18 +233,35 @@ public class DetailsContent extends LinearLayout implements DetailsListener {
         detailsManager.registerDetailsListener(this);
     }
 
+    /**
+     * Sets on screen server connection error view.
+     */
     private void setErrorScreen() {
-        view = layoutInflater.inflate(R.layout.internet_connection_error_fragment, null, false);
+        view = layoutInflater.inflate(R.layout.internet_connection_error_view, null, false);
         showDetailsView();
     }
 
-    private boolean isCreationActivity(final ProblemActivity problemActivity) {
-        return (problemActivity.getActivityType() == ProblemActivity.ActivityType.CREATE)
+    /**
+     * Sets on screen details loading view.
+     */
+    private void setDetailsLoadingScreen() {
+        view = layoutInflater.inflate(R.layout.problem_details_loading_view, null, false);
+        showDetailsView();
+    }
+
+    /**
+     * Checks is problemActivity represents information about creator of current problem.
+     *
+     * @param problemActivity problem activity instance.
+     * @return whether this is creator activity.
+     */
+    private boolean isCreatorActivity(final ProblemActivity problemActivity) {
+        return (problemActivity.getActivityType() == ActivityType.CREATE)
                 && (problemActivity.getProblemId() == problem.getProblemId());
     }
 
     /**
-     * Clear details panel
+     * Removes all problem details info from DetailsView.
      */
     private void clearDetailsPanel() {
         for (int i = 0; i < STAR_NUMBER; i++) {
@@ -236,6 +294,11 @@ public class DetailsContent extends LinearLayout implements DetailsListener {
         return userName + " " + day + "/" + month + "/" + year + " " + hour + ":" + minutes;
     }
 
+    /**
+     * Puts activities information on DetailContent view.
+     *
+     * @param details problem details instance.
+     */
     private void addActivitiesInfo(final Details details) {
         List<ProblemActivity> problemActivities = details.getProblemActivities();
         if (problemActivities == null) {
@@ -321,7 +384,7 @@ public class DetailsContent extends LinearLayout implements DetailsListener {
      * @param activityType activityType
      * @return icon resource
      */
-    private Drawable getActivityIcon(final ProblemActivity.ActivityType activityType) {
+    private Drawable getActivityIcon(final ActivityType activityType) {
         switch (activityType) {
             case CREATE:
                 return ResourcesCompat.getDrawable(context.getResources(), R.drawable.ic_done_black_36dp, null);
@@ -353,8 +416,13 @@ public class DetailsContent extends LinearLayout implements DetailsListener {
         proposalFiled.setText(proposal);
     }
 
-    private void setProblemStatus(final Problem.ProblemStatus problemStatus) {
-        if (problemStatus == Problem.ProblemStatus.UNSOLVED) {
+    /**
+     * Shows on screen information about topicality of current problem.
+     *
+     * @param problemStatus status of the current problem.
+     */
+    private void setProblemStatus(final ProblemStatus problemStatus) {
+        if (problemStatus == ProblemStatus.UNSOLVED) {
             this.problemStatus.setText(UNSOLVED);
             this.problemStatus.setTextColor(Color.RED);
         } else {
@@ -364,9 +432,9 @@ public class DetailsContent extends LinearLayout implements DetailsListener {
     }
 
     /**
-     * Adds photos to sliding panel
+     * Adds photos to DetailsContent view.
      *
-     * @param details details of problem
+     * @param details details of problem.
      */
     private void addPhotos(final Details details) {
         final List<Photo> photos = details.getPhotos();
@@ -394,11 +462,20 @@ public class DetailsContent extends LinearLayout implements DetailsListener {
         }
     }
 
+    /**
+     * Sets on screen title of photos block.
+     */
     private void setPhotosTitle() {
         TextView photosTitle = (TextView) detailsContentView.findViewById(R.id.photo);
         photosTitle.setText(PHOTOS_TITLE);
     }
 
+    /**
+     * Performs photo loading to photo preview panel.
+     *
+     * @param photo photo which related to the problem.
+     * @param photoView view which will contain the photo.
+     */
     private void loadPhotoToView(final Photo photo, final ImageView photoView) {
         Transformation transformation = new Transformation() {
             @Override
@@ -425,10 +502,22 @@ public class DetailsContent extends LinearLayout implements DetailsListener {
                 .into(photoView);
     }
 
+    /**
+     * Checks is view have children.
+     *
+     * @param view view, which need to check.
+     * @return whether the view have children.
+     */
     private boolean isViewHaveChild(final ViewGroup view) {
         return (view != null) && (view.getChildCount() > 0);
     }
 
+    /**
+     * Opens full photos preview.
+     *
+     * @param position position of selected photo on small photo preview panel.
+     * @param photos list of all photos, which related to the problem.
+     */
     private void openPhotoSlidePager(final int position, final List<Photo> photos) {
         ProblemPhotoSlidePager.setContent(photos);
         Intent intent = new Intent(context, ProblemPhotoSlidePager.class);
@@ -437,15 +526,25 @@ public class DetailsContent extends LinearLayout implements DetailsListener {
         context.startActivity(intent);
     }
 
+    /**
+     * Hides photos block if related to this problem photos does not exists.
+     */
     private void hidePhotosBlock() {
         TextView photosTitle = (TextView) detailsContentView.findViewById(R.id.photo);
         photosTitle.setText("");
         photoContainer.removeAllViews();
     }
 
+    /**
+     * Checks is this problem was liked by current user.
+     *
+     * @param problemActivity problem activity which may contain information about like.
+     * @param user current logged in user.
+     * @return whether current problem was liked by this user.
+     */
     private boolean isProblemLikedBefore(final ProblemActivity problemActivity, final User user) {
         return (problemActivity.getUserId() == user.getId())
-                && (problemActivity.getActivityType().getId() == ProblemActivity.ActivityType.LIKE.getId());
+                && (problemActivity.getActivityType().getId() == ActivityType.LIKE.getId());
     }
 
 }

@@ -3,7 +3,7 @@ package com.ecomap.ukraine.problemposting.manager;
 import android.content.Context;
 
 import com.ecomap.ukraine.models.ProblemForPosting;
-import com.ecomap.ukraine.problemposting.sync.AddProblemClient;
+import com.ecomap.ukraine.problemposting.AddProblemClient;
 
 import java.util.HashSet;
 import java.util.Set;

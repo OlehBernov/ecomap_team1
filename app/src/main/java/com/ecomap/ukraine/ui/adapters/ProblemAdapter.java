@@ -9,6 +9,7 @@ import android.widget.TextView;
 
 import com.ecomap.ukraine.R;
 import com.ecomap.ukraine.models.Problem;
+import com.ecomap.ukraine.models.ProblemType;
 import com.ecomap.ukraine.ui.activities.SearchActivity;
 
 import java.util.List;
@@ -41,7 +42,7 @@ public class ProblemAdapter extends RecyclerView.Adapter<ProblemAdapter.ViewHold
             });
         }
 
-        private int getIconRes(Problem.ProblemType problemType) {
+        private int getIconRes(ProblemType problemType) {
             int resId;
             switch (problemType) {
                 case FOREST_DESTRUCTION:

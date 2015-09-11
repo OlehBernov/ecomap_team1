@@ -3,7 +3,7 @@ package com.ecomap.ukraine.authentication.manager;
 import android.content.Context;
 import android.content.SharedPreferences;
 
-import com.ecomap.ukraine.authentication.sync.LogInClient;
+import com.ecomap.ukraine.authentication.LogInClient;
 import com.ecomap.ukraine.models.User;
 import com.ecomap.ukraine.util.ExtraFieldNames;
 

@@ -1,4 +1,4 @@
-package com.ecomap.ukraine.problemdetails.parser;
+package com.ecomap.ukraine.problemdetails;
 
 /**
  * Created by Andriy on 26.08.2015.

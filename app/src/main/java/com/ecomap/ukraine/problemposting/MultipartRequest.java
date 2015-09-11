@@ -1,4 +1,4 @@
-package com.ecomap.ukraine.problemposting.sync;
+package com.ecomap.ukraine.problemposting;
 
 import android.graphics.Bitmap;
 import android.util.Log;

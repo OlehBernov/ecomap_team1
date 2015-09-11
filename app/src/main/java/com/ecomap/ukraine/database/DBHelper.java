@@ -6,10 +6,13 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
+import com.ecomap.ukraine.models.ActivityType;
 import com.ecomap.ukraine.models.Details;
 import com.ecomap.ukraine.models.Photo;
 import com.ecomap.ukraine.models.Problem;
 import com.ecomap.ukraine.models.ProblemActivity;
+import com.ecomap.ukraine.models.ProblemStatus;
+import com.ecomap.ukraine.models.ProblemType;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -349,8 +352,8 @@ public class DBHelper extends SQLiteOpenHelper {
 
             Problem problem = new Problem(
                     cursor.getInt(cursor.getColumnIndex(DBContract.Problems.ID)),
-                    Problem.ProblemStatus.getProblemStatus(problemStatusId),
-                    Problem.ProblemType.getProblemType(problemTypeId),
+                    ProblemStatus.getProblemStatus(problemStatusId),
+                    ProblemType.getProblemType(problemTypeId),
                     cursor.getString(cursor.getColumnIndex(DBContract.Problems.PROBLEM_TITLE)),
                     cursor.getString(cursor.getColumnIndex(DBContract.Problems.PROBLEM_DATE)),
                     cursor.getDouble(cursor.getColumnIndex(DBContract.Problems.LATITUDE)),
@@ -496,7 +499,7 @@ public class DBHelper extends SQLiteOpenHelper {
         for (int i = 0; i < cursor.getCount(); i++) {
 
             int activityTypeId = cursor.getInt(cursor.getColumnIndex(DBContract.ProblemActivity.ACTIVITY_TYPES_ID));
-            ProblemActivity.ActivityType activityTypeEnum = ProblemActivity.ActivityType.getActivityType(activityTypeId);
+            ActivityType activityTypeEnum = ActivityType.getActivityType(activityTypeId);
 
             ProblemActivity problemActivity = new ProblemActivity(
                     problemId,

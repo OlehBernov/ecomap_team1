@@ -8,6 +8,7 @@ import android.widget.TextView;
 
 import com.ecomap.ukraine.R;
 import com.ecomap.ukraine.models.Problem;
+import com.ecomap.ukraine.models.ProblemType;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
@@ -137,7 +138,7 @@ public class IconRenderer extends DefaultClusterRenderer<Problem> {
      * @param problemType id of type
      * @return icon resourse
      */
-    public static int getResourceIdForMarker(final Problem.ProblemType problemType) {
+    public static int getResourceIdForMarker(final ProblemType problemType) {
         int resId = 0;
         switch (problemType) {
             case FOREST_DESTRUCTION:

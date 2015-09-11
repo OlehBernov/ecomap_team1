@@ -1,4 +1,4 @@
-package com.ecomap.ukraine.problemupdate.sync;
+package com.ecomap.ukraine.problemupdate;
 
 
 import android.content.Context;
@@ -10,7 +10,6 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.ecomap.ukraine.models.Details;
 import com.ecomap.ukraine.problemupdate.manager.ProblemRequestReceiver;
-import com.ecomap.ukraine.problemupdate.parser.JSONParser;
 
 import org.json.JSONException;
 

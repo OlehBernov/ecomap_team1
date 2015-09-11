@@ -1,4 +1,4 @@
-package com.ecomap.ukraine.problemdetails.parser;
+package com.ecomap.ukraine.problemdetails;
 
 import org.json.JSONException;
 import org.json.JSONObject;

@@ -25,6 +25,7 @@ import android.widget.TextView;
 import com.ecomap.ukraine.R;
 import com.ecomap.ukraine.models.Problem;
 import com.ecomap.ukraine.problemupdate.manager.DataManager;
+import com.ecomap.ukraine.problemupdate.manager.ProblemListener;
 import com.ecomap.ukraine.ui.activities.ChooseProblemLocationActivity;
 import com.ecomap.ukraine.ui.activities.MainActivity;
 import com.ecomap.ukraine.util.Keyboard;
@@ -59,6 +60,7 @@ public class DetailsController {
     public DetailsController(Activity activity, Problem problem, DetailsContent detailsContent) {
         this.activity = activity;
         this.detailsContent = detailsContent;
+        this.problem = problem;
 
         detailsContent.setProblemContent(problem);
 
@@ -67,8 +69,6 @@ public class DetailsController {
         scrollView = (ScrollView) activity.findViewById(R.id.panelScrollView);
         titleView = (TextView) activity.findViewById(R.id.details_title);
         fab = (FloatingActionButton) activity.findViewById(R.id.fab2);
-
-        this.problem = problem;
 
         MAIN_COLOR = activity.getResources().getColor(R.color.toolbar_teal);
         toolbar.setBackgroundColor(MAIN_COLOR);
@@ -175,7 +175,7 @@ public class DetailsController {
                         }
                     });
                 } else {
-                    final DrawerLayout drawerLayout = (DrawerLayout) detailsContent.findViewById(R.id.drawer);
+                    final DrawerLayout drawerLayout = (DrawerLayout) activity.findViewById(R.id.drawer);
                     toolbar.setNavigationOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {

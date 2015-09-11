@@ -8,11 +8,11 @@ import android.view.MenuItem;
 import android.view.View;
 
 import com.ecomap.ukraine.R;
-import com.ecomap.ukraine.ui.DetailsContent;
-import com.ecomap.ukraine.problemupdate.manager.DataManager;
-import com.ecomap.ukraine.problemupdate.manager.ProblemListener;
 import com.ecomap.ukraine.models.Details;
 import com.ecomap.ukraine.models.Problem;
+import com.ecomap.ukraine.problemupdate.manager.DataManager;
+import com.ecomap.ukraine.problemupdate.manager.ProblemListener;
+import com.ecomap.ukraine.ui.DetailsContent;
 
 import java.util.List;
 
@@ -79,6 +79,15 @@ public class ProblemDetailsActivity extends AppCompatActivity implements Problem
         DataManager dataManager = DataManager.getInstance(this);
         dataManager.registerProblemListener(this);
         dataManager.getProblemDetail(problem.getProblemId());
+    }
+
+    /**
+     * Remove itself from DataManager observers.
+     */
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        DataManager.getInstance(this).registerProblemListener(this);
     }
 
     /**

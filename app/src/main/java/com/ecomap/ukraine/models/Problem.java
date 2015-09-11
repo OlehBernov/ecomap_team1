@@ -107,7 +107,7 @@ public class Problem implements ClusterItem, Serializable {
     }
 
     /**
-     * provides acces to problem longtitude.
+     * provides acces to problem longitude.
      */
     public double getLongitude() {
         return longitude;
@@ -121,106 +121,5 @@ public class Problem implements ClusterItem, Serializable {
         return new LatLng(latitude, longitude);
     }
 
-    /**
-     * Possible problem statuses.
-     */
-    public enum ProblemStatus {
 
-        /**
-         * Unsolved problems.
-         */
-        UNSOLVED(0),
-
-        /**
-         * Resolved problems.
-         */
-        RESOLVED(1);
-
-        private int statusId;
-
-        /**
-         * Constructor of problem status.
-         *
-         * @param statusId problem status id.
-         */
-        ProblemStatus(int statusId) {
-            this.statusId = statusId;
-        }
-
-        /**
-         * Returns problems status according to status id.
-         *
-         * @param statusId problem status id.
-         * @return problem status.
-         */
-        public static ProblemStatus getProblemStatus(int statusId) {
-            for (ProblemStatus status : ProblemStatus.values()) {
-                if (status.statusId == statusId) {
-                    return status;
-                }
-            }
-            return UNSOLVED;
-        }
-
-        /**
-         * Returns problem status id.
-         *
-         * @return problem status id.
-         */
-        public int getId() {
-            return statusId;
-        }
-
-    }
-
-
-    /**
-     * Possible problem types.
-     */
-    public enum ProblemType {
-
-        FOREST_DESTRUCTION(1),
-        RUBBISH_DUMP(2),
-        ILLEGAL_BUILDING(3),
-        WATER_POLLUTION(4),
-        THREAD_TO_BIODIVERSITY(5),
-        POACHING(6),
-        OTHER(7);
-
-        private int id;
-
-        /**
-         * Constructor.
-         *
-         * @param id problem type id.
-         */
-        ProblemType(int id) {
-            this.id = id;
-        }
-
-        /**
-         * Return problem type according to problem type id.
-         *
-         * @param id problem type id.
-         * @return problem type.
-         */
-        public static ProblemType getProblemType(int id) {
-            for (ProblemType type : ProblemType.values()) {
-                if (type.id == id) {
-                    return type;
-                }
-            }
-            return OTHER;
-        }
-
-        /**
-         * Returns id of the problem type.
-         *
-         * @return problem type id.
-         */
-        public int getId() {
-            return id;
-        }
-
-    }
 }

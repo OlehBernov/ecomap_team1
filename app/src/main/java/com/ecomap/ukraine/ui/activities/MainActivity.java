@@ -49,6 +49,7 @@ public class MainActivity extends AppCompatActivity {
     private static final int SIGN_UP_REQUEST_CODE = 2;
     private static final int SETTINGS_REQUEST_CODE = 3;
 
+    //TODO: public?
     public ActionBarDrawerToggle drawerToggle;
     private DrawerLayout filterLayout;
     private Toolbar toolbar;
@@ -249,6 +250,7 @@ public class MainActivity extends AppCompatActivity {
                 getSupportFragmentManager().beginTransaction().remove(fragment).commit();
             }
             addMapFragment();
+            addFilterFragment();
         }
     }
 

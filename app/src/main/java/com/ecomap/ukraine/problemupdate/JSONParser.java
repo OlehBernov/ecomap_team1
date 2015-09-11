@@ -1,10 +1,13 @@
-package com.ecomap.ukraine.problemupdate.parser;
+package com.ecomap.ukraine.problemupdate;
 
 
+import com.ecomap.ukraine.models.ActivityType;
 import com.ecomap.ukraine.models.Details;
 import com.ecomap.ukraine.models.Photo;
 import com.ecomap.ukraine.models.Problem;
 import com.ecomap.ukraine.models.ProblemActivity;
+import com.ecomap.ukraine.models.ProblemStatus;
+import com.ecomap.ukraine.models.ProblemType;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -125,8 +128,8 @@ public final class JSONParser {
 
         problem = new Problem(
                 problemJsonObject.optInt(JSONFields.ID, -1),
-                Problem.ProblemStatus.getProblemStatus(problemStatusId),
-                Problem.ProblemType.getProblemType(problemTypesId),
+                ProblemStatus.getProblemStatus(problemStatusId),
+                ProblemType.getProblemType(problemTypesId),
                 problemJsonObject.getString(JSONFields.TITLE),
                 problemJsonObject.getString(JSONFields.PROBLEM_DATE),
                 problemJsonObject.getDouble(JSONFields.LATITUDE),
@@ -162,7 +165,7 @@ public final class JSONParser {
             }
 
             int activityTypeId = commentObject.optInt(JSONFields.ACTIVITY_TYPES_ID, -1);
-            ProblemActivity.ActivityType activityTypeEnum = ProblemActivity.ActivityType.getActivityType(activityTypeId);
+            ActivityType activityTypeEnum = ActivityType.getActivityType(activityTypeId);
 
             currentProblemActivity = new ProblemActivity(
                     commentObject.optInt(JSONFields.PROBLEMS_ID, -1),

@@ -1,4 +1,4 @@
-package com.ecomap.ukraine.authentication.parser;
+package com.ecomap.ukraine.authentication;
 
 /**
  * Field names in JSON, which comes on the server.

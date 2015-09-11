@@ -1,4 +1,4 @@
-package com.ecomap.ukraine.problemupdate.sync;
+package com.ecomap.ukraine.problemupdate;
 
 import android.content.Context;
 

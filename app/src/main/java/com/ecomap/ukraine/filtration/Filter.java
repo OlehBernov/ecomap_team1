@@ -1,6 +1,8 @@
 package com.ecomap.ukraine.filtration;
 
 import com.ecomap.ukraine.models.Problem;
+import com.ecomap.ukraine.models.ProblemStatus;
+import com.ecomap.ukraine.models.ProblemType;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -40,7 +42,7 @@ public class Filter {
      * @param type problem type.
      * @return appropriate filter criteria.
      */
-    public String getFilterCriteria(final Problem.ProblemType type) {
+    public String getFilterCriteria(final ProblemType type) {
         switch (type) {
             case FOREST_DESTRUCTION:
                 return FilterContract.FOREST_DESTRUCTION;
@@ -111,7 +113,7 @@ public class Filter {
      */
     private boolean showResolvedProblem(final FilterState filterState, final Problem problem) {
         return filterState.isFilterOff(FilterContract.RESOLVED)
-                && (problem.getStatus() == Problem.ProblemStatus.RESOLVED);
+                && (problem.getStatus() == ProblemStatus.RESOLVED);
     }
 
     /**
@@ -123,7 +125,7 @@ public class Filter {
      */
     private boolean showUnsolvedProblem(final FilterState filterState, final Problem problem) {
         return filterState.isFilterOff(FilterContract.UNSOLVED)
-                && (problem.getStatus() == Problem.ProblemStatus.UNSOLVED);
+                && (problem.getStatus() == ProblemStatus.UNSOLVED);
 
     }
 

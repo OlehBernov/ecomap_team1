@@ -2,7 +2,7 @@ package com.ecomap.ukraine.problemdetails.manager;
 
 import android.content.Context;
 
-import com.ecomap.ukraine.problemdetails.sync.DetailsClient;
+import com.ecomap.ukraine.problemdetails.DetailsClient;
 
 import java.util.HashSet;
 import java.util.Set;

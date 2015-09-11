@@ -69,9 +69,9 @@ public class FragmentEcoMap extends android.support.v4.app.Fragment
     private MapView mapView;
     private GoogleMap googleMap;
     private DataManager dataManager;
-    private int mapType;
     private FilterManager filterManager;
     private DetailsContent detailsContent;
+    private int mapType;
 
     public FragmentEcoMap() {
     }
@@ -107,7 +107,7 @@ public class FragmentEcoMap extends android.support.v4.app.Fragment
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         dataManager = DataManager.getInstance(getActivity());
-        detailsContent = (DetailsContent) getActivity().findViewById(R.id.panel_details_content);
+        dataManager.registerProblemListener(this);
 
         View rootView = inflater.inflate(R.layout.fragement_map, container, false);
         mapView = (MapView) rootView.findViewById(R.id.mapView);
@@ -196,7 +196,6 @@ public class FragmentEcoMap extends android.support.v4.app.Fragment
         FragmentEcoMap.problems = problems;
         putAllProblemsOnMap(null);
         setRenderer();
-        dataManager.removeProblemListener(this);
     }
 
     /**
@@ -224,8 +223,9 @@ public class FragmentEcoMap extends android.support.v4.app.Fragment
      */
     @Override
     public void updateProblemDetails(final Details details) {
-        detailsContent.setProblemDetails(details);
-        dataManager.removeProblemListener(this);
+        if (detailsContent != null) {
+            detailsContent.setProblemDetails(details);
+        }
     }
 
     /**
@@ -237,7 +237,7 @@ public class FragmentEcoMap extends android.support.v4.app.Fragment
     @Override
     public boolean onClusterItemClick(final Problem problem) {
         if (!((MainActivity) getActivity()).problemAddingMenu) {
-            dataManager.registerProblemListener(this);
+            detailsContent = (DetailsContent) getActivity().findViewById(R.id.panel_details_content);
             new DetailsController(getActivity(), problem, detailsContent);
             dataManager.getProblemDetail(problem.getProblemId());
             moveCameraToProblem(problem);
@@ -337,7 +337,7 @@ public class FragmentEcoMap extends android.support.v4.app.Fragment
         googleMap.setMyLocationEnabled(true);
         settings.setMyLocationButtonEnabled(true);
 
-        dataManager.registerProblemListener(this);
+    //    dataManager.registerProblemListener(this);
         dataManager.getAllProblems();
 
         CameraPosition cameraPosition = new CameraPosition
@@ -392,8 +392,7 @@ public class FragmentEcoMap extends android.support.v4.app.Fragment
      */
     private void setupClusterManager(final FilterState filterState) {
         List<Problem> filteredProblems = new Filter().filterProblem(problems, filterState);
-        clusterManager =
-                new ClusterManager<>(getActivity(), googleMap);
+        clusterManager = new ClusterManager<>(getActivity(), googleMap);
         googleMap.setOnCameraChangeListener(clusterManager);
         clusterManager.setOnClusterItemClickListener(this);
         clusterManager.setOnClusterClickListener(this);
