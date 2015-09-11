@@ -215,7 +215,7 @@ public class DataManager implements ProblemListenersNotifier,
     }
 
     public void getTop10 () {
-        SharedPreferences settings = context.getSharedPreferences(TIME, Context.MODE_PRIVATE);
+        SharedPreferences settings = context.getSharedPreferences(TOP_10_UPDATE_TIME, Context.MODE_PRIVATE);
         long lastUpdateTime = settings.getLong(TOP_10_UPDATE_TIME, 0);
         if (isUpdateTime(lastUpdateTime)) {
             loadingClient.getTop10();
