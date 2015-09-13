@@ -12,6 +12,7 @@ import com.ecomap.ukraine.models.Problem;
 import com.ecomap.ukraine.models.ProblemType;
 import com.ecomap.ukraine.ui.activities.SearchActivity;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class ProblemAdapter extends RecyclerView.Adapter<ProblemAdapter.ViewHolder> {
@@ -37,7 +38,7 @@ public class ProblemAdapter extends RecyclerView.Adapter<ProblemAdapter.ViewHold
             view.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-//                    searchActivity.showProblemInformation(problem);
+                    searchActivity.showProblemInformation(problem);
                 }
             });
         }
@@ -73,7 +74,7 @@ public class ProblemAdapter extends RecyclerView.Adapter<ProblemAdapter.ViewHold
     }
 
     public ProblemAdapter(List<Problem> dataSet, SearchActivity searchActivity) {
-        this.dataSet = dataSet;
+        this.dataSet = new ArrayList<>(dataSet);
         this.searchActivity = searchActivity;
     }
 

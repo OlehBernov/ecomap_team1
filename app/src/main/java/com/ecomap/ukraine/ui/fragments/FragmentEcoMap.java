@@ -55,7 +55,7 @@ public class FragmentEcoMap extends android.support.v4.app.Fragment
     private static final LatLng INITIAL_POSITION = new LatLng(48.4, 31.2);
     private static final float INITIAL_ZOOM = 4.5f;
     private static final float ON_MARKER_CLICK_ZOOM = 12;
-    private static final float ON_MY_POSITION_CLICK_ZOOM = 15;
+    private static final float ON_MY_POSITION_CLICK_ZOOM = 12;
     private static final int MAP_TYPE_NORMAL_ID = MapType.MAP_TYPE_NORMAL.getId();
 
      /**

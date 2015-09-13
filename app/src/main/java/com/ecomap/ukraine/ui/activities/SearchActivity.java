@@ -36,7 +36,6 @@ public class SearchActivity extends AppCompatActivity
 
     private RecyclerView recyclerView;
     private ProblemAdapter adapter;
-    private List<Problem> problems;
     private List<Problem> unfilteredProblems;
     private FilterManager filterManager;
 
@@ -60,7 +59,7 @@ public class SearchActivity extends AppCompatActivity
 
     @Override
     public boolean onQueryTextChange(String newText) {
-        List<Problem> filteredProblems = filter(problems, newText);
+        List<Problem> filteredProblems = filter(unfilteredProblems, newText);
         adapter.renewList(filteredProblems);
         recyclerView.scrollToPosition(0);
         return true;
@@ -133,21 +132,19 @@ public class SearchActivity extends AppCompatActivity
     }
 
     private void setUpRecyclerView() {
-        problems = new LinkedList<>();
         unfilteredProblems = new LinkedList<>();
         recyclerView = (RecyclerView) findViewById(R.id.my_recycler_view);
         recyclerView.setHasFixedSize(true);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
-        final List<Problem> problems = new ArrayList<>(this.problems);
-        adapter = new ProblemAdapter(problems, this);
+        adapter = new ProblemAdapter(unfilteredProblems, this);
         recyclerView.setAdapter(adapter);
     }
 
     private void showProblemList() {
         FilterState filterState = filterManager.getCurrentFilterState();
-        problems = new Filter().filterProblem(unfilteredProblems, filterState);
-        adapter = new ProblemAdapter(problems, this);
+        unfilteredProblems = new Filter().filterProblem(unfilteredProblems, filterState);
+        adapter = new ProblemAdapter(unfilteredProblems, this);
         recyclerView.setAdapter(adapter);
         View view = findViewById(R.id.progress_view);
         view.setVisibility(View.GONE);

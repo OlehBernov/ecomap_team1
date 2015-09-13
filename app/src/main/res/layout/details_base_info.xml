@@ -1,4 +1,4 @@
-<LinearLayout
+<FrameLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/details_base_info_layout"
     android:layout_width="match_parent"
@@ -64,7 +64,6 @@
                 android:layout_toRightOf="@+id/star2"
                 android:src="@drawable/ic_star_border_black_24dp"/>
 
-
             <ImageView
                 android:id="@+id/star4"
                 android:layout_width="25dp"
@@ -89,10 +88,10 @@
                 android:layout_width="wrap_content"
                 android:layout_height="22dp"
                 android:layout_centerVertical="true"
-                android:layout_marginLeft="41dp"
-                android:layout_marginStart="41dp"
-                android:layout_toEndOf="@+id/star5"
-                android:layout_toRightOf="@+id/star5"
+                android:layout_toEndOf="@id/star5"
+                android:layout_toRightOf="@id/star5"
+                android:layout_marginLeft="20dp"
+                android:layout_marginStart="20dp"
                 android:text="not resolved"
                 android:textAppearance="?android:attr/textAppearanceSmall"
                 android:textColor="#d01716"
@@ -166,4 +165,4 @@
 
     </RelativeLayout>
 
-</LinearLayout>
+</FrameLayout>

@@ -1,11 +1,21 @@
 package com.ecomap.ukraine.ui.fullinfo;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
+import android.animation.AnimatorSet;
+import android.animation.ObjectAnimator;
+import android.animation.ValueAnimator;
 import android.content.Context;
 import android.graphics.Color;
+import android.support.v4.view.animation.PathInterpolatorCompat;
 import android.util.AttributeSet;
+import android.util.TypedValue;
 import android.view.View;
+import android.view.animation.AnimationSet;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.ecomap.ukraine.R;
@@ -59,7 +69,48 @@ public class HeaderBlock extends LinearLayout implements DetailsListener {
     @Override
     public void onVoteAdded() {
         DataManager.getInstance(context).refreshProblemDetails(problem.getProblemId());
+        startLikeAnimation();
         voteIcon.setEnabled(false);
+    }
+
+    private void startLikeAnimation() {
+        final FrameLayout baseInfo = (FrameLayout) findViewById(R.id.details_base_info_layout);
+        RelativeLayout innerLayout = (RelativeLayout) findViewById(R.id.frameLayout);
+        final ImageView likeImage = new ImageView(getContext());
+        likeImage.setImageResource(R.drawable.liked_icon);
+        baseInfo.addView(likeImage, voteIcon.getWidth(), voteIcon.getHeight());
+        likeImage.setX(voteIcon.getX() + innerLayout.getX());
+        likeImage.setY(voteIcon.getY() + innerLayout.getY());
+        ObjectAnimator animateX = ObjectAnimator.ofFloat(likeImage, "translationX", -baseInfo.getWidth());
+        ObjectAnimator animateY = ObjectAnimator.ofFloat(likeImage, "translationY",
+                -TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 80,
+                        getResources().getDisplayMetrics()));
+        animateX.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+            private int count;
+
+            @Override
+            public void onAnimationUpdate(ValueAnimator animation) {
+                if ((count % 4) == 0) {
+                    final ImageView image = new ImageView(getContext());
+                    baseInfo.addView(image, likeImage.getWidth(), likeImage.getHeight());
+                    image.setImageResource(R.drawable.liked_icon);
+                    image.setX(likeImage.getX());
+                    image.setY(likeImage.getY());
+                    image.animate().alpha(0).setDuration(500).setListener(new AnimatorListenerAdapter() {
+                        @Override
+                        public void onAnimationEnd(Animator animation) {
+                            baseInfo.removeView(image);
+                        }
+                    }).start();
+                }
+                count++;
+            }
+        });
+        animateY.setInterpolator(PathInterpolatorCompat.create(1F, 1));
+        AnimatorSet animatorSet = new AnimatorSet();
+        animatorSet.playTogether(animateX, animateY);
+        animatorSet.setDuration(1500);
+        animatorSet.start();
     }
 
     @Override
