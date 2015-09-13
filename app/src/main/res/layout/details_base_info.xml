@@ -3,7 +3,6 @@
     android:id="@+id/details_base_info_layout"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_weight="1"
     android:background="#fafafa"
     android:clickable="false"
     android:orientation="vertical">
@@ -166,17 +165,5 @@
         </LinearLayout>
 
     </RelativeLayout>
-
-    <LinearLayout
-        android:id="@+id/details_content_root"
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:background="#fafafa"
-        android:clickable="false"
-        android:orientation="vertical">
-
-    </LinearLayout>
 
 </LinearLayout>

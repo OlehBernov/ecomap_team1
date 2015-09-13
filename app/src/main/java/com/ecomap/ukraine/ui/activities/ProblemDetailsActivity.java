@@ -1,11 +1,14 @@
 package com.ecomap.ukraine.ui.activities;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.LinearLayout;
 
 import com.ecomap.ukraine.R;
 import com.ecomap.ukraine.models.AllTop10Items;
@@ -13,7 +16,8 @@ import com.ecomap.ukraine.models.Details;
 import com.ecomap.ukraine.models.Problem;
 import com.ecomap.ukraine.problemupdate.manager.DataManager;
 import com.ecomap.ukraine.problemupdate.manager.ProblemListener;
-import com.ecomap.ukraine.ui.DetailsContent;
+import com.ecomap.ukraine.util.BasicContentLayout;
+import com.ecomap.ukraine.ui.fullinfo.DetailsContent;
 
 import java.util.List;
 
@@ -21,6 +25,8 @@ import java.util.List;
  * Activity which displays problem details after click on recycle view element.
  */
 public class ProblemDetailsActivity extends AppCompatActivity implements ProblemListener {
+
+    private static final String PROBLEM_DETAILS_TITLE = "Problem Details";
 
     private DetailsContent detailsContent;
     private Problem problem;
@@ -36,6 +42,7 @@ public class ProblemDetailsActivity extends AppCompatActivity implements Problem
      */
     @Override
     public void updateProblemDetails(Details details) {
+        detailsContent.prepareToRefresh();
         detailsContent.setProblemDetails(details);
     }
 
@@ -79,8 +86,11 @@ public class ProblemDetailsActivity extends AppCompatActivity implements Problem
         setUpToolbar();
 
         problem = (Problem) getIntent().getSerializableExtra(SearchActivity.PROBLEM_EXTRA);
-        detailsContent = (DetailsContent) findViewById(R.id.search_details_content);
-        detailsContent.setProblemContent(problem);
+        BasicContentLayout basicContentLayout;
+        basicContentLayout = (BasicContentLayout) findViewById(R.id.basic_content_layout_search_details);
+        basicContentLayout.setCrutch((LinearLayout) findViewById(R.id.pain2));
+        detailsContent = new DetailsContent(basicContentLayout, this);
+        detailsContent.setBaseInfo(problem);
 
         DataManager dataManager = DataManager.getInstance(this);
         dataManager.registerProblemListener(this);
@@ -102,6 +112,7 @@ public class ProblemDetailsActivity extends AppCompatActivity implements Problem
     private void setUpToolbar() {
         Toolbar toolbar = (Toolbar) findViewById(R.id.problem_details_toolbar);
         setSupportActionBar(toolbar);
+        toolbar.setTitle(PROBLEM_DETAILS_TITLE);
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

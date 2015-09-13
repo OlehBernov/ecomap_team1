@@ -23,12 +23,25 @@
         android:layout_height="match_parent"
         android:layout_gravity="right">
 
-        <com.ecomap.ukraine.ui.DetailsContent
-            android:id="@+id/search_details_content"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
 
-        </com.ecomap.ukraine.ui.DetailsContent>
+            <com.ecomap.ukraine.util.BasicContentLayout
+                android:id="@+id/basic_content_layout_search_details"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+
+            <LinearLayout
+                android:id="@+id/pain2"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+            </LinearLayout>
+
+        </LinearLayout>
 
     </ScrollView>
 

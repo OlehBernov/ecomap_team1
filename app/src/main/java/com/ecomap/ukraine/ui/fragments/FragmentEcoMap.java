@@ -11,12 +11,12 @@ import android.support.design.widget.FloatingActionButton;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 
 import com.ecomap.ukraine.R;
 import com.ecomap.ukraine.map.IconRenderer;
 import com.ecomap.ukraine.models.AllTop10Items;
 import com.ecomap.ukraine.ui.activities.MainActivity;
-import com.ecomap.ukraine.ui.DetailsContent;
 import com.ecomap.ukraine.ui.DetailsController;
 import com.ecomap.ukraine.problemupdate.manager.DataManager;
 import com.ecomap.ukraine.problemupdate.manager.ProblemListener;
@@ -27,6 +27,8 @@ import com.ecomap.ukraine.filtration.FilterState;
 import com.ecomap.ukraine.models.Details;
 import com.ecomap.ukraine.models.Problem;
 import com.ecomap.ukraine.map.MapType;
+import com.ecomap.ukraine.util.BasicContentLayout;
+import com.ecomap.ukraine.ui.fullinfo.DetailsContent;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -71,6 +73,8 @@ public class FragmentEcoMap extends android.support.v4.app.Fragment
     private GoogleMap googleMap;
     private DataManager dataManager;
     private FilterManager filterManager;
+    BasicContentLayout basicContentLayout;
+  //  private BasicContentLayout detailsContent;
     private DetailsContent detailsContent;
     private int mapType;
 
@@ -89,7 +93,7 @@ public class FragmentEcoMap extends android.support.v4.app.Fragment
     public void putAllProblemsOnMap(FilterState filterState) {
         googleMap.clear();
         if (filterState == null) {
-            filterState = filterManager.getFilterStateFromPreference();
+            filterState = filterManager.getCurrentFilterState();
         }
         setupClusterManager(filterState);
     }
@@ -107,6 +111,10 @@ public class FragmentEcoMap extends android.support.v4.app.Fragment
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
+        basicContentLayout = (BasicContentLayout) getActivity()
+                .findViewById(R.id.basic_content_layout_details);
+
         dataManager = DataManager.getInstance(getActivity());
         dataManager.registerProblemListener(this);
 
@@ -230,6 +238,7 @@ public class FragmentEcoMap extends android.support.v4.app.Fragment
     @Override
     public void updateProblemDetails(final Details details) {
         if (detailsContent != null) {
+            detailsContent.prepareToRefresh();
             detailsContent.setProblemDetails(details);
         }
     }
@@ -243,7 +252,8 @@ public class FragmentEcoMap extends android.support.v4.app.Fragment
     @Override
     public boolean onClusterItemClick(final Problem problem) {
         if (!((MainActivity) getActivity()).problemAddingMenu) {
-            detailsContent = (DetailsContent) getActivity().findViewById(R.id.panel_details_content);
+            basicContentLayout.setCrutch((LinearLayout) getActivity().findViewById(R.id.pain));
+            detailsContent = new DetailsContent(basicContentLayout, getActivity());
             new DetailsController(getActivity(), problem, detailsContent);
             dataManager.getProblemDetail(problem.getProblemId());
             moveCameraToProblem(problem);

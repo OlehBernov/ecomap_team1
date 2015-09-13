@@ -57,8 +57,13 @@ public class ExtraFieldNames {
     public static final String USER_SURNAME = "USER_SURNAME";
 
     /**
-     * Name of filter state (in JSON format) field for saving to shared preferences.
+     * Name of filter state fields for saving to shared preferences.
      */
     public static final String FILTERS_STATE = "Filters state";
+
+    /**
+     * Name of filter state set for saving to shared preferences.
+     */
+    public static final String FILTERS_STATE_SET = "Filters state set";
 
 }

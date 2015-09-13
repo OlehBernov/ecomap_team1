@@ -228,6 +228,7 @@ public class MainActivity extends AppCompatActivity {
      * @param item menu item which was clicked
      */
     public void openSearch(MenuItem item) {
+  //      filterFragment.saveState(this);
         Intent intent = new Intent(this, SearchActivity.class);
         startActivity(intent);
         menuDrawer.closeDrawers();

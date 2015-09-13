@@ -6,13 +6,18 @@ import android.util.Log;
 
 import com.ecomap.ukraine.util.ExtraFieldNames;
 
-import org.json.JSONException;
-
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashSet;
+import java.util.Locale;
 import java.util.Set;
 
 
 public class FilterManager implements FilterListenersNotifier {
+
+    private static final String DATE_TEMPLATE = "dd-MM-yyyy";
 
     /**
      * Holds the Singleton global instance of FilterManager.
@@ -101,22 +106,33 @@ public class FilterManager implements FilterListenersNotifier {
     }
 
     /**
+     * Returns the latest saved FilterState.
+     *
+     * @return filter state instance.
+     */
+    public FilterState getCurrentFilterState() {
+        if (currentFilterState != null) {
+            return currentFilterState;
+        } else {
+            return getFilterStateFromPreference();
+        }
+    }
+
+    /**
      * Gets filter state form SharedPreferences
      *
      * @return filter state
      */
-    public FilterState getFilterStateFromPreference() {
+    private FilterState getFilterStateFromPreference() {
         SharedPreferences settings = context
-                                     .getSharedPreferences(ExtraFieldNames.FILTERS_STATE, Context.MODE_PRIVATE);
-        String filterStateJson = settings.getString(ExtraFieldNames.FILTERS_STATE, null);
+                .getSharedPreferences(ExtraFieldNames.FILTERS_STATE, Context.MODE_PRIVATE);
+        Set<String> filterStateSet = settings.getStringSet(ExtraFieldNames.FILTERS_STATE_SET,
+                null);
         FilterState filterState;
-        if (filterStateJson != null) {
-            try {
-                filterState = FilterStateConverter.convertToFilterState(filterStateJson);
-            } catch (JSONException e) {
-                filterState = null;
-                Log.e(TAG, "convert filter");
-            }
+        if (filterStateSet != null) {
+            filterState = new FilterState(FilterStateConverter.convertToCheckBoxesState(filterStateSet),
+                    getDateFromPreference(settings, FilterContract.DATE_FROM),
+                    getDateFromPreference(settings, FilterContract.DATE_TO));
         } else {
             filterState = null;
             Log.e(TAG, "filter null");
@@ -124,12 +140,24 @@ public class FilterManager implements FilterListenersNotifier {
         return filterState;
     }
 
-    public FilterState getCurrentFilterState() {
-        if (currentFilterState != null) {
-            return currentFilterState;
-        } else {
-            return getFilterStateFromPreference();
+    /**
+     * Gets filtration date from SharedPreferences.
+     *
+     * @param settings SharedPreferences.
+     * @param key      filtration date type ("from" or "to").
+     * @return filtration date saved to SharedPreferences.
+     */
+    private Calendar getDateFromPreference(final SharedPreferences settings, final String key) {
+        Calendar date = Calendar.getInstance();
+        SimpleDateFormat dateFormat = new SimpleDateFormat(DATE_TEMPLATE, Locale.ENGLISH);
+        String dateFromString = settings.getString(key, String.valueOf(System.currentTimeMillis()));
+        try {
+            date.setTime(dateFormat.parse(dateFromString));
+        } catch (ParseException e) {
+            date.setTime(new Date(System.currentTimeMillis()));
         }
+
+        return date;
     }
 
 }

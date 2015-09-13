@@ -1,7 +1,7 @@
 <FrameLayout
+    android:id="@+id/root_view"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/root_view"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -114,13 +114,36 @@
                                 android:layout_height="match_parent"
                                 android:layout_gravity="right">
 
-                                <com.ecomap.ukraine.ui.DetailsContent
+                                <LinearLayout
+                                    android:id="@+id/pain3"
                                     xmlns:android="http://schemas.android.com/apk/res/android"
-                                    android:id="@+id/panel_details_content"
                                     android:layout_width="match_parent"
-                                    android:layout_height="wrap_content">
+                                    android:layout_height="match_parent"
+                                    android:layout_alignParentBottom="true"
+                                    android:layout_centerHorizontal="true"
+                                    android:background="#60004d40"
+                                    android:orientation="vertical">
 
-                                </com.ecomap.ukraine.ui.DetailsContent>
+                                    <com.ecomap.ukraine.util.BasicContentLayout
+                                        android:id="@+id/basic_content_layout_details"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content">
+
+                                    </com.ecomap.ukraine.util.BasicContentLayout>
+
+                                    <LinearLayout
+                                        android:id="@+id/pain"
+                                        xmlns:android="http://schemas.android.com/apk/res/android"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="match_parent"
+                                        android:layout_alignParentBottom="true"
+                                        android:layout_centerHorizontal="true"
+                                        android:background="#60004d40"
+                                        android:orientation="vertical">
+
+                                    </LinearLayout>
+
+                                </LinearLayout>
 
                             </ScrollView>
 
@@ -136,6 +159,8 @@
                             android:id="@+id/fab2"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:layout_alignParentEnd="true"
+                            android:layout_alignParentRight="true"
                             android:layout_gravity="bottom|right"
                             android:onClick="openChooseProblemLocationActivity"
                             android:src="@drawable/ic_add_white_24dp"
@@ -143,9 +168,7 @@
                             app:backgroundTint="#ff004d40"
                             app:borderWidth="0dp"
                             app:elevation="6dp"
-                            app:pressedTranslationZ="12dp"
-                            android:layout_alignParentRight="true"
-                            android:layout_alignParentEnd="true"/>
+                            app:pressedTranslationZ="12dp"/>
 
                         <io.codetail.widget.RevealLinearLayout
                             xmlns:android="http://schemas.android.com/apk/res/android"
