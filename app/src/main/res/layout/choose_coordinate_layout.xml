@@ -18,14 +18,9 @@
         android:layout_alignParentBottom="true">
     </FrameLayout>
 
-
-    <RelativeLayout
+    <FrameLayout
     android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-    android:layout_gravity="right|bottom"
-        android:layout_marginRight="10dp"
-    android:layout_marginBottom="10dp">
-
+    android:layout_height="fill_parent">
 
         <android.support.design.widget.FloatingActionButton
             android:layout_width="wrap_content"
@@ -33,14 +28,12 @@
             android:src="@drawable/ic_action"
             android:id="@+id/confirm_button"
             android:onClick="openAddDescriptionActivity"
+            style="@style/floating_action_button"
             app:backgroundTint="#ff004d40"
             app:elevation="6dp"
             app:pressedTranslationZ="12dp"
-            android:layout_marginBottom="70dp"
-            android:layout_marginRight="5dp"
-            android:layout_alignParentBottom="true"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentEnd="true"/>
+            android:layout_marginBottom="69dp"
+            android:layout_gravity="bottom|end"/>
 
         <android.support.design.widget.FloatingActionButton
             android:layout_width="wrap_content"
@@ -48,30 +41,24 @@
             android:src="@drawable/ic_clear_white_24dp"
             android:id="@+id/cancel_button"
             android:onClick="cancelButton"
+            style="@style/floating_action_button"
             app:backgroundTint="#ff004d40"
             app:elevation="6dp"
             app:pressedTranslationZ="12dp"
-            android:layout_alignParentBottom="true"
-            android:layout_alignLeft="@+id/confirm_button"
-            android:layout_alignStart="@+id/confirm_button" />
-
-
+            android:layout_gravity="bottom|end"/>
 
         <android.support.design.widget.FloatingActionButton
             android:id="@+id/position_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@drawable/ic_gps_fixed_black_24dp"
+            style="@style/floating_action_button"
             app:backgroundTint="#FFFFFFFF"
             app:elevation="6dp"
             app:pressedTranslationZ="12dp"
             android:layout_marginTop="70dp"
-            android:layout_gravity="top"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentEnd="true"/>
+            android:layout_gravity="top|end"/>
 
-    </RelativeLayout>
-
-
+    </FrameLayout>
 
 </RelativeLayout>
