@@ -2,6 +2,7 @@ package com.ecomap.ukraine.problemupdate;
 
 
 import android.content.Context;
+import android.os.AsyncTask;
 import android.util.Log;
 
 import com.android.volley.Request;
@@ -10,9 +11,12 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.ecomap.ukraine.models.AllTop10Items;
 import com.ecomap.ukraine.models.Details;
+import com.ecomap.ukraine.models.Problem;
 import com.ecomap.ukraine.problemupdate.manager.ProblemRequestReceiver;
 
 import org.json.JSONException;
+
+import java.util.List;
 
 /**
  * Performs loading data from server.
@@ -65,8 +69,13 @@ public class LoadingClient {
                     @Override
                     public void onResponse(String response) {
                         try {
-                            problemRequestReceiver.setAllProblemsRequestResult(
-                                    JSONParser.parseBriefProblems(response));
+//                            problemRequestReceiver.setAllProblemsRequestResult(
+//                                    JSONParser.parseBriefProblems(response));
+//                            new AsyncTask<Void, Void, Void>() {
+//
+//                            }.execute();
+                            List<Problem> temp = JSONParser.parseBriefProblems(response);
+                            problemRequestReceiver.setAllProblemsRequestResult(temp);
                         } catch (JSONException e) {
                             Log.e(TAG, "JSONException in LoadingClient");
                             problemRequestReceiver.setAllProblemsRequestResult(null);

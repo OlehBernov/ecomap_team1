@@ -24,11 +24,9 @@ import com.ecomap.ukraine.problemupdate.manager.ProblemListener;
 import com.ecomap.ukraine.ui.adapters.ProblemAdapter;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
-/**
- * Created by Oleh on 8/31/2015.
- */
 public class SearchActivity extends AppCompatActivity
         implements SearchView.OnQueryTextListener, ProblemListener {
 
@@ -87,6 +85,7 @@ public class SearchActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search);
         setUpToolbar();
+        setUpRecyclerView();
         requestProblemsList();
     }
 
@@ -127,6 +126,8 @@ public class SearchActivity extends AppCompatActivity
     }
 
     private void setUpRecyclerView() {
+        problems = new LinkedList<>();
+        unfilteredProblems = new LinkedList<>();
         recyclerView = (RecyclerView) findViewById(R.id.my_recycler_view);
         recyclerView.setHasFixedSize(true);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
@@ -139,7 +140,10 @@ public class SearchActivity extends AppCompatActivity
     private void showProblemList() {
         FilterState filterState = filterManager.getCurrentFilterState();
         problems = new Filter().filterProblem(unfilteredProblems, filterState);
-        setUpRecyclerView();
+        adapter = new ProblemAdapter(problems, this);
+        recyclerView.setAdapter(adapter);
+        View view = findViewById(R.id.progress_view);
+        view.setVisibility(View.GONE);
     }
 
 }

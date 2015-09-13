@@ -63,8 +63,6 @@
         <item name="android:textColor">@color/primary_text</item>
         <item name="android:textColorPrimary">@color/white</item>
 
-
-
     </style>
 
 </resources>

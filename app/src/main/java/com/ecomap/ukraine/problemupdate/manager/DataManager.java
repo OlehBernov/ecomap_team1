@@ -3,6 +3,8 @@ package com.ecomap.ukraine.problemupdate.manager;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
+import android.os.Handler;
+import android.os.Looper;
 import android.preference.PreferenceManager;
 
 import com.ecomap.ukraine.R;
