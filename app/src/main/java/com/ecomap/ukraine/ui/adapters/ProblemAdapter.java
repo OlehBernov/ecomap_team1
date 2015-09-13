@@ -37,7 +37,7 @@ public class ProblemAdapter extends RecyclerView.Adapter<ProblemAdapter.ViewHold
             view.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-//                    searchActivity.showProblemInformation(problem);
+                    searchActivity.showProblemInformation(problem);
                 }
             });
         }
