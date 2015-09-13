@@ -61,9 +61,6 @@ public class DetailsContent {
         if (details == null) {
             setErrorScreen();
             return;
-        } else {
-            basicContentLayout.removeBlock(errorView);
-            errorView = null;
         }
 
         headerBlock.setHeaderDetailInfo(details);
