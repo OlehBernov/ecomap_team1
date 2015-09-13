@@ -138,9 +138,18 @@ public class DataManager implements ProblemListenersNotifier,
     @Override
     public void setAllProblemsRequestResult(final List<Problem> problems) {
         if (problems != null) {
-            dbHelper.updateAllProblems(problems);
-            saveUpdateTime(TIME);
-            getAllProblems();
+            new AsyncTask<Void, Void, Void>() {
+                @Override
+                protected Void doInBackground(Void... params) {
+                    dbHelper.updateAllProblems(problems);
+                    saveUpdateTime(TIME);
+                    return null;
+                }
+                @Override
+                protected void onPostExecute(Void aVoid) {
+                    getAllProblems();
+                }
+            }.execute();
         } else {
             sendAllProblems(dbHelper.getAllProblems());
         }

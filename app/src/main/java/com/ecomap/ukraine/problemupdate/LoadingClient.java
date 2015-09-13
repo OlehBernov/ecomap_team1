@@ -67,19 +67,23 @@ public class LoadingClient {
         StringRequest stringRequest = new StringRequest(Request.Method.GET, ALL_PROBLEMS_URL,
                 new Response.Listener<String>() {
                     @Override
-                    public void onResponse(String response) {
-                        try {
-//                            problemRequestReceiver.setAllProblemsRequestResult(
-//                                    JSONParser.parseBriefProblems(response));
-//                            new AsyncTask<Void, Void, Void>() {
-//
-//                            }.execute();
-                            List<Problem> temp = JSONParser.parseBriefProblems(response);
-                            problemRequestReceiver.setAllProblemsRequestResult(temp);
-                        } catch (JSONException e) {
-                            Log.e(TAG, "JSONException in LoadingClient");
-                            problemRequestReceiver.setAllProblemsRequestResult(null);
-                        }
+                    public void onResponse(final String response) {
+                        new AsyncTask<Void, Void, List<Problem>>() {
+                            @Override
+                            protected List<Problem> doInBackground(Void... params) {
+                                List<Problem> temp = null;
+                                try {
+                                     temp = JSONParser.parseBriefProblems(response);
+                                } catch (JSONException e) {
+                                    Log.e(TAG, "JSONException in LoadingClient");
+                                }
+                                return temp;
+                            }
+                            @Override
+                            protected void onPostExecute(List<Problem> result) {
+                                problemRequestReceiver.setAllProblemsRequestResult(result);
+                            }
+                        }.execute();
                     }
                 }, new Response.ErrorListener() {
             @Override
