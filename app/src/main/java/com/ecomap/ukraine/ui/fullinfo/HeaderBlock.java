@@ -1,4 +1,4 @@
-package com.ecomap.ukraine.util;
+package com.ecomap.ukraine.ui.fullinfo;
 
 import android.content.Context;
 import android.graphics.Color;

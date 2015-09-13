@@ -1,4 +1,4 @@
-package com.ecomap.ukraine.util;
+package com.ecomap.ukraine.ui.fullinfo;
 
 import android.content.Context;
 import android.content.Intent;
@@ -15,6 +15,8 @@ import com.ecomap.ukraine.R;
 import com.ecomap.ukraine.models.Details;
 import com.ecomap.ukraine.models.Photo;
 import com.ecomap.ukraine.ui.fragments.ProblemPhotoSlidePager;
+import com.ecomap.ukraine.util.BasicContentLayout;
+import com.ecomap.ukraine.util.BitmapResizer;
 import com.ms.square.android.expandabletextview.ExpandableTextView;
 
 import java.util.List;

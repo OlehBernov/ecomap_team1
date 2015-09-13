@@ -1,4 +1,4 @@
-package com.ecomap.ukraine.util;
+package com.ecomap.ukraine.ui.fullinfo;
 
 import android.content.Context;
 import android.util.AttributeSet;
@@ -10,12 +10,10 @@ import android.widget.Toast;
 
 import com.ecomap.ukraine.R;
 import com.ecomap.ukraine.authentication.manager.AccountManager;
-import com.ecomap.ukraine.models.Details;
 import com.ecomap.ukraine.models.User;
 import com.ecomap.ukraine.problemdetails.manager.DetailsListener;
 import com.ecomap.ukraine.problemdetails.manager.DetailsManager;
 import com.ecomap.ukraine.problemupdate.manager.DataManager;
-import com.ms.square.android.expandabletextview.ExpandableTextView;
 
 /**
  * Created by Alexander on 12.09.2015.

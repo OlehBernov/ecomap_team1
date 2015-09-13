@@ -1,4 +1,4 @@
-package com.ecomap.ukraine.util;
+package com.ecomap.ukraine.ui.fullinfo;
 
 
 import android.content.Context;
@@ -10,6 +10,7 @@ import com.ecomap.ukraine.R;
 import com.ecomap.ukraine.models.Details;
 import com.ecomap.ukraine.models.Photo;
 import com.ecomap.ukraine.models.Problem;
+import com.ecomap.ukraine.util.BasicContentLayout;
 
 import java.util.List;
 

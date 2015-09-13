@@ -27,7 +27,7 @@ import com.ecomap.ukraine.models.Problem;
 import com.ecomap.ukraine.problemupdate.manager.DataManager;
 import com.ecomap.ukraine.ui.activities.ChooseProblemLocationActivity;
 import com.ecomap.ukraine.ui.activities.MainActivity;
-import com.ecomap.ukraine.util.DetailsContentContent;
+import com.ecomap.ukraine.ui.fullinfo.DetailsContentContent;
 import com.ecomap.ukraine.util.Keyboard;
 import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 

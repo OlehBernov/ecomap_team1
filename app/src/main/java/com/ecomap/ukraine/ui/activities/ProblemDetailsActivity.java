@@ -15,7 +15,7 @@ import com.ecomap.ukraine.models.Problem;
 import com.ecomap.ukraine.problemupdate.manager.DataManager;
 import com.ecomap.ukraine.problemupdate.manager.ProblemListener;
 import com.ecomap.ukraine.util.BasicContentLayout;
-import com.ecomap.ukraine.util.DetailsContentContent;
+import com.ecomap.ukraine.ui.fullinfo.DetailsContentContent;
 
 import java.util.List;
 
