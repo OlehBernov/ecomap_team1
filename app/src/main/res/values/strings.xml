@@ -145,6 +145,6 @@
     </string-array>
 
     <string name="title_activity_problem_details_screen">ProblemDetailsScreen</string>
-    <string name="title_activity_problem_details">ProblemDetailsActivity</string>
+    <string name="title_activity_problem_details">Problem Details</string>
 
 </resources>
