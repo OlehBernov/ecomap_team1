@@ -61,10 +61,6 @@ public class DetailsContent {
         if (details == null) {
             setErrorScreen();
             return;
-        } else {
-            basicContentLayout.removeBlock(errorView);
-            //TODO: how to find out is view exist inside another view or not? delete assignment
-            errorView = null;
         }
 
         headerBlock.setHeaderDetailInfo(details);

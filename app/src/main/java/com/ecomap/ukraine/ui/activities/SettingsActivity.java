@@ -16,11 +16,6 @@ import com.ecomap.ukraine.ui.fragments.SettingsFragment;
 public class SettingsActivity extends AppCompatActivity {
 
     /**
-     * Title of the SettingsActivity.
-     */
-    private static final String SETTINGS = "SettingsActivity";
-
-    /**
      * Called when the activity has detected the user's press of the back key.
      */
     @Override
@@ -50,7 +45,6 @@ public class SettingsActivity extends AppCompatActivity {
      */
     private void setupToolbar() {
         Toolbar toolbar = (Toolbar) findViewById(R.id.tool_bar);
-        toolbar.setTitle(SETTINGS);
         toolbar.setNavigationIcon(R.drawable.ic_arrow_back_white_24dp);
         toolbar.setClickable(true);
 

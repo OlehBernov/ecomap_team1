@@ -14,8 +14,8 @@ import com.ecomap.ukraine.models.Details;
 import com.ecomap.ukraine.models.Problem;
 import com.ecomap.ukraine.problemupdate.manager.DataManager;
 import com.ecomap.ukraine.problemupdate.manager.ProblemListener;
-import com.ecomap.ukraine.util.BasicContentLayout;
 import com.ecomap.ukraine.ui.fullinfo.DetailsContent;
+import com.ecomap.ukraine.util.BasicContentLayout;
 
 import java.util.List;
 
@@ -23,8 +23,6 @@ import java.util.List;
  * Activity which displays problem details after click on recycle view element.
  */
 public class ProblemDetailsActivity extends AppCompatActivity implements ProblemListener {
-
-    private static final String PROBLEM_DETAILS_TITLE = "Problem Details";
 
     private DetailsContent detailsContent;
     private Problem problem;
@@ -110,7 +108,6 @@ public class ProblemDetailsActivity extends AppCompatActivity implements Problem
     private void setUpToolbar() {
         Toolbar toolbar = (Toolbar) findViewById(R.id.problem_details_toolbar);
         setSupportActionBar(toolbar);
-        toolbar.setTitle(PROBLEM_DETAILS_TITLE);
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

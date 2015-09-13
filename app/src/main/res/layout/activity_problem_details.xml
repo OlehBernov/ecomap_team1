@@ -30,6 +30,7 @@
 
             <com.ecomap.ukraine.util.BasicContentLayout
                 android:id="@+id/basic_content_layout_search_details"
+                android:background="#fafafa"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"/>
 

@@ -26,6 +26,7 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TableLayout;
 import android.widget.TableRow;
+import android.widget.Toast;
 
 import com.ecomap.ukraine.R;
 import com.ecomap.ukraine.ui.SlidingTabLayout;
@@ -50,6 +51,7 @@ public class AddNewProblemDecriptionActivity extends AppCompatActivity {
     private static final int GALLERY_PHOTO = 2;
     private static final int ADD_PHOTO_ITEM = 1;
     private static final int NUMBER_OF_TUBS = 2;
+    private static final int PHOTO_LIMIT = 3;
 
     private static final String DATE_TEMPLATE = "MMdd_HHmmss";
     private static final String PHOTO_FORMAT = ".jpg";
@@ -59,6 +61,7 @@ public class AddNewProblemDecriptionActivity extends AppCompatActivity {
     private static final String CAMERA_URI = "Camera Uri";
     private static final String USER_PHOTOS = "Number of photos";
     private static final String DESCRIPTION = "Description";
+    private static final String PHOTO_LIMIT_EXCEEDED_MESSAGE = "You have reached the photo limit";
     protected final String TAG = getClass().getSimpleName();
     private Uri currentPhotoUri;
     private List<Uri> userPhotos;
@@ -98,6 +101,11 @@ public class AddNewProblemDecriptionActivity extends AppCompatActivity {
      * @param view button, which related to this action.
      */
     public void getPhotoFromCamera(View view) {
+        if (isPhotoLimitExceeded()) {
+            Toast.makeText(this, PHOTO_LIMIT_EXCEEDED_MESSAGE, Toast.LENGTH_SHORT).show();
+            return;
+        }
+
         Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
             File photoFile = null;
@@ -121,51 +129,14 @@ public class AddNewProblemDecriptionActivity extends AppCompatActivity {
      * @param view button, which related to this action.
      */
     public void getPhotoFromGallery(View view) {
+        if (isPhotoLimitExceeded()) {
+            Toast.makeText(this, PHOTO_LIMIT_EXCEEDED_MESSAGE, Toast.LENGTH_SHORT).show();
+            return;
+        }
+
         Intent galleryIntent = new Intent(
                 Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
         startActivityForResult(galleryIntent, GALLERY_PHOTO);
-    }
-
-    /**
-     * Inflate the menu, this adds items to the action bar if it is present.
-     *
-     * @param menu activity menu
-     * @return result of action
-     */
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_add_problem, menu);
-        return true;
-    }
-
-    /**
-     * Called when the user selects an item from the options menu
-     *
-     * @param item menu item
-     * @return result of action
-     */
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
-
-        if (id == R.id.action_confirm_problem) {
-            AddProblemDescriptionFragment.getInstance(getBitmapsPhoto(), descriptions)
-                    .postProblemValidation(this);
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
-
-    /**
-     * Called when the activity has detected the user's press of the back key.
-     */
-    @Override
-    public void onBackPressed() {
-        super.onBackPressed();
-        Intent mainIntent = new Intent(this, ChooseProblemLocationActivity.class);
-        startActivity(mainIntent);
-        finish();
     }
 
     /**
@@ -228,6 +199,37 @@ public class AddNewProblemDecriptionActivity extends AppCompatActivity {
     }
 
     /**
+     * Inflate the menu, this adds items to the action bar if it is present.
+     *
+     * @param menu activity menu
+     * @return result of action
+     */
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_add_problem, menu);
+        return true;
+    }
+
+    /**
+     * Called when the user selects an item from the options menu
+     *
+     * @param item menu item
+     * @return result of action
+     */
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+
+        if (id == R.id.action_confirm_problem) {
+            AddProblemDescriptionFragment.getInstance(getBitmapsPhoto(), descriptions)
+                    .postProblemValidation(this);
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
+    /**
      * Called when an activity you launched exits.
      *
      * @param requestCode The integer request code originally supplied to startActivityForResult().
@@ -242,6 +244,17 @@ public class AddNewProblemDecriptionActivity extends AppCompatActivity {
         } else if (isCameraPhoto(requestCode, resultCode)) {
             processCameraPhoto();
         }
+    }
+
+    /**
+     * Called when the activity has detected the user's press of the back key.
+     */
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        Intent mainIntent = new Intent(this, ChooseProblemLocationActivity.class);
+        startActivity(mainIntent);
+        finish();
     }
 
     /**
@@ -265,6 +278,15 @@ public class AddNewProblemDecriptionActivity extends AppCompatActivity {
         if (descriptions != null) {
             outState.putStringArrayList(DESCRIPTION, new ArrayList<>(descriptions));
         }
+    }
+
+    /**
+     * Checks if user photo for adding limit exceeded.
+     *
+     * @return whether user photo limit exceeded.
+     */
+    private boolean isPhotoLimitExceeded() {
+        return (userPhotos != null) && (userPhotos.size() >= PHOTO_LIMIT);
     }
 
     /**
@@ -393,6 +415,7 @@ public class AddNewProblemDecriptionActivity extends AppCompatActivity {
             activityRow.addView(buildPhotoDescription(i));
             photoDescriptionLayout.addView(activityRow);
         }
+
     }
 
     /**

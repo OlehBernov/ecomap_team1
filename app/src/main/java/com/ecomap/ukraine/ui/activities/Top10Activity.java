@@ -40,7 +40,6 @@ public class Top10Activity extends AppCompatActivity implements ProblemListener 
     SlidingTabLayout tabs;
     String[] titles;
 
-
     /**
      * Initialize activity
      *
@@ -73,7 +72,6 @@ public class Top10Activity extends AppCompatActivity implements ProblemListener 
             @Override
             public int getIndicatorColor(int position) {
                 return getResources().getColor(R.color.white);
-
             }
         });
         tabs.setViewPager(pager);
