@@ -28,7 +28,7 @@ import com.ecomap.ukraine.models.Details;
 import com.ecomap.ukraine.models.Problem;
 import com.ecomap.ukraine.map.MapType;
 import com.ecomap.ukraine.util.BasicContentLayout;
-import com.ecomap.ukraine.ui.fullinfo.DetailsContentContent;
+import com.ecomap.ukraine.ui.fullinfo.DetailsContent;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -75,7 +75,7 @@ public class FragmentEcoMap extends android.support.v4.app.Fragment
     private FilterManager filterManager;
     BasicContentLayout basicContentLayout;
   //  private BasicContentLayout detailsContent;
-    private DetailsContentContent detailsContentContent;
+    private DetailsContent detailsContent;
     private int mapType;
 
     public FragmentEcoMap() {
@@ -237,9 +237,9 @@ public class FragmentEcoMap extends android.support.v4.app.Fragment
      */
     @Override
     public void updateProblemDetails(final Details details) {
-        if (detailsContentContent != null) {
-            detailsContentContent.prepareToRefresh();
-            detailsContentContent.setProblemDetails(details);
+        if (detailsContent != null) {
+            detailsContent.prepareToRefresh();
+            detailsContent.setProblemDetails(details);
         }
     }
 
@@ -253,8 +253,8 @@ public class FragmentEcoMap extends android.support.v4.app.Fragment
     public boolean onClusterItemClick(final Problem problem) {
         if (!((MainActivity) getActivity()).problemAddingMenu) {
             basicContentLayout.setCrutch((LinearLayout) getActivity().findViewById(R.id.pain));
-            detailsContentContent = new DetailsContentContent(basicContentLayout, getActivity());
-            new DetailsController(getActivity(), problem, detailsContentContent);
+            detailsContent = new DetailsContent(basicContentLayout, getActivity());
+            new DetailsController(getActivity(), problem, detailsContent);
             dataManager.getProblemDetail(problem.getProblemId());
             moveCameraToProblem(problem);
             return true;

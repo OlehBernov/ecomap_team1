@@ -12,17 +12,18 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.bitmap_recycle.BitmapPool;
 import com.bumptech.glide.load.resource.bitmap.BitmapTransformation;
 import com.ecomap.ukraine.R;
-import com.ecomap.ukraine.models.Details;
 import com.ecomap.ukraine.models.Photo;
 import com.ecomap.ukraine.ui.fragments.ProblemPhotoSlidePager;
 import com.ecomap.ukraine.util.BasicContentLayout;
 import com.ecomap.ukraine.util.BitmapResizer;
-import com.ms.square.android.expandabletextview.ExpandableTextView;
 
 import java.util.List;
 
-
-public class PhotoBlock extends LinearLayout  {
+/**
+ * Block for full problem information layout which contains photos relevant to the
+ * problem.
+ */
+public class PhotoBlock extends LinearLayout {
 
     private static final String TRANSFORMATION = "transformation";
     private static final String POSITION = "position";
@@ -43,6 +44,10 @@ public class PhotoBlock extends LinearLayout  {
         init(context);
     }
 
+    /**
+     * Sets list of photos to relevant view on layout.
+     * @param photos list of photos which relevant to the problem.
+     */
     public void setPhotos(final List<Photo> photos) {
         BasicContentLayout photoPreview = (BasicContentLayout) findViewById(R.id.basic_content_layout_photo);
         int position = 0;
@@ -64,7 +69,7 @@ public class PhotoBlock extends LinearLayout  {
      * Opens full photos preview.
      *
      * @param position position of selected photo on small photo preview panel.
-     * @param photos list of all photos, which related to the problem.
+     * @param photos   list of all photos, which related to the problem.
      */
     private void openPhotoSlidePager(final int position, final List<Photo> photos) {
         ProblemPhotoSlidePager.setContent(photos);
@@ -77,11 +82,11 @@ public class PhotoBlock extends LinearLayout  {
     /**
      * Performs photo loading to photo preview panel.
      *
-     * @param photo photo which related to the problem.
+     * @param photo     photo which related to the problem.
      * @param photoView view which will contain the photo.
      */
     private void loadPhotoToView(final Photo photo, final ImageView photoView) {
-        BitmapTransformation transformation = new  BitmapTransformation(context) {
+        BitmapTransformation transformation = new BitmapTransformation(context) {
             @Override
             public Bitmap transform(BitmapPool pool, Bitmap source,
                                     int outWidth, int outHeight) {

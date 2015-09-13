@@ -14,7 +14,7 @@
         android:layout_height="wrap_content"
         android:paddingLeft="10dp"
         android:paddingRight="10dp"
-        android:paddingTop="5dp"
+        android:paddingTop="15dp"
         android:text="Description: "
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:textColor="@color/abc_primary_text_disable_only_material_light"

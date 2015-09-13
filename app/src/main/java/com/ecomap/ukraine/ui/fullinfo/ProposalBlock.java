@@ -9,6 +9,10 @@ import com.ecomap.ukraine.models.Details;
 import com.ms.square.android.expandabletextview.ExpandableTextView;
 
 
+/**
+ * Block for full problem information layout which contains information about
+ * proposal to solve the problem.
+ */
 public class ProposalBlock extends LinearLayout {
 
     public ProposalBlock(Context context) {
@@ -24,6 +28,11 @@ public class ProposalBlock extends LinearLayout {
         init(context);
     }
 
+    /**
+     * Sets proposal text to relevant TextView.
+     *
+     * @param details problem details.
+     */
     public void setProposal(Details details) {
         ExpandableTextView proposalFiled = (ExpandableTextView) findViewById(R.id.proposal_field);
         proposalFiled.setText(details.getProposal());

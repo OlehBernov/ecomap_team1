@@ -16,7 +16,7 @@ import com.ecomap.ukraine.problemdetails.manager.DetailsManager;
 import com.ecomap.ukraine.problemupdate.manager.DataManager;
 
 /**
- * Created by Alexander on 12.09.2015.
+ * Block for posting comments.
  */
 public class CommentBlock extends LinearLayout implements DetailsListener {
 
@@ -38,6 +38,11 @@ public class CommentBlock extends LinearLayout implements DetailsListener {
         init(context);
     }
 
+    /**
+     * Sets problem id.
+     *
+     * @param problemId problem id.
+     */
     public void setProblemId(int problemId) {
         this.problemId = problemId;
     }
@@ -47,6 +52,9 @@ public class CommentBlock extends LinearLayout implements DetailsListener {
 
     }
 
+    /**
+     * Performs when comment was successfully sent to server.
+     */
     @Override
     public void onCommentAdded() {
         DataManager.getInstance(context).refreshProblemDetails(problemId);

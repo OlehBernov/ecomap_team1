@@ -4,7 +4,6 @@ package com.ecomap.ukraine.ui.fullinfo;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 
 import com.ecomap.ukraine.R;
 import com.ecomap.ukraine.models.Details;
@@ -14,7 +13,11 @@ import com.ecomap.ukraine.util.BasicContentLayout;
 
 import java.util.List;
 
-public class DetailsContentContent {
+/**
+ * Builds and sets required blocks to the basic layout for describing
+ * basic information about problem.
+ */
+public class DetailsContent {
 
     private Context context;
     private BasicContentLayout basicContentLayout;
@@ -24,14 +27,19 @@ public class DetailsContentContent {
     private HeaderBlock headerBlock;
     private Problem problem;
 
-    public DetailsContentContent(BasicContentLayout basicContentLayout, Context context) {
+    public DetailsContent(BasicContentLayout basicContentLayout, Context context) {
         this.basicContentLayout = basicContentLayout;
         this.context = context;
-
-        clear();
+        clearLayout();
         layoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
 
+    /**
+     * Builds and sets required blocks to the basic layout for describing basic problem
+     * information.
+     *
+     * @param problem problem.
+     */
     public void setBaseInfo(Problem problem) {
         this.problem = problem;
 
@@ -42,6 +50,11 @@ public class DetailsContentContent {
         setDetailsLoadingScreen();
     }
 
+    /**
+     * Builds and sets required blocks to the basic layout for describing problem details.
+     *
+     * @param details problem details.
+     */
     public void setProblemDetails(Details details) {
         basicContentLayout.removeBlock(loadingView);
 
@@ -80,29 +93,21 @@ public class DetailsContentContent {
         basicContentLayout.addVerticalBlock(activitiesBlock);
     }
 
+    /**
+     * Prepare view to refresh problem details.
+     */
     public void prepareToRefresh() {
-        clear();
+        clearLayout();
         setBaseInfo(problem);
     }
 
-    private void clear() {
+    /**
+     * Delete all blocks in layout.
+     */
+    private void clearLayout() {
         if (basicContentLayout.getNumberOfBlocks() > 0) {
             basicContentLayout.removeAllBlocks();
         }
-
-        if (isViewHaveChild(basicContentLayout)) {
-            basicContentLayout.removeAllViews();
-        }
-    }
-
-    /**
-     * Checks is view have children.
-     *
-     * @param view view, which need to check.
-     * @return whether the view have children.
-     */
-    private boolean isViewHaveChild(final ViewGroup view) {
-        return (view != null) && (view.getChildCount() > 0);
     }
 
     /**

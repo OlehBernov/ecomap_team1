@@ -27,7 +27,7 @@ import com.ecomap.ukraine.models.Problem;
 import com.ecomap.ukraine.problemupdate.manager.DataManager;
 import com.ecomap.ukraine.ui.activities.ChooseProblemLocationActivity;
 import com.ecomap.ukraine.ui.activities.MainActivity;
-import com.ecomap.ukraine.ui.fullinfo.DetailsContentContent;
+import com.ecomap.ukraine.ui.fullinfo.DetailsContent;
 import com.ecomap.ukraine.util.Keyboard;
 import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 
@@ -50,19 +50,19 @@ public class DetailsController {
     private TextView titleView;
     private boolean isKeyboardShown;
 
-    private DetailsContentContent detailsContentContent;
+    private DetailsContent detailsContent;
     private Problem problem;
 
     private int fabState;
     private float currentOffset;
     private boolean isScrollDisable;
 
-    public DetailsController(Activity activity, Problem problem, DetailsContentContent detailsContentContent) {
+    public DetailsController(Activity activity, Problem problem, DetailsContent detailsContent) {
         this.activity = activity;
-        this.detailsContentContent = detailsContentContent;
+        this.detailsContent = detailsContent;
         this.problem = problem;
 
-        detailsContentContent.setBaseInfo(problem);
+        detailsContent.setBaseInfo(problem);
 
         slidingUpPanelLayout = (SlidingUpPanelLayout) activity.findViewById(R.id.sliding_layout);
         toolbar = (Toolbar) activity.findViewById(R.id.toolbar);

@@ -12,17 +12,14 @@ import android.widget.TableRow;
 import android.widget.TextView;
 
 import com.ecomap.ukraine.R;
-import com.ecomap.ukraine.authentication.manager.AccountManager;
 import com.ecomap.ukraine.models.ActivityType;
 import com.ecomap.ukraine.models.Details;
 import com.ecomap.ukraine.models.ProblemActivity;
-import com.ecomap.ukraine.models.User;
-import com.ms.square.android.expandabletextview.ExpandableTextView;
 
 import java.util.List;
 
 /**
- * Created by Alexander on 12.09.2015.
+ * Block for problem activities (comments, likes, ect.).
  */
 public class ActivitiesBlock extends LinearLayout {
 
@@ -44,14 +41,6 @@ public class ActivitiesBlock extends LinearLayout {
     }
 
     /**
-     * Initiates the view.
-     */
-    private void init() {
-        inflate(context, R.layout.problem_activities, this);
-        activitiesLayout = (TableLayout) findViewById(R.id.activities);
-    }
-
-    /**
      * Puts activities information on DetailContent view.
      *
      * @param details problem details instance.
@@ -69,6 +58,14 @@ public class ActivitiesBlock extends LinearLayout {
             activityRow.addView(buildActivityMessage(problemActivities.get(i)));
             activitiesLayout.addView(activityRow);
         }
+    }
+
+    /**
+     * Initiates the view.
+     */
+    private void init() {
+        inflate(context, R.layout.problem_activities, this);
+        activitiesLayout = (TableLayout) findViewById(R.id.activities);
     }
 
     /**

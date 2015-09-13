@@ -8,7 +8,10 @@ import com.ecomap.ukraine.R;
 import com.ecomap.ukraine.models.Details;
 import com.ms.square.android.expandabletextview.ExpandableTextView;
 
-
+/**
+ * Block for full problem information layout which contains information about
+ * problem description.
+ */
 public class DescriptionBlock extends LinearLayout {
 
     public DescriptionBlock(Context context) {
@@ -24,6 +27,11 @@ public class DescriptionBlock extends LinearLayout {
         init(context);
     }
 
+    /**
+     * Sets description text to relevant TextView.
+     *
+     * @param details problem details.
+     */
     public void setDescription(Details details) {
         ExpandableTextView descriptionFiled = (ExpandableTextView) findViewById(R.id.description_field);
         descriptionFiled.setText(details.getContent());

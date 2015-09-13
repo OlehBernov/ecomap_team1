@@ -1,11 +1,13 @@
 package com.ecomap.ukraine.ui.activities;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.LinearLayout;
 
 import com.ecomap.ukraine.R;
@@ -15,7 +17,7 @@ import com.ecomap.ukraine.models.Problem;
 import com.ecomap.ukraine.problemupdate.manager.DataManager;
 import com.ecomap.ukraine.problemupdate.manager.ProblemListener;
 import com.ecomap.ukraine.util.BasicContentLayout;
-import com.ecomap.ukraine.ui.fullinfo.DetailsContentContent;
+import com.ecomap.ukraine.ui.fullinfo.DetailsContent;
 
 import java.util.List;
 
@@ -26,7 +28,7 @@ public class ProblemDetailsActivity extends AppCompatActivity implements Problem
 
     private static final String PROBLEM_DETAILS_TITLE = "Problem Details";
 
-    private DetailsContentContent detailsContentContent;
+    private DetailsContent detailsContent;
     private Problem problem;
 
     @Override
@@ -40,8 +42,8 @@ public class ProblemDetailsActivity extends AppCompatActivity implements Problem
      */
     @Override
     public void updateProblemDetails(Details details) {
-        detailsContentContent.prepareToRefresh();
-        detailsContentContent.setProblemDetails(details);
+        detailsContent.prepareToRefresh();
+        detailsContent.setProblemDetails(details);
     }
 
     @Override
@@ -87,8 +89,8 @@ public class ProblemDetailsActivity extends AppCompatActivity implements Problem
         BasicContentLayout basicContentLayout;
         basicContentLayout = (BasicContentLayout) findViewById(R.id.basic_content_layout_search_details);
         basicContentLayout.setCrutch((LinearLayout) findViewById(R.id.pain2));
-        detailsContentContent = new DetailsContentContent(basicContentLayout, this);
-        detailsContentContent.setBaseInfo(problem);
+        detailsContent = new DetailsContent(basicContentLayout, this);
+        detailsContent.setBaseInfo(problem);
 
         DataManager dataManager = DataManager.getInstance(this);
         dataManager.registerProblemListener(this);

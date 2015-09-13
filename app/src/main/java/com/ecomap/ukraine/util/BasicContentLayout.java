@@ -6,7 +6,10 @@ import android.view.View;
 import android.view.ViewTreeObserver;
 import android.widget.LinearLayout;
 
-
+/**
+ * Layout for full problem information which allows easy to add new blocks or
+ * swap existing blocks.
+ */
 public class BasicContentLayout extends LinearLayout {
 
     private static final int DEFAULT_TOP_MARGIN = 0;
@@ -27,33 +30,60 @@ public class BasicContentLayout extends LinearLayout {
 
     public BasicContentLayout(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-        init();
-
+        setViewTreeObserver();
     }
 
     //TODO: need to solve the problem
-    public void setCrutch(LinearLayout pain) {
+    public void setCrutch(final LinearLayout pain) {
         root = pain;
     }
 
+    /**
+     * Adds vertical block to the bottom of the layout.
+     *
+     * @param newView new block.
+     */
     public void addVerticalBlock(final View newView) {
         addVerticalBlock(newView, numberOfBlocks);
     }
 
+    /**
+     * Adds vertical block to the concrete position of the layout.
+     *
+     * @param newView  new block.
+     * @param position new block position.
+     */
     public void addVerticalBlock(final View newView, final int position) {
         root.addView(newView, position, getVerticalLayoutParams(DEFAULT_TOP_MARGIN));
         numberOfBlocks++;
     }
 
+    /**
+     * Adds horizontal block to the bottom of the layout.
+     *
+     * @param newView new block.
+     */
     public void addHorizontalBlock(final View newView) {
         addHorizontalBlock(newView, DEFAULT_LEFT_MARGIN);
     }
 
-    public void addHorizontalBlock(final View view, final int margin) {
-        addView(view, numberOfBlocks, getHorizontalLayoutParams(margin));
+    /**
+     * Adds horizontal block to the bottom of the layout and sets the concrete margin to the
+     * top of this block.
+     *
+     * @param newView new block.
+     * @param margin  new block margin.
+     */
+    public void addHorizontalBlock(final View newView, final int margin) {
+        addView(newView, numberOfBlocks, getHorizontalLayoutParams(margin));
         numberOfBlocks++;
     }
 
+    /**
+     * Removes block from the layout.
+     *
+     * @param block block which will removed.
+     */
     public void removeBlock(View block) {
         if (block != null) {
             root.removeView(block);
@@ -61,19 +91,26 @@ public class BasicContentLayout extends LinearLayout {
         }
     }
 
+    /**
+     * Removes all blocks from the layout.
+     */
     public void removeAllBlocks() {
         root.removeAllViews();
         numberOfBlocks = 0;
     }
 
+    /**
+     * Returns the number of blocks in layout.
+     *
+     * @return number of blocks.
+     */
     public int getNumberOfBlocks() {
         return numberOfBlocks;
     }
 
-    private void init() {
-        setViewTreeObserver();
-    }
-
+    /**
+     * Sets view tree observer which allows get current layout params.
+     */
     private void setViewTreeObserver() {
         ViewTreeObserver vto = getViewTreeObserver();
         vto.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
@@ -85,6 +122,12 @@ public class BasicContentLayout extends LinearLayout {
         });
     }
 
+    /**
+     * Creates layout params for vertical blocks according to topMargin.
+     *
+     * @param topMargin top margin.
+     * @return layout params for vertical block.
+     */
     private LinearLayout.LayoutParams getVerticalLayoutParams(final int topMargin) {
         LinearLayout.LayoutParams marginParams =
                 new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
@@ -94,6 +137,12 @@ public class BasicContentLayout extends LinearLayout {
         return marginParams;
     }
 
+    /**
+     * Creates layout params for horizontal blocks according to topMargin.
+     *
+     * @param leftMargin left margin.
+     * @return layout params for vertical block.
+     */
     private LinearLayout.LayoutParams getHorizontalLayoutParams(final int leftMargin) {
         LinearLayout.LayoutParams marginParams =
                 new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,

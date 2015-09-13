@@ -23,7 +23,9 @@ import com.ecomap.ukraine.problemupdate.manager.DataManager;
 
 import java.util.List;
 
-
+/**
+ * Block for full problem information layout which contains basic information about problem.
+ */
 public class HeaderBlock extends LinearLayout implements DetailsListener {
 
     private static final String RESOLVED = "resolved";
@@ -51,6 +53,9 @@ public class HeaderBlock extends LinearLayout implements DetailsListener {
         init();
     }
 
+    /**
+     * Performs when vote was successfully sent to server.
+     */
     @Override
     public void onVoteAdded() {
         DataManager.getInstance(context).refreshProblemDetails(problem.getProblemId());
@@ -62,6 +67,11 @@ public class HeaderBlock extends LinearLayout implements DetailsListener {
 
     }
 
+    /**
+     * Complements basic information about problem.
+     *
+     * @param details problem details.
+     */
     public void setHeaderDetailInfo(Details details) {
         voteIcon.setEnabled(true);
 
@@ -82,18 +92,6 @@ public class HeaderBlock extends LinearLayout implements DetailsListener {
             ImageView star = (ImageView) findViewById(STARS_ID[i]);
             star.setBackgroundResource(R.drawable.ic_star_black_48dp);
         }
-    }
-
-    /**
-     * Checks is this problem was liked by current user.
-     *
-     * @param problemActivity problem activity which may contain information about like.
-     * @param user current logged in user.
-     * @return whether current problem was liked by this user.
-     */
-    private boolean isProblemLikedBefore(final ProblemActivity problemActivity, final User user) {
-        return (problemActivity.getUserId() == user.getId())
-                && (problemActivity.getActivityType().getId() == ActivityType.LIKE.getId());
     }
 
     /**
@@ -125,6 +123,18 @@ public class HeaderBlock extends LinearLayout implements DetailsListener {
                 DetailsManager.getInstance(context).postVote(problemID, userId, userName, userSurname);
             }
         });
+    }
+
+    /**
+     * Checks is this problem was liked by current user.
+     *
+     * @param problemActivity problem activity which may contain information about like.
+     * @param user            current logged in user.
+     * @return whether current problem was liked by this user.
+     */
+    private boolean isProblemLikedBefore(final ProblemActivity problemActivity, final User user) {
+        return (problemActivity.getUserId() == user.getId())
+                && (problemActivity.getActivityType().getId() == ActivityType.LIKE.getId());
     }
 
     /**
