@@ -1,24 +1,39 @@
 package com.ecomap.ukraine.util;
 
+import android.content.Context;
+import android.util.AttributeSet;
 import android.view.View;
 import android.view.ViewTreeObserver;
 import android.widget.LinearLayout;
 
 
-public class BasicContentLayout {
+public class BasicContentLayout extends LinearLayout {
 
     private static final int DEFAULT_TOP_MARGIN = 0;
     private static final int DEFAULT_LEFT_MARGIN = 25;
 
-    private LinearLayout rootLayout;
     private int numberOfBlocks;
     private int currentLayoutHeight;
-    private int getCurrentLayoutWidth;
+    private int currentLayoutWidth;
+    private LinearLayout root;
 
-    public BasicContentLayout(final LinearLayout rootLayout) {
-        this.rootLayout = rootLayout;
-        numberOfBlocks = rootLayout.getChildCount();
-        setViewTreeObserver();
+    public BasicContentLayout(Context context) {
+        this(context, null);
+    }
+
+    public BasicContentLayout(Context context, AttributeSet attrs) {
+        this(context, attrs, 0);
+    }
+
+    public BasicContentLayout(Context context, AttributeSet attrs, int defStyleAttr) {
+        super(context, attrs, defStyleAttr);
+        init();
+
+    }
+
+    //TODO: need to solve the problem
+    public void setCrutch(LinearLayout pain) {
+        root = pain;
     }
 
     public void addVerticalBlock(final View newView) {
@@ -26,7 +41,7 @@ public class BasicContentLayout {
     }
 
     public void addVerticalBlock(final View newView, final int position) {
-        rootLayout.addView(newView, position, getVerticalLayoutParams(DEFAULT_TOP_MARGIN));
+        root.addView(newView, position, getVerticalLayoutParams(DEFAULT_TOP_MARGIN));
         numberOfBlocks++;
     }
 
@@ -35,18 +50,37 @@ public class BasicContentLayout {
     }
 
     public void addHorizontalBlock(final View view, final int margin) {
-        rootLayout.addView(view, numberOfBlocks, getHorizontalLayoutParams(margin));
+        addView(view, numberOfBlocks, getHorizontalLayoutParams(margin));
         numberOfBlocks++;
     }
 
+    public void removeBlock(View block) {
+        if (block != null) {
+            root.removeView(block);
+            numberOfBlocks--;
+        }
+    }
+
+    public void removeAllBlocks() {
+        root.removeAllViews();
+        numberOfBlocks = 0;
+    }
+
+    public int getNumberOfBlocks() {
+        return numberOfBlocks;
+    }
+
+    private void init() {
+        setViewTreeObserver();
+    }
+
     private void setViewTreeObserver() {
-        ViewTreeObserver vto = rootLayout.getViewTreeObserver();
+        ViewTreeObserver vto = getViewTreeObserver();
         vto.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
             @Override
             public void onGlobalLayout() {
-                currentLayoutHeight = rootLayout.getMeasuredHeight();
-                getCurrentLayoutWidth = rootLayout.getMeasuredWidth();
-
+                currentLayoutHeight = getMeasuredHeight();
+                currentLayoutWidth = getMeasuredWidth();
             }
         });
     }
@@ -64,7 +98,7 @@ public class BasicContentLayout {
         LinearLayout.LayoutParams marginParams =
                 new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
                         LinearLayout.LayoutParams.WRAP_CONTENT);
-        marginParams.leftMargin = getCurrentLayoutWidth + leftMargin;
+        marginParams.leftMargin = currentLayoutWidth + leftMargin;
 
         return marginParams;
     }

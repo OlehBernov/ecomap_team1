@@ -25,9 +25,9 @@ import android.widget.TextView;
 import com.ecomap.ukraine.R;
 import com.ecomap.ukraine.models.Problem;
 import com.ecomap.ukraine.problemupdate.manager.DataManager;
-import com.ecomap.ukraine.problemupdate.manager.ProblemListener;
 import com.ecomap.ukraine.ui.activities.ChooseProblemLocationActivity;
 import com.ecomap.ukraine.ui.activities.MainActivity;
+import com.ecomap.ukraine.util.DetailsContentContent;
 import com.ecomap.ukraine.util.Keyboard;
 import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 
@@ -50,19 +50,19 @@ public class DetailsController {
     private TextView titleView;
     private boolean isKeyboardShown;
 
-    private DetailsContent detailsContent;
+    private DetailsContentContent detailsContentContent;
     private Problem problem;
 
     private int fabState;
     private float currentOffset;
     private boolean isScrollDisable;
 
-    public DetailsController(Activity activity, Problem problem, DetailsContent detailsContent) {
+    public DetailsController(Activity activity, Problem problem, DetailsContentContent detailsContentContent) {
         this.activity = activity;
-        this.detailsContent = detailsContent;
+        this.detailsContentContent = detailsContentContent;
         this.problem = problem;
 
-        detailsContent.setProblemContent(problem);
+        detailsContentContent.setBaseInfo(problem);
 
         slidingUpPanelLayout = (SlidingUpPanelLayout) activity.findViewById(R.id.sliding_layout);
         toolbar = (Toolbar) activity.findViewById(R.id.toolbar);

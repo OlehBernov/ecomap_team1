@@ -113,7 +113,7 @@ public class DetailsContent extends LinearLayout implements DetailsListener {
         activitiesLayout = (TableLayout) detailsContentView.findViewById(R.id.activities);
         commentText = (EditText) detailsContentView.findViewById(R.id.add_comment);
 
-        photoContainer = (LinearLayout) detailsContentView.findViewById(R.id.small_photo_conteiner);
+      //  photoContainer = (LinearLayout) detailsContentView.findViewById(R.id.small_photo_conteiner);
         descriptionFiled = (ExpandableTextView) detailsContentView.findViewById(R.id.description_field);
         proposalFiled = (ExpandableTextView) detailsContentView.findViewById(R.id.proposal_field);
 
@@ -228,11 +228,11 @@ public class DetailsContent extends LinearLayout implements DetailsListener {
      * Puts on screen DetailsContent view (connection error view, loading view, details information).
      */
     public void showDetailsView() {
-        LinearLayout detailsView = (LinearLayout) findViewById(R.id.details_content_root);
+/*        LinearLayout detailsView = (LinearLayout) findViewById(R.id.details_content_root);
         if (isViewHaveChild(detailsView)) {
             detailsView.removeAllViews();
         }
-        detailsView.addView(view);
+        detailsView.addView(view);*/
     }
 
     /**
@@ -451,7 +451,7 @@ public class DetailsContent extends LinearLayout implements DetailsListener {
      * @param details details of problem.
      */
     private void addPhotos(final Details details) {
-        final List<Photo> photos = details.getPhotos();
+/*        final List<Photo> photos = details.getPhotos();
         if (photos == null) {
             hidePhotosBlock();
             return;
@@ -460,7 +460,7 @@ public class DetailsContent extends LinearLayout implements DetailsListener {
         if (isViewHaveChild(photoContainer)) {
             photoContainer.removeAllViews();
         }
-        BasicContentLayout photoPreview = new BasicContentLayout(photoContainer);
+       // BasicContentLayout photoPreview = new BasicContentLayout(photoContainer);
         int position = 0;
         for (final Photo photo : photos) {
             ImageView photoView = new ImageView(context);
@@ -473,7 +473,7 @@ public class DetailsContent extends LinearLayout implements DetailsListener {
                     openPhotoSlidePager(v.getId(), photos);
                 }
             });
-        }
+        }*/
     }
 
     /**

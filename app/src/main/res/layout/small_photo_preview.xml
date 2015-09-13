@@ -13,12 +13,13 @@
         android:paddingRight="10dp"
         android:scrollbars="none">
 
-        <LinearLayout
-            android:id="@+id/small_photo_conteiner"
+        <com.ecomap.ukraine.util.BasicContentLayout
+            android:id="@+id/basic_content_layout_photo"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="horizontal">
+            android:layout_height="match_parent">
 
-        </LinearLayout>
+        </com.ecomap.ukraine.util.BasicContentLayout>
+
     </HorizontalScrollView>
+
 </LinearLayout>
