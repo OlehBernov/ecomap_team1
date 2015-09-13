@@ -86,6 +86,7 @@ public class CommentBlock extends LinearLayout implements DetailsListener {
                     Toast.makeText(context,
                             R.string.empty_post_comment, Toast.LENGTH_LONG).show();
                 } else {
+                    DetailsManager.getInstance(context).registerDetailsListener(CommentBlock.this);
                     DetailsManager.getInstance(context).postComment(problemID, userId, userName,
                             userSurname, content);
                 }

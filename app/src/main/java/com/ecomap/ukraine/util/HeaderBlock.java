@@ -121,6 +121,7 @@ public class HeaderBlock extends LinearLayout implements DetailsListener {
                 String userId = String.valueOf(user.getId());
                 String userName = user.getName();
                 String userSurname = user.getSurname();
+                DetailsManager.getInstance(context).registerDetailsListener(HeaderBlock.this);
                 DetailsManager.getInstance(context).postVote(problemID, userId, userName, userSurname);
             }
         });
