@@ -130,20 +130,30 @@ public class LoadingClient {
                 Request.Method.GET, TOP_10_PROBLEMS_URL ,
                 new Response.Listener<String>() {
                     @Override
-                    public void onResponse(String response) {
-                        try {
-                            AllTop10Items allTop10Items =
-                                    JSONParser.parseAllTop10Items(response);
-                            problemRequestReceiver.setTop10RequestResult(allTop10Items);
-                        } catch (JSONException e) {
-                            Log.e(TAG, "JSONException in getTop10");
-                            problemRequestReceiver.setTop10RequestResult(null);
-                        }
+                    public void onResponse(final String response) {
+                        new AsyncTask<Void, Void, AllTop10Items>() {
+                            @Override
+                            protected AllTop10Items doInBackground(Void... params) {
+                                AllTop10Items allTop10Items = null;
+                                try {
+                                    allTop10Items =
+                                            JSONParser.parseAllTop10Items(response);
+                                } catch (JSONException e) {
+                                    Log.e(TAG, "JSONException in getTop10");
+                                }
+                                return allTop10Items;
+                            }
+                            @Override
+                            protected void onPostExecute(AllTop10Items result) {
+                                problemRequestReceiver.setTop10RequestResult(result);
+                            }
+                        }.execute();
                     }
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
                 Log.e(TAG, "onErrorResponse in getTop10");
+                problemRequestReceiver.setTop10RequestResult(null);
             }
         });
         RequestQueueWrapper.getInstance(context).addToRequestQueue(stringRequest);

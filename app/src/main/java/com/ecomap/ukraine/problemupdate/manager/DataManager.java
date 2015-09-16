@@ -240,9 +240,6 @@ public class DataManager implements ProblemListenersNotifier,
         }
     }
 
-    public void getTop10Items () {
-        sendAllTop10Items(dbHelper.getAllTop10Items());
-    }
 
     public void refreshAllProblem() {
         loadingClient.getAllProblems();

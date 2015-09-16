@@ -17,6 +17,7 @@ import com.ecomap.ukraine.R;
 import com.ecomap.ukraine.models.AllTop10Items;
 import com.ecomap.ukraine.models.Details;
 import com.ecomap.ukraine.models.Problem;
+import com.ecomap.ukraine.models.Top10FragmentID;
 import com.ecomap.ukraine.models.Top10Item;
 import com.ecomap.ukraine.problemupdate.manager.DataManager;
 import com.ecomap.ukraine.problemupdate.manager.ProblemListener;
@@ -39,6 +40,7 @@ public class Top10Activity extends AppCompatActivity implements ProblemListener 
     private List<Problem> problems;
     SlidingTabLayout tabs;
     String[] titles;
+    View progresView;
 
     /**
      * Initialize activity
@@ -48,24 +50,25 @@ public class Top10Activity extends AppCompatActivity implements ProblemListener 
      */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        DataManager dataManager = DataManager.getInstance(this);
-
-        dataManager.registerProblemListener(this);
-        dataManager.getTop10Items();
-        dataManager.getAllProblems();
-
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_top10);
-        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
-        setupToolbar();
-
         titles = getResources().getStringArray(R.array.tabs_in_top10);
         tabs = (SlidingTabLayout) findViewById(R.id.tabs);
         pager = (ViewPager) findViewById(R.id.pager);
-        pager.setOffscreenPageLimit(3);
+        progresView = findViewById(R.id.progress_view_on_Top10);
+
+        DataManager dataManager = DataManager.getInstance(this);
+
+        dataManager.registerProblemListener(this);
+        dataManager.getTop10();
+        dataManager.getAllProblems();
+
+        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
+        setupToolbar();
+
         Top10ViewPagerAdapter adapter = new Top10ViewPagerAdapter(getSupportFragmentManager(), titles,
                 NUMBER_OF_TABS);
-
+        pager.setOffscreenPageLimit(3);
         pager.setAdapter(adapter);
         tabs.setDistributeEvenly(true);
         tabs.setCustomTabColorizer(new SlidingTabLayout.TabColorizer() {
@@ -121,6 +124,7 @@ public class Top10Activity extends AppCompatActivity implements ProblemListener 
     @Override
     public void updateTop10(AllTop10Items allTop10Items) {
         this.allTop10Items = allTop10Items;
+        progresView.setVisibility(View.GONE);
     }
 
     /**
@@ -167,21 +171,22 @@ public class Top10Activity extends AppCompatActivity implements ProblemListener 
                 List<Top10Item> top10ItemList = new ArrayList<>();
                 allTop10Items = new AllTop10Items(
                         top10ItemList, top10ItemList, top10ItemList);
-                Toast.makeText(getApplicationContext(), "Error of loading try again.", Toast.LENGTH_LONG)
-                        .show();
             }
             switch (position) {
                 case 0:
                     top10ListFragment.setIconID(R.drawable.like_iconq);
                     top10ListFragment.setTop10ItemList(allTop10Items.getMostLikedProblems());
+                    top10ListFragment.setTop10FragmentID(Top10FragmentID.TOP_LIKE_FRAGMENT_ID);
                     return top10ListFragment;
                 case 1:
                     top10ListFragment.setIconID(R.drawable.comment3);
                     top10ListFragment.setTop10ItemList(allTop10Items.getMostPopularProblems());
+                    top10ListFragment.setTop10FragmentID(Top10FragmentID.TOP_VOTE_FRAGMENT_ID);
                     return top10ListFragment;
                 case 2:
                     top10ListFragment.setIconID(R.drawable.ic_star_black_48dp);
                     top10ListFragment.setTop10ItemList(allTop10Items.getMostImportantProblems());
+                    top10ListFragment.setTop10FragmentID(Top10FragmentID.TOP_SEVERITY_FRAGMENT_ID);
                     return top10ListFragment;
             }
             return null;

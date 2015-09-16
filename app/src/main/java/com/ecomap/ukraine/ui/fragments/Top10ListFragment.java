@@ -14,6 +14,7 @@ import com.ecomap.ukraine.R;
 import com.ecomap.ukraine.models.AllTop10Items;
 import com.ecomap.ukraine.models.Details;
 import com.ecomap.ukraine.models.Problem;
+import com.ecomap.ukraine.models.Top10FragmentID;
 import com.ecomap.ukraine.models.Top10Item;
 import com.ecomap.ukraine.problemupdate.manager.DataManager;
 import com.ecomap.ukraine.problemupdate.manager.ProblemListener;
@@ -29,6 +30,7 @@ public class Top10ListFragment extends Fragment implements AdapterView.OnItemCli
 
     public static final String PROBLEM_EXTRA = "Problem";
 
+    private Top10FragmentID top10FragmentID;
     private Top10ListAdapter listAdapter;
     private List<Top10Item> top10ItemList;
     private int iconID;
@@ -46,6 +48,10 @@ public class Top10ListFragment extends Fragment implements AdapterView.OnItemCli
 
     public void setIconID(int iconID) {
         this.iconID = iconID;
+    }
+
+    public void setTop10FragmentID(Top10FragmentID top10FragmentID) {
+        this.top10FragmentID = top10FragmentID;
     }
 
     @Override
@@ -103,5 +109,19 @@ public class Top10ListFragment extends Fragment implements AdapterView.OnItemCli
 
     @Override
     public void updateTop10(AllTop10Items allTop10Items) {
+        switch (top10FragmentID) {
+            case TOP_LIKE_FRAGMENT_ID:
+                top10ItemList = allTop10Items.getMostLikedProblems();
+                break;
+            case TOP_VOTE_FRAGMENT_ID:
+                top10ItemList = allTop10Items.getMostPopularProblems();
+                break;
+            case TOP_SEVERITY_FRAGMENT_ID:
+                top10ItemList = allTop10Items.getMostImportantProblems();
+                break;
+        }
+        listAdapter = new Top10ListAdapter(getActivity(), top10ItemList, iconID);
+        listView.setAdapter(listAdapter);
+        listView.setOnItemClickListener(this);
     }
 }
