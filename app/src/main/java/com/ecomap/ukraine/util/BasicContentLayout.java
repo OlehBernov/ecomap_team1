@@ -15,13 +15,10 @@ public class BasicContentLayout {
     private static final int DEFAULT_LEFT_MARGIN = 25;
 
     private int numberOfBlocks;
-    private int currentLayoutHeight;
-    private int currentLayoutWidth;
     private ViewGroup root;
 
     public BasicContentLayout(ViewGroup root) {
         this.root = root;
-        setViewTreeObserver();
     }
 
     /**
@@ -95,20 +92,6 @@ public class BasicContentLayout {
     }
 
     /**
-     * Sets view tree observer which allows get current layout params.
-     */
-    private void setViewTreeObserver() {
-        ViewTreeObserver vto = root.getViewTreeObserver();
-        vto.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
-            @Override
-            public void onGlobalLayout() {
-                currentLayoutHeight = root.getMeasuredHeight();
-                currentLayoutWidth = root.getMeasuredWidth();
-            }
-        });
-    }
-
-    /**
      * Creates layout params for vertical blocks according to topMargin.
      *
      * @param topMargin top margin.
@@ -118,7 +101,7 @@ public class BasicContentLayout {
         LinearLayout.LayoutParams marginParams =
                 new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
                         LinearLayout.LayoutParams.WRAP_CONTENT);
-        marginParams.topMargin = currentLayoutHeight + topMargin;
+        marginParams.topMargin = topMargin;
 
         return marginParams;
     }
@@ -133,7 +116,7 @@ public class BasicContentLayout {
         LinearLayout.LayoutParams marginParams =
                 new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
                         LinearLayout.LayoutParams.WRAP_CONTENT);
-        marginParams.leftMargin = currentLayoutWidth + leftMargin;
+        marginParams.leftMargin = leftMargin;
 
         return marginParams;
     }
