@@ -112,9 +112,6 @@ public class FragmentEcoMap extends android.support.v4.app.Fragment
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        basicContentLayout = (BasicContentLayout) getActivity()
-                .findViewById(R.id.basic_content_layout_details);
-
         dataManager = DataManager.getInstance(getActivity());
         dataManager.registerProblemListener(this);
 
@@ -252,7 +249,8 @@ public class FragmentEcoMap extends android.support.v4.app.Fragment
     @Override
     public boolean onClusterItemClick(final Problem problem) {
         if (!((MainActivity) getActivity()).problemAddingMenu) {
-            basicContentLayout.setCrutch((LinearLayout) getActivity().findViewById(R.id.pain));
+            LinearLayout detailsRoot = (LinearLayout) getActivity().findViewById(R.id.pain);
+            basicContentLayout = new BasicContentLayout(detailsRoot);
             detailsContent = new DetailsContent(basicContentLayout, getActivity());
             new DetailsController(getActivity(), problem, detailsContent);
             dataManager.getProblemDetail(problem.getProblemId());

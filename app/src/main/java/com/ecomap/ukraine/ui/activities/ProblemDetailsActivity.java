@@ -82,9 +82,8 @@ public class ProblemDetailsActivity extends AppCompatActivity implements Problem
         setUpToolbar();
 
         problem = (Problem) getIntent().getSerializableExtra(SearchActivity.PROBLEM_EXTRA);
-        BasicContentLayout basicContentLayout;
-        basicContentLayout = (BasicContentLayout) findViewById(R.id.basic_content_layout_search_details);
-        basicContentLayout.setCrutch((LinearLayout) findViewById(R.id.pain2));
+        LinearLayout detailsRoot = (LinearLayout) findViewById(R.id.pain2);
+        BasicContentLayout basicContentLayout = new BasicContentLayout(detailsRoot);
         detailsContent = new DetailsContent(basicContentLayout, this);
         detailsContent.setBaseInfo(problem);
 
