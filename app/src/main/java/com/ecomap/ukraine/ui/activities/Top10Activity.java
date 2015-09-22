@@ -11,16 +11,15 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
-import android.widget.Toast;
+
 
 import com.ecomap.ukraine.R;
 import com.ecomap.ukraine.models.AllTop10Items;
-import com.ecomap.ukraine.models.Details;
 import com.ecomap.ukraine.models.Problem;
 import com.ecomap.ukraine.models.Top10FragmentID;
 import com.ecomap.ukraine.models.Top10Item;
 import com.ecomap.ukraine.problemupdate.manager.DataManager;
-import com.ecomap.ukraine.problemupdate.manager.ProblemListener;
+import com.ecomap.ukraine.problemupdate.manager.ProblemListenerAdapter;
 import com.ecomap.ukraine.ui.SlidingTabLayout;
 import com.ecomap.ukraine.ui.adapters.ViewPagerAdapter;
 import com.ecomap.ukraine.ui.fragments.Top10ListFragment;
@@ -31,16 +30,17 @@ import java.util.List;
 /**
  * Created by Andriy on 09.09.2015.
  */
-public class Top10Activity extends AppCompatActivity implements ProblemListener {
+public class Top10Activity extends AppCompatActivity  {
 
     private static final int NUMBER_OF_TABS = 3;
 
     private ViewPager pager;
     private AllTop10Items allTop10Items;
     private List<Problem> problems;
-    SlidingTabLayout tabs;
-    String[] titles;
-    View progresView;
+    private SlidingTabLayout tabs;
+    private String[] titles;
+    private View progresView;
+    private ProblemListenerAdapter problemListenerAdapter;
 
     /**
      * Initialize activity
@@ -59,7 +59,19 @@ public class Top10Activity extends AppCompatActivity implements ProblemListener 
 
         DataManager dataManager = DataManager.getInstance(this);
 
-        dataManager.registerProblemListener(this);
+        problemListenerAdapter = new ProblemListenerAdapter() {
+            @Override
+            public void updateAllProblems(List<Problem> updateproblems) {
+                problems = updateproblems;
+            }
+
+            @Override
+            public void updateTop10(AllTop10Items updateallTop10Items) {
+                allTop10Items = updateallTop10Items;
+                progresView.setVisibility(View.GONE);
+            }
+        };
+        dataManager.registerProblemListener(problemListenerAdapter);
         dataManager.getTop10();
         dataManager.getAllProblems();
 
@@ -78,6 +90,12 @@ public class Top10Activity extends AppCompatActivity implements ProblemListener 
             }
         });
         tabs.setViewPager(pager);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        DataManager.getInstance(this).removeProblemListener(problemListenerAdapter);
     }
 
     /**
@@ -112,20 +130,7 @@ public class Top10Activity extends AppCompatActivity implements ProblemListener 
         super.onBackPressed();
     }
 
-    @Override
-    public void updateAllProblems(List<Problem> problems) {
-        this.problems = problems;
-    }
 
-    @Override
-    public void updateProblemDetails(Details details) {
-    }
-
-    @Override
-    public void updateTop10(AllTop10Items allTop10Items) {
-        this.allTop10Items = allTop10Items;
-        progresView.setVisibility(View.GONE);
-    }
 
     /**
      * Sets application toolbar.

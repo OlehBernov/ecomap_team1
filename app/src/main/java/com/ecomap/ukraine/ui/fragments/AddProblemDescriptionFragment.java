@@ -18,15 +18,13 @@ import com.afollestad.materialdialogs.MaterialDialog;
 import com.ecomap.ukraine.R;
 import com.ecomap.ukraine.authentication.manager.AccountManager;
 import com.ecomap.ukraine.authentication.validator.Validator;
-import com.ecomap.ukraine.models.AllTop10Items;
-import com.ecomap.ukraine.models.Details;
 import com.ecomap.ukraine.models.Problem;
 import com.ecomap.ukraine.models.ProblemForPosting;
 import com.ecomap.ukraine.models.User;
 import com.ecomap.ukraine.problemposting.manager.AddProblemListener;
 import com.ecomap.ukraine.problemposting.manager.AddProblemManager;
 import com.ecomap.ukraine.problemupdate.manager.DataManager;
-import com.ecomap.ukraine.problemupdate.manager.ProblemListener;
+import com.ecomap.ukraine.problemupdate.manager.ProblemListenerAdapter;
 import com.ecomap.ukraine.ui.activities.MainActivity;
 import com.ecomap.ukraine.util.ExtraFieldNames;
 import com.ecomap.ukraine.util.Keyboard;
@@ -40,8 +38,7 @@ import butterknife.InjectView;
 /**
  * Fragment for posting description of new problem
  */
-public class AddProblemDescriptionFragment extends Fragment implements AddProblemListener,
-                                                                       ProblemListener {
+public class AddProblemDescriptionFragment extends Fragment implements AddProblemListener {
 
     private static final String PLEASE_WAIT = "Please wait...";
 
@@ -103,7 +100,20 @@ public class AddProblemDescriptionFragment extends Fragment implements AddProble
 
     public void successPosting(final int idOfMessage) {
         Toast.makeText(getActivity(), idOfMessage, Toast.LENGTH_LONG).show();
-        dataManager.registerProblemListener(this);
+        dataManager.registerProblemListener(new ProblemListenerAdapter() {
+            /**
+             * Get list of all problems.
+             *
+             * @param problems list of all problems.
+             */
+            @Override
+            public void updateAllProblems(final List<Problem> problems) {
+                Intent intent = new Intent(getActivity(), MainActivity.class);
+                startActivity(intent);
+                getActivity().finish();
+                dataManager.removeProblemListener(this);
+            }
+        });
         dataManager.refreshAllProblem();
     }
 
@@ -177,33 +187,6 @@ public class AddProblemDescriptionFragment extends Fragment implements AddProble
     public void onFailedPhotoPosting() {
         successPosting(R.string.photo_post_error);
 
-    }
-
-    /**
-     * Get list of all details.
-     *
-     * @param details details of concrete problem.
-     */
-    @Override
-    public void updateProblemDetails(final Details details) {
-    }
-
-    @Override
-    public void updateTop10(AllTop10Items allTop10Items) {
-
-    }
-
-    /**
-     * Get list of all problems.
-     *
-     * @param problems list of all problems.
-     */
-    @Override
-    public void updateAllProblems(final List<Problem> problems) {
-        Intent intent = new Intent(getActivity(), MainActivity.class);
-        startActivity(intent);
-        getActivity().finish();
-        dataManager.removeProblemListener(this);
     }
 
     /**

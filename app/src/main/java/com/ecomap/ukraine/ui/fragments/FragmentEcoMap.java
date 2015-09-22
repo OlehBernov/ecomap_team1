@@ -16,10 +16,10 @@ import android.widget.LinearLayout;
 import com.ecomap.ukraine.R;
 import com.ecomap.ukraine.map.IconRenderer;
 import com.ecomap.ukraine.models.AllTop10Items;
+import com.ecomap.ukraine.problemupdate.manager.ProblemListenerAdapter;
 import com.ecomap.ukraine.ui.activities.MainActivity;
 import com.ecomap.ukraine.ui.DetailsController;
 import com.ecomap.ukraine.problemupdate.manager.DataManager;
-import com.ecomap.ukraine.problemupdate.manager.ProblemListener;
 import com.ecomap.ukraine.filtration.Filter;
 import com.ecomap.ukraine.filtration.FilterListener;
 import com.ecomap.ukraine.filtration.FilterManager;
@@ -48,7 +48,7 @@ import java.util.List;
  * Represent map functionality
  */
 public class FragmentEcoMap extends android.support.v4.app.Fragment
-        implements ProblemListener, FilterListener,
+        implements FilterListener,
         ClusterManager.OnClusterItemClickListener<Problem>,
         ClusterManager.OnClusterClickListener <Problem> {
 
@@ -73,10 +73,10 @@ public class FragmentEcoMap extends android.support.v4.app.Fragment
     private GoogleMap googleMap;
     private DataManager dataManager;
     private FilterManager filterManager;
-    BasicContentLayout basicContentLayout;
-  //  private BasicContentLayout detailsContent;
+    private BasicContentLayout basicContentLayout;
     private DetailsContent detailsContent;
     private int mapType;
+    private ProblemListenerAdapter problemListenerAdapter;
 
     public FragmentEcoMap() {
     }
@@ -113,7 +113,33 @@ public class FragmentEcoMap extends android.support.v4.app.Fragment
                              Bundle savedInstanceState) {
 
         dataManager = DataManager.getInstance(getActivity());
-        dataManager.registerProblemListener(this);
+        problemListenerAdapter = new ProblemListenerAdapter() {
+            /**
+             * Get list of all problems.
+             *
+             * @param problems list of all problems.
+             */
+            @Override
+            public void updateAllProblems(final List<Problem> problems) {
+                FragmentEcoMap.problems = problems;
+                putAllProblemsOnMap(null);
+                setRenderer();
+            }
+
+            /**
+             * Get list of all details.
+             *
+             * @param details details of concrete problem.
+             */
+            @Override
+            public void updateProblemDetails(final Details details) {
+                if (detailsContent != null) {
+                    detailsContent.prepareToRefresh();
+                    detailsContent.setProblemDetails(details);
+                }
+            }
+        };
+        dataManager.registerProblemListener(problemListenerAdapter);
 
         View rootView = inflater.inflate(R.layout.fragement_map, container, false);
         mapView = (MapView) rootView.findViewById(R.id.mapView);
@@ -181,7 +207,7 @@ public class FragmentEcoMap extends android.support.v4.app.Fragment
     @Override
     public void onDestroy() {
         super.onDestroy();
-        dataManager.removeProblemListener(this);
+        dataManager.removeProblemListener(problemListenerAdapter);
         filterManager.removeFilterListener(this);
         SharedPreferences.Editor editor = getActivity()
                 .getSharedPreferences(FragmentEcoMap.POSITION,
@@ -192,22 +218,8 @@ public class FragmentEcoMap extends android.support.v4.app.Fragment
         editor.apply();
     }
 
-    /**
-     * Get list of all problems.
-     *
-     * @param problems list of all problems.
-     */
-    @Override
-    public void updateAllProblems(final List<Problem> problems) {
-        FragmentEcoMap.problems = problems;
-        putAllProblemsOnMap(null);
-        setRenderer();
-    }
 
-    @Override
-    public void updateTop10(AllTop10Items allTop10Items) {
 
-    }
 
     /**
      * Update filter
@@ -228,19 +240,6 @@ public class FragmentEcoMap extends android.support.v4.app.Fragment
     }
 
     /**
-     * Get list of all details.
-     *
-     * @param details details of concrete problem.
-     */
-    @Override
-    public void updateProblemDetails(final Details details) {
-        if (detailsContent != null) {
-            detailsContent.prepareToRefresh();
-            detailsContent.setProblemDetails(details);
-        }
-    }
-
-    /**
      * Action after click on Marker
      *
      * @param problem clicked marker
@@ -252,7 +251,8 @@ public class FragmentEcoMap extends android.support.v4.app.Fragment
             LinearLayout detailsRoot = (LinearLayout) getActivity().findViewById(R.id.pain);
             basicContentLayout = new BasicContentLayout(detailsRoot);
             detailsContent = new DetailsContent(basicContentLayout, getActivity());
-            new DetailsController(getActivity(), problem, detailsContent);
+            detailsContent.setBaseInfo(problem);
+            new DetailsController(getActivity(), problem);
             dataManager.getProblemDetail(problem.getProblemId());
             moveCameraToProblem(problem);
             return true;
@@ -260,8 +260,7 @@ public class FragmentEcoMap extends android.support.v4.app.Fragment
         return false;
     }
 
-    // TODO refactor and change names../
-    // TODO: but this is overridden method
+
     @Override
     public boolean onClusterClick(Cluster<Problem> cluster) {
         googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(getClusterCenter(cluster),
@@ -350,8 +349,7 @@ public class FragmentEcoMap extends android.support.v4.app.Fragment
         settings.setMapToolbarEnabled(false);
         googleMap.setMyLocationEnabled(true);
         settings.setMyLocationButtonEnabled(true);
-
-    //    dataManager.registerProblemListener(this);
+        
         dataManager.getAllProblems();
 
         CameraPosition cameraPosition = new CameraPosition

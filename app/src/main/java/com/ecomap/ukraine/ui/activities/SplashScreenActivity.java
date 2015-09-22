@@ -11,12 +11,10 @@ import android.view.View;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.ecomap.ukraine.R;
 import com.ecomap.ukraine.authentication.manager.AccountManager;
-import com.ecomap.ukraine.models.AllTop10Items;
 import com.ecomap.ukraine.problemupdate.manager.DataManager;
-import com.ecomap.ukraine.problemupdate.manager.ProblemListener;
-import com.ecomap.ukraine.models.Details;
 import com.ecomap.ukraine.models.Problem;
 import com.ecomap.ukraine.models.User;
+import com.ecomap.ukraine.problemupdate.manager.ProblemListenerAdapter;
 
 import java.util.List;
 
@@ -25,7 +23,7 @@ import fr.castorflex.android.smoothprogressbar.SmoothProgressBar;
 /**
  * Activity which represent loading data from server
  */
-public class SplashScreenActivity extends Activity implements ProblemListener {
+public class SplashScreenActivity extends Activity {
 
     /**
      * Failure loading message
@@ -77,43 +75,7 @@ public class SplashScreenActivity extends Activity implements ProblemListener {
      */
     User user;
 
-    /**
-     * Opens Main Activity.
-     *
-     * @param problems list of all problems.
-     */
-    @Override
-    public void updateAllProblems(final List<Problem> problems) {
-        if (problems != null) {
-            if (!state) {
-                state = true;
-                long endLoading = System.currentTimeMillis();
-                new Handler().postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        manager.removeProblemListener(SplashScreenActivity.this);
-                        startActivity(intent);
-                    }
-                }, Math.max(loadingTime(endLoading), 0));
-            }
-        } else {
-            setFailureLoadingDialog();
-        }
-    }
-
-    /**
-     * Updates current problem details from server
-     * @param details details of concrete problem.
-     */
-    @Override
-    public void updateProblemDetails(final Details details) {
-
-    }
-
-    @Override
-    public void updateTop10(AllTop10Items allTop10Items) {
-
-    }
+    private ProblemListenerAdapter problemListenerAdapter;
 
     /**
      * Initialize activity
@@ -144,8 +106,33 @@ public class SplashScreenActivity extends Activity implements ProblemListener {
         }
 
         manager = DataManager.getInstance(context);
-        manager.registerProblemListener(this);
-        manager.getAllProblems();
+        problemListenerAdapter = new ProblemListenerAdapter() {
+            /**
+             * Opens Main Activity.
+             *
+             * @param problems list of all problems.
+             */
+            @Override
+            public void updateAllProblems(final List<Problem> problems) {
+                if (problems != null) {
+                    if (!state) {
+                        state = true;
+                        long endLoading = System.currentTimeMillis();
+                        new Handler().postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                manager.removeProblemListener(problemListenerAdapter);
+                                startActivity(intent);
+                            }
+                        }, Math.max(loadingTime(endLoading), 0));
+                    }
+                } else {
+                    setFailureLoadingDialog();
+                }
+            }
+        };
+        manager.registerProblemListener(problemListenerAdapter);
+                manager.getAllProblems();
     }
 
     private long loadingTime(final long endLoading) {

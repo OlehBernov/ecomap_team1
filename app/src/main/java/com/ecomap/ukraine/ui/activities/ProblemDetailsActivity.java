@@ -9,11 +9,10 @@ import android.view.View;
 import android.widget.LinearLayout;
 
 import com.ecomap.ukraine.R;
-import com.ecomap.ukraine.models.AllTop10Items;
 import com.ecomap.ukraine.models.Details;
 import com.ecomap.ukraine.models.Problem;
 import com.ecomap.ukraine.problemupdate.manager.DataManager;
-import com.ecomap.ukraine.problemupdate.manager.ProblemListener;
+import com.ecomap.ukraine.problemupdate.manager.ProblemListenerAdapter;
 import com.ecomap.ukraine.ui.fullinfo.DetailsContent;
 import com.ecomap.ukraine.util.BasicContentLayout;
 
@@ -22,30 +21,14 @@ import java.util.List;
 /**
  * Activity which displays problem details after click on recycle view element.
  */
-public class ProblemDetailsActivity extends AppCompatActivity implements ProblemListener {
+public class ProblemDetailsActivity extends AppCompatActivity  {
 
     private DetailsContent detailsContent;
     private Problem problem;
+    private ProblemListenerAdapter problemListenerAdapter;
 
-    @Override
-    public void updateAllProblems(List<Problem> problems) {
-    }
 
-    /**
-     * Sets details of the problem to details view.
-     *
-     * @param details details of concrete problem.
-     */
-    @Override
-    public void updateProblemDetails(Details details) {
-        detailsContent.prepareToRefresh();
-        detailsContent.setProblemDetails(details);
-    }
 
-    @Override
-    public void updateTop10(AllTop10Items allTop10Items) {
-
-    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -88,7 +71,20 @@ public class ProblemDetailsActivity extends AppCompatActivity implements Problem
         detailsContent.setBaseInfo(problem);
 
         DataManager dataManager = DataManager.getInstance(this);
-        dataManager.registerProblemListener(this);
+        problemListenerAdapter = new ProblemListenerAdapter() {
+            /**
+             * Sets details of the problem to details view.
+             *
+             * @param details details of concrete problem.
+             */
+            @Override
+            public void updateProblemDetails(Details details) {
+                problemListenerAdapter = this;
+                detailsContent.prepareToRefresh();
+                detailsContent.setProblemDetails(details);
+            }
+        };
+        dataManager.registerProblemListener(problemListenerAdapter);
         dataManager.getProblemDetail(problem.getProblemId());
     }
 
@@ -98,7 +94,7 @@ public class ProblemDetailsActivity extends AppCompatActivity implements Problem
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        DataManager.getInstance(this).removeProblemListener(this);
+        DataManager.getInstance(this).removeProblemListener(problemListenerAdapter);
     }
 
     /**

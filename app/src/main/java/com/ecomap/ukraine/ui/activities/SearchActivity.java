@@ -18,11 +18,9 @@ import com.ecomap.ukraine.R;
 import com.ecomap.ukraine.filtration.Filter;
 import com.ecomap.ukraine.filtration.FilterManager;
 import com.ecomap.ukraine.filtration.FilterState;
-import com.ecomap.ukraine.models.AllTop10Items;
-import com.ecomap.ukraine.models.Details;
 import com.ecomap.ukraine.models.Problem;
 import com.ecomap.ukraine.problemupdate.manager.DataManager;
-import com.ecomap.ukraine.problemupdate.manager.ProblemListener;
+import com.ecomap.ukraine.problemupdate.manager.ProblemListenerAdapter;
 import com.ecomap.ukraine.ui.adapters.ProblemAdapter;
 
 import java.util.ArrayList;
@@ -30,7 +28,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class SearchActivity extends AppCompatActivity
-        implements SearchView.OnQueryTextListener, ProblemListener {
+        implements SearchView.OnQueryTextListener {
 
     public static final String PROBLEM_EXTRA = "Problem";
 
@@ -65,21 +63,7 @@ public class SearchActivity extends AppCompatActivity
         return true;
     }
 
-    @Override
-    public void updateAllProblems(List<Problem> problems) {
-        unfilteredProblems = problems;
-        showProblemList();
-        DataManager.getInstance(this).removeProblemListener(this);
-    }
 
-    @Override
-    public void updateProblemDetails(Details details) {
-    }
-
-    @Override
-    public void updateTop10(AllTop10Items allTop10Items) {
-
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -107,8 +91,15 @@ public class SearchActivity extends AppCompatActivity
     }
 
     private void requestProblemsList() {
-        DataManager dataManager = DataManager.getInstance(this);
-        dataManager.registerProblemListener(this);
+        final DataManager dataManager = DataManager.getInstance(this);
+        dataManager.registerProblemListener(new ProblemListenerAdapter() {
+            @Override
+            public void updateAllProblems(List<Problem> problems) {
+                unfilteredProblems = problems;
+                showProblemList();
+                dataManager.removeProblemListener(this);
+            }
+        });
         filterManager = FilterManager.getInstance(this);
         dataManager.getAllProblems();
     }

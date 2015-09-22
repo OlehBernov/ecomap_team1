@@ -12,12 +12,11 @@ import android.widget.Toast;
 
 import com.ecomap.ukraine.R;
 import com.ecomap.ukraine.models.AllTop10Items;
-import com.ecomap.ukraine.models.Details;
 import com.ecomap.ukraine.models.Problem;
 import com.ecomap.ukraine.models.Top10FragmentID;
 import com.ecomap.ukraine.models.Top10Item;
 import com.ecomap.ukraine.problemupdate.manager.DataManager;
-import com.ecomap.ukraine.problemupdate.manager.ProblemListener;
+import com.ecomap.ukraine.problemupdate.manager.ProblemListenerAdapter;
 import com.ecomap.ukraine.ui.activities.ProblemDetailsActivity;
 import com.ecomap.ukraine.ui.adapters.Top10ListAdapter;
 
@@ -26,7 +25,7 @@ import java.util.List;
 /**
  * Created by Andriy on 10.09.2015.
  */
-public class Top10ListFragment extends Fragment implements AdapterView.OnItemClickListener, ProblemListener {
+public class Top10ListFragment extends Fragment implements AdapterView.OnItemClickListener {
 
     public static final String PROBLEM_EXTRA = "Problem";
 
@@ -36,6 +35,8 @@ public class Top10ListFragment extends Fragment implements AdapterView.OnItemCli
     private int iconID;
     private ListView listView;
     private List<Problem> problems;
+    private ProblemListenerAdapter problemListenerAdapter;
+    private Top10ListFragment fragment = this;
 
 
     public void setTop10ItemList(List<Top10Item> top10ItemList)  {
@@ -59,7 +60,32 @@ public class Top10ListFragment extends Fragment implements AdapterView.OnItemCli
                              Bundle savedInstanceState) {
 
         View v = inflater.inflate(R.layout.fragment_list_top_10, container, false);
-        DataManager.getInstance(getActivity()).registerProblemListener(this);
+        problemListenerAdapter = new ProblemListenerAdapter() {
+
+            @Override
+            public void updateAllProblems(List<Problem> updateproblems) {
+                problems = updateproblems;
+            }
+
+            @Override
+            public void updateTop10(AllTop10Items allTop10Items) {
+                switch (top10FragmentID) {
+                    case TOP_LIKE_FRAGMENT_ID:
+                        top10ItemList = allTop10Items.getMostLikedProblems();
+                        break;
+                    case TOP_VOTE_FRAGMENT_ID:
+                        top10ItemList = allTop10Items.getMostPopularProblems();
+                        break;
+                    case TOP_SEVERITY_FRAGMENT_ID:
+                        top10ItemList = allTop10Items.getMostImportantProblems();
+                        break;
+                }
+                listAdapter = new Top10ListAdapter(getActivity(), top10ItemList, iconID);
+                listView.setAdapter(listAdapter);
+                listView.setOnItemClickListener(fragment);
+            }
+        };
+        DataManager.getInstance(getActivity()).registerProblemListener(problemListenerAdapter);
         listView = (ListView)v.findViewById(R.id.list);
         listAdapter = new Top10ListAdapter(getActivity(), top10ItemList, iconID);
         listView.setAdapter(listAdapter);
@@ -70,7 +96,7 @@ public class Top10ListFragment extends Fragment implements AdapterView.OnItemCli
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        DataManager.getInstance(getActivity()).removeProblemListener(this);
+        DataManager.getInstance(getActivity()).removeProblemListener(problemListenerAdapter);
     }
 
     @Override
@@ -95,33 +121,5 @@ public class Top10ListFragment extends Fragment implements AdapterView.OnItemCli
             intent.putExtra(PROBLEM_EXTRA, currentProblem);
             startActivity(intent);
         }
-    }
-
-    @Override
-    public void updateAllProblems(List<Problem> problems) {
-        this.problems = problems;
-    }
-
-    @Override
-    public void updateProblemDetails(Details details) {
-
-    }
-
-    @Override
-    public void updateTop10(AllTop10Items allTop10Items) {
-        switch (top10FragmentID) {
-            case TOP_LIKE_FRAGMENT_ID:
-                top10ItemList = allTop10Items.getMostLikedProblems();
-                break;
-            case TOP_VOTE_FRAGMENT_ID:
-                top10ItemList = allTop10Items.getMostPopularProblems();
-                break;
-            case TOP_SEVERITY_FRAGMENT_ID:
-                top10ItemList = allTop10Items.getMostImportantProblems();
-                break;
-        }
-        listAdapter = new Top10ListAdapter(getActivity(), top10ItemList, iconID);
-        listView.setAdapter(listAdapter);
-        listView.setOnItemClickListener(this);
     }
 }
