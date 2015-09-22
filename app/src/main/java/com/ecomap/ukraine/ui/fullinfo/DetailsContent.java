@@ -23,7 +23,6 @@ public class DetailsContent {
     private BasicContentLayout basicContentLayout;
     private LayoutInflater layoutInflater;
     private View loadingView;
-    private View errorView;
     private HeaderBlock headerBlock;
     private Problem problem;
 
@@ -118,7 +117,7 @@ public class DetailsContent {
      * Sets on screen server connection error view.
      */
     private void setErrorScreen() {
-        errorView = layoutInflater.inflate(R.layout.internet_connection_error_view, null, false);
+        View errorView = layoutInflater.inflate(R.layout.internet_connection_error_view, null, false);
         basicContentLayout.addVerticalBlock(errorView);
     }
 

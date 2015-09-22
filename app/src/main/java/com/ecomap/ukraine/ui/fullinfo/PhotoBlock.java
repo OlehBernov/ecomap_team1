@@ -49,7 +49,8 @@ public class PhotoBlock extends LinearLayout {
      * @param photos list of photos which relevant to the problem.
      */
     public void setPhotos(final List<Photo> photos) {
-        BasicContentLayout photoPreview = (BasicContentLayout) findViewById(R.id.basic_content_layout_photo);
+        LinearLayout photoRoot = (LinearLayout) findViewById(R.id.small_photo_container);
+        BasicContentLayout photoPreview = new BasicContentLayout(photoRoot);
         int position = 0;
         for (final Photo photo : photos) {
             ImageView photoView = new ImageView(context);

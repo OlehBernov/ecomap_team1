@@ -73,7 +73,7 @@ public class LoadingClient {
                             protected List<Problem> doInBackground(Void... params) {
                                 List<Problem> temp = null;
                                 try {
-                                     temp = JSONParser.parseBriefProblems(response);
+                                    temp = JSONParser.parseBriefProblems(response);
                                 } catch (JSONException e) {
                                     Log.e(TAG, "JSONException in LoadingClient");
                                 }

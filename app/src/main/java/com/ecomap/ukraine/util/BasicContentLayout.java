@@ -1,8 +1,7 @@
 package com.ecomap.ukraine.util;
 
-import android.content.Context;
-import android.util.AttributeSet;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.widget.LinearLayout;
 
@@ -10,32 +9,16 @@ import android.widget.LinearLayout;
  * Layout for full problem information which allows easy to add new blocks or
  * swap existing blocks.
  */
-public class BasicContentLayout extends LinearLayout {
+public class BasicContentLayout {
 
     private static final int DEFAULT_TOP_MARGIN = 0;
     private static final int DEFAULT_LEFT_MARGIN = 25;
 
     private int numberOfBlocks;
-    private int currentLayoutHeight;
-    private int currentLayoutWidth;
-    private LinearLayout root;
+    private ViewGroup root;
 
-    public BasicContentLayout(Context context) {
-        this(context, null);
-    }
-
-    public BasicContentLayout(Context context, AttributeSet attrs) {
-        this(context, attrs, 0);
-    }
-
-    public BasicContentLayout(Context context, AttributeSet attrs, int defStyleAttr) {
-        super(context, attrs, defStyleAttr);
-        setViewTreeObserver();
-    }
-
-    //TODO: need to solve the problem
-    public void setCrutch(final LinearLayout pain) {
-        root = pain;
+    public BasicContentLayout(ViewGroup root) {
+        this.root = root;
     }
 
     /**
@@ -75,7 +58,7 @@ public class BasicContentLayout extends LinearLayout {
      * @param margin  new block margin.
      */
     public void addHorizontalBlock(final View newView, final int margin) {
-        addView(newView, numberOfBlocks, getHorizontalLayoutParams(margin));
+        root.addView(newView, numberOfBlocks, getHorizontalLayoutParams(margin));
         numberOfBlocks++;
     }
 
@@ -109,20 +92,6 @@ public class BasicContentLayout extends LinearLayout {
     }
 
     /**
-     * Sets view tree observer which allows get current layout params.
-     */
-    private void setViewTreeObserver() {
-        ViewTreeObserver vto = getViewTreeObserver();
-        vto.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
-            @Override
-            public void onGlobalLayout() {
-                currentLayoutHeight = getMeasuredHeight();
-                currentLayoutWidth = getMeasuredWidth();
-            }
-        });
-    }
-
-    /**
      * Creates layout params for vertical blocks according to topMargin.
      *
      * @param topMargin top margin.
@@ -132,7 +101,7 @@ public class BasicContentLayout extends LinearLayout {
         LinearLayout.LayoutParams marginParams =
                 new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
                         LinearLayout.LayoutParams.WRAP_CONTENT);
-        marginParams.topMargin = currentLayoutHeight + topMargin;
+        marginParams.topMargin = topMargin;
 
         return marginParams;
     }
@@ -147,7 +116,7 @@ public class BasicContentLayout extends LinearLayout {
         LinearLayout.LayoutParams marginParams =
                 new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
                         LinearLayout.LayoutParams.WRAP_CONTENT);
-        marginParams.leftMargin = currentLayoutWidth + leftMargin;
+        marginParams.leftMargin = leftMargin;
 
         return marginParams;
     }

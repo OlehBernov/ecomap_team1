@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
     android:id="@+id/small_photo_preview"
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
@@ -13,12 +14,14 @@
         android:paddingRight="10dp"
         android:scrollbars="none">
 
-        <com.ecomap.ukraine.util.BasicContentLayout
-            android:id="@+id/basic_content_layout_photo"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
+        <LinearLayout
+            android:id="@+id/small_photo_container"
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
 
-        </com.ecomap.ukraine.util.BasicContentLayout>
+        </LinearLayout>
 
     </HorizontalScrollView>
 
