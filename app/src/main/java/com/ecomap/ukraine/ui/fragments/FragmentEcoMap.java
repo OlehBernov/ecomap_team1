@@ -349,7 +349,7 @@ public class FragmentEcoMap extends android.support.v4.app.Fragment
         settings.setMapToolbarEnabled(false);
         googleMap.setMyLocationEnabled(true);
         settings.setMyLocationButtonEnabled(true);
-        
+
         dataManager.getAllProblems();
 
         CameraPosition cameraPosition = new CameraPosition
