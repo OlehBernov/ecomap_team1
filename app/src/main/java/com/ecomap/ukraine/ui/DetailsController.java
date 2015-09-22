@@ -50,19 +50,15 @@ public class DetailsController {
     private TextView titleView;
     private boolean isKeyboardShown;
 
-    private DetailsContent detailsContent;
     private Problem problem;
 
     private int fabState;
     private float currentOffset;
     private boolean isScrollDisable;
 
-    public DetailsController(Activity activity, Problem problem, DetailsContent detailsContent) {
+    public DetailsController(Activity activity, Problem problem) {
         this.activity = activity;
-        this.detailsContent = detailsContent;
         this.problem = problem;
-
-        detailsContent.setBaseInfo(problem);
 
         slidingUpPanelLayout = (SlidingUpPanelLayout) activity.findViewById(R.id.sliding_layout);
         toolbar = (Toolbar) activity.findViewById(R.id.toolbar);

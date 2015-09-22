@@ -73,8 +73,7 @@ public class FragmentEcoMap extends android.support.v4.app.Fragment
     private GoogleMap googleMap;
     private DataManager dataManager;
     private FilterManager filterManager;
-    BasicContentLayout basicContentLayout;
-  //  private BasicContentLayout detailsContent;
+    private BasicContentLayout basicContentLayout;
     private DetailsContent detailsContent;
     private int mapType;
 
@@ -252,7 +251,8 @@ public class FragmentEcoMap extends android.support.v4.app.Fragment
             LinearLayout detailsRoot = (LinearLayout) getActivity().findViewById(R.id.pain);
             basicContentLayout = new BasicContentLayout(detailsRoot);
             detailsContent = new DetailsContent(basicContentLayout, getActivity());
-            new DetailsController(getActivity(), problem, detailsContent);
+            detailsContent.setBaseInfo(problem);
+            new DetailsController(getActivity(), problem);
             dataManager.getProblemDetail(problem.getProblemId());
             moveCameraToProblem(problem);
             return true;
@@ -260,8 +260,6 @@ public class FragmentEcoMap extends android.support.v4.app.Fragment
         return false;
     }
 
-    // TODO refactor and change names../
-    // TODO: but this is overridden method
     @Override
     public boolean onClusterClick(Cluster<Problem> cluster) {
         googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(getClusterCenter(cluster),
@@ -351,7 +349,6 @@ public class FragmentEcoMap extends android.support.v4.app.Fragment
         googleMap.setMyLocationEnabled(true);
         settings.setMyLocationButtonEnabled(true);
 
-    //    dataManager.registerProblemListener(this);
         dataManager.getAllProblems();
 
         CameraPosition cameraPosition = new CameraPosition
