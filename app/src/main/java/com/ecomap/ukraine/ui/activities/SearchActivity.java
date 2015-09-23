@@ -19,8 +19,8 @@ import com.ecomap.ukraine.filtration.Filter;
 import com.ecomap.ukraine.filtration.FilterManager;
 import com.ecomap.ukraine.filtration.FilterState;
 import com.ecomap.ukraine.models.Problem;
-import com.ecomap.ukraine.problemupdate.manager.DataListenerAdapter;
-import com.ecomap.ukraine.problemupdate.manager.DataManager;
+import com.ecomap.ukraine.update.manager.DataListenerAdapter;
+import com.ecomap.ukraine.update.manager.DataManager;
 import com.ecomap.ukraine.ui.adapters.ProblemAdapter;
 
 import java.util.ArrayList;

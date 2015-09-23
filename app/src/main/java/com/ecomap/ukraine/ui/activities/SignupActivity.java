@@ -102,14 +102,6 @@ public class SignupActivity extends AppCompatActivity implements LogInListener {
         scrollView.setVerticalScrollBarEnabled(false);
         background.setVerticalScrollBarEnabled(false);
 
-        scrollView.getViewTreeObserver()
-                .addOnScrollChangedListener(new ViewTreeObserver.OnScrollChangedListener() {
-                    @Override
-                    public void onScrollChanged() {
-                        background.setScrollY((int) (scrollView.getScrollY() * 0.5));
-                    }
-                });
-
         accountManager = AccountManager.getInstance(getApplicationContext());
 
         signUpButton.setOnClickListener(new View.OnClickListener() {

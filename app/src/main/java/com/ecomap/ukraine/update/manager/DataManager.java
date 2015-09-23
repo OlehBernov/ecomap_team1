@@ -1,4 +1,4 @@
-package com.ecomap.ukraine.problemupdate.manager;
+package com.ecomap.ukraine.update.manager;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -10,7 +10,7 @@ import com.ecomap.ukraine.database.DBHelper;
 import com.ecomap.ukraine.models.AllTop10Items;
 import com.ecomap.ukraine.models.Details;
 import com.ecomap.ukraine.models.Problem;
-import com.ecomap.ukraine.problemupdate.LoadingClient;
+import com.ecomap.ukraine.update.LoadingClient;
 
 import java.util.Collection;
 import java.util.List;

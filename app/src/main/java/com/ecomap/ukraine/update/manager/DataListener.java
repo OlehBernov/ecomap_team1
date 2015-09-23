@@ -1,4 +1,4 @@
-package com.ecomap.ukraine.problemupdate.manager;
+package com.ecomap.ukraine.update.manager;
 
 import com.ecomap.ukraine.models.AllTop10Items;
 import com.ecomap.ukraine.models.Details;

@@ -1,9 +1,9 @@
-package com.ecomap.ukraine.problemposting.manager;
+package com.ecomap.ukraine.posting.manager;
 
 import android.content.Context;
 
 import com.ecomap.ukraine.models.ProblemForPosting;
-import com.ecomap.ukraine.problemposting.AddProblemClient;
+import com.ecomap.ukraine.posting.AddProblemClient;
 
 import java.util.HashSet;
 import java.util.Set;

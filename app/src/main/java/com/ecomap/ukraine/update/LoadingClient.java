@@ -1,4 +1,4 @@
-package com.ecomap.ukraine.problemupdate;
+package com.ecomap.ukraine.update;
 
 
 import android.content.Context;
@@ -16,7 +16,7 @@ import com.ecomap.ukraine.authentication.manager.AccountManager;
 import com.ecomap.ukraine.models.AllTop10Items;
 import com.ecomap.ukraine.models.Details;
 import com.ecomap.ukraine.models.Problem;
-import com.ecomap.ukraine.problemupdate.manager.ProblemRequestReceiver;
+import com.ecomap.ukraine.update.manager.ProblemRequestReceiver;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -88,6 +88,7 @@ public class LoadingClient {
                                 }
                                 return temp;
                             }
+
                             @Override
                             protected void onPostExecute(List<Problem> result) {
                                 problemRequestReceiver.setAllProblemsRequestResult(result);
@@ -134,9 +135,9 @@ public class LoadingClient {
         RequestQueueWrapper.getInstance(context).addToRequestQueue(stringRequest);
     }
 
-    public void getTop10 () {
+    public void getTop10() {
         StringRequest stringRequest = new StringRequest(
-                Request.Method.GET, TOP_10_PROBLEMS_URL ,
+                Request.Method.GET, TOP_10_PROBLEMS_URL,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(final String response) {
@@ -152,6 +153,7 @@ public class LoadingClient {
                                 }
                                 return allTop10Items;
                             }
+
                             @Override
                             protected void onPostExecute(AllTop10Items result) {
                                 problemRequestReceiver.setTop10RequestResult(result);
@@ -170,9 +172,10 @@ public class LoadingClient {
 
     /**
      * Post vote of problem on server
-     * @param problemID problem id
-     * @param userID user id
-     * @param userName user name
+     *
+     * @param problemID   problem id
+     * @param userID      user id
+     * @param userName    user name
      * @param userSurname user surname
      */
     public void postVote(final String problemID, final String userID,
@@ -197,7 +200,7 @@ public class LoadingClient {
                 Map<String, String> params = new HashMap<>();
                 params.put(JSONFields.PROBLEM_ID, problemID);
                 AccountManager accountManager = AccountManager.getInstance(context);
-                if(!accountManager.isAnonymousUser()) {
+                if (!accountManager.isAnonymousUser()) {
                     params.put(JSONFields.USER_ID, userID);
                     params.put(JSONFields.USER_NAME, userName);
                     params.put(JSONFields.USER_SURNAME, userSurname);
@@ -216,11 +219,12 @@ public class LoadingClient {
 
     /**
      * Post comment of problem on server using AsyncTask
-     * @param problemID problem id
-     * @param userID user id
-     * @param userName user name
+     *
+     * @param problemID   problem id
+     * @param userID      user id
+     * @param userName    user name
      * @param userSurname user surname
-     * @param content content of content
+     * @param content     content of content
      */
     public void postComment(final int problemID, final String userID,
                             final String userName, final String userSurname,

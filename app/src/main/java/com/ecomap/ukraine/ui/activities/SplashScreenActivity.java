@@ -11,8 +11,8 @@ import android.view.View;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.ecomap.ukraine.R;
 import com.ecomap.ukraine.authentication.manager.AccountManager;
-import com.ecomap.ukraine.problemupdate.manager.DataListenerAdapter;
-import com.ecomap.ukraine.problemupdate.manager.DataManager;
+import com.ecomap.ukraine.update.manager.DataListenerAdapter;
+import com.ecomap.ukraine.update.manager.DataManager;
 import com.ecomap.ukraine.models.Problem;
 import com.ecomap.ukraine.models.User;
 
@@ -167,7 +167,7 @@ public class SplashScreenActivity extends Activity {
                     public void onNegative(MaterialDialog dialog) {
                         super.onNegative(dialog);
                         dialog.cancel();
-                        System.exit(0);
+                        finish();
                     }
                 })
                 .show();

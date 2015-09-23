@@ -1,4 +1,4 @@
-package com.ecomap.ukraine.problemposting;
+package com.ecomap.ukraine.posting;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -6,9 +6,9 @@ import android.util.Log;
 
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.ecomap.ukraine.problemposting.manager.AddProblemRequestReceiver;
+import com.ecomap.ukraine.posting.manager.AddProblemRequestReceiver;
 import com.ecomap.ukraine.models.ProblemForPosting;
-import com.ecomap.ukraine.problemupdate.RequestQueueWrapper;
+import com.ecomap.ukraine.update.RequestQueueWrapper;
 
 import org.json.JSONException;
 

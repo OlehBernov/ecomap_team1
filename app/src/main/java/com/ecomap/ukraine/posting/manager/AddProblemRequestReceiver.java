@@ -1,4 +1,4 @@
-package com.ecomap.ukraine.problemposting.manager;
+package com.ecomap.ukraine.posting.manager;
 
 /**
  * Interface of class, which receives server responses.

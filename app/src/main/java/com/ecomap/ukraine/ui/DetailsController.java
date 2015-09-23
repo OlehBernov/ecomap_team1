@@ -24,10 +24,9 @@ import android.widget.TextView;
 
 import com.ecomap.ukraine.R;
 import com.ecomap.ukraine.models.Problem;
-import com.ecomap.ukraine.problemupdate.manager.DataManager;
+import com.ecomap.ukraine.update.manager.DataManager;
 import com.ecomap.ukraine.ui.activities.ChooseProblemLocationActivity;
 import com.ecomap.ukraine.ui.activities.MainActivity;
-import com.ecomap.ukraine.ui.fullinfo.DetailsContent;
 import com.ecomap.ukraine.util.Keyboard;
 import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 

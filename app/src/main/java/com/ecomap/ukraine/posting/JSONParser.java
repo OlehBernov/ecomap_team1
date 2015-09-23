@@ -1,4 +1,4 @@
-package com.ecomap.ukraine.problemposting;
+package com.ecomap.ukraine.posting;
 
 import org.json.JSONException;
 import org.json.JSONObject;

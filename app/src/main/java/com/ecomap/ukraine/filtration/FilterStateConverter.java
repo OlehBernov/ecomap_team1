@@ -6,22 +6,22 @@ import java.util.Map;
 import java.util.Set;
 
 /**
- * Performs convertion of the filter state to JSON format for saving to shared preferences,
- * converts JSON to FilterState object.
+ * Performs convertion of the filter state to JSON format for saving to shared preferences.
  */
 public class FilterStateConverter {
 
-    private FilterStateConverter() {}
+    private FilterStateConverter() {
+    }
 
     /**
-     * Converts filter state to JSON format.
+     * Converts filter state to string set.
      *
-     * @return filter state in JSON format.
-     * @params filterState state of the filters.
+     * @param filterState state of the filters.
+     * @return string set.
      */
     public static Set<String> convertToStringSet(final FilterState filterState) {
         Set<String> filterStateSet = new HashSet<>();
-        for (String filterItem: filterState.getState().keySet()) {
+        for (String filterItem : filterState.getState().keySet()) {
             if (filterState.isFilterOff(filterItem)) {
                 filterStateSet.add(filterItem);
             }
@@ -31,10 +31,10 @@ public class FilterStateConverter {
     }
 
     /**
-     * Converts JSON to FilterState object.
+     * Maps the specified key to the specified value.
      *
-     * @return object of the filter state.
-     * @params filterStateJson saved filter state in JSON format.
+     * @param filterStateSet saved filter state in string set.
+     * @return check boxes state.
      */
     public static Map<String, Boolean> convertToCheckBoxesState(final Set<String> filterStateSet) {
         Map<String, Boolean> filterStateValues = new HashMap<>();

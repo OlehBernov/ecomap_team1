@@ -11,12 +11,10 @@ import android.widget.LinearLayout;
 import com.ecomap.ukraine.R;
 import com.ecomap.ukraine.models.Details;
 import com.ecomap.ukraine.models.Problem;
-import com.ecomap.ukraine.problemupdate.manager.DataListenerAdapter;
-import com.ecomap.ukraine.problemupdate.manager.DataManager;
+import com.ecomap.ukraine.update.manager.DataListenerAdapter;
+import com.ecomap.ukraine.update.manager.DataManager;
 import com.ecomap.ukraine.ui.fullinfo.DetailsContent;
 import com.ecomap.ukraine.util.BasicContentLayout;
-
-import java.util.List;
 
 /**
  * Activity which displays problem details after click on recycle view element.

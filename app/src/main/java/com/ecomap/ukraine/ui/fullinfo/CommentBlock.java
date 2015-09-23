@@ -11,8 +11,8 @@ import android.widget.Toast;
 import com.ecomap.ukraine.R;
 import com.ecomap.ukraine.authentication.manager.AccountManager;
 import com.ecomap.ukraine.models.User;
-import com.ecomap.ukraine.problemupdate.manager.DataListenerAdapter;
-import com.ecomap.ukraine.problemupdate.manager.DataManager;
+import com.ecomap.ukraine.update.manager.DataListenerAdapter;
+import com.ecomap.ukraine.update.manager.DataManager;
 
 /**
  * Block for posting comments.

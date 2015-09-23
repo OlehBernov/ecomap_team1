@@ -1,4 +1,4 @@
-package com.ecomap.ukraine.problemupdate;
+package com.ecomap.ukraine.update;
 
 
 import com.ecomap.ukraine.models.ActivityType;

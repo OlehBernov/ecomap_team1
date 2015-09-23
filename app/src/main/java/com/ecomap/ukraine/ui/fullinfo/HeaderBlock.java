@@ -17,8 +17,8 @@ import com.ecomap.ukraine.models.Problem;
 import com.ecomap.ukraine.models.ProblemActivity;
 import com.ecomap.ukraine.models.ProblemStatus;
 import com.ecomap.ukraine.models.User;
-import com.ecomap.ukraine.problemupdate.manager.DataListenerAdapter;
-import com.ecomap.ukraine.problemupdate.manager.DataManager;
+import com.ecomap.ukraine.update.manager.DataListenerAdapter;
+import com.ecomap.ukraine.update.manager.DataManager;
 import java.util.List;
 
 /**

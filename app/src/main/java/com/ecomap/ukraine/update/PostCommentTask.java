@@ -1,4 +1,4 @@
-package com.ecomap.ukraine.problemupdate;
+package com.ecomap.ukraine.update;
 
 import android.content.Context;
 import android.os.AsyncTask;
@@ -6,7 +6,7 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.ecomap.ukraine.R;
-import com.ecomap.ukraine.problemupdate.manager.ProblemRequestReceiver;
+import com.ecomap.ukraine.update.manager.ProblemRequestReceiver;
 
 import org.json.JSONObject;
 

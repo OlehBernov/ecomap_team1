@@ -15,8 +15,8 @@ import com.ecomap.ukraine.models.AllTop10Items;
 import com.ecomap.ukraine.models.Problem;
 import com.ecomap.ukraine.models.Top10FragmentID;
 import com.ecomap.ukraine.models.Top10Item;
-import com.ecomap.ukraine.problemupdate.manager.DataListenerAdapter;
-import com.ecomap.ukraine.problemupdate.manager.DataManager;
+import com.ecomap.ukraine.update.manager.DataListenerAdapter;
+import com.ecomap.ukraine.update.manager.DataManager;
 import com.ecomap.ukraine.ui.activities.ProblemDetailsActivity;
 import com.ecomap.ukraine.ui.adapters.Top10ListAdapter;
 

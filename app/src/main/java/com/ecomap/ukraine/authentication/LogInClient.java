@@ -10,7 +10,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.ecomap.ukraine.authentication.manager.LogRequestReceiver;
 import com.ecomap.ukraine.models.User;
-import com.ecomap.ukraine.problemupdate.RequestQueueWrapper;
+import com.ecomap.ukraine.update.RequestQueueWrapper;
 
 import org.json.JSONException;
 

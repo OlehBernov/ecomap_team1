@@ -15,10 +15,10 @@ import android.widget.LinearLayout;
 
 import com.ecomap.ukraine.R;
 import com.ecomap.ukraine.map.IconRenderer;
-import com.ecomap.ukraine.problemupdate.manager.DataListenerAdapter;
+import com.ecomap.ukraine.update.manager.DataListenerAdapter;
 import com.ecomap.ukraine.ui.activities.MainActivity;
 import com.ecomap.ukraine.ui.DetailsController;
-import com.ecomap.ukraine.problemupdate.manager.DataManager;
+import com.ecomap.ukraine.update.manager.DataManager;
 import com.ecomap.ukraine.filtration.Filter;
 import com.ecomap.ukraine.filtration.FilterListener;
 import com.ecomap.ukraine.filtration.FilterManager;

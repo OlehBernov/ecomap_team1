@@ -1,4 +1,4 @@
-package com.ecomap.ukraine.problemupdate.manager;
+package com.ecomap.ukraine.update.manager;
 
 /**
  * Possible modes of data updating.
