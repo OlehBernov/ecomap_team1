@@ -11,14 +11,13 @@ import android.widget.Toast;
 import com.ecomap.ukraine.R;
 import com.ecomap.ukraine.authentication.manager.AccountManager;
 import com.ecomap.ukraine.models.User;
-import com.ecomap.ukraine.problemdetails.manager.DetailsListener;
-import com.ecomap.ukraine.problemdetails.manager.DetailsManager;
+import com.ecomap.ukraine.problemupdate.manager.DataListenerAdapter;
 import com.ecomap.ukraine.problemupdate.manager.DataManager;
 
 /**
  * Block for posting comments.
  */
-public class CommentBlock extends LinearLayout implements DetailsListener {
+public class CommentBlock extends LinearLayout {
 
     private Context context;
     private int problemId;
@@ -47,19 +46,7 @@ public class CommentBlock extends LinearLayout implements DetailsListener {
         this.problemId = problemId;
     }
 
-    @Override
-    public void onVoteAdded() {
 
-    }
-
-    /**
-     * Performs when comment was successfully sent to server.
-     */
-    @Override
-    public void onCommentAdded() {
-        DataManager.getInstance(context).refreshProblemDetails(problemId);
-        commentText.setText("");
-    }
 
     /**
      * Initiates the view.
@@ -92,8 +79,17 @@ public class CommentBlock extends LinearLayout implements DetailsListener {
                     Toast.makeText(context,
                             R.string.empty_post_comment, Toast.LENGTH_LONG).show();
                 } else {
-                    DetailsManager.getInstance(context).registerDetailsListener(CommentBlock.this);
-                    DetailsManager.getInstance(context).postComment(problemID, userId, userName,
+                    DataManager.getInstance(context).registerProblemListener(new DataListenerAdapter() {
+                        /**
+                         * Performs when comment was successfully sent to server.
+                         */
+                        @Override
+                        public void onCommentAdded() {
+                            DataManager.getInstance(context).refreshProblemDetails(problemId);
+                            commentText.setText("");
+                        }
+                    });
+                    DataManager.getInstance(context).postComment(problemID, userId, userName,
                             userSurname, content);
                 }
             }

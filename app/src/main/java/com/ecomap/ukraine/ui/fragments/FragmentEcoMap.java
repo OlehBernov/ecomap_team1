@@ -15,8 +15,7 @@ import android.widget.LinearLayout;
 
 import com.ecomap.ukraine.R;
 import com.ecomap.ukraine.map.IconRenderer;
-import com.ecomap.ukraine.models.AllTop10Items;
-import com.ecomap.ukraine.problemupdate.manager.ProblemListenerAdapter;
+import com.ecomap.ukraine.problemupdate.manager.DataListenerAdapter;
 import com.ecomap.ukraine.ui.activities.MainActivity;
 import com.ecomap.ukraine.ui.DetailsController;
 import com.ecomap.ukraine.problemupdate.manager.DataManager;
@@ -76,7 +75,7 @@ public class FragmentEcoMap extends android.support.v4.app.Fragment
     private BasicContentLayout basicContentLayout;
     private DetailsContent detailsContent;
     private int mapType;
-    private ProblemListenerAdapter problemListenerAdapter;
+    private DataListenerAdapter dataListenerAdapter;
 
     public FragmentEcoMap() {
     }
@@ -113,7 +112,7 @@ public class FragmentEcoMap extends android.support.v4.app.Fragment
                              Bundle savedInstanceState) {
 
         dataManager = DataManager.getInstance(getActivity());
-        problemListenerAdapter = new ProblemListenerAdapter() {
+        dataListenerAdapter = new DataListenerAdapter() {
             /**
              * Get list of all problems.
              *
@@ -139,7 +138,7 @@ public class FragmentEcoMap extends android.support.v4.app.Fragment
                 }
             }
         };
-        dataManager.registerProblemListener(problemListenerAdapter);
+        dataManager.registerProblemListener(dataListenerAdapter);
 
         View rootView = inflater.inflate(R.layout.fragement_map, container, false);
         mapView = (MapView) rootView.findViewById(R.id.mapView);
@@ -207,7 +206,7 @@ public class FragmentEcoMap extends android.support.v4.app.Fragment
     @Override
     public void onDestroy() {
         super.onDestroy();
-        dataManager.removeProblemListener(problemListenerAdapter);
+        dataManager.removeProblemListener(dataListenerAdapter);
         filterManager.removeFilterListener(this);
         SharedPreferences.Editor editor = getActivity()
                 .getSharedPreferences(FragmentEcoMap.POSITION,

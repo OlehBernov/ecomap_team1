@@ -23,8 +23,8 @@ import com.ecomap.ukraine.models.ProblemForPosting;
 import com.ecomap.ukraine.models.User;
 import com.ecomap.ukraine.problemposting.manager.AddProblemListener;
 import com.ecomap.ukraine.problemposting.manager.AddProblemManager;
+import com.ecomap.ukraine.problemupdate.manager.DataListenerAdapter;
 import com.ecomap.ukraine.problemupdate.manager.DataManager;
-import com.ecomap.ukraine.problemupdate.manager.ProblemListenerAdapter;
 import com.ecomap.ukraine.ui.activities.MainActivity;
 import com.ecomap.ukraine.util.ExtraFieldNames;
 import com.ecomap.ukraine.util.Keyboard;
@@ -100,7 +100,7 @@ public class AddProblemDescriptionFragment extends Fragment implements AddProble
 
     public void successPosting(final int idOfMessage) {
         Toast.makeText(getActivity(), idOfMessage, Toast.LENGTH_LONG).show();
-        dataManager.registerProblemListener(new ProblemListenerAdapter() {
+        dataManager.registerProblemListener(new DataListenerAdapter() {
             /**
              * Get list of all problems.
              *

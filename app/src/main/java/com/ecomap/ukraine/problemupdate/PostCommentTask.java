@@ -1,4 +1,4 @@
-package com.ecomap.ukraine.problemdetails;
+package com.ecomap.ukraine.problemupdate;
 
 import android.content.Context;
 import android.os.AsyncTask;
@@ -6,7 +6,7 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.ecomap.ukraine.R;
-import com.ecomap.ukraine.problemdetails.manager.DetailsRequestReceiver;
+import com.ecomap.ukraine.problemupdate.manager.ProblemRequestReceiver;
 
 import org.json.JSONObject;
 
@@ -27,19 +27,19 @@ public class PostCommentTask extends AsyncTask<JSONObject, Void, Boolean> {
 
     private int problemID;
     private Context context;
-    private DetailsRequestReceiver detailsRequestReceiver;
+    private ProblemRequestReceiver problemRequestReceiver;
 
     /**
      * Constructor
      * @param problemID problem id
      * @param context application context
-     * @param detailsRequestReceiver receiver of request
+     * @param problemRequestReceiver receiver of request
      */
-    public PostCommentTask (int problemID, Context context,
-                            DetailsRequestReceiver detailsRequestReceiver) {
+    public PostCommentTask(int problemID, Context context,
+                           ProblemRequestReceiver problemRequestReceiver) {
         this.problemID = problemID;
         this.context = context;
-        this.detailsRequestReceiver = detailsRequestReceiver;
+        this.problemRequestReceiver = problemRequestReceiver;
     }
 
     /**
@@ -86,7 +86,7 @@ public class PostCommentTask extends AsyncTask<JSONObject, Void, Boolean> {
     @Override
     protected void onPostExecute(Boolean result) {
         if(result) {
-            detailsRequestReceiver.onCommentAdded();
+            problemRequestReceiver.onCommentAdded();
         }
     }
 }

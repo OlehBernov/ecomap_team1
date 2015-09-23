@@ -10,7 +10,7 @@ import java.util.List;
  * Interface of classes, which want to get
  * information about problem from database.
  */
-public interface ProblemListener {
+public interface DataListener {
 
     /**
      * Send to listeners list of all problems.
@@ -27,5 +27,9 @@ public interface ProblemListener {
     void updateProblemDetails(final Details details);
 
     void updateTop10(final AllTop10Items allTop10Items);
+
+    void onVoteAdded();
+
+    void onCommentAdded();
 
 }

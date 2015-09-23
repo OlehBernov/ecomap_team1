@@ -3,8 +3,6 @@ package com.ecomap.ukraine.problemupdate.manager;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
-import android.os.Handler;
-import android.os.Looper;
 import android.preference.PreferenceManager;
 
 import com.ecomap.ukraine.R;
@@ -45,7 +43,7 @@ public class DataManager implements ProblemListenersNotifier,
     /**
      * Set of problem listeners.
      */
-    private Collection<ProblemListener> problemListeners = new CopyOnWriteArrayList<>();
+    private Collection<DataListener> problemListeners = new CopyOnWriteArrayList<>();
 
     /**
      * Holds the reference to LoadingClient used by DataManager.
@@ -89,7 +87,7 @@ public class DataManager implements ProblemListenersNotifier,
      *
      * @param listener the ProblemListener to add.
      */
-    public void registerProblemListener(final ProblemListener listener) {
+    public void registerProblemListener(final DataListener listener) {
         problemListeners.add(listener);
     }
 
@@ -98,7 +96,7 @@ public class DataManager implements ProblemListenersNotifier,
      *
      * @param listener the ProblemListener to remove.
      */
-    public void removeProblemListener(final ProblemListener listener) {
+    public void removeProblemListener(final DataListener listener) {
         problemListeners.remove(listener);
     }
 
@@ -107,7 +105,7 @@ public class DataManager implements ProblemListenersNotifier,
      */
     @Override
     public void sendAllProblems(final List<Problem> problems) {
-        for (ProblemListener listener : problemListeners) {
+        for (DataListener listener : problemListeners) {
             listener.updateAllProblems(problems);
         }
     }
@@ -117,14 +115,14 @@ public class DataManager implements ProblemListenersNotifier,
      */
     @Override
     public void sendProblemDetails(final Details details) {
-        for (ProblemListener listener : problemListeners) {
+        for (DataListener listener : problemListeners) {
             listener.updateProblemDetails(details);
         }
     }
 
     @Override
     public void sendAllTop10Items(final AllTop10Items allTop10Items) {
-        for (ProblemListener listener : problemListeners) {
+        for (DataListener listener : problemListeners) {
             listener.updateTop10(allTop10Items);
         }
     }
@@ -179,6 +177,20 @@ public class DataManager implements ProblemListenersNotifier,
             getTop10();
         } else {
             sendAllTop10Items(dbHelper.getAllTop10Items());
+        }
+    }
+
+    @Override
+    public void onVoteAdded() {
+        for (DataListener listener : problemListeners) {
+            listener.onVoteAdded();
+        }
+    }
+
+    @Override
+    public void onCommentAdded() {
+        for (DataListener listener : problemListeners) {
+            listener.onCommentAdded();
         }
     }
 
@@ -240,6 +252,18 @@ public class DataManager implements ProblemListenersNotifier,
         }
     }
 
+    public void postVote(final String problemID, final String userID,
+                         final String userName, final String userSurname) {
+        loadingClient.postVote(problemID, userID, userName, userSurname);
+
+    }
+
+    public void postComment(final int problemID, final String userID,
+                            final String userName, final String userSurname,
+                            final String content) {
+        loadingClient.postComment(problemID, userID, userName, userSurname, content);
+    }
+
 
     public void refreshAllProblem() {
         loadingClient.getAllProblems();
@@ -263,6 +287,10 @@ public class DataManager implements ProblemListenersNotifier,
                 return null;
             }
         }.execute();
+    }
+
+    public void removeAllListeners() {
+        problemListeners.clear();
     }
 
     /**

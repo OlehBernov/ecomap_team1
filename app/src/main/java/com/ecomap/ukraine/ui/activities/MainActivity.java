@@ -24,7 +24,7 @@ import com.ecomap.ukraine.R;
 import com.ecomap.ukraine.authentication.manager.AccountManager;
 import com.ecomap.ukraine.filtration.FilterManager;
 import com.ecomap.ukraine.models.User;
-import com.ecomap.ukraine.problemdetails.manager.DetailsManager;
+import com.ecomap.ukraine.problemupdate.manager.DataManager;
 import com.ecomap.ukraine.ui.fragments.FilterFragment;
 import com.ecomap.ukraine.ui.fragments.FragmentEcoMap;
 import com.sothree.slidinguppanel.SlidingUpPanelLayout;
@@ -279,7 +279,7 @@ public class MainActivity extends AppCompatActivity {
         } else if (isInformationalPanelCollapsed()) {
             slidingUpPanelLayout.setPanelState(SlidingUpPanelLayout
                     .PanelState.HIDDEN);
-            DetailsManager.getInstance(getApplicationContext()).removeAllDetailsListener();
+            DataManager.getInstance(getApplicationContext()).removeAllListeners();
         } else {
             super.onBackPressed();
         }

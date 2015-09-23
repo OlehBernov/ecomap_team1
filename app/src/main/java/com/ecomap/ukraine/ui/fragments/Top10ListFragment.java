@@ -15,8 +15,8 @@ import com.ecomap.ukraine.models.AllTop10Items;
 import com.ecomap.ukraine.models.Problem;
 import com.ecomap.ukraine.models.Top10FragmentID;
 import com.ecomap.ukraine.models.Top10Item;
+import com.ecomap.ukraine.problemupdate.manager.DataListenerAdapter;
 import com.ecomap.ukraine.problemupdate.manager.DataManager;
-import com.ecomap.ukraine.problemupdate.manager.ProblemListenerAdapter;
 import com.ecomap.ukraine.ui.activities.ProblemDetailsActivity;
 import com.ecomap.ukraine.ui.adapters.Top10ListAdapter;
 
@@ -35,7 +35,7 @@ public class Top10ListFragment extends Fragment implements AdapterView.OnItemCli
     private int iconID;
     private ListView listView;
     private List<Problem> problems;
-    private ProblemListenerAdapter problemListenerAdapter;
+    private DataListenerAdapter dataListenerAdapter;
     private Top10ListFragment fragment = this;
 
 
@@ -60,7 +60,7 @@ public class Top10ListFragment extends Fragment implements AdapterView.OnItemCli
                              Bundle savedInstanceState) {
 
         View v = inflater.inflate(R.layout.fragment_list_top_10, container, false);
-        problemListenerAdapter = new ProblemListenerAdapter() {
+        dataListenerAdapter = new DataListenerAdapter() {
 
             @Override
             public void updateAllProblems(List<Problem> updateproblems) {
@@ -85,7 +85,7 @@ public class Top10ListFragment extends Fragment implements AdapterView.OnItemCli
                 listView.setOnItemClickListener(fragment);
             }
         };
-        DataManager.getInstance(getActivity()).registerProblemListener(problemListenerAdapter);
+        DataManager.getInstance(getActivity()).registerProblemListener(dataListenerAdapter);
         listView = (ListView)v.findViewById(R.id.list);
         listAdapter = new Top10ListAdapter(getActivity(), top10ItemList, iconID);
         listView.setAdapter(listAdapter);
@@ -96,7 +96,7 @@ public class Top10ListFragment extends Fragment implements AdapterView.OnItemCli
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        DataManager.getInstance(getActivity()).removeProblemListener(problemListenerAdapter);
+        DataManager.getInstance(getActivity()).removeProblemListener(dataListenerAdapter);
     }
 
     @Override

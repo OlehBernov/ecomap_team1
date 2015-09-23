@@ -18,8 +18,8 @@ import com.ecomap.ukraine.models.AllTop10Items;
 import com.ecomap.ukraine.models.Problem;
 import com.ecomap.ukraine.models.Top10FragmentID;
 import com.ecomap.ukraine.models.Top10Item;
+import com.ecomap.ukraine.problemupdate.manager.DataListenerAdapter;
 import com.ecomap.ukraine.problemupdate.manager.DataManager;
-import com.ecomap.ukraine.problemupdate.manager.ProblemListenerAdapter;
 import com.ecomap.ukraine.ui.SlidingTabLayout;
 import com.ecomap.ukraine.ui.adapters.ViewPagerAdapter;
 import com.ecomap.ukraine.ui.fragments.Top10ListFragment;
@@ -40,7 +40,7 @@ public class Top10Activity extends AppCompatActivity  {
     private SlidingTabLayout tabs;
     private String[] titles;
     private View progresView;
-    private ProblemListenerAdapter problemListenerAdapter;
+    private DataListenerAdapter dataListenerAdapter;
 
     /**
      * Initialize activity
@@ -59,7 +59,7 @@ public class Top10Activity extends AppCompatActivity  {
 
         DataManager dataManager = DataManager.getInstance(this);
 
-        problemListenerAdapter = new ProblemListenerAdapter() {
+        dataListenerAdapter = new DataListenerAdapter() {
             @Override
             public void updateAllProblems(List<Problem> updateproblems) {
                 problems = updateproblems;
@@ -71,7 +71,7 @@ public class Top10Activity extends AppCompatActivity  {
                 progresView.setVisibility(View.GONE);
             }
         };
-        dataManager.registerProblemListener(problemListenerAdapter);
+        dataManager.registerProblemListener(dataListenerAdapter);
         dataManager.getTop10();
         dataManager.getAllProblems();
 
@@ -95,7 +95,7 @@ public class Top10Activity extends AppCompatActivity  {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        DataManager.getInstance(this).removeProblemListener(problemListenerAdapter);
+        DataManager.getInstance(this).removeProblemListener(dataListenerAdapter);
     }
 
     /**

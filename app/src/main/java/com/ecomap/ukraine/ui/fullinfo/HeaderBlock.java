@@ -1,21 +1,11 @@
 package com.ecomap.ukraine.ui.fullinfo;
 
-import android.animation.Animator;
-import android.animation.AnimatorListenerAdapter;
-import android.animation.AnimatorSet;
-import android.animation.ObjectAnimator;
-import android.animation.ValueAnimator;
 import android.content.Context;
 import android.graphics.Color;
-import android.support.v4.view.animation.PathInterpolatorCompat;
 import android.util.AttributeSet;
-import android.util.TypedValue;
 import android.view.View;
-import android.view.animation.AnimationSet;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.ecomap.ukraine.R;
@@ -27,16 +17,14 @@ import com.ecomap.ukraine.models.Problem;
 import com.ecomap.ukraine.models.ProblemActivity;
 import com.ecomap.ukraine.models.ProblemStatus;
 import com.ecomap.ukraine.models.User;
-import com.ecomap.ukraine.problemdetails.manager.DetailsListener;
-import com.ecomap.ukraine.problemdetails.manager.DetailsManager;
+import com.ecomap.ukraine.problemupdate.manager.DataListenerAdapter;
 import com.ecomap.ukraine.problemupdate.manager.DataManager;
-
 import java.util.List;
 
 /**
  * Block for full problem information layout which contains basic information about problem.
  */
-public class HeaderBlock extends LinearLayout implements DetailsListener {
+public class HeaderBlock extends LinearLayout {
 
     private static final String RESOLVED = "resolved";
     private static final String UNSOLVED = "unsolved";
@@ -61,20 +49,6 @@ public class HeaderBlock extends LinearLayout implements DetailsListener {
         super(context, attrs, defStyleAttr);
         this.context = context;
         init();
-    }
-
-    /**
-     * Performs when vote was successfully sent to server.
-     */
-    @Override
-    public void onVoteAdded() {
-        DataManager.getInstance(context).refreshProblemDetails(problem.getProblemId());
-        voteIcon.setEnabled(false);
-    }
-
-    @Override
-    public void onCommentAdded() {
-
     }
 
     /**
@@ -129,8 +103,17 @@ public class HeaderBlock extends LinearLayout implements DetailsListener {
                 String userId = String.valueOf(user.getId());
                 String userName = user.getName();
                 String userSurname = user.getSurname();
-                DetailsManager.getInstance(context).registerDetailsListener(HeaderBlock.this);
-                DetailsManager.getInstance(context).postVote(problemID, userId, userName, userSurname);
+                DataManager.getInstance(context).registerProblemListener(new DataListenerAdapter() {
+                    /**
+                     * Performs when vote was successfully sent to server.
+                     */
+                    @Override
+                    public void onVoteAdded() {
+                        DataManager.getInstance(context).refreshProblemDetails(problem.getProblemId());
+                        voteIcon.setEnabled(false);
+                    }
+                });
+                DataManager.getInstance(context).postVote(problemID, userId, userName, userSurname);
             }
         });
     }

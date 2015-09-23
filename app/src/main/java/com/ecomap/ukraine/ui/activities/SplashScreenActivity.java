@@ -11,10 +11,10 @@ import android.view.View;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.ecomap.ukraine.R;
 import com.ecomap.ukraine.authentication.manager.AccountManager;
+import com.ecomap.ukraine.problemupdate.manager.DataListenerAdapter;
 import com.ecomap.ukraine.problemupdate.manager.DataManager;
 import com.ecomap.ukraine.models.Problem;
 import com.ecomap.ukraine.models.User;
-import com.ecomap.ukraine.problemupdate.manager.ProblemListenerAdapter;
 
 import java.util.List;
 
@@ -75,7 +75,7 @@ public class SplashScreenActivity extends Activity {
      */
     User user;
 
-    private ProblemListenerAdapter problemListenerAdapter;
+    private DataListenerAdapter dataListenerAdapter;
 
     /**
      * Initialize activity
@@ -106,7 +106,7 @@ public class SplashScreenActivity extends Activity {
         }
 
         manager = DataManager.getInstance(context);
-        problemListenerAdapter = new ProblemListenerAdapter() {
+        dataListenerAdapter = new DataListenerAdapter() {
             /**
              * Opens Main Activity.
              *
@@ -121,7 +121,7 @@ public class SplashScreenActivity extends Activity {
                         new Handler().postDelayed(new Runnable() {
                             @Override
                             public void run() {
-                                manager.removeProblemListener(problemListenerAdapter);
+                                manager.removeProblemListener(dataListenerAdapter);
                                 startActivity(intent);
                             }
                         }, Math.max(loadingTime(endLoading), 0));
@@ -131,7 +131,7 @@ public class SplashScreenActivity extends Activity {
                 }
             }
         };
-        manager.registerProblemListener(problemListenerAdapter);
+        manager.registerProblemListener(dataListenerAdapter);
                 manager.getAllProblems();
     }
 

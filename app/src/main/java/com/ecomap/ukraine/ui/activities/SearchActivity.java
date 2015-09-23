@@ -19,8 +19,8 @@ import com.ecomap.ukraine.filtration.Filter;
 import com.ecomap.ukraine.filtration.FilterManager;
 import com.ecomap.ukraine.filtration.FilterState;
 import com.ecomap.ukraine.models.Problem;
+import com.ecomap.ukraine.problemupdate.manager.DataListenerAdapter;
 import com.ecomap.ukraine.problemupdate.manager.DataManager;
-import com.ecomap.ukraine.problemupdate.manager.ProblemListenerAdapter;
 import com.ecomap.ukraine.ui.adapters.ProblemAdapter;
 
 import java.util.ArrayList;
@@ -92,7 +92,7 @@ public class SearchActivity extends AppCompatActivity
 
     private void requestProblemsList() {
         final DataManager dataManager = DataManager.getInstance(this);
-        dataManager.registerProblemListener(new ProblemListenerAdapter() {
+        dataManager.registerProblemListener(new DataListenerAdapter() {
             @Override
             public void updateAllProblems(List<Problem> problems) {
                 unfilteredProblems = problems;

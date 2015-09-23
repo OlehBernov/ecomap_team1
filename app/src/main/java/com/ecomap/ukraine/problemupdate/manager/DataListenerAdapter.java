@@ -9,7 +9,7 @@ import java.util.List;
 /**
  * Created by Andriy on 22.09.2015.
  */
-public class ProblemListenerAdapter implements ProblemListener {
+public class DataListenerAdapter implements DataListener {
 
     @Override
     public void updateAllProblems(List<Problem> problems) {
@@ -23,6 +23,16 @@ public class ProblemListenerAdapter implements ProblemListener {
 
     @Override
     public void updateTop10(AllTop10Items allTop10Items) {
+
+    }
+
+    @Override
+    public void onVoteAdded() {
+
+    }
+
+    @Override
+    public void onCommentAdded() {
 
     }
 }

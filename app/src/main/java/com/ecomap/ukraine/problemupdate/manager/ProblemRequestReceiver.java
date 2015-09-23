@@ -29,4 +29,8 @@ public interface ProblemRequestReceiver {
 
     void setTop10RequestResult (final AllTop10Items allTop10Items);
 
+    void onVoteAdded();
+
+    void onCommentAdded();
+
 }

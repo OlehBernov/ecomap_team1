@@ -135,7 +135,9 @@ public class JSONFields {
      */
     public static final int PROBLEM_ACTIVITY_POSITION = 2;
 
-
+    /**
+     * Fileds for top_10
+     */
     public static final String TOP_10_ITEM_ID = "Id";
 
     public static final String TOP_10_TITLE= "Title";
@@ -145,5 +147,18 @@ public class JSONFields {
     public static final String TOP_10_SEVERITY = "Severity";
 
     public static final String TOP_10_COMMENTS = "value";
+
+    public static final String PROBLEM_ID = "idProblem";
+
+    public static final String USER_ID = "userId";
+
+    /**
+     * Fields fot posting comment
+     */
+    public static final String USER_SURNAME = "userSurname";
+
+    public static final String CONTENT = "Content";
+
+    public static final String DATA = "data";
 
 }

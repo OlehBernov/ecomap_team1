@@ -18,14 +18,14 @@ interface ProblemListenersNotifier {
      *
      * @param listener the ProblemListener to add.
      */
-    void registerProblemListener(final ProblemListener listener);
+    void registerProblemListener(final DataListener listener);
 
     /**
      * Removes the specified listener from the set of problemListeners.
      *
      * @param listener the ProblemListener to remove.
      */
-    void removeProblemListener(final ProblemListener listener);
+    void removeProblemListener(final DataListener listener);
 
     /**
      * Send to listeners list of all problems.

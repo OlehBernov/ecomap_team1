@@ -11,8 +11,8 @@ import android.widget.LinearLayout;
 import com.ecomap.ukraine.R;
 import com.ecomap.ukraine.models.Details;
 import com.ecomap.ukraine.models.Problem;
+import com.ecomap.ukraine.problemupdate.manager.DataListenerAdapter;
 import com.ecomap.ukraine.problemupdate.manager.DataManager;
-import com.ecomap.ukraine.problemupdate.manager.ProblemListenerAdapter;
 import com.ecomap.ukraine.ui.fullinfo.DetailsContent;
 import com.ecomap.ukraine.util.BasicContentLayout;
 
@@ -25,7 +25,7 @@ public class ProblemDetailsActivity extends AppCompatActivity  {
 
     private DetailsContent detailsContent;
     private Problem problem;
-    private ProblemListenerAdapter problemListenerAdapter;
+    private DataListenerAdapter dataListenerAdapter;
 
 
 
@@ -71,7 +71,7 @@ public class ProblemDetailsActivity extends AppCompatActivity  {
         detailsContent.setBaseInfo(problem);
 
         DataManager dataManager = DataManager.getInstance(this);
-        problemListenerAdapter = new ProblemListenerAdapter() {
+        dataListenerAdapter = new DataListenerAdapter() {
             /**
              * Sets details of the problem to details view.
              *
@@ -79,12 +79,12 @@ public class ProblemDetailsActivity extends AppCompatActivity  {
              */
             @Override
             public void updateProblemDetails(Details details) {
-                problemListenerAdapter = this;
+                dataListenerAdapter = this;
                 detailsContent.prepareToRefresh();
                 detailsContent.setProblemDetails(details);
             }
         };
-        dataManager.registerProblemListener(problemListenerAdapter);
+        dataManager.registerProblemListener(dataListenerAdapter);
         dataManager.getProblemDetail(problem.getProblemId());
     }
 
@@ -94,7 +94,7 @@ public class ProblemDetailsActivity extends AppCompatActivity  {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        DataManager.getInstance(this).removeProblemListener(problemListenerAdapter);
+        DataManager.getInstance(this).removeProblemListener(dataListenerAdapter);
     }
 
     /**
