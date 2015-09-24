@@ -16,7 +16,7 @@ import com.ecomap.ukraine.authentication.manager.AccountManager;
 import com.ecomap.ukraine.models.AllTop10Items;
 import com.ecomap.ukraine.models.Details;
 import com.ecomap.ukraine.models.Problem;
-import com.ecomap.ukraine.update.manager.ProblemRequestReceiver;
+import com.ecomap.ukraine.update.manager.DataResponseReceiver;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -54,17 +54,17 @@ public class LoadingClient {
     /**
      * Request receiver.
      */
-    private ProblemRequestReceiver problemRequestReceiver;
+    private DataResponseReceiver dataResponseReceiver;
 
     /**
      * Constructor of LoadingClient.
      *
-     * @param problemRequestReceiver request receiver.
+     * @param dataResponseReceiver request receiver.
      * @param context                application context.
      */
-    public LoadingClient(final ProblemRequestReceiver problemRequestReceiver,
+    public LoadingClient(final DataResponseReceiver dataResponseReceiver,
                          final Context context) {
-        this.problemRequestReceiver = problemRequestReceiver;
+        this.dataResponseReceiver = dataResponseReceiver;
         this.context = context;
     }
 
@@ -91,14 +91,14 @@ public class LoadingClient {
 
                             @Override
                             protected void onPostExecute(List<Problem> result) {
-                                problemRequestReceiver.setAllProblemsRequestResult(result);
+                                dataResponseReceiver.getAllProblemsResponseResult(result);
                             }
                         }.execute();
                     }
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                problemRequestReceiver.setAllProblemsRequestResult(null);
+                dataResponseReceiver.getAllProblemsResponseResult(null);
             }
         });
         RequestQueueWrapper.getInstance(context).addToRequestQueue(stringRequest);
@@ -119,17 +119,17 @@ public class LoadingClient {
                     public void onResponse(String response) {
                         try {
                             Details details = JSONParser.parseDetailedProblem(response);
-                            problemRequestReceiver.setProblemDetailsRequestResult(details);
+                            dataResponseReceiver.getProblemDetailsResponseResult(details);
                         } catch (JSONException e) {
                             Log.e(TAG, "JSONException in getProblemDetail");
-                            problemRequestReceiver.setProblemDetailsRequestResult(null);
+                            dataResponseReceiver.getProblemDetailsResponseResult(null);
                         }
                     }
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
                 Log.e(TAG, "onErrorResponse in getProblemDetail");
-                problemRequestReceiver.setProblemDetailsRequestResult(null);
+                dataResponseReceiver.getProblemDetailsResponseResult(null);
             }
         });
         RequestQueueWrapper.getInstance(context).addToRequestQueue(stringRequest);
@@ -156,7 +156,7 @@ public class LoadingClient {
 
                             @Override
                             protected void onPostExecute(AllTop10Items result) {
-                                problemRequestReceiver.setTop10RequestResult(result);
+                                dataResponseReceiver.getTop10ResponseResult(result);
                             }
                         }.execute();
                     }
@@ -164,7 +164,7 @@ public class LoadingClient {
             @Override
             public void onErrorResponse(VolleyError error) {
                 Log.e(TAG, "onErrorResponse in getTop10");
-                problemRequestReceiver.setTop10RequestResult(null);
+                dataResponseReceiver.getTop10ResponseResult(null);
             }
         });
         RequestQueueWrapper.getInstance(context).addToRequestQueue(stringRequest);
@@ -184,7 +184,7 @@ public class LoadingClient {
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
-                        problemRequestReceiver.onVoteAdded();
+                        dataResponseReceiver.onVoteAdded();
                     }
                 },
                 new Response.ErrorListener() {
@@ -239,7 +239,7 @@ public class LoadingClient {
         }
 
         PostCommentTask postComment = new PostCommentTask(problemID, context,
-                problemRequestReceiver);
+                dataResponseReceiver);
         postComment.execute(dataJSON);
     }
 

@@ -8,7 +8,7 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
-import com.ecomap.ukraine.authentication.manager.LogRequestReceiver;
+import com.ecomap.ukraine.authentication.manager.LogInResponseReceiver;
 import com.ecomap.ukraine.models.User;
 import com.ecomap.ukraine.update.RequestQueueWrapper;
 
@@ -48,16 +48,16 @@ public class LogInClient {
     /**
      * Request receiver.
      */
-    private LogRequestReceiver logRequestReceiver;
+    private LogInResponseReceiver logInResponseReceiver;
 
     /**
      * Constructor
      *
-     * @param logRequestReceiver receive request result
+     * @param logInResponseReceiver receive request result
      * @param context            application context
      */
-    public LogInClient(final LogRequestReceiver logRequestReceiver, final Context context) {
-        this.logRequestReceiver = logRequestReceiver;
+    public LogInClient(final LogInResponseReceiver logInResponseReceiver, final Context context) {
+        this.logInResponseReceiver = logInResponseReceiver;
         this.context = context;
     }
 
@@ -74,17 +74,16 @@ public class LogInClient {
                     public void onResponse(String response) {
                         try {
                             User user = JSONParser.parseUserInformation(response);
-                            logRequestReceiver.setLogInRequestResult(user);
-                            logRequestReceiver.putUserToPreferences(user, password);
+                            logInResponseReceiver.getLogInResponseResult(user);
                         } catch (JSONException e) {
                             Log.e(TAG, "JSONException in LogInUser");
-                            logRequestReceiver.setLogInRequestResult(null);
+                            logInResponseReceiver.getLogInResponseResult(null);
                         }
                     }
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError volleyError) {
-                logRequestReceiver.setLogInRequestResult(null);
+                logInResponseReceiver.getLogInResponseResult(null);
             }
         }) {
             @Override
@@ -118,17 +117,16 @@ public class LogInClient {
                     public void onResponse(String response) {
                         try {
                             User user = JSONParser.parseRegistrationInformation(response, email);
-                            logRequestReceiver.setLogInRequestResult(user);
-                            logRequestReceiver.putUserToPreferences(user, password);
+                            logInResponseReceiver.getLogInResponseResult(user);
                         } catch (JSONException e) {
                             Log.e(TAG, "JSONException in Registration");
-                            logRequestReceiver.setLogInRequestResult(null);
+                            logInResponseReceiver.getLogInResponseResult(null);
                         }
                     }
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError volleyError) {
-                logRequestReceiver.setLogInRequestResult(null);
+                logInResponseReceiver.getLogInResponseResult(null);
                 Log.e(TAG, "onErrorResponse in postRegistration");
             }
         }) {

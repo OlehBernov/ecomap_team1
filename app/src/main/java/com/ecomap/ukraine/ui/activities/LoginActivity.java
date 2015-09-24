@@ -136,7 +136,6 @@ public class LoginActivity extends AppCompatActivity implements LogInListener {
 
         ButterKnife.inject(this);
         emailText.setText(sharedPreferences.getString(ExtraFieldNames.LOGIN, ""));
-        passwordText.setText(sharedPreferences.getString(ExtraFieldNames.PASSWORD, ""));
 
         Keyboard.setOnFocusChangeListener(emailText);
         Keyboard.setOnFocusChangeListener(passwordText);

@@ -6,7 +6,7 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.ecomap.ukraine.R;
-import com.ecomap.ukraine.update.manager.ProblemRequestReceiver;
+import com.ecomap.ukraine.update.manager.DataResponseReceiver;
 
 import org.json.JSONObject;
 
@@ -27,19 +27,19 @@ public class PostCommentTask extends AsyncTask<JSONObject, Void, Boolean> {
 
     private int problemID;
     private Context context;
-    private ProblemRequestReceiver problemRequestReceiver;
+    private DataResponseReceiver dataResponseReceiver;
 
     /**
      * Constructor
      * @param problemID problem id
      * @param context application context
-     * @param problemRequestReceiver receiver of request
+     * @param dataResponseReceiver receiver of request
      */
     public PostCommentTask(int problemID, Context context,
-                           ProblemRequestReceiver problemRequestReceiver) {
+                           DataResponseReceiver dataResponseReceiver) {
         this.problemID = problemID;
         this.context = context;
-        this.problemRequestReceiver = problemRequestReceiver;
+        this.dataResponseReceiver = dataResponseReceiver;
     }
 
     /**
@@ -86,7 +86,7 @@ public class PostCommentTask extends AsyncTask<JSONObject, Void, Boolean> {
     @Override
     protected void onPostExecute(Boolean result) {
         if(result) {
-            problemRequestReceiver.onCommentAdded();
+            dataResponseReceiver.onCommentAdded();
         }
     }
 }

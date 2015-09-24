@@ -20,7 +20,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
  * Coordinates the work of the database, data loading client and activities.
  * Provides updates of the database.
  */
-public class DataManager implements ProblemRequestReceiver {
+public class DataManager implements DataResponseReceiver {
 
     /**
      * The name of the preference to retrieve.
@@ -141,7 +141,7 @@ public class DataManager implements ProblemRequestReceiver {
      * @param problems list of all problems.
      */
     @Override
-    public void setAllProblemsRequestResult(final List<Problem> problems) {
+    public void getAllProblemsResponseResult(final List<Problem> problems) {
         if (problems != null) {
             new AsyncTask<Void, Void, Void>() {
                 @Override
@@ -167,7 +167,7 @@ public class DataManager implements ProblemRequestReceiver {
      * @param details details of concrete problem.
      */
     @Override
-    public void setProblemDetailsRequestResult(final Details details) {
+    public void getProblemDetailsResponseResult(final Details details) {
         if (details != null) {
             dbHelper.updateProblemDetails(details);
             getProblemDetail(details.getProblemId());
@@ -182,7 +182,7 @@ public class DataManager implements ProblemRequestReceiver {
      * @param allTop10Items object of top 10 problem
      */
     @Override
-    public void setTop10RequestResult (AllTop10Items allTop10Items) {
+    public void getTop10ResponseResult (AllTop10Items allTop10Items) {
         if (allTop10Items != null) {
             dbHelper.updateTop10(allTop10Items);
             saveUpdateTime(TOP_10_UPDATE_TIME);

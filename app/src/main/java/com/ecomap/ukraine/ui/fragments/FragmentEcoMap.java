@@ -78,9 +78,6 @@ public class FragmentEcoMap extends android.support.v4.app.Fragment
     public FragmentEcoMap() {
     }
 
-    public static FragmentEcoMap newInstance() {
-        return new FragmentEcoMap();
-    }
 
     /**
      * Puts all problems on map
@@ -227,7 +224,6 @@ public class FragmentEcoMap extends android.support.v4.app.Fragment
     /**
      * Sets renderer on map
      */
-    @Override
     public void setRenderer() {
         clusterManager.setRenderer(new IconRenderer(getActivity(), googleMap, clusterManager));
     }

@@ -96,11 +96,6 @@ public class FilterManager implements FilterListenersNotifier {
         }
     }
 
-    public void setRenderer() {
-        for (FilterListener listener : filterListeners) {
-            listener.setRenderer();
-        }
-    }
 
     /**
      * This method use to get  filter state for filter manager

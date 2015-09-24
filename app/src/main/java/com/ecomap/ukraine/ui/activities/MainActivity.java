@@ -62,6 +62,7 @@ public class MainActivity extends AppCompatActivity {
     private CharSequence previousTitle;
     private DrawerLayout drawerLayout;
     private FilterFragment filterFragment;
+    private FragmentEcoMap mapFragment;
 
     public boolean problemAddingMenu;
 
@@ -197,7 +198,7 @@ public class MainActivity extends AppCompatActivity {
      */
     public void logOut(MenuItem item) {
         setUserInformation(User.ANONYM_USER);
-        accountManager.putUserToPreferences(User.ANONYM_USER, "");
+        accountManager.putUser(User.ANONYM_USER);
     }
 
     /**
@@ -394,8 +395,9 @@ public class MainActivity extends AppCompatActivity {
      */
     private void addMapFragment() {
         FragmentManager fragmentManager = getSupportFragmentManager();
+        mapFragment = new FragmentEcoMap();
         fragmentManager.beginTransaction()
-                .replace(R.id.container, FragmentEcoMap.newInstance(), MAP_TAG)
+                .replace(R.id.container, mapFragment, MAP_TAG)
                 .commit();
     }
 
@@ -427,7 +429,7 @@ public class MainActivity extends AppCompatActivity {
     private class FilterDrawerListener extends DrawerLayout.SimpleDrawerListener {
         @Override
         public void onDrawerClosed(View view) {
-            filterManager.setRenderer();
+            mapFragment.setRenderer();
         }
     }
 

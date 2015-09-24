@@ -13,7 +13,7 @@ import java.util.Set;
 /**
  * Coordinates the work of the identification client and activities.
  */
-public class AccountManager implements LogRequestReceiver {
+public class AccountManager implements LogInResponseReceiver {
 
     /**
      * Holds the Singleton global instance of AccountManager.
@@ -73,7 +73,8 @@ public class AccountManager implements LogRequestReceiver {
      * @param user registered user
      */
     @Override
-    public void setLogInRequestResult(final User user) {
+    public void getLogInResponseResult(final User user) {
+        putUser(user);
         sendLogInResult(user);
     }
 
@@ -81,14 +82,11 @@ public class AccountManager implements LogRequestReceiver {
      * Puts user information to Shared Preferences
      *
      * @param user     user information
-     * @param password user password
      */
-    @Override
-    public void putUserToPreferences(final User user, final String password) {
+    public void putUser(final User user) {
         SharedPreferences.Editor editor = context.getSharedPreferences(ExtraFieldNames.USER_INFO,
                 Context.MODE_PRIVATE).edit();
         editor.putString(ExtraFieldNames.LOGIN, user.getEmail());
-        editor.putString(ExtraFieldNames.PASSWORD, password);
         editor.putInt(ExtraFieldNames.USER_ID, user.getId());
         editor.putString(ExtraFieldNames.USER_NAME, user.getName());
         editor.putString(ExtraFieldNames.USER_SURNAME, user.getSurname());
