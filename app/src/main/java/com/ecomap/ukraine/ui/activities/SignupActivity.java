@@ -43,8 +43,6 @@ public class SignupActivity extends AppCompatActivity implements LogInListener {
     @InjectView(R.id.btn_signup) Button signUpButton;
     @InjectView(R.id.link_login_p2) TextView loginLink;
 
-    private ScrollView scrollView;
-    private ScrollView background;
     private AccountManager accountManager;
     private MaterialDialog signUpProgress;
 
@@ -97,9 +95,9 @@ public class SignupActivity extends AppCompatActivity implements LogInListener {
         Keyboard.setOnFocusChangeListener(passwordText);
         Keyboard.setOnFocusChangeListener(passwordConfirmText);
 
-        scrollView = (ScrollView) findViewById(R.id.scroll_view);
-        background = (ScrollView) findViewById(R.id.background_layout);
+        ScrollView scrollView = (ScrollView) findViewById(R.id.scroll_view);
         scrollView.setVerticalScrollBarEnabled(false);
+        ScrollView background = (ScrollView) findViewById(R.id.background_layout);
         background.setVerticalScrollBarEnabled(false);
 
         accountManager = AccountManager.getInstance(getApplicationContext());

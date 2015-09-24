@@ -11,22 +11,22 @@ public class ProblemActivity {
      * Creation activity.
      */
     public static final int CREATE = 1;
+
     /**
      * User like.
      */
     public static final int LIKE = 3;
+
     /**
      * Photo adding.
      */
     public static final int PHOTO = 4;
+
     /**
      * Problem comment.
      */
     public static final int COMMENT = 5;
-    /**
-     * Default type for unknown activity.
-     */
-    public static final int UNKNOWN_TYPE = 7;
+
     /**
      * id of the problem
      */

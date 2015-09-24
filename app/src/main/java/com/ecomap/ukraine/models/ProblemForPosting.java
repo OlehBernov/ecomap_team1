@@ -10,34 +10,42 @@ import java.util.List;
  * Data of new created problem
  */
 public class ProblemForPosting {
+
     /**
      * Title of problem
      */
     private final String title;
+
     /**
      * Description of problem
      */
     private final String content;
+
     /**
      * Proposition of solving problem
      */
     private final String proposal;
+
     /**
      * Type of problem
      */
     private final String type;
+
     /**
      * Problem position
      */
     private final LatLng position;
+
     /**
      * Photos of problem
      */
     private final List<Bitmap> bitmaps;
+
     /**
      * Descriptions of problem photos
      */
     private final List<String> photoDescriptions;
+
     /**
      * Author of problem
      */

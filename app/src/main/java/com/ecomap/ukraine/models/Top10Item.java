@@ -1,8 +1,6 @@
 package com.ecomap.ukraine.models;
 
-/**
- * Created by Andriy on 10.09.2015.
- */
+
 public class Top10Item {
 
     public static final int TOP_LIKE_FRAGMENT_ID = 0;
@@ -10,8 +8,8 @@ public class Top10Item {
     public static final int TOP_SEVERITY_FRAGMENT_ID = 2;
 
     private int problemID;
-    private String title;
     private int value;
+    private String title;
 
     public Top10Item(int problemID, String title, int value) {
         this.problemID = problemID;

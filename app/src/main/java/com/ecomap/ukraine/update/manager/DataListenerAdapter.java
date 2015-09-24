@@ -6,9 +6,7 @@ import com.ecomap.ukraine.models.Problem;
 
 import java.util.List;
 
-/**
- * Created by Andriy on 22.09.2015.
- */
+
 public class DataListenerAdapter implements DataListener {
 
     /**

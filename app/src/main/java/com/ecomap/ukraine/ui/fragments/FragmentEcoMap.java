@@ -405,10 +405,16 @@ public class FragmentEcoMap extends android.support.v4.app.Fragment
      * Sets map type
      */
     private void setMapType() {
-        if (mapType == MapType.MAP_TYPE_NORMAL) {
-            googleMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
-        } else {
-            googleMap.setMapType(GoogleMap.MAP_TYPE_HYBRID);
+        switch (mapType) {
+            case MapType.MAP_TYPE_NORMAL:
+                googleMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
+                break;
+            case MapType.MAP_TYPE_HYBRID:
+                googleMap.setMapType(GoogleMap.MAP_TYPE_HYBRID);
+                break;
+            default:
+                googleMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
+                break;
         }
     }
 

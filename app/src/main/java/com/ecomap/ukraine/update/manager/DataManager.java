@@ -125,7 +125,7 @@ public class DataManager implements DataResponseReceiver {
     }
 
     /**
-     * Sends object of top10 problems to lsteners
+     * Sends object of top10 problems to listeners
      * @param allTop10Items object of top10 problems
      */
     public void sendAllTop10Items(final AllTop10Items allTop10Items) {

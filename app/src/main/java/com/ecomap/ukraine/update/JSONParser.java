@@ -85,14 +85,13 @@ public final class JSONParser {
         JSONArray allTop10ItemsArray = new JSONArray(allTop10ItemsJson);
         JSONArray top10VotesArray = allTop10ItemsArray.getJSONArray(0);
         JSONArray top10SeverityArray = allTop10ItemsArray.getJSONArray(1);
-        JSONArray top10ComentArray = allTop10ItemsArray.getJSONArray(2);
+        JSONArray top10CommentArray = allTop10ItemsArray.getJSONArray(2);
         List<Top10Item> top10VoteList = getTop10VoteList(top10VotesArray);
         List<Top10Item> top10SeverityList = getTop10SeverityList(top10SeverityArray);
-        List<Top10Item> top10ComentList = getTop10ComentList(top10ComentArray);
-        AllTop10Items allTop10Items = new AllTop10Items(top10ComentList, top10SeverityList,
-                top10VoteList);
+        List<Top10Item> top10CommentList = getTop10ComentList(top10CommentArray);
 
-        return allTop10Items;
+        return new AllTop10Items(top10CommentList, top10SeverityList,
+                top10VoteList);
     }
 
     /**

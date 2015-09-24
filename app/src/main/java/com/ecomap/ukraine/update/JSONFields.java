@@ -43,7 +43,7 @@ public class JSONFields {
     /**
      * Longitude of problem localization.
      */
-    public static final String LONGITUDE = "Longtitude";
+    public static final String LONGITUDE = "Longtitude"; //must be with a mistake
 
     /**
      * Description of the problem.
@@ -136,17 +136,20 @@ public class JSONFields {
     public static final int PROBLEM_ACTIVITY_POSITION = 2;
 
     /**
-     * Fileds for top_10
+     * Fields for top_10
      */
     public static final String TOP_10_ITEM_ID = "Id";
+
     /**
      * Title of problem, whicg is in top10
      */
     public static final String TOP_10_TITLE= "Title";
+
     /**
      * Number of votes of problem, which is in top 10 by votes
      */
     public static final String TOP_10_VOTES = "Votes";
+
     /**
      * Severity of problem, which is in top 10 by severity
      */
@@ -163,12 +166,12 @@ public class JSONFields {
     public static final String PROBLEM_ID = "idProblem";
 
     /**
-     * Id of user, who posten vote
+     * Id of user, who posted vote
      */
     public static final String USER_ID = "userId";
 
     /**
-     * Id of user, who posten comment
+     * Id of user, who posted comment
      */
     public static final String USER_SURNAME = "userSurname";
 
@@ -176,6 +179,7 @@ public class JSONFields {
      * Content of comment
      */
     public static final String CONTENT = "Content";
+
     /**
      * Data of comment
      */

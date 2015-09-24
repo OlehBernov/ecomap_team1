@@ -14,7 +14,6 @@ public class BasicContentLayout {
     private static final int DEFAULT_TOP_MARGIN = 0;
     private static final int DEFAULT_LEFT_MARGIN = 25;
 
-    private int numberOfBlocks;
     private ViewGroup root;
 
     public BasicContentLayout(ViewGroup root) {
@@ -27,7 +26,7 @@ public class BasicContentLayout {
      * @param newView new block.
      */
     public void addVerticalBlock(final View newView) {
-        addVerticalBlock(newView, numberOfBlocks);
+        addVerticalBlock(newView, root.getChildCount());
     }
 
     /**
@@ -38,7 +37,6 @@ public class BasicContentLayout {
      */
     public void addVerticalBlock(final View newView, final int position) {
         root.addView(newView, position, getVerticalLayoutParams(DEFAULT_TOP_MARGIN));
-        numberOfBlocks++;
     }
 
     /**
@@ -58,8 +56,7 @@ public class BasicContentLayout {
      * @param margin  new block margin.
      */
     public void addHorizontalBlock(final View newView, final int margin) {
-        root.addView(newView, numberOfBlocks, getHorizontalLayoutParams(margin));
-        numberOfBlocks++;
+        root.addView(newView, root.getChildCount(), getHorizontalLayoutParams(margin));
     }
 
     /**
@@ -70,7 +67,6 @@ public class BasicContentLayout {
     public void removeBlock(View block) {
         if (block != null) {
             root.removeView(block);
-            numberOfBlocks--;
         }
     }
 
@@ -79,7 +75,6 @@ public class BasicContentLayout {
      */
     public void removeAllBlocks() {
         root.removeAllViews();
-        numberOfBlocks = 0;
     }
 
     /**
@@ -88,7 +83,7 @@ public class BasicContentLayout {
      * @return number of blocks.
      */
     public int getNumberOfBlocks() {
-        return numberOfBlocks;
+        return root.getChildCount();
     }
 
     /**

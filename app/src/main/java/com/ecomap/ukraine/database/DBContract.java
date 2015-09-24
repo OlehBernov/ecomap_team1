@@ -28,7 +28,6 @@ public class DBContract {
 
     }
 
-
     public static abstract class Details implements BaseColumns {
 
         public static final String TABLE_NAME = "Details";
@@ -50,7 +49,6 @@ public class DBContract {
         public static final String TITLE = "Title";
     }
 
-
     public static abstract class Photos implements BaseColumns {
 
         public static final String TABLE_NAME = "Photos";
@@ -65,7 +63,6 @@ public class DBContract {
 
         public static final String PHOTO_DESCRIPTION = "Description";
     }
-
 
     public static abstract class ProblemActivity implements BaseColumns {
 

@@ -19,7 +19,6 @@ import com.ecomap.ukraine.update.manager.DataManager;
  */
 public class CommentBlock extends LinearLayout {
 
-    private Context context;
     private int problemId;
     private EditText commentText;
 
@@ -33,7 +32,6 @@ public class CommentBlock extends LinearLayout {
 
     public CommentBlock(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-        this.context = context;
         init(context);
     }
 
@@ -45,8 +43,6 @@ public class CommentBlock extends LinearLayout {
     public void setProblemId(int problemId) {
         this.problemId = problemId;
     }
-
-
 
     /**
      * Initiates the view.

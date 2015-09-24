@@ -156,6 +156,7 @@ public class ActivitiesBlock extends LinearLayout {
      * @return information about post
      */
     private String getPostInformation(final ProblemActivity problemActivity) {
+        //TODO: from template
         String userName = problemActivity.getFirstName();
         String day = problemActivity.getDate().substring(8, 10);
         String year = problemActivity.getDate().substring(0, 4);

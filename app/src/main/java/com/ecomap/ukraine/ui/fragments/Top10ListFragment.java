@@ -13,12 +13,11 @@ import android.widget.Toast;
 import com.ecomap.ukraine.R;
 import com.ecomap.ukraine.models.AllTop10Items;
 import com.ecomap.ukraine.models.Problem;
-import com.ecomap.ukraine.models.Top10FragmentID;
 import com.ecomap.ukraine.models.Top10Item;
-import com.ecomap.ukraine.update.manager.DataListenerAdapter;
-import com.ecomap.ukraine.update.manager.DataManager;
 import com.ecomap.ukraine.ui.activities.ProblemDetailsActivity;
 import com.ecomap.ukraine.ui.adapters.Top10ListAdapter;
+import com.ecomap.ukraine.update.manager.DataListenerAdapter;
+import com.ecomap.ukraine.update.manager.DataManager;
 
 import java.util.List;
 
@@ -38,7 +37,7 @@ public class Top10ListFragment extends Fragment implements AdapterView.OnItemCli
     private DataListenerAdapter dataListenerAdapter;
     private Top10ListFragment fragment = this;
 
-    public void setTop10ItemList(List<Top10Item> top10ItemList)  {
+    public void setTop10ItemList(List<Top10Item> top10ItemList) {
         this.top10ItemList = top10ItemList;
     }
 
@@ -93,7 +92,7 @@ public class Top10ListFragment extends Fragment implements AdapterView.OnItemCli
             }
         };
         DataManager.getInstance(getActivity()).registerProblemListener(dataListenerAdapter);
-        listView = (ListView)v.findViewById(R.id.list);
+        listView = (ListView) v.findViewById(R.id.list);
         listAdapter = new Top10ListAdapter(getActivity(), top10ItemList, iconID);
         listView.setAdapter(listAdapter);
         listView.setOnItemClickListener(this);

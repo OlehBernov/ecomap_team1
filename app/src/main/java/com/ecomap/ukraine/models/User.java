@@ -1,7 +1,7 @@
 package com.ecomap.ukraine.models;
 
 /**
- * Represents user atributes
+ * Represents user attributes
  */
 public class User {
 
