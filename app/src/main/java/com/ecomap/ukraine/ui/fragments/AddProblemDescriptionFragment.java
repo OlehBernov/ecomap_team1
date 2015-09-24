@@ -107,7 +107,7 @@ public class AddProblemDescriptionFragment extends Fragment implements AddProble
              * @param problems list of all problems.
              */
             @Override
-            public void updateAllProblems(final List<Problem> problems) {
+            public void onAllProblemsUpdate(final List<Problem> problems) {
                 Intent intent = new Intent(getActivity(), MainActivity.class);
                 startActivity(intent);
                 getActivity().finish();
@@ -125,8 +125,8 @@ public class AddProblemDescriptionFragment extends Fragment implements AddProble
                              @Nullable Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.tab_1, container, false);
         accountManager = AccountManager.getInstance(v.getContext());
-        userName = accountManager.getUserFromPreference().getName();
-        userSurname = accountManager.getUserFromPreference().getSurname();
+        userName = accountManager.getUser().getName();
+        userSurname = accountManager.getUser().getSurname();
         addProblemManager = AddProblemManager.getInstance(getActivity());
         dataManager = DataManager.getInstance(getActivity());
 
@@ -209,7 +209,7 @@ public class AddProblemDescriptionFragment extends Fragment implements AddProble
                 .setProposal(solution)
                 .setPosition(new LatLng(latitude, longitude))
                 .setType(type)
-                .setUser(new User(accountManager.getUserFromPreference().getId(),
+                .setUser(new User(accountManager.getUser().getId(),
                         userName, userSurname, "", "", "", ""))
                 .setPhotos(bitmapPhotos)
                 .setPhotoDescriptions(photoDescriptions)

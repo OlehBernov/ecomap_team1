@@ -9,22 +9,23 @@ import java.util.Map;
  */
 public class FilterState {
 
+    //TODO: sparse array
     private Map<String, Boolean> state;
-    private Calendar DateFrom;
-    private Calendar DateTo;
+    private Calendar dateFrom;
+    private Calendar dateTo;
 
     /**
      * Constructor of the current filter state.
      *
      * @params state contains flags which describes the state of filter checkboxes.
-     * @params DateFrom start date of filtration.
-     * @params DateTo finish date of filtration.
+     * @params dateFrom start date of filtration.
+     * @params dateTo finish date of filtration.
      */
-    public FilterState(final Map<String, Boolean> state, final Calendar DateFrom,
-                       final Calendar DateTo) {
+    public FilterState(final Map<String, Boolean> state, final Calendar dateFrom,
+                       final Calendar dateTo) {
         this.state = state;
-        this.DateFrom = DateFrom;
-        this.DateTo = DateTo;
+        this.dateFrom = dateFrom;
+        this.dateTo = dateTo;
     }
 
     /**
@@ -50,11 +51,11 @@ public class FilterState {
     }
 
     public Calendar getDateFrom() {
-        return DateFrom;
+        return dateFrom;
     }
 
     public Calendar getDateTo() {
-        return DateTo;
+        return dateTo;
     }
 
 }

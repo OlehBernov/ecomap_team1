@@ -87,7 +87,7 @@ public class AddProblemClient {
                         Log.e(TAG, "JSONException in parsing json from new problem");
                     }
                 } else {
-                    addProblemRequestReceiver.onSuccesProblemPosting();
+                    addProblemRequestReceiver.onSuccessProblemPosting();
                 }
             }
         }, new Response.ErrorListener() {
@@ -118,7 +118,7 @@ public class AddProblemClient {
                     @Override
                     public void onResponse(String response) {
                         if (count == size) {
-                            addProblemRequestReceiver.onSuccesPhotoPosting();
+                            addProblemRequestReceiver.onSuccessPhotoPosting();
                         }
                     }
                 }, new Response.ErrorListener() {

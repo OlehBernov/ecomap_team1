@@ -31,6 +31,7 @@ import com.ecomap.ukraine.util.Keyboard;
 import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 
 public class DetailsController {
+
     private static final float ANCHOR_POINT = 0.3f;
     private static final int ADD_PROBLEM_BUTTON = 1;
     private static final int REFRESH_BUTTON = 2;
@@ -321,4 +322,5 @@ public class DetailsController {
     private int convertToPixels(float value) {
         return (int) (value * slidingUpPanelLayout.getHeight());
     }
+
 }

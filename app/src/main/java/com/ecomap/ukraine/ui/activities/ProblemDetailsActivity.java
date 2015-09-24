@@ -25,9 +25,6 @@ public class ProblemDetailsActivity extends AppCompatActivity  {
     private Problem problem;
     private DataListenerAdapter dataListenerAdapter;
 
-
-
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_problem_details, menu);
@@ -76,7 +73,7 @@ public class ProblemDetailsActivity extends AppCompatActivity  {
              * @param details details of concrete problem.
              */
             @Override
-            public void updateProblemDetails(Details details) {
+            public void onProblemDetailsUpdate(Details details) {
                 dataListenerAdapter = this;
                 detailsContent.prepareToRefresh();
                 detailsContent.setProblemDetails(details);

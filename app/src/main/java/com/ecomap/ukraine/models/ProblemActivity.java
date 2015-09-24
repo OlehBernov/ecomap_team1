@@ -8,6 +8,26 @@ package com.ecomap.ukraine.models;
 public class ProblemActivity {
 
     /**
+     * Creation activity.
+     */
+    public static final int CREATE = 1;
+    /**
+     * User like.
+     */
+    public static final int LIKE = 3;
+    /**
+     * Photo adding.
+     */
+    public static final int PHOTO = 4;
+    /**
+     * Problem comment.
+     */
+    public static final int COMMENT = 5;
+    /**
+     * Default type for unknown activity.
+     */
+    public static final int UNKNOWN_TYPE = 7;
+    /**
      * id of the problem
      */
     private int problemId;
@@ -20,7 +40,7 @@ public class ProblemActivity {
     /**
      * Represent type of current problemActivity
      */
-    private ActivityType activityType;
+    private int activityType;
 
     /**
      * id of user who added this problemActivity
@@ -52,7 +72,7 @@ public class ProblemActivity {
      * @param date              contains adding date of current problemActivity
      * @param userName          name of user who added this problemActivity
      */
-    public ProblemActivity(int problemId, int problemActivityId, ActivityType activityType, int userId,
+    public ProblemActivity(int problemId, int problemActivityId, int activityType, int userId,
                            String content, String date, String userName) {
         this.problemId = problemId;
         this.problemActivityId = problemActivityId;
@@ -82,7 +102,7 @@ public class ProblemActivity {
     /**
      * provides access to position
      */
-    public ActivityType getActivityType() {
+    public int getActivityType() {
         return activityType;
     }
 

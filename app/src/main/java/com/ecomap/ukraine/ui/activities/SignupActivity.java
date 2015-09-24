@@ -134,7 +134,7 @@ public class SignupActivity extends AppCompatActivity implements LogInListener {
      * @param user identified user.
      */
     @Override
-    public void setLogInResult(final User user) {
+    public void onLogInResult(final User user) {
         accountManager.removeLogInListener(this);
         signUpButton.setEnabled(true);
         if (user != null) {

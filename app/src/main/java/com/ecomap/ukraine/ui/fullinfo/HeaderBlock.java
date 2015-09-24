@@ -11,11 +11,9 @@ import android.widget.TextView;
 import com.ecomap.ukraine.R;
 import com.ecomap.ukraine.authentication.manager.AccountManager;
 import com.ecomap.ukraine.map.IconRenderer;
-import com.ecomap.ukraine.models.ActivityType;
 import com.ecomap.ukraine.models.Details;
 import com.ecomap.ukraine.models.Problem;
 import com.ecomap.ukraine.models.ProblemActivity;
-import com.ecomap.ukraine.models.ProblemStatus;
 import com.ecomap.ukraine.models.User;
 import com.ecomap.ukraine.update.manager.DataListenerAdapter;
 import com.ecomap.ukraine.update.manager.DataManager;
@@ -61,7 +59,7 @@ public class HeaderBlock extends LinearLayout {
 
         List<ProblemActivity> problemActivities = details.getProblemActivities();
         if (problemActivities != null) {
-            User user = AccountManager.getInstance(context).getUserFromPreference();
+            User user = AccountManager.getInstance(context).getUser();
             for (int i = problemActivities.size() - 1; i >= 0; i--) {
                 if (isProblemLikedBefore(problemActivities.get(i), user)) {
                     voteIcon.setEnabled(false);
@@ -88,7 +86,7 @@ public class HeaderBlock extends LinearLayout {
         setProblemStatus(problem.getStatus());
         markerIcon.setImageResource(IconRenderer.getResourceIdForMarker(problem.getProblemType()));
 
-        final User user = AccountManager.getInstance(context).getUserFromPreference();
+        final User user = AccountManager.getInstance(context).getUser();
         voteIcon = (ImageView) findViewById(R.id.like);
         voteIcon.setEnabled(false);
         voteIcon.setOnClickListener(new OnClickListener() {
@@ -127,7 +125,7 @@ public class HeaderBlock extends LinearLayout {
      */
     private boolean isProblemLikedBefore(final ProblemActivity problemActivity, final User user) {
         return (problemActivity.getUserId() == user.getId())
-                && (problemActivity.getActivityType().getId() == ActivityType.LIKE.getId());
+                && (problemActivity.getActivityType() == ProblemActivity.LIKE);
     }
 
     /**
@@ -145,8 +143,8 @@ public class HeaderBlock extends LinearLayout {
      *
      * @param problemStatus status of the current problem.
      */
-    private void setProblemStatus(final ProblemStatus problemStatus) {
-        if (problemStatus == ProblemStatus.UNSOLVED) {
+    private void setProblemStatus(final int problemStatus) {
+        if (problemStatus == Problem.UNSOLVED) {
             this.problemStatus.setText(UNSOLVED);
             this.problemStatus.setTextColor(Color.RED);
         } else {

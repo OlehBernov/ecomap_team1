@@ -146,7 +146,7 @@ public class Details {
     /**
      * returns date of the last data loading from server
      *
-     * @return date of last updateAllProblems
+     * @return date of last onAllProblemsUpdate
      */
     public String getLastUpdate() {
         return lastUpdate;

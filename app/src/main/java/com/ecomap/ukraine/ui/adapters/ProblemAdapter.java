@@ -9,7 +9,6 @@ import android.widget.TextView;
 
 import com.ecomap.ukraine.R;
 import com.ecomap.ukraine.models.Problem;
-import com.ecomap.ukraine.models.ProblemType;
 import com.ecomap.ukraine.ui.activities.SearchActivity;
 
 import java.util.ArrayList;
@@ -43,25 +42,25 @@ public class ProblemAdapter extends RecyclerView.Adapter<ProblemAdapter.ViewHold
             });
         }
 
-        private int getIconRes(ProblemType problemType) {
+        private int getIconRes(int problemType) {
             int resId;
             switch (problemType) {
-                case FOREST_DESTRUCTION:
+                case Problem.FOREST_DESTRUCTION:
                     resId = R.drawable.type1;
                     break;
-                case RUBBISH_DUMP:
+                case Problem.RUBBISH_DUMP:
                     resId = R.drawable.type2;
                     break;
-                case ILLEGAL_BUILDING:
+                case Problem.ILLEGAL_BUILDING:
                     resId = R.drawable.type3;
                     break;
-                case WATER_POLLUTION:
+                case Problem.WATER_POLLUTION:
                     resId = R.drawable.type4;
                     break;
-                case THREAD_TO_BIODIVERSITY:
+                case Problem.THREAD_TO_BIODIVERSITY:
                     resId = R.drawable.type5;
                     break;
-                case POACHING:
+                case Problem.POACHING:
                     resId = R.drawable.type6;
                     break;
                 default:

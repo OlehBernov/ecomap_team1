@@ -12,11 +12,9 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
 
-
 import com.ecomap.ukraine.R;
 import com.ecomap.ukraine.models.AllTop10Items;
 import com.ecomap.ukraine.models.Problem;
-import com.ecomap.ukraine.models.Top10FragmentID;
 import com.ecomap.ukraine.models.Top10Item;
 import com.ecomap.ukraine.update.manager.DataListenerAdapter;
 import com.ecomap.ukraine.update.manager.DataManager;
@@ -65,17 +63,17 @@ public class Top10Activity extends AppCompatActivity  {
              * @param updateproblems list of all problems.
              */
             @Override
-            public void updateAllProblems(List<Problem> updateproblems) {
+            public void onAllProblemsUpdate(List<Problem> updateproblems) {
                 problems = updateproblems;
             }
 
             /**
-             * Receive oject, which contains top10 elements
-             * @param updateallTop10Items object, which contains top 10 elements
+             * Receive object, which contains top10 elements
+             * @param updateAllTop10Items object, which contains top 10 elements
              */
             @Override
-            public void updateTop10(AllTop10Items updateallTop10Items) {
-                allTop10Items = updateallTop10Items;
+            public void onTop10Update(AllTop10Items updateAllTop10Items) {
+                allTop10Items = updateAllTop10Items;
                 progresView.setVisibility(View.GONE);
             }
         };
@@ -138,8 +136,6 @@ public class Top10Activity extends AppCompatActivity  {
         super.onBackPressed();
     }
 
-
-
     /**
      * Sets application toolbar.
      */
@@ -189,17 +185,17 @@ public class Top10Activity extends AppCompatActivity  {
                 case 0:
                     top10ListFragment.setIconID(R.drawable.like_iconq);
                     top10ListFragment.setTop10ItemList(allTop10Items.getMostLikedProblems());
-                    top10ListFragment.setTop10FragmentID(Top10FragmentID.TOP_LIKE_FRAGMENT_ID);
+                    top10ListFragment.setTop10FragmentID(Top10Item.TOP_LIKE_FRAGMENT_ID);
                     return top10ListFragment;
                 case 1:
                     top10ListFragment.setIconID(R.drawable.comment3);
                     top10ListFragment.setTop10ItemList(allTop10Items.getMostPopularProblems());
-                    top10ListFragment.setTop10FragmentID(Top10FragmentID.TOP_VOTE_FRAGMENT_ID);
+                    top10ListFragment.setTop10FragmentID(Top10Item.TOP_VOTE_FRAGMENT_ID);
                     return top10ListFragment;
                 case 2:
                     top10ListFragment.setIconID(R.drawable.ic_star_black_48dp);
                     top10ListFragment.setTop10ItemList(allTop10Items.getMostImportantProblems());
-                    top10ListFragment.setTop10FragmentID(Top10FragmentID.TOP_SEVERITY_FRAGMENT_ID);
+                    top10ListFragment.setTop10FragmentID(Top10Item.TOP_SEVERITY_FRAGMENT_ID);
                     return top10ListFragment;
             }
             return null;

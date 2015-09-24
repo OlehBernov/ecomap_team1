@@ -14,6 +14,24 @@ import java.io.Serializable;
 public class Problem implements ClusterItem, Serializable {
 
     /**
+     * Unsolved problems.
+     */
+    public static final int UNSOLVED = 0;
+
+    /**
+     * Resolved problems.
+     */
+    public static final int RESOLVED = 1;
+
+    public static final int FOREST_DESTRUCTION = 1;
+    public static final int RUBBISH_DUMP = 2;
+    public static final int ILLEGAL_BUILDING = 3;
+    public static final int WATER_POLLUTION = 4;
+    public static final int THREAD_TO_BIODIVERSITY = 5;
+    public static final int POACHING = 6;
+    public static final int OTHER = 7;
+
+    /**
      * id of current problem
      */
     private int problemId;
@@ -21,12 +39,12 @@ public class Problem implements ClusterItem, Serializable {
     /**
      * represent status of current problem resolved (1) or not resolved (0)
      */
-    private ProblemStatus statusId;
+    private int statusId;
 
     /**
      * represent type of current problem
      */
-    private ProblemType problemType;
+    private int problemType;
 
     /**
      * contains title of current problem
@@ -53,7 +71,7 @@ public class Problem implements ClusterItem, Serializable {
      * @param longitude   contains longitude of coordinate current problem
      */
 
-    public Problem(int problemId, ProblemStatus statusId, ProblemType problemType,
+    public Problem(int problemId, int statusId, int problemType,
                    String title, String date, double latitude, double longitude) {
         this.problemId = problemId;
         this.statusId = statusId;
@@ -74,14 +92,14 @@ public class Problem implements ClusterItem, Serializable {
     /**
      * provides access to statusId
      */
-    public ProblemStatus getStatus() {
+    public int getStatus() {
         return statusId;
     }
 
     /**
      * provides access to problemType
      */
-    public ProblemType getProblemType() {
+    public int getProblemType() {
         return problemType;
     }
 

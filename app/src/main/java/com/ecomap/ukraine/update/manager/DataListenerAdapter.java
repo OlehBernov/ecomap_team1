@@ -16,7 +16,7 @@ public class DataListenerAdapter implements DataListener {
      * @param problems list of all problems.
      */
     @Override
-    public void updateAllProblems(List<Problem> problems) {
+    public void onAllProblemsUpdate(List<Problem> problems) {
 
     }
 
@@ -25,7 +25,7 @@ public class DataListenerAdapter implements DataListener {
      * @param details object of problem details.
      */
     @Override
-    public void updateProblemDetails(Details details) {
+    public void onProblemDetailsUpdate(Details details) {
 
     }
     /**
@@ -33,7 +33,7 @@ public class DataListenerAdapter implements DataListener {
      * @param allTop10Items object, which contains top 10 elements
      */
     @Override
-    public void updateTop10(AllTop10Items allTop10Items) {
+    public void onTop10Update(AllTop10Items allTop10Items) {
 
     }
 

@@ -12,7 +12,6 @@ import android.widget.TableRow;
 import android.widget.TextView;
 
 import com.ecomap.ukraine.R;
-import com.ecomap.ukraine.models.ActivityType;
 import com.ecomap.ukraine.models.Details;
 import com.ecomap.ukraine.models.ProblemActivity;
 
@@ -119,15 +118,15 @@ public class ActivitiesBlock extends LinearLayout {
      * @param activityType activityType
      * @return icon resource
      */
-    private Drawable getActivityIcon(final ActivityType activityType) {
+    private Drawable getActivityIcon(final int activityType) {
         switch (activityType) {
-            case CREATE:
+            case ProblemActivity.CREATE:
                 return ResourcesCompat.getDrawable(context.getResources(), R.drawable.ic_done_black_36dp, null);
-            case LIKE:
+            case ProblemActivity.LIKE:
                 return ResourcesCompat.getDrawable(context.getResources(), R.drawable.like_iconq, null);
-            case PHOTO:
+            case ProblemActivity.PHOTO:
                 return ResourcesCompat.getDrawable(context.getResources(), R.drawable.ic_photo_camera_black_36dp, null);
-            case COMMENT:
+            case ProblemActivity.COMMENT:
                 return ResourcesCompat.getDrawable(context.getResources(), R.drawable.comment3, null);
             default:
                 return ResourcesCompat.getDrawable(context.getResources(), R.drawable.type1, null);

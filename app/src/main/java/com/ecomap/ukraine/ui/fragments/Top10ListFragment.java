@@ -29,7 +29,7 @@ public class Top10ListFragment extends Fragment implements AdapterView.OnItemCli
 
     public static final String PROBLEM_EXTRA = "Problem";
 
-    private Top10FragmentID top10FragmentID;
+    private int top10FragmentID;
     private Top10ListAdapter listAdapter;
     private List<Top10Item> top10ItemList;
     private int iconID;
@@ -37,7 +37,6 @@ public class Top10ListFragment extends Fragment implements AdapterView.OnItemCli
     private List<Problem> problems;
     private DataListenerAdapter dataListenerAdapter;
     private Top10ListFragment fragment = this;
-
 
     public void setTop10ItemList(List<Top10Item> top10ItemList)  {
         this.top10ItemList = top10ItemList;
@@ -51,7 +50,7 @@ public class Top10ListFragment extends Fragment implements AdapterView.OnItemCli
         this.iconID = iconID;
     }
 
-    public void setTop10FragmentID(Top10FragmentID top10FragmentID) {
+    public void setTop10FragmentID(int top10FragmentID) {
         this.top10FragmentID = top10FragmentID;
     }
 
@@ -64,11 +63,11 @@ public class Top10ListFragment extends Fragment implements AdapterView.OnItemCli
 
             /**
              * Receive list of all problems.
-             * @param updateproblems list of all problems.
+             * @param updateProblems list of all problems.
              */
             @Override
-            public void updateAllProblems(List<Problem> updateproblems) {
-                problems = updateproblems;
+            public void onAllProblemsUpdate(List<Problem> updateProblems) {
+                problems = updateProblems;
             }
 
             /**
@@ -76,15 +75,15 @@ public class Top10ListFragment extends Fragment implements AdapterView.OnItemCli
              * @param allTop10Items object, which contains top 10 elements
              */
             @Override
-            public void updateTop10(AllTop10Items allTop10Items) {
+            public void onTop10Update(AllTop10Items allTop10Items) {
                 switch (top10FragmentID) {
-                    case TOP_LIKE_FRAGMENT_ID:
+                    case Top10Item.TOP_LIKE_FRAGMENT_ID:
                         top10ItemList = allTop10Items.getMostLikedProblems();
                         break;
-                    case TOP_VOTE_FRAGMENT_ID:
+                    case Top10Item.TOP_VOTE_FRAGMENT_ID:
                         top10ItemList = allTop10Items.getMostPopularProblems();
                         break;
-                    case TOP_SEVERITY_FRAGMENT_ID:
+                    case Top10Item.TOP_SEVERITY_FRAGMENT_ID:
                         top10ItemList = allTop10Items.getMostImportantProblems();
                         break;
                 }
@@ -112,7 +111,7 @@ public class Top10ListFragment extends Fragment implements AdapterView.OnItemCli
         showProblemInformation(listAdapter.getItem(position).getProblemID());
     }
 
-    public void showProblemInformation(int probemID) {
+    public void showProblemInformation(int problemID) {
         if (problems == null) {
             Toast.makeText(getActivity(), "Error of loading try again.", Toast.LENGTH_LONG)
                     .show();
@@ -121,7 +120,7 @@ public class Top10ListFragment extends Fragment implements AdapterView.OnItemCli
             Intent intent = new Intent(getActivity(), ProblemDetailsActivity.class);
             Problem currentProblem = problems.get(0);
             for (Problem problem : problems) {
-                if (problem.getProblemId() == probemID) {
+                if (problem.getProblemId() == problemID) {
                     currentProblem = problem;
                     break;
                 }
@@ -130,4 +129,5 @@ public class Top10ListFragment extends Fragment implements AdapterView.OnItemCli
             startActivity(intent);
         }
     }
+
 }

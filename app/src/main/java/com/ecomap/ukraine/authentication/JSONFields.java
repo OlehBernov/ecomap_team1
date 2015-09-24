@@ -21,19 +21,10 @@ public class JSONFields {
 
     public static final String PASSWORD = "password";
 
-    /**
-     * Id of registration
-     */
     public static final String REGISTRATION_ID = "id";
 
-    /**
-     * Id of user who is registered
-     */
     public static final String ID_OF_REGISTRATION_USER = "insertId";
 
-    /**
-     * Description of registration
-     */
     public static final String FIRST_NAME = "first_name";
 
     public static final String LAST_NAME = "last_name";

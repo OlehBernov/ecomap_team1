@@ -87,7 +87,7 @@ public class LoginActivity extends AppCompatActivity implements LogInListener {
      * @param user identified user.
      */
     @Override
-    public void setLogInResult(final User user) {
+    public void onLogInResult(final User user) {
         logInButton.setEnabled(true);
         if (user != null) {
             openMainActivity();

@@ -5,11 +5,11 @@ package com.ecomap.ukraine.posting.manager;
  */
 public interface AddProblemRequestReceiver {
 
-    void onSuccesProblemPosting();
+    void onSuccessProblemPosting();
 
     void onFailedProblemPosting();
 
-    void onSuccesPhotoPosting();
+    void onSuccessPhotoPosting();
 
     void onFailedPhotoPosting();
 

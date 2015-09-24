@@ -6,14 +6,11 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
-import com.ecomap.ukraine.models.ActivityType;
 import com.ecomap.ukraine.models.AllTop10Items;
 import com.ecomap.ukraine.models.Details;
 import com.ecomap.ukraine.models.Photo;
 import com.ecomap.ukraine.models.Problem;
 import com.ecomap.ukraine.models.ProblemActivity;
-import com.ecomap.ukraine.models.ProblemStatus;
-import com.ecomap.ukraine.models.ProblemType;
 import com.ecomap.ukraine.models.Top10Item;
 
 import java.util.ArrayList;
@@ -330,8 +327,8 @@ public class DBHelper extends SQLiteOpenHelper {
         ContentValues contentValues = new ContentValues();
         for (Problem problem : problems) {
             contentValues.put(DBContract.Problems.ID, problem.getProblemId());
-            contentValues.put(DBContract.Problems.PROBLEM_STATUS, problem.getStatus().getId());
-            contentValues.put(DBContract.Problems.PROBLEM_TYPES_ID, problem.getProblemType().getId());
+            contentValues.put(DBContract.Problems.PROBLEM_STATUS, problem.getStatus());
+            contentValues.put(DBContract.Problems.PROBLEM_TYPES_ID, problem.getProblemType());
             contentValues.put(DBContract.Problems.PROBLEM_TITLE, problem.getTitle());
             contentValues.put(DBContract.Problems.PROBLEM_DATE, problem.getDate());
             contentValues.put(DBContract.Problems.LATITUDE, problem.getPosition().latitude);
@@ -377,11 +374,11 @@ public class DBHelper extends SQLiteOpenHelper {
     }
 
     /**
-     * Returns time of the last updateAllProblems of the information
+     * Returns time of the last onAllProblemsUpdate of the information
      * about concrete problem.
      *
      * @param problemId id of required problem.
-     * @return time of the last updateAllProblems.
+     * @return time of the last onAllProblemsUpdate.
      */
     public String getLastUpdateTime(final int problemId) {
         if (problemId < 0) {
@@ -415,7 +412,6 @@ public class DBHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = getWritableDatabase();
         ContentValues values;
         for (ProblemActivity problemActivity : problemActivities) {
-            int activityTypeId = problemActivity.getActivityType().getId();
 
             values = new ContentValues();
             values.put(DBContract.ProblemActivity.PROBLEM_ACTIVITY_ID,
@@ -424,7 +420,8 @@ public class DBHelper extends SQLiteOpenHelper {
                     problemActivity.getDate());
             values.put(DBContract.ProblemActivity.PROBLEM_ID,
                     problemActivity.getProblemId());
-            values.put(DBContract.ProblemActivity.ACTIVITY_TYPES_ID, activityTypeId);
+            values.put(DBContract.ProblemActivity.ACTIVITY_TYPES_ID,
+                    problemActivity.getActivityType());
             values.put(DBContract.ProblemActivity.USER_NAME,
                     problemActivity.getFirstName());
             values.put(DBContract.ProblemActivity.ACTIVITY_USERS_ID,
@@ -529,8 +526,8 @@ public class DBHelper extends SQLiteOpenHelper {
 
             Problem problem = new Problem(
                     cursor.getInt(cursor.getColumnIndex(DBContract.Problems.ID)),
-                    ProblemStatus.getProblemStatus(problemStatusId),
-                    ProblemType.getProblemType(problemTypeId),
+                    problemStatusId,
+                    problemTypeId,
                     cursor.getString(cursor.getColumnIndex(DBContract.Problems.PROBLEM_TITLE)),
                     cursor.getString(cursor.getColumnIndex(DBContract.Problems.PROBLEM_DATE)),
                     cursor.getDouble(cursor.getColumnIndex(DBContract.Problems.LATITUDE)),
@@ -675,13 +672,10 @@ public class DBHelper extends SQLiteOpenHelper {
         List<ProblemActivity> problemActivities = new ArrayList<>();
         for (int i = 0; i < cursor.getCount(); i++) {
 
-            int activityTypeId = cursor.getInt(cursor.getColumnIndex(DBContract.ProblemActivity.ACTIVITY_TYPES_ID));
-            ActivityType activityTypeEnum = ActivityType.getActivityType(activityTypeId);
-
             ProblemActivity problemActivity = new ProblemActivity(
                     problemId,
                     cursor.getInt(cursor.getColumnIndex(DBContract.ProblemActivity.PROBLEM_ACTIVITY_ID)),
-                    activityTypeEnum,
+                    cursor.getInt(cursor.getColumnIndex(DBContract.ProblemActivity.ACTIVITY_TYPES_ID)),
                     cursor.getInt(cursor.getColumnIndex(DBContract.ProblemActivity.ACTIVITY_USERS_ID)),
                     cursor.getString(cursor.getColumnIndex(DBContract.ProblemActivity.PROBLEM_ACTIVITY_CONTENT)),
                     cursor.getString(cursor.getColumnIndex(DBContract.ProblemActivity.PROBLEM_ACTIVITY_DATE)),

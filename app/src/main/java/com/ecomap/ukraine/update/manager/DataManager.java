@@ -20,8 +20,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
  * Coordinates the work of the database, data loading client and activities.
  * Provides updates of the database.
  */
-public class DataManager implements ProblemListenersNotifier,
-                                    ProblemRequestReceiver {
+public class DataManager implements ProblemRequestReceiver {
 
     /**
      * The name of the preference to retrieve.
@@ -79,7 +78,11 @@ public class DataManager implements ProblemListenersNotifier,
      */
     public static DataManager getInstance(final Context context) {
         if (instance == null) {
-            instance = new DataManager(context);
+            synchronized (DataManager.class) {
+                if (instance == null) {
+                    instance = new DataManager(context);
+                }
+            }
         }
         return instance;
     }
@@ -106,20 +109,18 @@ public class DataManager implements ProblemListenersNotifier,
     /**
      * Send to listeners list of all problems.
      */
-    @Override
     public void sendAllProblems(final List<Problem> problems) {
         for (DataListener listener : problemListeners) {
-            listener.updateAllProblems(problems);
+            listener.onAllProblemsUpdate(problems);
         }
     }
 
     /**
      * Send to listeners details of concrete problem.
      */
-    @Override
     public void sendProblemDetails(final Details details) {
         for (DataListener listener : problemListeners) {
-            listener.updateProblemDetails(details);
+            listener.onProblemDetailsUpdate(details);
         }
     }
 
@@ -127,10 +128,9 @@ public class DataManager implements ProblemListenersNotifier,
      * Sends object of top10 problems to lsteners
      * @param allTop10Items object of top10 problems
      */
-    @Override
     public void sendAllTop10Items(final AllTop10Items allTop10Items) {
         for (DataListener listener : problemListeners) {
-            listener.updateTop10(allTop10Items);
+            listener.onTop10Update(allTop10Items);
         }
     }
 
@@ -215,7 +215,7 @@ public class DataManager implements ProblemListenersNotifier,
     /**
      * This method is used to made request for more information about
      * the problem.
-     * Initiates the updateAllProblems of detailed information of the problem
+     * Initiates the onAllProblemsUpdate of detailed information of the problem
      * in the database, if it is missing or obsolete.
      *
      * @param problemId the id of the problem.
@@ -237,7 +237,7 @@ public class DataManager implements ProblemListenersNotifier,
 
     /**
      * This method is used to made request for all problems.
-     * Initiates the updateAllProblems of brief information of the problem in the database,
+     * Initiates the onAllProblemsUpdate of brief information of the problem in the database,
      * if it is missing or obsolete.
      */
     public void getAllProblems() {

@@ -250,7 +250,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        setUserInformation(accountManager.getUserFromPreference());
+        setUserInformation(accountManager.getUser());
         if (isSettingsRequest(requestCode)) {
             Fragment fragment = getSupportFragmentManager().findFragmentByTag(MAP_TAG);
             if (fragment != null) {
@@ -306,7 +306,7 @@ public class MainActivity extends AppCompatActivity {
         filterManager = FilterManager.getInstance(this);
 
         accountManager = AccountManager.getInstance(this);
-        setUserInformation(accountManager.getUserFromPreference());
+        setUserInformation(accountManager.getUser());
 
         slidingUpPanelLayout = (SlidingUpPanelLayout) findViewById(R.id.sliding_layout);
         slidingUpPanelLayout.setAnchorPoint(ANCHOR_POINT);

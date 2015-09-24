@@ -10,6 +10,7 @@ public interface FilterListener {
      */
     void updateFilterState(FilterState filterState);
 
+    //TODO: renderer
     void setRenderer();
 
 }

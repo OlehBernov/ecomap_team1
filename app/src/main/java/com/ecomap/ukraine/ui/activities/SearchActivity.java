@@ -63,8 +63,6 @@ public class SearchActivity extends AppCompatActivity
         return true;
     }
 
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -98,7 +96,7 @@ public class SearchActivity extends AppCompatActivity
              * @param problems list of all problems.
              */
             @Override
-            public void updateAllProblems(List<Problem> problems) {
+            public void onAllProblemsUpdate(List<Problem> problems) {
                 unfilteredProblems = problems;
                 showProblemList();
                 dataManager.removeProblemListener(this);
@@ -138,7 +136,7 @@ public class SearchActivity extends AppCompatActivity
 
     private void showProblemList() {
         FilterState filterState = filterManager.getCurrentFilterState();
-        unfilteredProblems = new Filter().filterProblem(unfilteredProblems, filterState);
+        unfilteredProblems = Filter.filterProblem(unfilteredProblems, filterState);
         adapter = new ProblemAdapter(unfilteredProblems, this);
         recyclerView.setAdapter(adapter);
         View view = findViewById(R.id.progress_view);

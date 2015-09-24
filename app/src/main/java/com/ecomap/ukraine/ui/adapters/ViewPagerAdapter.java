@@ -1,7 +1,6 @@
 package com.ecomap.ukraine.ui.adapters;
 
 
-import android.app.Activity;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
@@ -16,6 +15,7 @@ public class ViewPagerAdapter extends FragmentStatePagerAdapter {
 
     private String[] titles;
     private int numbOfTabs;
+
     /**
      * Constructor
      */
@@ -27,6 +27,7 @@ public class ViewPagerAdapter extends FragmentStatePagerAdapter {
 
     /**
      * Get tab activity by position
+     *
      * @param position position of tab
      * @return tab activity
      */
@@ -41,6 +42,7 @@ public class ViewPagerAdapter extends FragmentStatePagerAdapter {
 
     /**
      * Gets number of tabs
+     *
      * @return number of tabs
      */
     @Override
@@ -50,6 +52,7 @@ public class ViewPagerAdapter extends FragmentStatePagerAdapter {
 
     /**
      * Gets title of tab from position
+     *
      * @param position position of tab
      * @return title
      */

@@ -13,18 +13,14 @@ import com.ecomap.ukraine.models.Top10Item;
 
 import java.util.List;
 
-/**
- * Created by Andriy on 10.09.2015.
- */
+
 public class Top10ListAdapter extends BaseAdapter {
 
-    private Context context;
     private LayoutInflater layoutInflater;
     private List<Top10Item> top10problems;
     private int iconID;
 
     public Top10ListAdapter(Context context, List<Top10Item> top10problems, int iconID) {
-        this.context = context;
         this.top10problems = top10problems;
         this.iconID = iconID;
         layoutInflater = (LayoutInflater) context.getSystemService(
@@ -52,7 +48,7 @@ public class Top10ListAdapter extends BaseAdapter {
         if (view == null) {
             view = layoutInflater.inflate(R.layout.top_10_item, parent, false);
         }
-        Top10Item item = (Top10Item) getItem(position);
+        Top10Item item = getItem(position);
         ((TextView) view.findViewById(R.id.top_10_value)).setText(String.valueOf(item.getValue()));
         ((TextView) view.findViewById(R.id.top_10_item_title)).setText(item.getTitle());
         ((ImageView) view.findViewById(R.id.top_10_item_icon)).setImageResource(iconID);

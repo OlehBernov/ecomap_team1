@@ -65,7 +65,7 @@ public class CommentBlock extends LinearLayout {
             @Override
             public void onClick(View v) {
                 int problemID = problemId;
-                User user = AccountManager.getInstance(context).getUserFromPreference();
+                User user = AccountManager.getInstance(context).getUser();
                 String userId = String.valueOf(user.getId());
                 String content = commentText.getText().toString();
                 String userName = user.getName();

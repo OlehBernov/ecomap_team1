@@ -18,7 +18,6 @@ import com.ecomap.ukraine.R;
 import com.ecomap.ukraine.filtration.FilterContract;
 import com.ecomap.ukraine.filtration.FilterManager;
 import com.ecomap.ukraine.filtration.FilterState;
-import com.ecomap.ukraine.filtration.FilterStateConverter;
 import com.ecomap.ukraine.util.ExtraFieldNames;
 
 import java.text.ParseException;
@@ -125,9 +124,7 @@ public class FilterFragment extends android.support.v4.app.Fragment {
         SharedPreferences settings = activity.getSharedPreferences(ExtraFieldNames.FILTERS_STATE, 0);
         SharedPreferences.Editor editor = settings.edit();
         FilterState filterState = buildFiltersState();
-
-        editor.putStringSet(ExtraFieldNames.FILTERS_STATE_SET,
-                            FilterStateConverter.convertToStringSet(filterState));
+        editor.putStringSet(ExtraFieldNames.FILTERS_STATE_SET, convertToStringSet(filterState));
 
         SimpleDateFormat dateFormat = new SimpleDateFormat(DATE_TEMPLATE, Locale.ENGLISH);
 
@@ -312,6 +309,23 @@ public class FilterFragment extends android.support.v4.app.Fragment {
         TextView dateToView = (TextView) layoutView.findViewById(R.id.date_to);
         formattedDate = dateFormat.format(dateTo.getTime());
         dateToView.setText(formattedDate);
+    }
+
+    /**
+     * Converts filter state to JSON format.
+     *
+     * @return filter state in JSON format.
+     * @params filterState state of the filters.
+     */
+    private Set<String> convertToStringSet(final FilterState filterState) {
+        Set<String> filterStateSet = new HashSet<>();
+        for (String filterItem: filterState.getState().keySet()) {
+            if (filterState.isFilterOff(filterItem)) {
+                filterStateSet.add(filterItem);
+            }
+        }
+
+        return filterStateSet;
     }
 
 }

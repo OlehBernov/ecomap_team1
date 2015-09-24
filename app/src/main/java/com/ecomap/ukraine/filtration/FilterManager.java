@@ -10,8 +10,10 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Locale;
+import java.util.Map;
 import java.util.Set;
 
 
@@ -53,7 +55,11 @@ public class FilterManager implements FilterListenersNotifier {
      */
     public static FilterManager getInstance(final Context context) {
         if (instance == null) {
-            instance = new FilterManager(context);
+            synchronized (FilterManager.class) {
+                if (instance == null) {
+                    instance = new FilterManager(context);
+                }
+            }
         }
         return instance;
     }
@@ -130,7 +136,7 @@ public class FilterManager implements FilterListenersNotifier {
                 null);
         FilterState filterState;
         if (filterStateSet != null) {
-            filterState = new FilterState(FilterStateConverter.convertToCheckBoxesState(filterStateSet),
+            filterState = new FilterState(convertToCheckBoxesState(filterStateSet),
                     getDateFromPreference(settings, FilterContract.DATE_FROM),
                     getDateFromPreference(settings, FilterContract.DATE_TO));
         } else {
@@ -158,6 +164,36 @@ public class FilterManager implements FilterListenersNotifier {
         }
 
         return date;
+    }
+
+    /**
+     * Converts JSON to FilterState object.
+     *
+     * @param filterStateSet saved filter state in JSON format.
+     * @return object of the filter state.
+     */
+    private Map<String, Boolean> convertToCheckBoxesState(final Set<String> filterStateSet) {
+        Map<String, Boolean> filterStateValues = new HashMap<>();
+        filterStateValues.put(FilterContract.FOREST_DESTRUCTION,
+                filterStateSet.contains(FilterContract.FOREST_DESTRUCTION));
+        filterStateValues.put(FilterContract.RUBBISH_DUMP,
+                filterStateSet.contains(FilterContract.RUBBISH_DUMP));
+        filterStateValues.put(FilterContract.ILLEGAL_BUILDING,
+                filterStateSet.contains(FilterContract.ILLEGAL_BUILDING));
+        filterStateValues.put(FilterContract.WATER_POLLUTION,
+                filterStateSet.contains(FilterContract.WATER_POLLUTION));
+        filterStateValues.put(FilterContract.THREAD_TO_BIODIVERSITY,
+                filterStateSet.contains(FilterContract.THREAD_TO_BIODIVERSITY));
+        filterStateValues.put(FilterContract.POACHING,
+                filterStateSet.contains(FilterContract.POACHING));
+        filterStateValues.put(FilterContract.OTHER,
+                filterStateSet.contains(FilterContract.OTHER));
+        filterStateValues.put(FilterContract.RESOLVED,
+                filterStateSet.contains(FilterContract.RESOLVED));
+        filterStateValues.put(FilterContract.UNSOLVED,
+                filterStateSet.contains(FilterContract.UNSOLVED));
+
+        return filterStateValues;
     }
 
 }

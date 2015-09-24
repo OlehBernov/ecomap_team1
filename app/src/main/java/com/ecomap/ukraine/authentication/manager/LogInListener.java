@@ -4,7 +4,7 @@ import com.ecomap.ukraine.models.User;
 
 /**
  * Interface of classes, which want to get
- * information about identidication of user.
+ * information about identification of user.
  */
 public interface LogInListener {
 
@@ -13,6 +13,6 @@ public interface LogInListener {
      *
      * @param user identified user.
      */
-    void setLogInResult(User user);
+    void onLogInResult(User user);
 
 }

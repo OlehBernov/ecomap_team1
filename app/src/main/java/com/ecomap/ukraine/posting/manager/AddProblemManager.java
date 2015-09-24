@@ -11,7 +11,7 @@ import java.util.Set;
 /**
  * Coordinates the work of the data posting client and activities.
  */
-public class AddProblemManager implements AddProblemRequestReceiver, AddProblemNotifier {
+public class AddProblemManager implements AddProblemRequestReceiver {
 
     private static AddProblemManager instance;
 
@@ -32,7 +32,11 @@ public class AddProblemManager implements AddProblemRequestReceiver, AddProblemN
      */
     public static AddProblemManager getInstance(final Context context) {
         if (instance == null) {
-            instance = new AddProblemManager(context);
+            synchronized (AddProblemManager.class) {
+                if (instance == null) {
+                    instance = new AddProblemManager(context);
+                }
+            }
         }
         return instance;
     }
@@ -49,7 +53,7 @@ public class AddProblemManager implements AddProblemRequestReceiver, AddProblemN
      * Represents variants of posting result
      */
     @Override
-    public void onSuccesProblemPosting() {
+    public void onSuccessProblemPosting() {
         for (AddProblemListener listener : addProblemListeners) {
             listener.onSuccessProblemPosting();
         }
@@ -63,7 +67,7 @@ public class AddProblemManager implements AddProblemRequestReceiver, AddProblemN
     }
 
     @Override
-    public void onSuccesPhotoPosting() {
+    public void onSuccessPhotoPosting() {
         for (AddProblemListener listener : addProblemListeners) {
             listener.onSuccessPhotoPosting();
         }
@@ -80,7 +84,6 @@ public class AddProblemManager implements AddProblemRequestReceiver, AddProblemN
      * Adds the specified listener to the set of addProblemListeners. If it is already
      * registered, it is not added a second time.
      */
-    @Override
     public void registerAddProblemListener(final AddProblemListener listener) {
         addProblemListeners.add(listener);
     }
@@ -88,7 +91,6 @@ public class AddProblemManager implements AddProblemRequestReceiver, AddProblemN
     /**
      * Removes the specified listener from the set of addProblemListeners.
      */
-    @Override
     public void removeAddProblemListener(final AddProblemListener listener) {
         addProblemListeners.remove(listener);
     }

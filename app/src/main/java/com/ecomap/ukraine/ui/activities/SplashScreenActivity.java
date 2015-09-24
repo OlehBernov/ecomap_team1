@@ -96,7 +96,7 @@ public class SplashScreenActivity extends Activity {
         intent = new Intent(this, LoginActivity.class);
 
         AccountManager accountManager = AccountManager.getInstance(getApplicationContext());
-        user = accountManager.getUserFromPreference();
+        user = accountManager.getUser();
 
         if(accountManager.isAnonymousUser()) {
             intent = new Intent(this, LoginActivity.class);
@@ -113,7 +113,7 @@ public class SplashScreenActivity extends Activity {
              * @param problems list of all problems.
              */
             @Override
-            public void updateAllProblems(final List<Problem> problems) {
+            public void onAllProblemsUpdate(final List<Problem> problems) {
                 if (problems != null) {
                     if (!state) {
                         state = true;

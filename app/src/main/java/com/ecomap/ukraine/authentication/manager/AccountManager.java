@@ -13,8 +13,7 @@ import java.util.Set;
 /**
  * Coordinates the work of the identification client and activities.
  */
-public class AccountManager implements LogInListenerNotifier,
-                                       LogRequestReceiver {
+public class AccountManager implements LogRequestReceiver {
 
     /**
      * Holds the Singleton global instance of AccountManager.
@@ -36,7 +35,6 @@ public class AccountManager implements LogInListenerNotifier,
      */
     private Context context;
 
-
     /**
      * Constructor
      *
@@ -52,17 +50,20 @@ public class AccountManager implements LogInListenerNotifier,
      */
     public static AccountManager getInstance(final Context context) {
         if (instance == null) {
-            instance = new AccountManager(context);
+            synchronized (AccountManager.class) {
+                if (instance == null) {
+                    instance = new AccountManager(context);
+                }
+            }
         }
         return instance;
     }
-
 
     /**
      * Checks if user is anonym
      */
     public boolean isAnonymousUser() {
-        User user = getUserFromPreference();
+        User user = getUser();
         return user.getId() < 0;
     }
 
@@ -100,7 +101,6 @@ public class AccountManager implements LogInListenerNotifier,
      *
      * @param listener the LogInListener to add.
      */
-    @Override
     public void registerLogInListener(final LogInListener listener) {
         logInListeners.add(listener);
     }
@@ -110,7 +110,6 @@ public class AccountManager implements LogInListenerNotifier,
      *
      * @param listener the LogInListener to remove.
      */
-    @Override
     public void removeLogInListener(final LogInListener listener) {
         logInListeners.remove(listener);
     }
@@ -120,10 +119,9 @@ public class AccountManager implements LogInListenerNotifier,
      *
      * @param user logged user.
      */
-    @Override
     public void sendLogInResult(final User user) {
         for (LogInListener listener : logInListeners) {
-            listener.setLogInResult(user);
+            listener.onLogInResult(user);
         }
     }
 
@@ -153,7 +151,7 @@ public class AccountManager implements LogInListenerNotifier,
     /**
      * Gets user information from Shared Preferences
      */
-    public User getUserFromPreference() {
+    public User getUser() {
         SharedPreferences userPreference = context.
                 getSharedPreferences(ExtraFieldNames.USER_INFO, Context.MODE_PRIVATE);
         int userID = userPreference.getInt(ExtraFieldNames.USER_ID, -1);
@@ -162,4 +160,5 @@ public class AccountManager implements LogInListenerNotifier,
         String email = userPreference.getString(ExtraFieldNames.LOGIN, "");
         return new User(userID, userName, userSurname, "", "", "", email);
     }
+
 }

@@ -1,8 +1,6 @@
 package com.ecomap.ukraine.filtration;
 
 import com.ecomap.ukraine.models.Problem;
-import com.ecomap.ukraine.models.ProblemStatus;
-import com.ecomap.ukraine.models.ProblemType;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -14,6 +12,8 @@ import java.util.List;
  */
 public class Filter {
 
+    private Filter(){}
+
     /**
      * Filter all problem
      *
@@ -21,7 +21,7 @@ public class Filter {
      * @param filterState rules of filtration
      * @return unfiltered problems
      */
-    public List<Problem> filterProblem(final List<Problem> problems,
+    public static List<Problem> filterProblem(final List<Problem> problems,
                                        final FilterState filterState) {
         if (filterState != null) {
             List<Problem> filteredProblem = new ArrayList<>();
@@ -42,28 +42,28 @@ public class Filter {
      * @param type problem type.
      * @return appropriate filter criteria.
      */
-    public String getFilterCriteria(final ProblemType type) {
+    public static String getFilterCriteria(final int type) {
         switch (type) {
-            case FOREST_DESTRUCTION:
+            case Problem.FOREST_DESTRUCTION:
                 return FilterContract.FOREST_DESTRUCTION;
-            case RUBBISH_DUMP:
+            case Problem.RUBBISH_DUMP:
                 return FilterContract.RUBBISH_DUMP;
-            case ILLEGAL_BUILDING:
+            case Problem.ILLEGAL_BUILDING:
                 return FilterContract.ILLEGAL_BUILDING;
-            case WATER_POLLUTION:
+            case Problem.WATER_POLLUTION:
                 return FilterContract.WATER_POLLUTION;
-            case THREAD_TO_BIODIVERSITY:
+            case Problem.THREAD_TO_BIODIVERSITY:
                 return FilterContract.THREAD_TO_BIODIVERSITY;
-            case POACHING:
+            case Problem.POACHING:
                 return FilterContract.POACHING;
-            case OTHER:
+            case Problem.OTHER:
                 return FilterContract.OTHER;
             default:
                 return FilterContract.OTHER;
         }
     }
 
-    private boolean filtration(final FilterState filterState, final Problem problem) {
+    private static boolean filtration(final FilterState filterState, final Problem problem) {
         if (filterState.isFilterOff(getFilterCriteria(problem.getProblemType()))) {
             if (showProblemBySolvedFilter(filterState, problem)) {
                 if (showActualProblem(filterState, problem)) {
@@ -81,8 +81,8 @@ public class Filter {
      * @param problem     problem under filtration
      * @return access to show problem
      */
-    private boolean showProblemBySolvedFilter(final FilterState filterState,
-                                              final Problem problem) {
+    private static boolean showProblemBySolvedFilter(final FilterState filterState,
+                                                     final Problem problem) {
         return showResolvedProblem(filterState, problem)
                 || showUnsolvedProblem(filterState, problem);
 
@@ -95,7 +95,8 @@ public class Filter {
      * @param problem     problem under filtration
      * @return access to show problem
      */
-    private boolean showActualProblem(final FilterState filterState, final Problem problem) {
+    private static boolean showActualProblem(final FilterState filterState, final Problem problem) {
+        //TODO: date template
         int day = Integer.parseInt(problem.getDate().substring(8, 10));
         int year = Integer.parseInt(problem.getDate().substring(0, 4));
         int month = Integer.parseInt(problem.getDate().substring(5, 7)) - 1;
@@ -111,9 +112,9 @@ public class Filter {
      * @param problem     problem under filtration
      * @return access to show problem
      */
-    private boolean showResolvedProblem(final FilterState filterState, final Problem problem) {
+    private static boolean showResolvedProblem(final FilterState filterState, final Problem problem) {
         return filterState.isFilterOff(FilterContract.RESOLVED)
-                && (problem.getStatus() == ProblemStatus.RESOLVED);
+                && (problem.getStatus() == Problem.RESOLVED);
     }
 
     /**
@@ -123,9 +124,9 @@ public class Filter {
      * @param problem     problem under filtration
      * @return access to show problem
      */
-    private boolean showUnsolvedProblem(final FilterState filterState, final Problem problem) {
+    private static boolean showUnsolvedProblem(final FilterState filterState, final Problem problem) {
         return filterState.isFilterOff(FilterContract.UNSOLVED)
-                && (problem.getStatus() == ProblemStatus.UNSOLVED);
+                && (problem.getStatus() == Problem.UNSOLVED);
 
     }
 

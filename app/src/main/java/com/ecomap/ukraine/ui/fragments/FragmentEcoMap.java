@@ -14,20 +14,20 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
 import com.ecomap.ukraine.R;
-import com.ecomap.ukraine.map.IconRenderer;
-import com.ecomap.ukraine.update.manager.DataListenerAdapter;
-import com.ecomap.ukraine.ui.activities.MainActivity;
-import com.ecomap.ukraine.ui.DetailsController;
-import com.ecomap.ukraine.update.manager.DataManager;
 import com.ecomap.ukraine.filtration.Filter;
 import com.ecomap.ukraine.filtration.FilterListener;
 import com.ecomap.ukraine.filtration.FilterManager;
 import com.ecomap.ukraine.filtration.FilterState;
+import com.ecomap.ukraine.map.IconRenderer;
+import com.ecomap.ukraine.map.MapType;
 import com.ecomap.ukraine.models.Details;
 import com.ecomap.ukraine.models.Problem;
-import com.ecomap.ukraine.map.MapType;
-import com.ecomap.ukraine.util.BasicContentLayout;
+import com.ecomap.ukraine.ui.DetailsController;
+import com.ecomap.ukraine.ui.activities.MainActivity;
 import com.ecomap.ukraine.ui.fullinfo.DetailsContent;
+import com.ecomap.ukraine.update.manager.DataListenerAdapter;
+import com.ecomap.ukraine.update.manager.DataManager;
+import com.ecomap.ukraine.util.BasicContentLayout;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -49,15 +49,14 @@ import java.util.List;
 public class FragmentEcoMap extends android.support.v4.app.Fragment
         implements FilterListener,
         ClusterManager.OnClusterItemClickListener<Problem>,
-        ClusterManager.OnClusterClickListener <Problem> {
+        ClusterManager.OnClusterClickListener<Problem> {
 
     private static final LatLng INITIAL_POSITION = new LatLng(48.4, 31.2);
     private static final float INITIAL_ZOOM = 4.5f;
     private static final float ON_MARKER_CLICK_ZOOM = 12;
     private static final float ON_MY_POSITION_CLICK_ZOOM = 12;
-    private static final int MAP_TYPE_NORMAL_ID = MapType.MAP_TYPE_NORMAL.getId();
 
-     /**
+    /**
      * The name of the preference to retrieve.
      */
     private static final String POSITION = "POSITION";
@@ -72,7 +71,6 @@ public class FragmentEcoMap extends android.support.v4.app.Fragment
     private GoogleMap googleMap;
     private DataManager dataManager;
     private FilterManager filterManager;
-    private BasicContentLayout basicContentLayout;
     private DetailsContent detailsContent;
     private int mapType;
     private DataListenerAdapter dataListenerAdapter;
@@ -119,7 +117,7 @@ public class FragmentEcoMap extends android.support.v4.app.Fragment
              * @param problems list of all problems.
              */
             @Override
-            public void updateAllProblems(final List<Problem> problems) {
+            public void onAllProblemsUpdate(final List<Problem> problems) {
                 FragmentEcoMap.problems = problems;
                 putAllProblemsOnMap(null);
                 setRenderer();
@@ -130,7 +128,7 @@ public class FragmentEcoMap extends android.support.v4.app.Fragment
              * @param details object of problem details.
              */
             @Override
-            public void updateProblemDetails(final Details details) {
+            public void onProblemDetailsUpdate(final Details details) {
                 if (detailsContent != null) {
                     detailsContent.prepareToRefresh();
                     detailsContent.setProblemDetails(details);
@@ -157,19 +155,11 @@ public class FragmentEcoMap extends android.support.v4.app.Fragment
                 CameraUpdate cameraUpdate = CameraUpdateFactory.newCameraPosition(cameraPosition);
                 googleMap.animateCamera(cameraUpdate);
 
-                }
-            });
+            }
+        });
 
         FloatingActionButton myPositionButton = (FloatingActionButton) getActivity().findViewById(R.id.fab1);
         myPositionButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Location myLocation = getLocation();
-                if (myLocation != null) {
-                    moveCameraToMyLocation(myLocation);
-                }
-            }
-
             @Nullable
             private Location getLocation() {
                 Location myLocation = null;
@@ -183,7 +173,15 @@ public class FragmentEcoMap extends android.support.v4.app.Fragment
                     }
                 }
                 return myLocation;
+            }            @Override
+            public void onClick(View v) {
+                Location myLocation = getLocation();
+                if (myLocation != null) {
+                    moveCameraToMyLocation(myLocation);
+                }
             }
+
+
         });
 
         filterManager = FilterManager.getInstance(getActivity());
@@ -216,9 +214,6 @@ public class FragmentEcoMap extends android.support.v4.app.Fragment
         editor.apply();
     }
 
-
-
-
     /**
      * Update filter
      *
@@ -233,7 +228,7 @@ public class FragmentEcoMap extends android.support.v4.app.Fragment
      * Sets renderer on map
      */
     @Override
-    public void setRenderer () {
+    public void setRenderer() {
         clusterManager.setRenderer(new IconRenderer(getActivity(), googleMap, clusterManager));
     }
 
@@ -247,7 +242,7 @@ public class FragmentEcoMap extends android.support.v4.app.Fragment
     public boolean onClusterItemClick(final Problem problem) {
         if (!((MainActivity) getActivity()).problemAddingMenu) {
             LinearLayout detailsRoot = (LinearLayout) getActivity().findViewById(R.id.pain);
-            basicContentLayout = new BasicContentLayout(detailsRoot);
+            BasicContentLayout basicContentLayout = new BasicContentLayout(detailsRoot);
             detailsContent = new DetailsContent(basicContentLayout, getActivity());
             detailsContent.setBaseInfo(problem);
             new DetailsController(getActivity(), problem);
@@ -282,8 +277,8 @@ public class FragmentEcoMap extends android.support.v4.app.Fragment
         double latitudeScreenDifference = getLatSize(screenBounds);
         double longitudeScreenDifference = getLngSize(screenBounds);
 
-        if (Math.abs(longitudeClusterDifference/longitudeScreenDifference)
-                > Math.abs(latitudeClusterDifference/latitudeScreenDifference)) {
+        if (Math.abs(longitudeClusterDifference / longitudeScreenDifference)
+                > Math.abs(latitudeClusterDifference / latitudeScreenDifference)) {
             return (float) (googleMap.getCameraPosition().zoom
                     + zoomIncreaseValue(longitudeClusterDifference, longitudeScreenDifference));
         } else {
@@ -305,7 +300,7 @@ public class FragmentEcoMap extends android.support.v4.app.Fragment
     }
 
     private double zoomIncreaseValue(double clusterMaxDifference, double screenMaxDifference) {
-        return log(Math.abs(screenMaxDifference/clusterMaxDifference) * 0.7, 2);
+        return log(Math.abs(screenMaxDifference / clusterMaxDifference) * 0.7, 2);
     }
 
     private LatLngBounds getScreenLatLngBounds() {
@@ -322,7 +317,7 @@ public class FragmentEcoMap extends android.support.v4.app.Fragment
     }
 
     private double log(double num, double base) {
-        return Math.log10(num)/Math.log10(base);
+        return Math.log10(num) / Math.log10(base);
     }
 
     /**
@@ -401,7 +396,7 @@ public class FragmentEcoMap extends android.support.v4.app.Fragment
      * @param filterState state of filter
      */
     private void setupClusterManager(final FilterState filterState) {
-        List<Problem> filteredProblems = new Filter().filterProblem(problems, filterState);
+        List<Problem> filteredProblems = Filter.filterProblem(problems, filterState);
         clusterManager = new ClusterManager<>(getActivity(), googleMap);
         googleMap.setOnCameraChangeListener(clusterManager);
         clusterManager.setOnClusterItemClickListener(this);
@@ -414,7 +409,7 @@ public class FragmentEcoMap extends android.support.v4.app.Fragment
      * Sets map type
      */
     private void setMapType() {
-        if(mapType == MAP_TYPE_NORMAL_ID) {
+        if (mapType == MapType.MAP_TYPE_NORMAL) {
             googleMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
         } else {
             googleMap.setMapType(GoogleMap.MAP_TYPE_HYBRID);

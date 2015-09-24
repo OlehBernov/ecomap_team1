@@ -1,14 +1,11 @@
 package com.ecomap.ukraine.update;
 
 
-import com.ecomap.ukraine.models.ActivityType;
 import com.ecomap.ukraine.models.AllTop10Items;
 import com.ecomap.ukraine.models.Details;
 import com.ecomap.ukraine.models.Photo;
 import com.ecomap.ukraine.models.Problem;
 import com.ecomap.ukraine.models.ProblemActivity;
-import com.ecomap.ukraine.models.ProblemStatus;
-import com.ecomap.ukraine.models.ProblemType;
 import com.ecomap.ukraine.models.Top10Item;
 
 import org.json.JSONArray;
@@ -38,7 +35,8 @@ public final class JSONParser {
      */
     private static final String NULL_ARGUMENT = "Argument is null";
 
-    private JSONParser() {}
+    private JSONParser() {
+    }
 
     /**
      * Converts brief information from JSON to List of Problem objects.
@@ -79,7 +77,7 @@ public final class JSONParser {
         return resultJson;
     }
 
-    public static AllTop10Items parseAllTop10Items (final String allTop10ItemsJson)
+    public static AllTop10Items parseAllTop10Items(final String allTop10ItemsJson)
             throws JSONException {
         if (allTop10ItemsJson == null) {
             throw new JSONException(NULL_ARGUMENT);
@@ -157,13 +155,10 @@ public final class JSONParser {
             throws JSONException {
         Problem problem;
 
-        int problemStatusId = problemJsonObject.optInt(JSONFields.PROBLEM_STATUS, -1);
-        int problemTypesId = problemJsonObject.optInt(JSONFields.PROBLEM_TYPES_ID, -1);
-
         problem = new Problem(
                 problemJsonObject.optInt(JSONFields.ID, -1),
-                ProblemStatus.getProblemStatus(problemStatusId),
-                ProblemType.getProblemType(problemTypesId),
+                problemJsonObject.optInt(JSONFields.PROBLEM_STATUS, -1),
+                problemJsonObject.optInt(JSONFields.PROBLEM_TYPES_ID, -1),
                 problemJsonObject.getString(JSONFields.TITLE),
                 problemJsonObject.getString(JSONFields.PROBLEM_DATE),
                 problemJsonObject.getDouble(JSONFields.LATITUDE),
@@ -198,13 +193,10 @@ public final class JSONParser {
                 continue;
             }
 
-            int activityTypeId = commentObject.optInt(JSONFields.ACTIVITY_TYPES_ID, -1);
-            ActivityType activityTypeEnum = ActivityType.getActivityType(activityTypeId);
-
             currentProblemActivity = new ProblemActivity(
                     commentObject.optInt(JSONFields.PROBLEMS_ID, -1),
                     commentObject.optInt(JSONFields.ID, -1),
-                    activityTypeEnum,
+                    commentObject.optInt(JSONFields.ACTIVITY_TYPES_ID, -1),
                     commentObject.optInt(JSONFields.COMMENT_USERS_ID, -1),
                     contentObject.getString(JSONFields.COMMENT_CORE),
                     commentObject.getString(JSONFields.PROBLEM_ACTIVITY_DATE),
@@ -248,8 +240,8 @@ public final class JSONParser {
         return photos;
     }
 
-    private static List<Top10Item> getTop10VoteList (final JSONArray top10VotesArray)
-            throws JSONException{
+    private static List<Top10Item> getTop10VoteList(final JSONArray top10VotesArray)
+            throws JSONException {
         List<Top10Item> top10VoteList = new ArrayList<>();
         Top10Item currentTop10Item;
         for (int i = 0; i < top10VotesArray.length(); i++) {
@@ -264,8 +256,8 @@ public final class JSONParser {
         return top10VoteList;
     }
 
-    private static List<Top10Item> getTop10SeverityList (final JSONArray top10SeverityArray)
-            throws JSONException{
+    private static List<Top10Item> getTop10SeverityList(final JSONArray top10SeverityArray)
+            throws JSONException {
         List<Top10Item> top10SeverityList = new ArrayList<>();
         Top10Item currentTop10Item;
         for (int i = 0; i < top10SeverityArray.length(); i++) {
@@ -280,8 +272,8 @@ public final class JSONParser {
         return top10SeverityList;
     }
 
-    private static List<Top10Item> getTop10ComentList (final JSONArray top10ComentArray)
-            throws JSONException{
+    private static List<Top10Item> getTop10ComentList(final JSONArray top10ComentArray)
+            throws JSONException {
         List<Top10Item> top10ComentList = new ArrayList<>();
         Top10Item currentTop10Item;
         for (int i = 0; i < top10ComentArray.length(); i++) {

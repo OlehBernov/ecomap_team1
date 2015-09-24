@@ -1,6 +1,5 @@
 package com.ecomap.ukraine.authentication;
 
-import com.ecomap.ukraine.authentication.JSONFields;
 import com.ecomap.ukraine.models.User;
 
 import org.json.JSONException;
@@ -13,7 +12,8 @@ public final class JSONParser {
 
     private static final String NULL_ARGUMENT = "Argument is null";
 
-    private JSONParser() {}
+    private JSONParser() {
+    }
 
     /**
      * Converts information about identified user from JSON to User objects.

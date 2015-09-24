@@ -8,7 +8,6 @@ import android.widget.TextView;
 
 import com.ecomap.ukraine.R;
 import com.ecomap.ukraine.models.Problem;
-import com.ecomap.ukraine.models.ProblemType;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
@@ -21,6 +20,8 @@ import com.google.maps.android.clustering.view.DefaultClusterRenderer;
  * The default view for a ClusterManager. Markers are animated in and out of clusters.
  */
 public class IconRenderer extends DefaultClusterRenderer<Problem> {
+
+    public static final float ANCHOR = 0.5f;
     /**
      * Icons for each bucket.
      */
@@ -79,7 +80,7 @@ public class IconRenderer extends DefaultClusterRenderer<Problem> {
         BitmapDescriptor icon = BitmapDescriptorFactory.fromResource(IconRenderer.getResourceIdForMarker(
                 problem.getProblemType()));
         markerOptions.icon(icon)
-                .anchor(0.5f, 1f);
+                .anchor(ANCHOR, 1f);
         super.onBeforeClusterItemRendered(problem, markerOptions);
     }
 
@@ -98,8 +99,7 @@ public class IconRenderer extends DefaultClusterRenderer<Problem> {
      */
     @Override
     protected int getBucket(Cluster<Problem> cluster) {
-        int size = cluster.getSize();
-        return size;
+        return cluster.getSize();
     }
 
     /**
@@ -133,33 +133,33 @@ public class IconRenderer extends DefaultClusterRenderer<Problem> {
     }
 
     /**
-     * Gets markers resourses
+     * Gets markers resources
      *
      * @param problemType id of type
-     * @return icon resourse
+     * @return icon resource
      */
-    public static int getResourceIdForMarker(final ProblemType problemType) {
+    public static int getResourceIdForMarker(final int problemType) {
         int resId = 0;
         switch (problemType) {
-            case FOREST_DESTRUCTION:
+            case Problem.FOREST_DESTRUCTION:
                 resId = R.drawable.type1;
                 break;
-            case RUBBISH_DUMP:
+            case Problem.RUBBISH_DUMP:
                 resId = R.drawable.type2;
                 break;
-            case ILLEGAL_BUILDING:
+            case Problem.ILLEGAL_BUILDING:
                 resId = R.drawable.type3;
                 break;
-            case WATER_POLLUTION:
+            case Problem.WATER_POLLUTION:
                 resId = R.drawable.type4;
                 break;
-            case THREAD_TO_BIODIVERSITY:
+            case Problem.THREAD_TO_BIODIVERSITY:
                 resId = R.drawable.type5;
                 break;
-            case POACHING:
+            case Problem.POACHING:
                 resId = R.drawable.type6;
                 break;
-            case OTHER:
+            case Problem.OTHER:
                 resId = R.drawable.type7;
                 break;
         }
