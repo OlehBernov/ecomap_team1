@@ -60,11 +60,19 @@ public class Top10Activity extends AppCompatActivity  {
         DataManager dataManager = DataManager.getInstance(this);
 
         dataListenerAdapter = new DataListenerAdapter() {
+            /**
+             * Receive list of all problems.
+             * @param updateproblems list of all problems.
+             */
             @Override
             public void updateAllProblems(List<Problem> updateproblems) {
                 problems = updateproblems;
             }
 
+            /**
+             * Receive oject, which contains top10 elements
+             * @param updateallTop10Items object, which contains top 10 elements
+             */
             @Override
             public void updateTop10(AllTop10Items updateallTop10Items) {
                 allTop10Items = updateallTop10Items;

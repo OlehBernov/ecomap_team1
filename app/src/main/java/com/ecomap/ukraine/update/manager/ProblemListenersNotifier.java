@@ -37,6 +37,10 @@ interface ProblemListenersNotifier {
      */
     void sendProblemDetails(final Details details);
 
+    /**
+     * Sends object of top10 problems to lsteners
+     * @param allTop10Items object of top10 problems
+     */
     void sendAllTop10Items(final AllTop10Items allTop10Items);
 
 }

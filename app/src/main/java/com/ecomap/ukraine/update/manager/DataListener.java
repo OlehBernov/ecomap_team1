@@ -20,16 +20,26 @@ public interface DataListener {
     void updateAllProblems(final List<Problem> problems);
 
     /**
-     * Send to listeners list of problem details.
+     * Send to listeners object of problem details.
      *
      * @param details details of concrete problem.
      */
     void updateProblemDetails(final Details details);
 
+    /**
+     * Send to listeners oject, which contains top10 elements
+     * @param allTop10Items object, which contains top 10 elements
+     */
     void updateTop10(final AllTop10Items allTop10Items);
 
+    /**
+     * Performs when vote successfully sent to server
+     */
     void onVoteAdded();
 
+    /**
+     * Performs when comment was successfully sent to server.
+     */
     void onCommentAdded();
 
 }

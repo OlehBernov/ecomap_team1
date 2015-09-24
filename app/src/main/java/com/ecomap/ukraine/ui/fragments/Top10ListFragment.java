@@ -62,11 +62,19 @@ public class Top10ListFragment extends Fragment implements AdapterView.OnItemCli
         View v = inflater.inflate(R.layout.fragment_list_top_10, container, false);
         dataListenerAdapter = new DataListenerAdapter() {
 
+            /**
+             * Receive list of all problems.
+             * @param updateproblems list of all problems.
+             */
             @Override
             public void updateAllProblems(List<Problem> updateproblems) {
                 problems = updateproblems;
             }
 
+            /**
+             * Receive oject, which contains top10 elements
+             * @param allTop10Items object, which contains top 10 elements
+             */
             @Override
             public void updateTop10(AllTop10Items allTop10Items) {
                 switch (top10FragmentID) {

@@ -139,26 +139,46 @@ public class JSONFields {
      * Fileds for top_10
      */
     public static final String TOP_10_ITEM_ID = "Id";
-
+    /**
+     * Title of problem, whicg is in top10
+     */
     public static final String TOP_10_TITLE= "Title";
-
+    /**
+     * Number of votes of problem, which is in top 10 by votes
+     */
     public static final String TOP_10_VOTES = "Votes";
-
+    /**
+     * Severity of problem, which is in top 10 by severity
+     */
     public static final String TOP_10_SEVERITY = "Severity";
 
+    /**
+     * Number of comments of problem, which is in top 10 by comments
+     */
     public static final String TOP_10_COMMENTS = "value";
 
+    /**
+     * Id of problem, which for posting vote
+     */
     public static final String PROBLEM_ID = "idProblem";
 
+    /**
+     * Id of user, who posten vote
+     */
     public static final String USER_ID = "userId";
 
     /**
-     * Fields fot posting comment
+     * Id of user, who posten comment
      */
     public static final String USER_SURNAME = "userSurname";
 
+    /**
+     * Content of comment
+     */
     public static final String CONTENT = "Content";
-
+    /**
+     * Data of comment
+     */
     public static final String DATA = "data";
 
 }

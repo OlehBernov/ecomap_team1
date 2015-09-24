@@ -93,6 +93,10 @@ public class SearchActivity extends AppCompatActivity
     private void requestProblemsList() {
         final DataManager dataManager = DataManager.getInstance(this);
         dataManager.registerProblemListener(new DataListenerAdapter() {
+            /**
+             * Receive list of all problems.
+             * @param problems list of all problems.
+             */
             @Override
             public void updateAllProblems(List<Problem> problems) {
                 unfilteredProblems = problems;

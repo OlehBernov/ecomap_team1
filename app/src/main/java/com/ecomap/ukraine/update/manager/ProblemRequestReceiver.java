@@ -27,10 +27,21 @@ public interface ProblemRequestReceiver {
      */
     void setProblemDetailsRequestResult(final Details details);
 
+    /**
+     * Receive server response to the request of top 10
+     * problems and send int to listeners
+     * @param allTop10Items object of top 10 problem
+     */
     void setTop10RequestResult (final AllTop10Items allTop10Items);
 
+    /**
+     * Performs when comment was successfully sent to server.
+     */
     void onVoteAdded();
 
+    /**
+     * Performs when comment was successfully sent to server.
+     */
     void onCommentAdded();
 
 }

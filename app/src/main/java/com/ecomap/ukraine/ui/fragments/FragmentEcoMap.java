@@ -126,9 +126,8 @@ public class FragmentEcoMap extends android.support.v4.app.Fragment
             }
 
             /**
-             * Get list of all details.
-             *
-             * @param details details of concrete problem.
+             * Receive object of problem details.
+             * @param details object of problem details.
              */
             @Override
             public void updateProblemDetails(final Details details) {

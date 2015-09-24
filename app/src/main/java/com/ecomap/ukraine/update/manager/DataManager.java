@@ -60,6 +60,9 @@ public class DataManager implements ProblemListenersNotifier,
      */
     private DBHelper dbHelper;
 
+    /**
+     * Id of current problem
+     */
     private int currentProblemId;
 
     /**
@@ -120,6 +123,10 @@ public class DataManager implements ProblemListenersNotifier,
         }
     }
 
+    /**
+     * Sends object of top10 problems to lsteners
+     * @param allTop10Items object of top10 problems
+     */
     @Override
     public void sendAllTop10Items(final AllTop10Items allTop10Items) {
         for (DataListener listener : problemListeners) {
@@ -169,6 +176,11 @@ public class DataManager implements ProblemListenersNotifier,
         }
     }
 
+    /**
+     * Receive server response to the request of top 10
+     * problems and send int to listeners
+     * @param allTop10Items object of top 10 problem
+     */
     @Override
     public void setTop10RequestResult (AllTop10Items allTop10Items) {
         if (allTop10Items != null) {
@@ -180,6 +192,9 @@ public class DataManager implements ProblemListenersNotifier,
         }
     }
 
+    /**
+     * Performs when vote successfully sent to server
+     */
     @Override
     public void onVoteAdded() {
         for (DataListener listener : problemListeners) {
@@ -187,6 +202,9 @@ public class DataManager implements ProblemListenersNotifier,
         }
     }
 
+    /**
+     * Performs when comment was successfully sent to server.
+     */
     @Override
     public void onCommentAdded() {
         for (DataListener listener : problemListeners) {
@@ -237,6 +255,9 @@ public class DataManager implements ProblemListenersNotifier,
         }
     }
 
+    /**
+     * This method is used to made request for get top 10 problems.
+     */
     public void getTop10 () {
         SharedPreferences settings = context.getSharedPreferences(TOP_10_UPDATE_TIME, Context.MODE_PRIVATE);
         long lastUpdateTime = settings.getLong(TOP_10_UPDATE_TIME, 0);
@@ -252,6 +273,13 @@ public class DataManager implements ProblemListenersNotifier,
         }
     }
 
+    /**
+     * This method is used to send vote to server for current problem
+     * @param problemID id of current problem
+     * @param userID id of user who send vote
+     * @param userName name of user who send vote
+     * @param userSurname surname of user who send vote
+     */
     public void postVote(final String problemID, final String userID,
                          final String userName, final String userSurname) {
         loadingClient.postVote(problemID, userID, userName, userSurname);
@@ -264,20 +292,17 @@ public class DataManager implements ProblemListenersNotifier,
         loadingClient.postComment(problemID, userID, userName, userSurname, content);
     }
 
-
+    /**
+     * Refresh brief information about all problems
+     */
     public void refreshAllProblem() {
         loadingClient.getAllProblems();
     }
 
-    //TODO: add to navigation
-    public void refreshAllProblems() {
-        SharedPreferences settings = context.getSharedPreferences(TIME, 0);
-        SharedPreferences.Editor editor = settings.edit();
-        editor.putLong(TIME, 0);
-        editor.apply();
-        getAllProblems();
-    }
-
+    /**
+     * Refresh details of current problem
+     * @param problemId id of current problem
+     */
     public void refreshProblemDetails(final int problemId) {
         new AsyncTask<Void, Void, Void>(){
             @Override
@@ -289,6 +314,9 @@ public class DataManager implements ProblemListenersNotifier,
         }.execute();
     }
 
+    /**
+     * Remove all listeners from Data manager.
+     */
     public void removeAllListeners() {
         problemListeners.clear();
     }
