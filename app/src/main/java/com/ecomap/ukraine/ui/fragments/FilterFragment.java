@@ -36,6 +36,7 @@ public class FilterFragment extends android.support.v4.app.Fragment {
     private static final String DATE_TEMPLATE = "dd-MM-yyyy";
     private static final String DEFAULT_DATE_FROM = "01-01-1990";
     private static final String DEFAULT_DATE_TO = "31-12-2030";
+    private static final int MIDNIGHT_TIME = 0;
 
     private FilterManager filterManager;
     private View layoutView;
@@ -204,6 +205,9 @@ public class FilterFragment extends android.support.v4.app.Fragment {
                         date.set(Calendar.YEAR, year);
                         date.set(Calendar.MONTH, monthOfYear);
                         date.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+                        date.set(Calendar.HOUR_OF_DAY, MIDNIGHT_TIME);
+                        date.set(Calendar.MINUTE, MIDNIGHT_TIME);
+                        date.set(Calendar.SECOND, MIDNIGHT_TIME);
 
                         if (isValidDates(date, calendarDateTo)) {
                             calendarDateFrom = date;

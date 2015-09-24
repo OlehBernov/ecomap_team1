@@ -15,13 +15,19 @@ import com.ecomap.ukraine.R;
 import com.ecomap.ukraine.models.Details;
 import com.ecomap.ukraine.models.ProblemActivity;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 /**
  * Block for problem activities (comments, likes, ect.).
  */
 public class ActivitiesBlock extends LinearLayout {
 
+    private static final String DATE_TEMPLATE = "yyyy-MM-dd'T'HH:mm:ss.'000Z'";
     private Context context;
     private TableLayout activitiesLayout;
 
@@ -156,14 +162,16 @@ public class ActivitiesBlock extends LinearLayout {
      * @return information about post
      */
     private String getPostInformation(final ProblemActivity problemActivity) {
-        //TODO: from template
+        Calendar date = Calendar.getInstance();
+        SimpleDateFormat dateFormat = new SimpleDateFormat(DATE_TEMPLATE, Locale.ENGLISH);
+        try {
+            date.setTime(dateFormat.parse(problemActivity.getDate()));
+        } catch (ParseException e) {
+            date.setTime(new Date(System.currentTimeMillis()));
+        }
         String userName = problemActivity.getFirstName();
-        String day = problemActivity.getDate().substring(8, 10);
-        String year = problemActivity.getDate().substring(0, 4);
-        String month = problemActivity.getDate().substring(5, 7);
-        String hour = problemActivity.getDate().substring(11, 13);
-        String minutes = problemActivity.getDate().substring(14, 16);
-        return userName + " " + day + "/" + month + "/" + year + " " + hour + ":" + minutes;
+        return userName + " " + date.get(Calendar.DAY_OF_MONTH)  + "/" + (date.get(Calendar.MONTH) + 1)
+                + "/" + date.get(Calendar.YEAR) + " " + date.get(Calendar.HOUR) + ":" + date.get(Calendar.MINUTE);
     }
 
 }

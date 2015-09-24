@@ -141,9 +141,9 @@ public class AddProblemClient {
                                    final String userSurname, final List<String> descriptions,
                                    final String problemID, final List<Bitmap> photos) {
         final int size = photos.size();
-        for (int i = 1; i <= descriptions.size(); i++) {
-            addPhotoToProblem(userID, userName, userSurname, descriptions.get(i - 1),
-                    problemID, photos.get(i - 1), i, size);
+        for (int i = 0; i < descriptions.size(); i++) {
+            addPhotoToProblem(userID, userName, userSurname, descriptions.get(i),
+                    problemID, photos.get(i), i, size - 1);
         }
     }
 

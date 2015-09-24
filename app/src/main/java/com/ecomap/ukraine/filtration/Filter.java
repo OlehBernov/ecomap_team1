@@ -2,15 +2,21 @@ package com.ecomap.ukraine.filtration;
 
 import com.ecomap.ukraine.models.Problem;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
+import java.util.Locale;
 
 /**
  * Class which is responsible for filtration
  */
 public class Filter {
+
+    private static final String DATE_TEMPLATE = "yyyy-MM-dd'T'HH:mm:ss'.000Z'";
 
     private Filter(){}
 
@@ -96,11 +102,13 @@ public class Filter {
      * @return access to show problem
      */
     private static boolean showActualProblem(final FilterState filterState, final Problem problem) {
-        //TODO: date template
-        int day = Integer.parseInt(problem.getDate().substring(8, 10));
-        int year = Integer.parseInt(problem.getDate().substring(0, 4));
-        int month = Integer.parseInt(problem.getDate().substring(5, 7)) - 1;
-        Calendar creatingProblemDate = new GregorianCalendar(year, month, day);
+        Calendar creatingProblemDate = Calendar.getInstance();
+        SimpleDateFormat dateFormat = new SimpleDateFormat(DATE_TEMPLATE, Locale.ENGLISH);
+        try {
+            creatingProblemDate.setTime(dateFormat.parse(problem.getDate()));
+        } catch (ParseException e) {
+            creatingProblemDate.setTime(new Date(System.currentTimeMillis()));
+        }
         return creatingProblemDate.after(filterState.getDateFrom())
                 && filterState.getDateTo().after(creatingProblemDate);
     }
