@@ -242,13 +242,13 @@ public class FragmentEcoMap extends android.support.v4.app.Fragment
             detailsContent = new DetailsContent(basicContentLayout, getActivity());
             detailsContent.setBaseInfo(problem);
             new DetailsController(getActivity(), problem);
+            dataManager.registerProblemListener(dataListenerAdapter);
             dataManager.getProblemDetail(problem.getProblemId());
             moveCameraToProblem(problem);
             return true;
         }
         return false;
     }
-
 
     @Override
     public boolean onClusterClick(Cluster<Problem> cluster) {

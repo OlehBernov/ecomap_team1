@@ -9,7 +9,6 @@ import java.io.Serializable;
 
 /**
  * Class Problem represent general information about problem, enough to show the problem on the map.
- * Created by Andriy on 17.07.2015.
  */
 public class Problem implements ClusterItem, Serializable {
 
@@ -63,8 +62,8 @@ public class Problem implements ClusterItem, Serializable {
      * Constructor of class
      *
      * @param problemId   id of current problem
-     * @param statusId    represend status of current problem resolved (1) or not resolved (0)
-     * @param problemType represend type of current problem
+     * @param statusId    represent status of current problem resolved (1) or not resolved (0)
+     * @param problemType represent type of current problem
      * @param title       contains title of current problem
      * @param date        contains adding date of current problem
      * @param latitude    contains latitude of coordinate current problem

@@ -3,7 +3,6 @@ package com.ecomap.ukraine.models;
 /**
  * Class ProblemActivity represent information about activity that are related to the problem.
  * Activity - some action which is related to the problem (like, comment, creation).
- * Created by Andriy on 17.07.2015.
  */
 public class ProblemActivity {
 
