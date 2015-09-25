@@ -17,23 +17,33 @@ import com.ecomap.ukraine.models.ProblemActivity;
 import com.ecomap.ukraine.models.User;
 import com.ecomap.ukraine.update.manager.DataListenerAdapter;
 import com.ecomap.ukraine.update.manager.DataManager;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 /**
  * Block for full problem information layout which contains basic information about problem.
  */
 public class HeaderBlock extends LinearLayout {
 
+    private static final String DATE_TEMPLATE = "yyyy-MM-dd'T'HH:mm:ss'.000Z'";
+    private static final String DATE_TEMPLATE_FOR_SHOW = "dd-MM-yyyy";
     private static final String RESOLVED = "resolved";
     private static final String UNSOLVED = "unsolved";
     private static int[] STARS_ID = {R.id.star1, R.id.star2, R.id.star3, R.id.star4, R.id.star5};
+
+    private Problem problem;
 
     private TextView problemTitle;
     private TextView problemStatus;
     private ImageView markerIcon;
     private Context context;
-    private Problem problem;
     private ImageView voteIcon;
+    private TextView dateOfPostingAndAuthor;
 
     public HeaderBlock(Context context) {
         this(context, null);
@@ -59,6 +69,7 @@ public class HeaderBlock extends LinearLayout {
 
         List<ProblemActivity> problemActivities = details.getProblemActivities();
         if (problemActivities != null) {
+            setDateOfPostingAndAuthor(problemActivities.get(0));
             User user = AccountManager.getInstance(context).getUser();
             for (int i = problemActivities.size() - 1; i >= 0; i--) {
                 if (isProblemLikedBefore(problemActivities.get(i), user)) {
@@ -83,6 +94,7 @@ public class HeaderBlock extends LinearLayout {
         this.problem = problem;
 
         problemTitle.setText(problem.getTitle());
+        dateOfPostingAndAuthor.setText(problem.getDate());
         setProblemStatus(problem.getStatus());
         markerIcon.setImageResource(IconRenderer.getResourceIdForMarker(problem.getProblemType()));
 
@@ -136,6 +148,7 @@ public class HeaderBlock extends LinearLayout {
         markerIcon = (ImageView) findViewById(R.id.markerIcon);
         problemTitle = (TextView) findViewById(R.id.title_of_problem);
         problemStatus = (TextView) findViewById(R.id.status_of_problem);
+        dateOfPostingAndAuthor = (TextView) findViewById(R.id.date_of_posting);
     }
 
     /**
@@ -151,6 +164,25 @@ public class HeaderBlock extends LinearLayout {
             this.problemStatus.setText(RESOLVED);
             this.problemStatus.setTextColor(Color.GREEN);
         }
+    }
+
+    /**
+     * Sets the creator name and date of posting to the relevant place on view.
+     *
+     * @param creatorActivity activity which contains information about creator of the problem.
+     */
+    private void setDateOfPostingAndAuthor(ProblemActivity creatorActivity) {
+        SimpleDateFormat dateFormat = new SimpleDateFormat(DATE_TEMPLATE, Locale.ENGLISH);
+        Calendar postingDate = Calendar.getInstance();
+        try {
+            postingDate.setTime(dateFormat.parse(problem.getDate()));
+        } catch (ParseException e) {
+            postingDate.setTime(new Date(System.currentTimeMillis()));
+        }
+
+        dateFormat = new SimpleDateFormat(DATE_TEMPLATE_FOR_SHOW, Locale.ENGLISH);
+        dateOfPostingAndAuthor.setText(creatorActivity.getFirstName()
+                                       + " " + dateFormat.format(postingDate.getTime()));
     }
 
 }

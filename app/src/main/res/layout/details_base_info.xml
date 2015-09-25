@@ -95,7 +95,7 @@
                 android:text="not resolved"
                 android:textAppearance="?android:attr/textAppearanceSmall"
                 android:textColor="#d01716"
-                android:textSize="17dp"
+                android:textSize="17sp"
                 android:textStyle="bold"/>
 
             <ImageView
@@ -121,22 +121,21 @@
                 android:text="0"
                 android:textAppearance="?android:attr/textAppearanceSmall"
                 android:textColor="@color/abc_primary_text_disable_only_material_light"
-                android:textSize="17dp"/>
+                android:textSize="17sp"/>
 
         </RelativeLayout>
 
         <TextView
-            android:id="@+id/user"
+            android:id="@+id/date_of_posting"
             android:layout_width="wrap_content"
             android:layout_height="22dp"
             android:layout_alignRight="@+id/frameLayout"
             android:layout_below="@+id/markerIcon"
-            android:text="(Анонім)28/02/2014 00:02 "
+            android:text="Анонім"
             android:textAppearance="?android:attr/textAppearanceSmall"
             android:textColor="#bdbdbd"
             android:textSize="13dp"
             android:textStyle="italic"/>
-
 
         <LinearLayout
             android:layout_width="50dp"
@@ -152,13 +151,10 @@
                 android:id="@+id/title_of_problem"
                 android:layout_width="200dp"
                 android:layout_height="wrap_content"
-                android:layout_alignParentEnd="true"
-                android:layout_alignParentRight="true"
-                android:layout_below="@+id/im"
                 android:text="Title is missing."
                 android:textAppearance="?android:attr/textAppearanceSmall"
                 android:textColor="@color/abc_primary_text_disable_only_material_light"
-                android:textSize="15dp"
+                android:textSize="15sp"
                 android:textStyle="bold"/>
 
         </LinearLayout>
