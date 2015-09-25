@@ -9,7 +9,6 @@ import java.util.Map;
  */
 public class FilterState {
 
-    //TODO: sparse array
     private Map<String, Boolean> state;
     private Calendar dateFrom;
     private Calendar dateTo;

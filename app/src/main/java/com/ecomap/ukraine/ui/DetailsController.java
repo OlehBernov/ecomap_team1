@@ -24,9 +24,9 @@ import android.widget.TextView;
 
 import com.ecomap.ukraine.R;
 import com.ecomap.ukraine.models.Problem;
-import com.ecomap.ukraine.update.manager.DataManager;
 import com.ecomap.ukraine.ui.activities.ChooseProblemLocationActivity;
 import com.ecomap.ukraine.ui.activities.MainActivity;
+import com.ecomap.ukraine.update.manager.DataManager;
 import com.ecomap.ukraine.util.Keyboard;
 import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 
@@ -161,7 +161,7 @@ public class DetailsController {
 
             private void animateMenuIcon(final float v) {
                 MainActivity mainActivity = (MainActivity) activity;
-                ActionBarDrawerToggle drawerToggle = mainActivity.drawerToggle;
+                ActionBarDrawerToggle drawerToggle = mainActivity.getDrawerToggle();
                 drawerToggle.onDrawerSlide(null, 1 - calculateAlpha(v));
                 if (v == 1) {
                     toolbar.setNavigationOnClickListener(new View.OnClickListener() {

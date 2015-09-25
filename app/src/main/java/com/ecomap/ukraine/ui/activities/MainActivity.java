@@ -22,11 +22,10 @@ import android.widget.TextView;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.ecomap.ukraine.R;
 import com.ecomap.ukraine.authentication.manager.AccountManager;
-import com.ecomap.ukraine.filtration.FilterManager;
 import com.ecomap.ukraine.models.User;
-import com.ecomap.ukraine.update.manager.DataManager;
 import com.ecomap.ukraine.ui.fragments.FilterFragment;
 import com.ecomap.ukraine.ui.fragments.FragmentEcoMap;
+import com.ecomap.ukraine.update.manager.DataManager;
 import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 
 
@@ -48,23 +47,19 @@ public class MainActivity extends AppCompatActivity {
     private static final int LOG_IN_REQUEST_CODE = 1;
     private static final int SIGN_UP_REQUEST_CODE = 2;
     private static final int SETTINGS_REQUEST_CODE = 3;
-
-    //TODO: public?
-    public ActionBarDrawerToggle drawerToggle;
+    public boolean problemAddingMenu;
+    private ActionBarDrawerToggle drawerToggle;
     private DrawerLayout filterLayout;
     private Toolbar toolbar;
     private SlidingUpPanelLayout slidingUpPanelLayout;
     private Menu menu;
     private Activity activity = this;
     private DrawerLayout menuDrawer;
-    private FilterManager filterManager;
     private AccountManager accountManager;
     private CharSequence previousTitle;
     private DrawerLayout drawerLayout;
     private FilterFragment filterFragment;
     private FragmentEcoMap mapFragment;
-
-    public boolean problemAddingMenu;
 
     /**
      * Inflate the menu, this adds items to the action bar if it is present.
@@ -91,6 +86,10 @@ public class MainActivity extends AppCompatActivity {
             return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    public ActionBarDrawerToggle getDrawerToggle() {
+        return drawerToggle;
     }
 
     /**
@@ -229,7 +228,6 @@ public class MainActivity extends AppCompatActivity {
      * @param item menu item which was clicked
      */
     public void openSearch(MenuItem item) {
-  //      filterFragment.saveState(this);
         Intent intent = new Intent(this, SearchActivity.class);
         startActivity(intent);
         menuDrawer.closeDrawers();
@@ -304,7 +302,6 @@ public class MainActivity extends AppCompatActivity {
         filterLayout = (DrawerLayout) findViewById(R.id.drawer2);
         filterLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
         filterLayout.setDrawerListener(new FilterDrawerListener());
-        filterManager = FilterManager.getInstance(this);
 
         accountManager = AccountManager.getInstance(this);
         setUserInformation(accountManager.getUser());
