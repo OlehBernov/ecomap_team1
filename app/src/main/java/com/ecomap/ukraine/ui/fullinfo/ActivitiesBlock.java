@@ -28,6 +28,7 @@ import java.util.Locale;
 public class ActivitiesBlock extends LinearLayout {
 
     private static final String DATE_TEMPLATE = "yyyy-MM-dd'T'HH:mm:ss.'000Z'";
+    private static final String DATE_TEMPLATE_FOR_SHOW = "dd/MM/yyyy HH:mm";
     private Context context;
     private TableLayout activitiesLayout;
 
@@ -170,8 +171,8 @@ public class ActivitiesBlock extends LinearLayout {
             date.setTime(new Date(System.currentTimeMillis()));
         }
         String userName = problemActivity.getFirstName();
-        return userName + " " + date.get(Calendar.DAY_OF_MONTH)  + "/" + (date.get(Calendar.MONTH) + 1)
-                + "/" + date.get(Calendar.YEAR) + " " + date.get(Calendar.HOUR) + ":" + date.get(Calendar.MINUTE);
+        dateFormat = new SimpleDateFormat(DATE_TEMPLATE_FOR_SHOW, Locale.ENGLISH);
+        return userName + " " + dateFormat.format(date.getTime());
     }
 
 }
