@@ -16,33 +16,43 @@ import com.ecomap.ukraine.models.Statistics;
 
 import org.w3c.dom.Text;
 
+import java.util.ArrayList;
+import java.util.List;
+
+/*import lecho.lib.hellocharts.gesture.ContainerScrollType;
+import lecho.lib.hellocharts.model.PieChartData;
+import lecho.lib.hellocharts.model.SliceValue;
+import lecho.lib.hellocharts.view.PieChartView;*/
+
 /**
  * Contains information about statistics of problem posting for a certain period.
  */
 public class StatisticsFragment extends Fragment {
 
     private SparseIntArray statisticItem;
-    private TextView test;
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.statistics_layout, container, false);
 
-        test = (TextView) v.findViewById(R.id.for_test);
-        int text = 0;
-        if (statisticItem != null) {
-            text = statisticItem.get(2);
+        /*PieChartView pieChartView = (PieChartView) v.findViewById(R.id.pie_chart_view);
+        pieChartView.setInteractive(true);
+        pieChartView.setContainerScrollEnabled(true, ContainerScrollType.VERTICAL);
+
+        List<SliceValue> sliceValues = new ArrayList<>();
+        for (int i = 0; i < statisticItem.size(); i++) {
+            sliceValues.add(new SliceValue(statisticItem.get(i)));
         }
-        test.setText(String.valueOf(text));
+
+        PieChartData pieChartData = new PieChartData();
+        pieChartData.setValues(sliceValues);
+        pieChartView.setPieChartData(pieChartData);*/
 
         return v;
     }
 
     public void setStatisticItem(SparseIntArray statisticItem) {
-        if (test != null) {
-            test.setText(String.valueOf(statisticItem.get(2)));
-        }
         this.statisticItem = statisticItem;
     }
 

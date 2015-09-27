@@ -17,19 +17,6 @@ import com.ecomap.ukraine.authentication.manager.LogInListener;
 import com.ecomap.ukraine.util.Keyboard;
 import com.ecomap.ukraine.models.User;
 import com.ecomap.ukraine.authentication.validator.Validator;
-import com.facebook.CallbackManager;
-import com.facebook.FacebookCallback;
-import com.facebook.FacebookException;
-import com.facebook.FacebookSdk;
-import com.facebook.GraphRequest;
-import com.facebook.GraphResponse;
-import com.facebook.login.LoginResult;
-import com.facebook.login.widget.LoginButton;
-
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.util.Random;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -52,7 +39,6 @@ public class LoginActivity extends AppCompatActivity implements LogInListener {
     @InjectView(R.id.btn_log_in) Button logInButton;
 
     private AccountManager accountManager;
-    private CallbackManager callbackManager;
     private MaterialDialog logInProgress;
 
     /**
@@ -107,7 +93,6 @@ public class LoginActivity extends AppCompatActivity implements LogInListener {
     @Override
     public void onActivityResult(final int requestCode, final int resultCode, final Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        callbackManager.onActivityResult(requestCode, resultCode, data);
     }
 
     /**
@@ -128,7 +113,6 @@ public class LoginActivity extends AppCompatActivity implements LogInListener {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        FacebookSdk.sdkInitialize(this);
         SharedPreferences sharedPreferences =
                 getSharedPreferences(ExtraFieldNames.USER_INFO, MODE_PRIVATE);
 
@@ -147,24 +131,6 @@ public class LoginActivity extends AppCompatActivity implements LogInListener {
             }
         });
 
-        callbackManager = CallbackManager.Factory.create();
-        LoginButton logInFacebookButton = (LoginButton) findViewById(R.id.facebook_button);
-        logInFacebookButton.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
-            @Override
-            public void onSuccess(LoginResult loginResult) {
-                facebookLogIn(loginResult);
-            }
-
-            @Override
-            public void onCancel() {
-                Log.e(TAG, "facebook login canceled");
-            }
-
-            @Override
-            public void onError(FacebookException e) {
-                Log.e(TAG, "facebook login error", e);
-            }
-        });
         accountManager = AccountManager.getInstance(getApplicationContext());
 
         View skip = findViewById(R.id.skip_button);
@@ -239,39 +205,6 @@ public class LoginActivity extends AppCompatActivity implements LogInListener {
         mainIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(mainIntent);
         finish();
-    }
-
-    /**
-     * Registration via facebook
-     * @param loginResult
-     */
-    private void facebookLogIn(final LoginResult loginResult) {
-        GraphRequest request = GraphRequest.newMeRequest(loginResult.getAccessToken(),
-                new GraphRequest.GraphJSONObjectCallback() {
-                    @Override
-                    public void onCompleted(JSONObject jsonObject, GraphResponse graphResponse) {
-                        try {
-                            jsonObject.getString("id");
-                        } catch (JSONException e) {
-                            Log.e("parsing", "invalid response from server", e);
-                        }
-                    }
-                });
-        Bundle parameters = new Bundle();
-        parameters.putString("fields", "id,name,link");
-        request.setParameters(parameters);
-        request.executeAsync();
-    }
-
-    /**
-     * Generates random password
-     *
-     * @param id user id
-     * @return generated password
-     */
-    private long generatePassword(final String id) {
-        long input = Long.getLong(id);
-        return new Random(input + 1).nextLong();
     }
 
 }

@@ -41,7 +41,7 @@
 
         <item
             android:id="@+id/statistic_item_7"
-            android:icon="@drawable/ic_statistics"
+            android:icon="@drawable/ic_equalizer_black_24dp"
             android:onClick="openStatisticActivity"
             android:title="@string/statistics"/>
 
