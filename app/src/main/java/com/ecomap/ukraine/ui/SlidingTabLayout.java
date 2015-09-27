@@ -25,6 +25,7 @@ public class SlidingTabLayout extends HorizontalScrollView {
     private static final int TITLE_OFFSET_DIPS = 14;
     private static final int TAB_VIEW_PADDING_DIPS = 16;
     private static final int TAB_VIEW_TEXT_SIZE_SP = 12;
+    private static final int TEXT_SIZE = 16;
 
     private final SlidingTabStrip tabStrip;
     private int titleOffset;
@@ -204,8 +205,9 @@ public class SlidingTabLayout extends HorizontalScrollView {
                 tabView.setSelected(true);
             }
 
-            tabTitleView.setTextColor(getResources().getColorStateList(R.color.filter_background));
-            tabTitleView.setTextSize(12);
+            tabTitleView.setTextColor(getResources().getColorStateList(R.color.white));
+            tabTitleView.setAllCaps(false);
+            tabTitleView.setTextSize(TEXT_SIZE);
         }
     }
 
@@ -239,7 +241,6 @@ public class SlidingTabLayout extends HorizontalScrollView {
         int getIndicatorColor(int position);
 
     }
-
 
     /**
      * Initialize on page change listener
@@ -303,7 +304,6 @@ public class SlidingTabLayout extends HorizontalScrollView {
         }
 
     }
-
 
     /**
      * Action on click on tab title

@@ -106,6 +106,7 @@
         </activity>
         <activity
             android:name=".ui.activities.StatisticsActivity"
+            android:screenOrientation="portrait"
             android:label="@string/title_activity_statistic" >
         </activity>
     </application>
