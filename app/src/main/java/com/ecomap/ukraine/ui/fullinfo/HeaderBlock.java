@@ -113,7 +113,7 @@ public class HeaderBlock extends LinearLayout {
                 String userId = String.valueOf(user.getId());
                 String userName = user.getName();
                 String userSurname = user.getSurname();
-                DataManager.getInstance(context).registerProblemListener(new DataListenerAdapter() {
+                DataManager.getInstance(context).registerDataListener(new DataListenerAdapter() {
                     /**
                      * Performs when vote was successfully sent to server.
                      */

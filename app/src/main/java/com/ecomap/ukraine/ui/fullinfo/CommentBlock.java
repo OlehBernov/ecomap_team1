@@ -75,7 +75,7 @@ public class CommentBlock extends LinearLayout {
                     Toast.makeText(context,
                             R.string.empty_post_comment, Toast.LENGTH_LONG).show();
                 } else {
-                    DataManager.getInstance(context).registerProblemListener(new DataListenerAdapter() {
+                    DataManager.getInstance(context).registerDataListener(new DataListenerAdapter() {
                         /**
                          * Performs when comment was successfully sent to server.
                          */

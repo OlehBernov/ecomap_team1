@@ -21,9 +21,7 @@ import com.ecomap.ukraine.update.manager.DataManager;
 
 import java.util.List;
 
-/**
- * Created by Andriy on 10.09.2015.
- */
+
 public class Top10ListFragment extends Fragment implements AdapterView.OnItemClickListener {
 
     public static final String PROBLEM_EXTRA = "Problem";
@@ -70,7 +68,7 @@ public class Top10ListFragment extends Fragment implements AdapterView.OnItemCli
             }
 
             /**
-             * Receive oject, which contains top10 elements
+             * Receive object, which contains top10 elements
              * @param allTop10Items object, which contains top 10 elements
              */
             @Override
@@ -91,7 +89,7 @@ public class Top10ListFragment extends Fragment implements AdapterView.OnItemCli
                 listView.setOnItemClickListener(fragment);
             }
         };
-        DataManager.getInstance(getActivity()).registerProblemListener(dataListenerAdapter);
+        DataManager.getInstance(getActivity()).registerDataListener(dataListenerAdapter);
         listView = (ListView) v.findViewById(R.id.list);
         listAdapter = new Top10ListAdapter(getActivity(), top10ItemList, iconID);
         listView.setAdapter(listAdapter);
@@ -102,7 +100,7 @@ public class Top10ListFragment extends Fragment implements AdapterView.OnItemCli
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        DataManager.getInstance(getActivity()).removeProblemListener(dataListenerAdapter);
+        DataManager.getInstance(getActivity()).removeDataListener(dataListenerAdapter);
     }
 
     @Override

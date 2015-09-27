@@ -25,19 +25,14 @@ import com.ecomap.ukraine.ui.fragments.Top10ListFragment;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by Andriy on 09.09.2015.
- */
+
 public class Top10Activity extends AppCompatActivity  {
 
     private static final int NUMBER_OF_TABS = 3;
 
-    private ViewPager pager;
     private AllTop10Items allTop10Items;
     private List<Problem> problems;
-    private SlidingTabLayout tabs;
-    private String[] titles;
-    private View progresView;
+    private View progressView;
     private DataListenerAdapter dataListenerAdapter;
 
     /**
@@ -50,21 +45,21 @@ public class Top10Activity extends AppCompatActivity  {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_top10);
-        titles = getResources().getStringArray(R.array.tabs_in_top10);
-        tabs = (SlidingTabLayout) findViewById(R.id.tabs);
-        pager = (ViewPager) findViewById(R.id.pager);
-        progresView = findViewById(R.id.progress_view_on_Top10);
+        String[] titles = getResources().getStringArray(R.array.tabs_in_top10);
+        SlidingTabLayout tabs = (SlidingTabLayout) findViewById(R.id.tabs);
+        ViewPager pager = (ViewPager) findViewById(R.id.pager);
+        progressView = findViewById(R.id.progress_view_on_Top10);
 
         DataManager dataManager = DataManager.getInstance(this);
 
         dataListenerAdapter = new DataListenerAdapter() {
             /**
              * Receive list of all problems.
-             * @param updateproblems list of all problems.
+             * @param updateProblems list of all problems.
              */
             @Override
-            public void onAllProblemsUpdate(List<Problem> updateproblems) {
-                problems = updateproblems;
+            public void onAllProblemsUpdate(List<Problem> updateProblems) {
+                problems = updateProblems;
             }
 
             /**
@@ -74,10 +69,10 @@ public class Top10Activity extends AppCompatActivity  {
             @Override
             public void onTop10Update(AllTop10Items updateAllTop10Items) {
                 allTop10Items = updateAllTop10Items;
-                progresView.setVisibility(View.GONE);
+                progressView.setVisibility(View.GONE);
             }
         };
-        dataManager.registerProblemListener(dataListenerAdapter);
+        dataManager.registerDataListener(dataListenerAdapter);
         dataManager.getTop10();
         dataManager.getAllProblems();
 
@@ -101,7 +96,7 @@ public class Top10Activity extends AppCompatActivity  {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        DataManager.getInstance(this).removeProblemListener(dataListenerAdapter);
+        DataManager.getInstance(this).removeDataListener(dataListenerAdapter);
     }
 
     /**

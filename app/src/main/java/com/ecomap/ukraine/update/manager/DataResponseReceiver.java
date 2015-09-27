@@ -3,6 +3,7 @@ package com.ecomap.ukraine.update.manager;
 import com.ecomap.ukraine.models.AllTop10Items;
 import com.ecomap.ukraine.models.Details;
 import com.ecomap.ukraine.models.Problem;
+import com.ecomap.ukraine.models.Statistics;
 
 import java.util.List;
 
@@ -17,7 +18,7 @@ public interface DataResponseReceiver {
      *
      * @param problems list of all problems.
      */
-    void getAllProblemsResponseResult(final List<Problem> problems);
+    void setAllProblemsResponse(List<Problem> problems);
 
     /**
      * Receives server response to the request of details of
@@ -25,14 +26,23 @@ public interface DataResponseReceiver {
      *
      * @param details details of concrete problem.
      */
-    void getProblemDetailsResponseResult(final Details details);
+    void setProblemDetailsResponse(Details details);
 
     /**
      * Receive server response to the request of top 10
-     * problems and send int to listeners
+     * problems and send it to listeners.
+     *
      * @param allTop10Items object of top 10 problem
      */
-    void getTop10ResponseResult (final AllTop10Items allTop10Items);
+    void setTop10Response(AllTop10Items allTop10Items);
+
+    /**
+     * Receive server response to the request of statistics about
+     * problem posting and send it to listeners.
+     *
+     * @param statistics object of statistics.
+     */
+    void setStatisticsResponse(Statistics statistics);
 
     /**
      * Performs when comment was successfully sent to server.

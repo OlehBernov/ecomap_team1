@@ -143,7 +143,7 @@ public class JSONFields {
     /**
      * Title of problem, whicg is in top10
      */
-    public static final String TOP_10_TITLE= "Title";
+    public static final String TOP_10_TITLE = "Title";
 
     /**
      * Number of votes of problem, which is in top 10 by votes
@@ -184,5 +184,15 @@ public class JSONFields {
      * Data of comment
      */
     public static final String DATA = "data";
+
+    /**
+     * Id of problem type in statistics JSON.
+     */
+    public static final String STATISTICS_ID = "id";
+
+    /**
+     * Name of statistics value on JSON field.
+     */
+    public static final String STATISTICS_VALUE = "value";
 
 }

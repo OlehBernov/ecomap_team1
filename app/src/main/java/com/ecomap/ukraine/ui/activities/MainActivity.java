@@ -239,6 +239,12 @@ public class MainActivity extends AppCompatActivity {
         menuDrawer.closeDrawers();
     }
 
+    public void openStatisticActivity(MenuItem item) {
+        Intent intent = new Intent(this, StatisticsActivity.class);
+        startActivity(intent);
+        menuDrawer.closeDrawers();
+    }
+
     /**
      * Called when an activity you launched exits.
      *

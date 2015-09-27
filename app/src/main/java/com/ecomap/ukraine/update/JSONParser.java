@@ -1,6 +1,8 @@
 package com.ecomap.ukraine.update;
 
 
+import android.util.SparseIntArray;
+
 import com.ecomap.ukraine.models.AllTop10Items;
 import com.ecomap.ukraine.models.Details;
 import com.ecomap.ukraine.models.Photo;
@@ -63,9 +65,9 @@ public final class JSONParser {
         return briefProblems;
     }
 
-    public static JSONObject generateCommentObj (final String userID,
-                                                 final String userName, final String userSurname,
-                                                 final String content) throws JSONException {
+    public static JSONObject generateCommentObj(final String userID,
+                                                final String userName, final String userSurname,
+                                                final String content) throws JSONException {
         JSONObject dataJson = new JSONObject();
         JSONObject resultJson = new JSONObject();
 
@@ -88,7 +90,7 @@ public final class JSONParser {
         JSONArray top10CommentArray = allTop10ItemsArray.getJSONArray(2);
         List<Top10Item> top10VoteList = getTop10VoteList(top10VotesArray);
         List<Top10Item> top10SeverityList = getTop10SeverityList(top10SeverityArray);
-        List<Top10Item> top10CommentList = getTop10ComentList(top10CommentArray);
+        List<Top10Item> top10CommentList = getTop10CommentList(top10CommentArray);
 
         return new AllTop10Items(top10CommentList, top10SeverityList,
                 top10VoteList);
@@ -100,9 +102,9 @@ public final class JSONParser {
      *
      * @param detailedProblemJson detailed information about
      *                            concrete problem from server.
-     * @return Detail object with detailed information about
+     * @return Details object with detailed information about
      * concrete problem.
-     * @throws JSONException if argument do not correct.
+     * @throws JSONException if argument is not correct.
      */
     public static Details parseDetailedProblem(final String detailedProblemJson)
             throws JSONException {
@@ -140,6 +142,27 @@ public final class JSONParser {
         return details;
     }
 
+
+    /**
+     * @param statisticsItemJson statistics of problem posting from server.
+     * @return SparseIntArray with problem id and relevant number of posing.
+     * @throws JSONException if argument is not correct.
+     */
+    public static SparseIntArray parseStatisticsItem(final String statisticsItemJson)
+            throws JSONException {
+        if (statisticsItemJson == null) {
+            throw new JSONException(NULL_ARGUMENT);
+        }
+
+        SparseIntArray statisticsItem = new SparseIntArray();
+        JSONArray statisticItemsJSONArray = new JSONArray(statisticsItemJson);
+        for (int i = 0; i < statisticItemsJSONArray.length(); i++) {
+            JSONObject itemJSONObject = statisticItemsJSONArray.getJSONObject(i);
+            statisticsItem.append(itemJSONObject.getInt(JSONFields.STATISTICS_ID),
+                    itemJSONObject.getInt(JSONFields.STATISTICS_VALUE));
+        }
+        return statisticsItem;
+    }
 
     /**
      * Converts brief information about concrete problem from JSONObject
@@ -271,7 +294,7 @@ public final class JSONParser {
         return top10SeverityList;
     }
 
-    private static List<Top10Item> getTop10ComentList(final JSONArray top10ComentArray)
+    private static List<Top10Item> getTop10CommentList(final JSONArray top10ComentArray)
             throws JSONException {
         List<Top10Item> top10ComentList = new ArrayList<>();
         Top10Item currentTop10Item;

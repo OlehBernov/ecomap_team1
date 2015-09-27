@@ -100,7 +100,7 @@ public class AddProblemDescriptionFragment extends Fragment implements AddProble
 
     public void successPosting(final int idOfMessage) {
         Toast.makeText(getActivity(), idOfMessage, Toast.LENGTH_LONG).show();
-        dataManager.registerProblemListener(new DataListenerAdapter() {
+        dataManager.registerDataListener(new DataListenerAdapter() {
             /**
              * Get list of all problems.
              *
@@ -111,7 +111,7 @@ public class AddProblemDescriptionFragment extends Fragment implements AddProble
                 Intent intent = new Intent(getActivity(), MainActivity.class);
                 startActivity(intent);
                 getActivity().finish();
-                dataManager.removeProblemListener(this);
+                dataManager.removeDataListener(this);
             }
         });
         dataManager.refreshAllProblem();
@@ -203,7 +203,7 @@ public class AddProblemDescriptionFragment extends Fragment implements AddProble
         String type = String.valueOf(spinner.getSelectedItemId() + 1);
         showProgressDialog();
         ProblemForPosting problemData = new ProblemForPosting.Builder()
-                .setdefaultData()
+                .setDefaultData()
                 .setTitle(title)
                 .setContent(description)
                 .setProposal(solution)

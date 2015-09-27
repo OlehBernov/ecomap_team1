@@ -52,6 +52,7 @@
             android:screenOrientation="portrait" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -97,11 +98,15 @@
             android:name=".ui.activities.ProblemDetailsActivity"
             android:label="@string/title_activity_problem_details"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="adjustPan">
+            android:windowSoftInputMode="adjustPan" >
         </activity>
         <activity
             android:name=".ui.activities.Top10Activity"
-            android:screenOrientation="portrait">
+            android:screenOrientation="portrait" >
+        </activity>
+        <activity
+            android:name=".ui.activities.StatisticsActivity"
+            android:label="@string/title_activity_statistic" >
         </activity>
     </application>
 

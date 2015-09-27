@@ -4,6 +4,7 @@ package com.ecomap.ukraine.update;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
+import android.util.SparseIntArray;
 import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
@@ -16,6 +17,7 @@ import com.ecomap.ukraine.authentication.manager.AccountManager;
 import com.ecomap.ukraine.models.AllTop10Items;
 import com.ecomap.ukraine.models.Details;
 import com.ecomap.ukraine.models.Problem;
+import com.ecomap.ukraine.models.Statistics;
 import com.ecomap.ukraine.update.manager.DataResponseReceiver;
 
 import org.json.JSONException;
@@ -44,6 +46,10 @@ public class LoadingClient {
      */
     private static final String TOP_10_PROBLEMS_URL = "http://ecomap.org/api/getStats4/";
 
+    private static final String STATISTICS_URL = "http://ecomap.org/api/getStats2/";
+
+    private static final int STATISTIC_ITEMS_COUNT = 5;
+
     protected final String TAG = getClass().getSimpleName();
 
     /**
@@ -60,7 +66,7 @@ public class LoadingClient {
      * Constructor of LoadingClient.
      *
      * @param dataResponseReceiver request receiver.
-     * @param context                application context.
+     * @param context              application context.
      */
     public LoadingClient(final DataResponseReceiver dataResponseReceiver,
                          final Context context) {
@@ -91,14 +97,14 @@ public class LoadingClient {
 
                             @Override
                             protected void onPostExecute(List<Problem> result) {
-                                dataResponseReceiver.getAllProblemsResponseResult(result);
+                                dataResponseReceiver.setAllProblemsResponse(result);
                             }
                         }.execute();
                     }
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                dataResponseReceiver.getAllProblemsResponseResult(null);
+                dataResponseReceiver.setAllProblemsResponse(null);
             }
         });
         RequestQueueWrapper.getInstance(context).addToRequestQueue(stringRequest);
@@ -119,17 +125,17 @@ public class LoadingClient {
                     public void onResponse(String response) {
                         try {
                             Details details = JSONParser.parseDetailedProblem(response);
-                            dataResponseReceiver.getProblemDetailsResponseResult(details);
+                            dataResponseReceiver.setProblemDetailsResponse(details);
                         } catch (JSONException e) {
                             Log.e(TAG, "JSONException in getProblemDetail");
-                            dataResponseReceiver.getProblemDetailsResponseResult(null);
+                            dataResponseReceiver.setProblemDetailsResponse(null);
                         }
                     }
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
                 Log.e(TAG, "onErrorResponse in getProblemDetail");
-                dataResponseReceiver.getProblemDetailsResponseResult(null);
+                dataResponseReceiver.setProblemDetailsResponse(null);
             }
         });
         RequestQueueWrapper.getInstance(context).addToRequestQueue(stringRequest);
@@ -156,7 +162,7 @@ public class LoadingClient {
 
                             @Override
                             protected void onPostExecute(AllTop10Items result) {
-                                dataResponseReceiver.getTop10ResponseResult(result);
+                                dataResponseReceiver.setTop10Response(result);
                             }
                         }.execute();
                     }
@@ -164,7 +170,7 @@ public class LoadingClient {
             @Override
             public void onErrorResponse(VolleyError error) {
                 Log.e(TAG, "onErrorResponse in getTop10");
-                dataResponseReceiver.getTop10ResponseResult(null);
+                dataResponseReceiver.setTop10Response(null);
             }
         });
         RequestQueueWrapper.getInstance(context).addToRequestQueue(stringRequest);
@@ -196,6 +202,11 @@ public class LoadingClient {
                     }
                 }) {
             @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                return new HashMap<>();
+            }
+
+            @Override
             protected Map<String, String> getParams() {
                 Map<String, String> params = new HashMap<>();
                 params.put(JSONFields.PROBLEM_ID, problemID);
@@ -206,11 +217,6 @@ public class LoadingClient {
                     params.put(JSONFields.USER_SURNAME, userSurname);
                 }
                 return params;
-            }
-
-            @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
-                return new HashMap<>();
             }
         };
 
@@ -241,6 +247,92 @@ public class LoadingClient {
         PostCommentTask postComment = new PostCommentTask(problemID, context,
                 dataResponseReceiver);
         postComment.execute(dataJSON);
+    }
+
+    /**
+     * Starts downloading information about statistics of problem posting for all
+     * avalible periods.
+     */
+    public void getStatistics() {
+        Map<String, SparseIntArray> statisticsItems = new HashMap<>();
+        getStatisticsItem(Statistics.DAILY, statisticsItems);
+        getStatisticsItem(Statistics.WEEKLY, statisticsItems);
+        getStatisticsItem(Statistics.MONTH, statisticsItems);
+        getStatisticsItem(Statistics.ANNUAL, statisticsItems);
+        getStatisticsItem(Statistics.FOR_ALL_TIME, statisticsItems);
+    }
+
+    /**
+     * Sends a request to download statistics information
+     * about problem posting for concrete period.
+     *
+     * @param period          period for statistics and part of api address for downloading.
+     * @param statisticsItems map for response saving.
+     */
+    private void getStatisticsItem(final String period, final Map<String, SparseIntArray> statisticsItems) {
+        StringRequest stringRequest = new StringRequest(
+                Request.Method.GET, STATISTICS_URL + period,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(final String response) {
+                        new AsyncTask<Void, Void, SparseIntArray>() {
+                            @Override
+                            protected SparseIntArray doInBackground(Void... params) {
+                                SparseIntArray statisticsItem = null;
+                                try {
+                                    statisticsItem = JSONParser.parseStatisticsItem(response);
+                                } catch (JSONException e) {
+                                    Log.e(TAG, "JSONException in getStatisticsItem");
+                                }
+                                return statisticsItem;
+                            }
+
+                            @Override
+                            protected void onPostExecute(SparseIntArray result) {
+                                addStatisticsItem(statisticsItems, period, result);
+                                if (isStatisticsObjectReady(statisticsItems)) {
+                                    Statistics statistics = new Statistics(statisticsItems);
+                                    dataResponseReceiver.setStatisticsResponse(statistics);
+                                }
+                            }
+                        }.execute();
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.e(TAG, "onErrorResponse in getStatisticsItem");
+                addStatisticsItem(statisticsItems, period, null);
+                if (isStatisticsObjectReady(statisticsItems)) {
+                    Statistics statistics = new Statistics(statisticsItems);
+                    dataResponseReceiver.setStatisticsResponse(statistics);
+                }
+            }
+        });
+        RequestQueueWrapper.getInstance(context).addToRequestQueue(stringRequest);
+    }
+
+    /**
+     * Adds response with statistics information about problem posting for certain period to
+     * resulting map.
+     *
+     * @param statisticsItems resulting map.
+     * @param period          certain period.
+     * @param statisticsItem  server responce.
+     */
+    private synchronized void addStatisticsItem(final Map<String, SparseIntArray> statisticsItems,
+                                                final String period,
+                                                final SparseIntArray statisticsItem) {
+        statisticsItems.put(period, statisticsItem);
+    }
+
+    /**
+     * Checks if all information about statistics is ready.
+     *
+     * @param statisticsItems all downloaded period for statistics.
+     * @return is information ready.
+     */
+    private synchronized boolean isStatisticsObjectReady(final Map<String, SparseIntArray> statisticsItems) {
+        return statisticsItems.size() == STATISTIC_ITEMS_COUNT;
     }
 
 }

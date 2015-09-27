@@ -79,7 +79,7 @@ public class ProblemDetailsActivity extends AppCompatActivity  {
                 detailsContent.setProblemDetails(details);
             }
         };
-        dataManager.registerProblemListener(dataListenerAdapter);
+        dataManager.registerDataListener(dataListenerAdapter);
         dataManager.getProblemDetail(problem.getProblemId());
     }
 
@@ -89,7 +89,7 @@ public class ProblemDetailsActivity extends AppCompatActivity  {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        DataManager.getInstance(this).removeProblemListener(dataListenerAdapter);
+        DataManager.getInstance(this).removeDataListener(dataListenerAdapter);
     }
 
     /**

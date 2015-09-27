@@ -116,4 +116,21 @@ public class DBContract {
         public static final String PROBLEM_SEVERITY = "Problem_Severity";
     }
 
+    public static abstract class Statistics implements BaseColumns {
+
+        public static final String TABLE_NAME = "Statistics";
+
+        public static final String PROBLEM_TYPE_ID = "Problem_type_ID";
+
+        public static final String DAILY_VALUE = "Daily_value";
+
+        public static final String WEEKLY_VALUE = "Weekly_value";
+
+        public static final String MONTH_VALUE = "Month_value";
+
+        public static final String ANNUAL_VALUE = "Annual_value";
+
+        public static final String VALUE_FOR_ALL_TIME = "Value_for_all_time";
+    }
+
 }

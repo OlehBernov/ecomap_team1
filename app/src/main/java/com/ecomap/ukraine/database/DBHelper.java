@@ -5,16 +5,20 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.SparseIntArray;
 
 import com.ecomap.ukraine.models.AllTop10Items;
 import com.ecomap.ukraine.models.Details;
 import com.ecomap.ukraine.models.Photo;
 import com.ecomap.ukraine.models.Problem;
 import com.ecomap.ukraine.models.ProblemActivity;
+import com.ecomap.ukraine.models.Statistics;
 import com.ecomap.ukraine.models.Top10Item;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Exposes methods to work with inner database.
@@ -29,15 +33,17 @@ public class DBHelper extends SQLiteOpenHelper {
             "DROP TABLE IF EXISTS " + DBContract.Details.TABLE_NAME;
     private static final String DELETE_PROBLEMS_TABLE =
             "DROP TABLE IF EXISTS " + DBContract.Problems.TABLE_NAME;
-    private static final String DELETE_TopByVotes_TABLE =
+    private static final String DELETE_TOP_BY_VOTES_TABLE =
             "DROP TABLE IF EXISTS " + DBContract.TopByVotes.TABLE_NAME;
-    private static final String DELETE_TopByComments_TABLE =
+    private static final String DELETE_TOP_BY_COMMENTS_TABLE =
             "DROP TABLE IF EXISTS " + DBContract.TopByComments.TABLE_NAME;
-    private static final String DELETE_TopBySeverity_TABLE =
+    private static final String DELETE_TOP_BY_SEVERITY_TABLE =
             "DROP TABLE IF EXISTS " + DBContract.TopBySeverity.TABLE_NAME;
+    private static final String DELETE_STATISTICS_TABLE =
+            "DROP TABLE IF EXISTS " + DBContract.Statistics.TABLE_NAME;
 
     private static final String DB_NAME = "Problems.db";
-    private static final int DB_VERSION = 3;
+    private static final int DB_VERSION = 4;
     private static final String TEXT_TYPE = " TEXT";
     private static final String INT_TYPE = " INTEGER";
     private static final String REAL_TYPE = " REAL";
@@ -83,28 +89,68 @@ public class DBHelper extends SQLiteOpenHelper {
             DBContract.Problems.LATITUDE + REAL_TYPE + COMMA_SEP +
             DBContract.Problems.LONGITUDE + REAL_TYPE + ")";
 
-    private static final String CREATE_TopByVotes_TABLE
+    private static final String CREATE_TOP_BY_VOTES_TABLE
             = "CREATE TABLE " + DBContract.TopByVotes.TABLE_NAME + " (" +
             DBContract.TopByVotes.PROBLEM_ID + INT_TYPE + COMMA_SEP +
             DBContract.TopByVotes.PROBLEM_TITLE + TEXT_TYPE + COMMA_SEP +
             DBContract.TopByVotes.PROBLEM_Votes + INT_TYPE + ")";
 
-    private static final String CREATE_TopByComments_TABLE
+    private static final String CREATE_TOP_BY_COMMENTS_TABLE
             = "CREATE TABLE " + DBContract.TopByComments.TABLE_NAME + " (" +
             DBContract.TopByComments.PROBLEM_ID + INT_TYPE + COMMA_SEP +
             DBContract.TopByComments.PROBLEM_TITLE + TEXT_TYPE + COMMA_SEP +
             DBContract.TopByComments.PROBLEM_COMMENTS + INT_TYPE + ")";
 
-    private static final String CREATE_TopBySeverity_TABLE
+    private static final String CREATE_TOP_BY_SEVERITY_TABLE
             = "CREATE TABLE " + DBContract.TopBySeverity.TABLE_NAME + " (" +
             DBContract.TopBySeverity.PROBLEM_ID + INT_TYPE + COMMA_SEP +
             DBContract.TopBySeverity.PROBLEM_TITLE + TEXT_TYPE + COMMA_SEP +
             DBContract.TopBySeverity.PROBLEM_SEVERITY + INT_TYPE + ")";
 
+    private static final String CREATE_STATISTICS
+            = "CREATE TABLE " + DBContract.Statistics.TABLE_NAME + " (" +
+            DBContract.Statistics.PROBLEM_TYPE_ID + INT_TYPE + COMMA_SEP +
+            DBContract.Statistics.DAILY_VALUE + INT_TYPE + COMMA_SEP +
+            DBContract.Statistics.WEEKLY_VALUE + INT_TYPE + COMMA_SEP +
+            DBContract.Statistics.MONTH_VALUE + INT_TYPE + COMMA_SEP +
+            DBContract.Statistics.ANNUAL_VALUE + INT_TYPE + COMMA_SEP +
+            DBContract.Statistics.VALUE_FOR_ALL_TIME + INT_TYPE + ")";
+
     private static final String DELETE_FROM = "DELETE FROM ";
 
     public DBHelper(final Context context) {
         super(context, DB_NAME, null, DB_VERSION);
+    }
+
+
+    @Override
+    public void onCreate(SQLiteDatabase db) {
+        db.execSQL(CREATE_PROBLEMS_TABLE);
+        db.execSQL(CREATE_DETAILS_TABLE);
+        db.execSQL(CREATE_ACTIVITIES_TABLE);
+        db.execSQL(CREATE_PHOTOS_TABLE);
+
+        db.execSQL(CREATE_TOP_BY_VOTES_TABLE);
+        db.execSQL(CREATE_TOP_BY_COMMENTS_TABLE);
+        db.execSQL(CREATE_TOP_BY_SEVERITY_TABLE);
+
+        db.execSQL(CREATE_STATISTICS);
+    }
+
+    @Override
+    public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+        db.execSQL(DELETE_PHOTOS_TABLE);
+        db.execSQL(DELETE_DETAILS_TABLE);
+        db.execSQL(DELETE_ACTIVITIES_TABLE);
+        db.execSQL(DELETE_PROBLEMS_TABLE);
+
+        db.execSQL(DELETE_TOP_BY_VOTES_TABLE);
+        db.execSQL(DELETE_TOP_BY_COMMENTS_TABLE);
+        db.execSQL(DELETE_TOP_BY_SEVERITY_TABLE);
+
+        db.execSQL(DELETE_STATISTICS_TABLE);
+
+        onCreate(db);
     }
 
     /**
@@ -120,30 +166,6 @@ public class DBHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = getWritableDatabase();
         db.execSQL(DBHelper.DELETE_FROM + DBContract.Problems.TABLE_NAME);
         setAllProblems(problems);
-    }
-
-    public void updateTop10 (final AllTop10Items allTop10Items) {
-        if (allTop10Items == null) {
-            return;
-        }
-        SQLiteDatabase db = getWritableDatabase();
-        db.execSQL(DBHelper.DELETE_FROM + DBContract.TopByVotes.TABLE_NAME);
-        db.execSQL(DBHelper.DELETE_FROM + DBContract.TopByComments.TABLE_NAME);
-        db.execSQL(DBHelper.DELETE_FROM + DBContract.TopBySeverity.TABLE_NAME);
-        setTop10ByVotes(allTop10Items.getMostLikedProblems());
-        setTop10ByComments(allTop10Items.getMostPopularProblems());
-        setTop10BySeverity(allTop10Items.getMostImportantProblems());
-    }
-
-    @Override
-    public void onCreate(SQLiteDatabase db) {
-        db.execSQL(CREATE_PROBLEMS_TABLE);
-        db.execSQL(CREATE_DETAILS_TABLE);
-        db.execSQL(CREATE_ACTIVITIES_TABLE);
-        db.execSQL(CREATE_PHOTOS_TABLE);
-        db.execSQL(CREATE_TopByVotes_TABLE);
-        db.execSQL(CREATE_TopByComments_TABLE);
-        db.execSQL(CREATE_TopBySeverity_TABLE);
     }
 
     /**
@@ -170,100 +192,47 @@ public class DBHelper extends SQLiteOpenHelper {
         setProblemDetails(details);
     }
 
-    @Override
-    public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        db.execSQL(DELETE_PHOTOS_TABLE);
-        db.execSQL(DELETE_DETAILS_TABLE);
-        db.execSQL(DELETE_ACTIVITIES_TABLE);
-        db.execSQL(DELETE_PROBLEMS_TABLE);
-        db.execSQL(DELETE_TopByVotes_TABLE);
-        db.execSQL(DELETE_TopByComments_TABLE);
-        db.execSQL(DELETE_TopBySeverity_TABLE);
-        onCreate(db);
-    }
-
-    public void setTop10ByVotes (final List<Top10Item> top10ByVotes) {
-        if (top10ByVotes == null) {
+    public void updateTop10(final AllTop10Items allTop10Items) {
+        if (allTop10Items == null) {
             return;
         }
+
         SQLiteDatabase db = getWritableDatabase();
-        ContentValues contentValues = new ContentValues();
-        for (int i = 0; i < top10ByVotes.size(); i++) {
-            contentValues.put(DBContract.TopByVotes.PROBLEM_ID, top10ByVotes.get(i).getProblemID());
-            contentValues.put(DBContract.TopByVotes.PROBLEM_TITLE, top10ByVotes.get(i).getTitle());
-            contentValues.put(DBContract.TopByVotes.PROBLEM_Votes, top10ByVotes.get(i).getValue());
-            db.insert(DBContract.TopByVotes.TABLE_NAME, null, contentValues);
-            contentValues.clear();
-        }
+        db.execSQL(DBHelper.DELETE_FROM + DBContract.TopByVotes.TABLE_NAME);
+        db.execSQL(DBHelper.DELETE_FROM + DBContract.TopByComments.TABLE_NAME);
+        db.execSQL(DBHelper.DELETE_FROM + DBContract.TopBySeverity.TABLE_NAME);
+
+        //TODO: code duplication. should pass table name in only one method.
+        setTop10ByVotes(allTop10Items.getMostLikedProblems());
+        setTop10ByComments(allTop10Items.getMostPopularProblems());
+        setTop10BySeverity(allTop10Items.getMostImportantProblems());
     }
 
-    public void setTop10ByComments (final List<Top10Item> top10ByComments) {
-        if (top10ByComments == null) {
+    /**
+     * Performs updating database table, which contains
+     * information about statistics.
+     *
+     * @param statistics new problems statistics.
+     */
+    public void updateStatistics(final Statistics statistics) {
+        if (statistics == null) {
             return;
         }
+
         SQLiteDatabase db = getWritableDatabase();
+        db.execSQL(DBHelper.DELETE_FROM + DBContract.Statistics.TABLE_NAME);
+
         ContentValues contentValues = new ContentValues();
-        for (int i = 0; i < top10ByComments.size(); i++) {
-            contentValues.put(DBContract.TopByComments.PROBLEM_ID, top10ByComments.get(i).getProblemID());
-            contentValues.put(DBContract.TopByComments.PROBLEM_TITLE, top10ByComments.get(i).getTitle());
-            contentValues.put(DBContract.TopByComments.PROBLEM_COMMENTS, top10ByComments.get(i).getValue());
-            db.insert(DBContract.TopByComments.TABLE_NAME, null, contentValues);
+        for (int i = 0; i < statistics.size(); i++) {
+            contentValues.put(DBContract.Statistics.PROBLEM_TYPE_ID, i);
+            contentValues.put(DBContract.Statistics.DAILY_VALUE, statistics.getDailyStatistics().get(i));
+            contentValues.put(DBContract.Statistics.WEEKLY_VALUE, statistics.getWeeklyStatistics().get(i));
+            contentValues.put(DBContract.Statistics.MONTH_VALUE, statistics.getMonthStatistics().get(i));
+            contentValues.put(DBContract.Statistics.ANNUAL_VALUE, statistics.getAnnualStatistics().get(i));
+            contentValues.put(DBContract.Statistics.VALUE_FOR_ALL_TIME, statistics.getStatisticsForAllTime().get(i));
+            db.insert(DBContract.Statistics.TABLE_NAME, null, contentValues);
             contentValues.clear();
         }
-    }
-
-    public void setTop10BySeverity (final List<Top10Item> top10BySeverity) {
-        if (top10BySeverity == null) {
-            return;
-        }
-        SQLiteDatabase db = getWritableDatabase();
-        ContentValues contentValues = new ContentValues();
-        for (int i = 0; i < top10BySeverity.size(); i++) {
-            contentValues.put(DBContract.TopBySeverity.PROBLEM_ID, top10BySeverity.get(i).getProblemID());
-            contentValues.put(DBContract.TopBySeverity.PROBLEM_TITLE, top10BySeverity.get(i).getTitle());
-            contentValues.put(DBContract.TopBySeverity.PROBLEM_SEVERITY, top10BySeverity.get(i).getValue());
-            db.insert(DBContract.TopBySeverity.TABLE_NAME, null, contentValues);
-            contentValues.clear();
-        }
-    }
-
-    public List<Top10Item> getTop10ByVotes() {
-        SQLiteDatabase db = getWritableDatabase();
-        Cursor cursor = db.query(DBContract.TopByVotes.TABLE_NAME, null, null, null, null, null, null);
-        List<Top10Item> top10ItemList = null;
-        if (cursor.moveToFirst()) {
-            top10ItemList = buildTop10byVotesList(cursor);
-        }
-        return top10ItemList;
-    }
-
-    public List<Top10Item> getTop10ByComments() {
-        SQLiteDatabase db = getWritableDatabase();
-        Cursor cursor = db.query(DBContract.TopByComments.TABLE_NAME, null, null, null, null, null, null);
-        List<Top10Item> top10ItemList = null;
-        if (cursor.moveToFirst()) {
-            top10ItemList = buildTop10byCommentList(cursor);
-        }
-        return top10ItemList;
-    }
-
-    public List<Top10Item> getTop10BySeverity() {
-        SQLiteDatabase db = getWritableDatabase();
-        Cursor cursor = db.query(DBContract.TopBySeverity.TABLE_NAME, null, null, null, null, null, null);
-        List<Top10Item> top10ItemList = null;
-        if (cursor.moveToFirst()) {
-            top10ItemList = buildTop10bySeverityList(cursor);
-        }
-        return top10ItemList;
-    }
-
-    public AllTop10Items getAllTop10Items () {
-        AllTop10Items allTop10Items = new
-                AllTop10Items(getTop10ByComments(), getTop10BySeverity(), getTop10ByVotes());
-        if(allTop10Items.getMostLikedProblems() == null) {
-            return null;
-        }
-        return allTop10Items;
     }
 
     /**
@@ -400,8 +369,127 @@ public class DBHelper extends SQLiteOpenHelper {
         }
     }
 
+    public AllTop10Items getAllTop10Items() {
+        AllTop10Items allTop10Items = new
+                AllTop10Items(getTop10ByComments(), getTop10BySeverity(), getTop10ByVotes());
+        if (allTop10Items.getMostLikedProblems() == null) {
+            return null;
+        }
+        return allTop10Items;
+    }
+
+    public List<Top10Item> getTop10ByVotes() {
+        SQLiteDatabase db = getWritableDatabase();
+        Cursor cursor = db.query(DBContract.TopByVotes.TABLE_NAME, null, null, null, null, null, null);
+        List<Top10Item> top10ItemList = null;
+        if (cursor.moveToFirst()) {
+            top10ItemList = buildTop10byVotesList(cursor);
+        }
+        return top10ItemList;
+    }
+
+    public void setTop10ByVotes(final List<Top10Item> top10ByVotes) {
+        if (top10ByVotes == null) {
+            return;
+        }
+        SQLiteDatabase db = getWritableDatabase();
+        ContentValues contentValues = new ContentValues();
+        for (int i = 0; i < top10ByVotes.size(); i++) {
+            contentValues.put(DBContract.TopByVotes.PROBLEM_ID, top10ByVotes.get(i).getProblemID());
+            contentValues.put(DBContract.TopByVotes.PROBLEM_TITLE, top10ByVotes.get(i).getTitle());
+            contentValues.put(DBContract.TopByVotes.PROBLEM_Votes, top10ByVotes.get(i).getValue());
+            db.insert(DBContract.TopByVotes.TABLE_NAME, null, contentValues);
+            contentValues.clear();
+        }
+    }
+
+    public List<Top10Item> getTop10ByComments() {
+        SQLiteDatabase db = getWritableDatabase();
+        Cursor cursor = db.query(DBContract.TopByComments.TABLE_NAME, null, null, null, null, null, null);
+        List<Top10Item> top10ItemList = null;
+        if (cursor.moveToFirst()) {
+            top10ItemList = buildTop10byCommentList(cursor);
+        }
+        return top10ItemList;
+    }
+
+    public void setTop10ByComments(final List<Top10Item> top10ByComments) {
+        if (top10ByComments == null) {
+            return;
+        }
+        SQLiteDatabase db = getWritableDatabase();
+        ContentValues contentValues = new ContentValues();
+        for (int i = 0; i < top10ByComments.size(); i++) {
+            contentValues.put(DBContract.TopByComments.PROBLEM_ID, top10ByComments.get(i).getProblemID());
+            contentValues.put(DBContract.TopByComments.PROBLEM_TITLE, top10ByComments.get(i).getTitle());
+            contentValues.put(DBContract.TopByComments.PROBLEM_COMMENTS, top10ByComments.get(i).getValue());
+            db.insert(DBContract.TopByComments.TABLE_NAME, null, contentValues);
+            contentValues.clear();
+        }
+    }
+
+    public List<Top10Item> getTop10BySeverity() {
+        SQLiteDatabase db = getWritableDatabase();
+        Cursor cursor = db.query(DBContract.TopBySeverity.TABLE_NAME, null, null, null, null, null, null);
+        List<Top10Item> top10ItemList = null;
+        if (cursor.moveToFirst()) {
+            top10ItemList = buildTop10bySeverityList(cursor);
+        }
+        return top10ItemList;
+    }
+
+    public void setTop10BySeverity(final List<Top10Item> top10BySeverity) {
+        if (top10BySeverity == null) {
+            return;
+        }
+        SQLiteDatabase db = getWritableDatabase();
+        ContentValues contentValues = new ContentValues();
+        for (int i = 0; i < top10BySeverity.size(); i++) {
+            contentValues.put(DBContract.TopBySeverity.PROBLEM_ID, top10BySeverity.get(i).getProblemID());
+            contentValues.put(DBContract.TopBySeverity.PROBLEM_TITLE, top10BySeverity.get(i).getTitle());
+            contentValues.put(DBContract.TopBySeverity.PROBLEM_SEVERITY, top10BySeverity.get(i).getValue());
+            db.insert(DBContract.TopBySeverity.TABLE_NAME, null, contentValues);
+            contentValues.clear();
+        }
+    }
+
     /**
-     * Sets acivitiew of concrete problem into the database.
+     * Returns statistics that are currently in the database.
+     *
+     * @return saved statistics.
+     */
+    public Statistics getStatistics() {
+        SQLiteDatabase db = getWritableDatabase();
+        Cursor cursor = db.query(DBContract.Statistics.TABLE_NAME, null, null, null, null, null, null);
+
+        SparseIntArray dailyStatistics = new SparseIntArray();
+        SparseIntArray weeklyStatistics = new SparseIntArray();
+        SparseIntArray monthStatistics = new SparseIntArray();
+        SparseIntArray annualStatistics = new SparseIntArray();
+        SparseIntArray statisticsForAllTime = new SparseIntArray();
+
+        cursor.moveToFirst();
+        for (int i = 0; i < cursor.getCount(); i++) {
+            dailyStatistics.append(i, cursor.getInt(cursor.getColumnIndex(DBContract.Statistics.DAILY_VALUE)));
+            weeklyStatistics.append(i, cursor.getInt(cursor.getColumnIndex(DBContract.Statistics.WEEKLY_VALUE)));
+            monthStatistics.append(i, cursor.getInt(cursor.getColumnIndex(DBContract.Statistics.MONTH_VALUE)));
+            annualStatistics.append(i, cursor.getInt(cursor.getColumnIndex(DBContract.Statistics.ANNUAL_VALUE)));
+            statisticsForAllTime.append(i, cursor.getInt(cursor.getColumnIndex(DBContract.Statistics.VALUE_FOR_ALL_TIME)));
+            cursor.moveToNext();
+        }
+
+        Map<String, SparseIntArray> statisticItems = new HashMap<>();
+        statisticItems.put(Statistics.DAILY, dailyStatistics);
+        statisticItems.put(Statistics.WEEKLY, weeklyStatistics);
+        statisticItems.put(Statistics.MONTH, monthStatistics);
+        statisticItems.put(Statistics.ANNUAL, annualStatistics);
+        statisticItems.put(Statistics.FOR_ALL_TIME, statisticsForAllTime);
+
+        return new Statistics(statisticItems);
+    }
+
+    /**
+     * Sets activities of concrete problem into the database.
      *
      * @param problemActivities activities of the problem.
      */
@@ -458,6 +546,72 @@ public class DBHelper extends SQLiteOpenHelper {
             db.insert(DBContract.Photos.TABLE_NAME, null, values);
             values.clear();
         }
+    }
+
+    /**
+     * Returns photos of concrete problem
+     * that are currently in the database.
+     *
+     * @param problemId id of the required problem.
+     * @return map of photos.
+     */
+    private List<Photo> getProblemPhotos(final int problemId) {
+        if (problemId < 0) {
+            return null;
+        }
+        SQLiteDatabase db = getWritableDatabase();
+
+        String[] projection = {
+                DBContract.Photos.PHOTO_ID, DBContract.Photos.PHOTO_STATUS,
+                DBContract.Photos.LINK, DBContract.Photos.PHOTO_DESCRIPTION,
+        };
+        String selection = DBContract.Photos.PROBLEM_ID + " = ?";
+        String[] selectionArgs = new String[]{String.valueOf(problemId)};
+
+        Cursor cursor = db.query(DBContract.Photos.TABLE_NAME, projection, selection,
+                selectionArgs, null, null, null);
+
+        List<Photo> photoList = null;
+        if (cursor.moveToFirst()) {
+            photoList = buildPhotosList(problemId, cursor);
+        }
+
+        return photoList;
+    }
+
+    /**
+     * Returns list of all problem activities that
+     * are currently in the database.
+     *
+     * @param problemId id of the required problem.
+     * @return list of problem activities.
+     */
+    private List<ProblemActivity> getProblemActivities(final int problemId) {
+        if (problemId < 0) {
+            return null;
+        }
+
+        SQLiteDatabase db = getWritableDatabase();
+        String[] projection = {
+                DBContract.ProblemActivity.PROBLEM_ACTIVITY_DATE,
+                DBContract.ProblemActivity.ACTIVITY_TYPES_ID,
+                DBContract.ProblemActivity.PROBLEM_ACTIVITY_ID,
+                DBContract.ProblemActivity.USER_NAME,
+                DBContract.ProblemActivity.ACTIVITY_USERS_ID,
+                DBContract.ProblemActivity.PROBLEM_ACTIVITY_CONTENT,
+        };
+        String selection = DBContract.Photos.PROBLEM_ID + " = ?";
+        String[] selectionArgs = new String[]{String.valueOf(problemId)};
+
+        Cursor cursor = db.query(DBContract.ProblemActivity.TABLE_NAME, projection,
+                selection, selectionArgs, null, null, null);
+
+        List<ProblemActivity> problemActivities = null;
+        if (cursor.moveToFirst()) {
+            problemActivities = buildProblemActivitiesList(problemId, cursor);
+        }
+
+        return problemActivities;
     }
 
     private List<Top10Item> buildTop10byVotesList(final Cursor cursor) {
@@ -538,72 +692,6 @@ public class DBHelper extends SQLiteOpenHelper {
         }
 
         return problems;
-    }
-
-    /**
-     * Returns photos of concrete problem
-     * that are currently in the database.
-     *
-     * @param problemId id of the required problem.
-     * @return map of photos.
-     */
-    private List<Photo> getProblemPhotos(final int problemId) {
-        if (problemId < 0) {
-            return null;
-        }
-        SQLiteDatabase db = getWritableDatabase();
-
-        String[] projection = {
-                DBContract.Photos.PHOTO_ID, DBContract.Photos.PHOTO_STATUS,
-                DBContract.Photos.LINK, DBContract.Photos.PHOTO_DESCRIPTION,
-        };
-        String selection = DBContract.Photos.PROBLEM_ID + " = ?";
-        String[] selectionArgs = new String[]{String.valueOf(problemId)};
-
-        Cursor cursor = db.query(DBContract.Photos.TABLE_NAME, projection, selection,
-                selectionArgs, null, null, null);
-
-        List<Photo> photoList = null;
-        if (cursor.moveToFirst()) {
-            photoList = buildPhotosList(problemId, cursor);
-        }
-
-        return photoList;
-    }
-
-    /**
-     * Returns list of all problem activities that
-     * are currently in the database.
-     *
-     * @param problemId id of the required problem.
-     * @return list of problem activities.
-     */
-    private List<ProblemActivity> getProblemActivities(final int problemId) {
-        if (problemId < 0) {
-            return null;
-        }
-
-        SQLiteDatabase db = getWritableDatabase();
-        String[] projection = {
-                DBContract.ProblemActivity.PROBLEM_ACTIVITY_DATE,
-                DBContract.ProblemActivity.ACTIVITY_TYPES_ID,
-                DBContract.ProblemActivity.PROBLEM_ACTIVITY_ID,
-                DBContract.ProblemActivity.USER_NAME,
-                DBContract.ProblemActivity.ACTIVITY_USERS_ID,
-                DBContract.ProblemActivity.PROBLEM_ACTIVITY_CONTENT,
-        };
-        String selection = DBContract.Photos.PROBLEM_ID + " = ?";
-        String[] selectionArgs = new String[]{String.valueOf(problemId)};
-
-        Cursor cursor = db.query(DBContract.ProblemActivity.TABLE_NAME, projection,
-                selection, selectionArgs, null, null, null);
-
-        List<ProblemActivity> problemActivities = null;
-        if (cursor.moveToFirst()) {
-            problemActivities = buildProblemActivitiesList(problemId, cursor);
-        }
-
-        return problemActivities;
     }
 
     /**

@@ -39,6 +39,12 @@
             android:onClick="openTop10Activity"
             android:title="@string/top10"/>
 
+        <item
+            android:id="@+id/statistic_item_7"
+            android:icon="@drawable/ic_statistics"
+            android:onClick="openStatisticActivity"
+            android:title="@string/statistics"/>
+
     </group>
 
 </menu>

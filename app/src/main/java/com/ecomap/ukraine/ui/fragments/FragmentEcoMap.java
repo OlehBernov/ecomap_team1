@@ -132,7 +132,7 @@ public class FragmentEcoMap extends android.support.v4.app.Fragment
                 }
             }
         };
-        dataManager.registerProblemListener(dataListenerAdapter);
+        dataManager.registerDataListener(dataListenerAdapter);
 
         View rootView = inflater.inflate(R.layout.fragement_map, container, false);
         mapView = (MapView) rootView.findViewById(R.id.mapView);
@@ -200,7 +200,7 @@ public class FragmentEcoMap extends android.support.v4.app.Fragment
     @Override
     public void onDestroy() {
         super.onDestroy();
-        dataManager.removeProblemListener(dataListenerAdapter);
+        dataManager.removeDataListener(dataListenerAdapter);
         filterManager.removeFilterListener(this);
         SharedPreferences.Editor editor = getActivity()
                 .getSharedPreferences(FragmentEcoMap.POSITION,
@@ -242,7 +242,7 @@ public class FragmentEcoMap extends android.support.v4.app.Fragment
             detailsContent = new DetailsContent(basicContentLayout, getActivity());
             detailsContent.setBaseInfo(problem);
             new DetailsController(getActivity(), problem);
-            dataManager.registerProblemListener(dataListenerAdapter);
+            dataManager.registerDataListener(dataListenerAdapter);
             dataManager.getProblemDetail(problem.getProblemId());
             moveCameraToProblem(problem);
             return true;

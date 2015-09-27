@@ -10,6 +10,7 @@ import com.ecomap.ukraine.database.DBHelper;
 import com.ecomap.ukraine.models.AllTop10Items;
 import com.ecomap.ukraine.models.Details;
 import com.ecomap.ukraine.models.Problem;
+import com.ecomap.ukraine.models.Statistics;
 import com.ecomap.ukraine.update.LoadingClient;
 
 import java.util.Collection;
@@ -27,7 +28,9 @@ public class DataManager implements DataResponseReceiver {
      */
     private static final String TIME = "Time";
 
-    private static final String TOP_10_UPDATE_TIME = "Top_10_Update_time";
+    private static final String TOP_10_UPDATE_TIME = "Top 10 Update time";
+
+    private static final String STATISTICS_UPDATE_TIME = "StatisticsItem Update time";
 
     /**
      * Holds the Singleton global instance of DataManager.
@@ -93,7 +96,7 @@ public class DataManager implements DataResponseReceiver {
      *
      * @param listener the ProblemListener to add.
      */
-    public void registerProblemListener(final DataListener listener) {
+    public void registerDataListener(final DataListener listener) {
         problemListeners.add(listener);
     }
 
@@ -102,7 +105,7 @@ public class DataManager implements DataResponseReceiver {
      *
      * @param listener the ProblemListener to remove.
      */
-    public void removeProblemListener(final DataListener listener) {
+    public void removeDataListener(final DataListener listener) {
         problemListeners.remove(listener);
     }
 
@@ -125,12 +128,24 @@ public class DataManager implements DataResponseReceiver {
     }
 
     /**
-     * Sends object of top10 problems to listeners
-     * @param allTop10Items object of top10 problems
+     * Sends object of top10 problems to listeners.
+     *
+     * @param allTop10Items object of top10 problems.
      */
     public void sendAllTop10Items(final AllTop10Items allTop10Items) {
         for (DataListener listener : problemListeners) {
             listener.onTop10Update(allTop10Items);
+        }
+    }
+
+    /**
+     * Sends object of statistics of problem posting to listeners.
+     *
+     * @param statistics object of statistics.
+     */
+    public void sendStatistics(final Statistics statistics) {
+        for (DataListener listener : problemListeners) {
+            listener.onStatisticsUpdate(statistics);
         }
     }
 
@@ -141,7 +156,7 @@ public class DataManager implements DataResponseReceiver {
      * @param problems list of all problems.
      */
     @Override
-    public void getAllProblemsResponseResult(final List<Problem> problems) {
+    public void setAllProblemsResponse(final List<Problem> problems) {
         if (problems != null) {
             new AsyncTask<Void, Void, Void>() {
                 @Override
@@ -150,6 +165,7 @@ public class DataManager implements DataResponseReceiver {
                     saveUpdateTime(TIME);
                     return null;
                 }
+
                 @Override
                 protected void onPostExecute(Void aVoid) {
                     getAllProblems();
@@ -167,7 +183,7 @@ public class DataManager implements DataResponseReceiver {
      * @param details details of concrete problem.
      */
     @Override
-    public void getProblemDetailsResponseResult(final Details details) {
+    public void setProblemDetailsResponse(final Details details) {
         if (details != null) {
             dbHelper.updateProblemDetails(details);
             getProblemDetail(details.getProblemId());
@@ -178,17 +194,35 @@ public class DataManager implements DataResponseReceiver {
 
     /**
      * Receive server response to the request of top 10
-     * problems and send int to listeners
+     * problems and send int to listeners.
+     *
      * @param allTop10Items object of top 10 problem
      */
     @Override
-    public void getTop10ResponseResult (AllTop10Items allTop10Items) {
+    public void setTop10Response(AllTop10Items allTop10Items) {
         if (allTop10Items != null) {
             dbHelper.updateTop10(allTop10Items);
             saveUpdateTime(TOP_10_UPDATE_TIME);
             getTop10();
         } else {
             sendAllTop10Items(dbHelper.getAllTop10Items());
+        }
+    }
+
+    /**
+     * Receive server response to the request of statistics about
+     * problem posting and send it to listeners.
+     *
+     * @param statistics object of statistics.
+     */
+    @Override
+    public void setStatisticsResponse(Statistics statistics) {
+        if (statistics != null) {
+            dbHelper.updateStatistics(statistics);
+            saveUpdateTime(STATISTICS_UPDATE_TIME);
+            getStatistics();
+        } else {
+            sendStatistics(dbHelper.getStatistics());
         }
     }
 
@@ -258,7 +292,7 @@ public class DataManager implements DataResponseReceiver {
     /**
      * This method is used to made request for get top 10 problems.
      */
-    public void getTop10 () {
+    public void getTop10() {
         SharedPreferences settings = context.getSharedPreferences(TOP_10_UPDATE_TIME, Context.MODE_PRIVATE);
         long lastUpdateTime = settings.getLong(TOP_10_UPDATE_TIME, 0);
         if (isUpdateTime(lastUpdateTime)) {
@@ -274,11 +308,31 @@ public class DataManager implements DataResponseReceiver {
     }
 
     /**
-     * This method is used to send vote to server for current problem
-     * @param problemID id of current problem
-     * @param userID id of user who send vote
-     * @param userName name of user who send vote
-     * @param userSurname surname of user who send vote
+     * Make request for statistics of problem posting.
+     */
+    public void getStatistics() {
+        SharedPreferences settings = context.getSharedPreferences(STATISTICS_UPDATE_TIME,
+                Context.MODE_PRIVATE);
+        long lastUpdateTime = settings.getLong(STATISTICS_UPDATE_TIME, 0);
+        if (isUpdateTime(lastUpdateTime)) {
+            loadingClient.getStatistics();
+        } else {
+            Statistics statistics = dbHelper.getStatistics();
+            if (statistics == null) {
+                loadingClient.getStatistics();
+            } else {
+                sendStatistics(statistics);
+            }
+        }
+    }
+
+    /**
+     * This method is used to send vote to server for current problem.
+     *
+     * @param problemID   id of current problem.
+     * @param userID      id of user who send vote.
+     * @param userName    name of user who send vote.
+     * @param userSurname surname of user who send vote.
      */
     public void postVote(final String problemID, final String userID,
                          final String userName, final String userSurname) {
@@ -286,6 +340,15 @@ public class DataManager implements DataResponseReceiver {
 
     }
 
+    /**
+     * This method is used to send comment to server for current problem.
+     *
+     * @param problemID   id of current problem.
+     * @param userID      id of user who send comment.
+     * @param userName    name of user who send vote.
+     * @param userSurname surname of user who send vote.
+     * @param content     content of comment.
+     */
     public void postComment(final int problemID, final String userID,
                             final String userName, final String userSurname,
                             final String content) {
@@ -293,18 +356,19 @@ public class DataManager implements DataResponseReceiver {
     }
 
     /**
-     * Refresh brief information about all problems
+     * Refresh brief information about all problems.
      */
     public void refreshAllProblem() {
         loadingClient.getAllProblems();
     }
 
     /**
-     * Refresh details of current problem
-     * @param problemId id of current problem
+     * Refresh details of current problem.
+     *
+     * @param problemId id of current problem.
      */
     public void refreshProblemDetails(final int problemId) {
-        new AsyncTask<Void, Void, Void>(){
+        new AsyncTask<Void, Void, Void>() {
             @Override
             protected Void doInBackground(Void... params) {
                 currentProblemId = problemId;

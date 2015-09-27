@@ -121,7 +121,7 @@ public class SplashScreenActivity extends Activity {
                         new Handler().postDelayed(new Runnable() {
                             @Override
                             public void run() {
-                                manager.removeProblemListener(dataListenerAdapter);
+                                manager.removeDataListener(dataListenerAdapter);
                                 startActivity(intent);
                             }
                         }, Math.max(loadingTime(endLoading), 0));
@@ -131,7 +131,7 @@ public class SplashScreenActivity extends Activity {
                 }
             }
         };
-        manager.registerProblemListener(dataListenerAdapter);
+        manager.registerDataListener(dataListenerAdapter);
                 manager.getAllProblems();
     }
 

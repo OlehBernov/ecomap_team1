@@ -250,7 +250,7 @@ public class ProblemForPosting {
         /**
          * Sets default data on builder
          */
-        public Builder setdefaultData() {
+        public Builder setDefaultData() {
             title = "";
             content = "";
             proposal = "";
