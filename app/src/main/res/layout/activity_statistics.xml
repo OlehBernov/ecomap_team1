@@ -1,0 +1,40 @@
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="com.ecomap.ukraine.ui.activities.StatisticsActivity">
+
+    <include
+        android:id="@+id/tool_bar"
+        layout="@layout/tool_bar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
+    <com.ecomap.ukraine.ui.SlidingTabLayout
+        android:id="@+id/statistic_tabs"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/toolbar_teal"
+        android:elevation="2dp"/>
+
+    <android.support.v4.view.ViewPager
+        android:id="@+id/statistic_pager"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
+
+    </android.support.v4.view.ViewPager>
+
+    <com.github.rahatarmanahmed.cpv.CircularProgressView
+        android:id="@+id/progress_view_on_statistics"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_gravity="center"
+        app:cpv_animAutostart="true"
+        app:cpv_indeterminate="true"/>
+
+</LinearLayout>
+
