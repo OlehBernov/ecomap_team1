@@ -139,8 +139,8 @@ public class SearchActivity extends AppCompatActivity
         unfilteredProblems = Filter.filterProblem(unfilteredProblems, filterState);
         adapter = new ProblemAdapter(unfilteredProblems, this);
         recyclerView.setAdapter(adapter);
-        View view = findViewById(R.id.progress_view);
-        view.setVisibility(View.GONE);
+        View progressView = findViewById(R.id.progress_view);
+        progressView.setVisibility(View.GONE);
     }
 
 }

@@ -94,6 +94,7 @@ public class Top10ListFragment extends Fragment implements AdapterView.OnItemCli
         listAdapter = new Top10ListAdapter(getActivity(), top10ItemList, iconID);
         listView.setAdapter(listAdapter);
         listView.setOnItemClickListener(this);
+
         return v;
     }
 

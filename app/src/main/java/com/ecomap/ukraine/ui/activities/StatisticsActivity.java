@@ -35,15 +35,16 @@ public class StatisticsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_statistics);
 
-        View progressView = findViewById(R.id.progress_view_on_statistics);
+
 
         setupToolbar();
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
 
         String[] titles = getResources().getStringArray(R.array.tabs_in_statistic);
+
         StatisticsPagerAdapter adapter =
                 new StatisticsPagerAdapter(getSupportFragmentManager(), titles, NUMBER_OF_TUBS,
-                                           getApplicationContext(), progressView);
+                                           getApplicationContext());
         ViewPager pager = (ViewPager) findViewById(R.id.statistic_pager);
         pager.setAdapter(adapter);
 

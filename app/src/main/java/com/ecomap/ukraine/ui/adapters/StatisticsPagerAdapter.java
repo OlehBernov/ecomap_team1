@@ -21,7 +21,7 @@ public class StatisticsPagerAdapter extends FragmentStatePagerAdapter {
     private Statistics statistics;
 
     public StatisticsPagerAdapter(FragmentManager fragmentManager, String[] titles, int numberOfTabs,
-                                  final Context context, final View progressView) {
+                                  final Context context) {
         super(fragmentManager);
 
         this.titles = titles;
@@ -32,7 +32,6 @@ public class StatisticsPagerAdapter extends FragmentStatePagerAdapter {
                     @Override
                     public void onStatisticsUpdate(Statistics statistics) {
                         StatisticsPagerAdapter.this.statistics = statistics;
-                        progressView.setVisibility(View.GONE);
                         DataManager.getInstance(context).removeDataListener(this);
                     }
                 });

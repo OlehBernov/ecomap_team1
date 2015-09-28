@@ -82,17 +82,6 @@
 
             </android.support.design.widget.TextInputLayout>
 
-            <view
-                android:id="@+id/facebook_button"
-                class="com.facebook.login.widget.LoginButton"
-                android:layout_width="1dp"
-                android:layout_height="1dp"
-                android:visibility="invisible"
-                android:layout_above="@+id/Logo"
-                android:layout_alignLeft="@+id/Ukraine_text"
-                android:layout_alignStart="@+id/Ukraine_text"
-                android:layout_gravity="center_horizontal" />
-
             <android.support.v7.widget.AppCompatButton
                 android:id="@+id/btn_log_in"
                 android:layout_width="fill_parent"

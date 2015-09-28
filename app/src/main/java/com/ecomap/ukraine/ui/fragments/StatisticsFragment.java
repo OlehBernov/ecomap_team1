@@ -7,6 +7,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.util.SparseIntArray;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -49,6 +50,13 @@ public class StatisticsFragment extends Fragment {
         pieChart.setDrawSliceText(false);
         pieChart.setDescription("");
 
+        pieChart.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                return true;
+            }
+        });
+
         Legend legend = pieChart.getLegend();
         legend.setPosition(Legend.LegendPosition.BELOW_CHART_LEFT);
         legend.setWordWrapEnabled(true);
@@ -72,7 +80,7 @@ public class StatisticsFragment extends Fragment {
     private void setData(PieChart pieChart) {
         List<Entry> values = new ArrayList<>();
         for (int i = 0; i < statisticItem.size(); i++) {
-            if (isItemHaveValue(statisticItem.get(i))) {
+            if (isItemHasValue(statisticItem.get(i))) {
                 values.add(new Entry(statisticItem.get(i), i));
             }
         }
@@ -96,6 +104,7 @@ public class StatisticsFragment extends Fragment {
         PieData pieData = new PieData(fieldNames, pieDataSet);
         pieData.setValueFormatter(new PercentFormatter());
         pieData.setValueTextSize(14f);
+
         pieData.setValueTextColor(Color.WHITE);
 
         pieChart.setData(pieData);
@@ -104,7 +113,7 @@ public class StatisticsFragment extends Fragment {
         pieChart.invalidate();
     }
 
-    private boolean isItemHaveValue(int item) {
+    private boolean isItemHasValue(int item) {
         return item != 0;
     }
 
