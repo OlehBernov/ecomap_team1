@@ -251,7 +251,7 @@ public class LoadingClient {
 
     /**
      * Starts downloading information about statistics of problem posting for all
-     * avalible periods.
+     * available periods.
      */
     public void getStatistics() {
         Map<String, SparseIntArray> statisticsItems = new HashMap<>();
@@ -286,7 +286,6 @@ public class LoadingClient {
                                 }
                                 return statisticsItem;
                             }
-
                             @Override
                             protected void onPostExecute(SparseIntArray result) {
                                 addStatisticsItem(statisticsItems, period, result);
@@ -317,7 +316,7 @@ public class LoadingClient {
      *
      * @param statisticsItems resulting map.
      * @param period          certain period.
-     * @param statisticsItem  server responce.
+     * @param statisticsItem  server response.
      */
     private synchronized void addStatisticsItem(final Map<String, SparseIntArray> statisticsItems,
                                                 final String period,
