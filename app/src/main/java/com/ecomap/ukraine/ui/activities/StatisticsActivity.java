@@ -1,5 +1,6 @@
 package com.ecomap.ukraine.ui.activities;
 
+import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
@@ -12,11 +13,7 @@ import android.view.View;
 import android.view.WindowManager;
 
 import com.ecomap.ukraine.R;
-import com.ecomap.ukraine.models.Statistics;
-import com.ecomap.ukraine.ui.SlidingTabLayout;
 import com.ecomap.ukraine.ui.adapters.StatisticsPagerAdapter;
-import com.ecomap.ukraine.update.manager.DataListenerAdapter;
-import com.ecomap.ukraine.update.manager.DataManager;
 
 /**
  * Activity for displaying statistics information about problem posting.
@@ -50,17 +47,10 @@ public class StatisticsActivity extends AppCompatActivity {
         ViewPager pager = (ViewPager) findViewById(R.id.statistic_pager);
         pager.setAdapter(adapter);
 
-        SlidingTabLayout tabs = (SlidingTabLayout) findViewById(R.id.statistic_tabs);
-        tabs.setDistributeEvenly(true);
+        TabLayout tabs = (TabLayout) findViewById(R.id.statistic_tabs);
 
-        tabs.setCustomTabColorizer(new SlidingTabLayout.TabColorizer() {
-            @Override
-            public int getIndicatorColor(int position) {
-                return getResources().getColor(R.color.white);
-            }
-        });
-
-        tabs.setViewPager(pager);
+        tabs.setTabGravity(TabLayout.GRAVITY_FILL);
+        tabs.setupWithViewPager(pager);
     }
 
     /**

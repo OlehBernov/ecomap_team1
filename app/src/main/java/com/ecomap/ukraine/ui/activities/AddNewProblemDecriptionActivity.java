@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
+import android.support.design.widget.TabLayout;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
@@ -29,7 +30,6 @@ import android.widget.TableRow;
 import android.widget.Toast;
 
 import com.ecomap.ukraine.R;
-import com.ecomap.ukraine.ui.SlidingTabLayout;
 import com.ecomap.ukraine.ui.adapters.ViewPagerAdapter;
 import com.ecomap.ukraine.ui.fragments.AddProblemDescriptionFragment;
 import com.ecomap.ukraine.util.BitmapResizer;
@@ -160,17 +160,9 @@ public class AddNewProblemDecriptionActivity extends AppCompatActivity {
         pager = (ViewPager) findViewById(R.id.pager);
         pager.setAdapter(adapter);
 
-        SlidingTabLayout tabs = (SlidingTabLayout) findViewById(R.id.tabs);
-        tabs.setDistributeEvenly(true);
-
-        tabs.setCustomTabColorizer(new SlidingTabLayout.TabColorizer() {
-            @Override
-            public int getIndicatorColor(int position) {
-                return getResources().getColor(R.color.white);
-            }
-        });
-
-        tabs.setViewPager(pager);
+        TabLayout tabs = (TabLayout) findViewById(R.id.tabs);
+        tabs.setTabGravity(TabLayout.GRAVITY_FILL);
+        tabs.setupWithViewPager(pager);
     }
 
     /**

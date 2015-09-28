@@ -1,6 +1,7 @@
 package com.ecomap.ukraine.ui.activities;
 
 import android.os.Bundle;
+import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.ViewPager;
@@ -10,6 +11,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.WindowManager;
 
 import com.ecomap.ukraine.R;
@@ -18,7 +20,6 @@ import com.ecomap.ukraine.models.Problem;
 import com.ecomap.ukraine.models.Top10Item;
 import com.ecomap.ukraine.update.manager.DataListenerAdapter;
 import com.ecomap.ukraine.update.manager.DataManager;
-import com.ecomap.ukraine.ui.SlidingTabLayout;
 import com.ecomap.ukraine.ui.adapters.ViewPagerAdapter;
 import com.ecomap.ukraine.ui.fragments.Top10ListFragment;
 
@@ -46,7 +47,7 @@ public class Top10Activity extends AppCompatActivity  {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_top10);
         String[] titles = getResources().getStringArray(R.array.tabs_in_top10);
-        SlidingTabLayout tabs = (SlidingTabLayout) findViewById(R.id.tabs);
+        TabLayout tabs = (TabLayout) findViewById(R.id.tabs);
         ViewPager pager = (ViewPager) findViewById(R.id.pager);
         progressView = findViewById(R.id.progress_view_on_Top10);
 
@@ -83,14 +84,9 @@ public class Top10Activity extends AppCompatActivity  {
                 NUMBER_OF_TABS);
         pager.setOffscreenPageLimit(3);
         pager.setAdapter(adapter);
-        tabs.setDistributeEvenly(true);
-        tabs.setCustomTabColorizer(new SlidingTabLayout.TabColorizer() {
-            @Override
-            public int getIndicatorColor(int position) {
-                return getResources().getColor(R.color.white);
-            }
-        });
-        tabs.setViewPager(pager);
+        tabs.setTabGravity(TabLayout.GRAVITY_FILL);
+
+        tabs.setupWithViewPager(pager);
     }
 
     @Override

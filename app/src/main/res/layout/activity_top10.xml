@@ -15,11 +15,13 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"/>
 
-        <com.ecomap.ukraine.ui.SlidingTabLayout
+        <android.support.design.widget.TabLayout
             android:id="@+id/tabs"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@color/toolbar_teal"
+            style="@style/CustomTabLayout"
+            android:theme="@style/CustomTabLayout"
             android:elevation="2dp"/>
 
         <FrameLayout
