@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.ecomap.ukraine.R;
 import com.github.mikephil.charting.charts.PieChart;
@@ -37,6 +38,11 @@ public class StatisticsFragment extends Fragment {
     public static final String POACHING = "Poaching";
     public static final String OTHER = "Other";
 
+    private static final int LEGEND_ITEM_SIZE = 12;
+    private static final int VALUE_TEXT_SIZE = 14;
+    private static final int ENTRY_SPACE = 7;
+    private static final int SLICE_SPACE = 3;
+
     private SparseIntArray statisticItem;
 
     @Override
@@ -49,7 +55,6 @@ public class StatisticsFragment extends Fragment {
         pieChart.setRotationEnabled(false);
         pieChart.setDrawSliceText(false);
         pieChart.setDescription("");
-
         pieChart.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
@@ -57,68 +62,127 @@ public class StatisticsFragment extends Fragment {
             }
         });
 
-        Legend legend = pieChart.getLegend();
-        legend.setPosition(Legend.LegendPosition.BELOW_CHART_LEFT);
-        legend.setWordWrapEnabled(true);
-        legend.setXEntrySpace(7f);
-        legend.setYEntrySpace(7f);
-        legend.setFormSize(12f);
-        legend.setTextSize(12f);
-        legend.setForm(Legend.LegendForm.SQUARE);
+        customizeLegend(pieChart.getLegend());
 
-        if (statisticItem != null) {
-            setData(pieChart);
+        if ((statisticItem == null) || isNotDataAvailable(statisticItem)) {
+            pieChart.setVisibility(View.INVISIBLE);
+            TextView noDataMessage = (TextView) v.findViewById(R.id.text_view_for_message);
+            noDataMessage.setVisibility(View.VISIBLE);
+        } else {
+            setData(pieChart, loadColors());
         }
 
         return v;
     }
 
+    /**
+     * Sets statistics item.
+     *
+     * @param statisticItem new statistic item.
+     */
     public void setStatisticItem(SparseIntArray statisticItem) {
         this.statisticItem = statisticItem;
     }
 
-    private void setData(PieChart pieChart) {
+    /**
+     * Loads colors for diagram slices from resources.
+     *
+     * @return list of colors for diagram slices.
+     */
+    private List<Integer> loadColors() {
+        List<Integer> itemColors = new ArrayList<>();
+        itemColors.add(getResources().getColor(R.color.forest_destruction));
+        itemColors.add(getResources().getColor(R.color.rubbish_dump));
+        itemColors.add(getResources().getColor(R.color.illegal_building));
+        itemColors.add(getResources().getColor(R.color.water_pollution));
+        itemColors.add(getResources().getColor(R.color.thread_to_biodiversity));
+        itemColors.add(getResources().getColor(R.color.poaching));
+        itemColors.add(getResources().getColor(R.color.other));
+
+        return itemColors;
+    }
+
+    /**
+     * Performs diagram legend settings.
+     *
+     * @param legend diagram legend.
+     */
+    private void customizeLegend(Legend legend) {
+        legend.setPosition(Legend.LegendPosition.BELOW_CHART_LEFT);
+        legend.setWordWrapEnabled(true);
+        legend.setXEntrySpace(ENTRY_SPACE);
+        legend.setYEntrySpace(ENTRY_SPACE);
+        legend.setFormSize(LEGEND_ITEM_SIZE);
+        legend.setTextSize(LEGEND_ITEM_SIZE);
+        legend.setForm(Legend.LegendForm.SQUARE);
+    }
+
+    /**
+     * Checks is statistics element have data.
+     *
+     * @param sparseIntArray statistics element.
+     * @return is statistics element have data or not.
+     */
+    private boolean isNotDataAvailable(SparseIntArray sparseIntArray) {
+        for (int i = 0; i < sparseIntArray.size(); i++) {
+            if (sparseIntArray.get(i) != 0) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    /**
+     * Sets data to the diagram.
+     *
+     * @param pieChart   diagram.
+     * @param itemColors colors for diagram slices.
+     */
+    private void setData(PieChart pieChart, List<Integer> itemColors) {
         List<Entry> values = new ArrayList<>();
         for (int i = 0; i < statisticItem.size(); i++) {
-            if (isItemHasValue(statisticItem.get(i))) {
+            if (statisticItem.get(i) != 0) {
                 values.add(new Entry(statisticItem.get(i), i));
             }
         }
 
-        PieDataSet pieDataSet = new PieDataSet(values, "");
-        pieDataSet.setSliceSpace(3f);
-
         List<String> fieldNames = new ArrayList<>();
         for (int i = 0; i < statisticItem.size(); i++) {
-            fieldNames.add(getTitleById(i) + ": " + statisticItem.get(i));
+            if (statisticItem.get(i) != 0) {
+                fieldNames.add(getTitleById(i) + ": " + statisticItem.get(i));
+            }
         }
 
         List<Integer> colors = new ArrayList<>();
-        for (int color : ColorTemplate.COLORFUL_COLORS) {
-            colors.add(color);
+        for (int i = 0; i < statisticItem.size(); i++) {
+            if (statisticItem.get(i) != 0) {
+                colors.add(itemColors.get(i));
+            }
         }
-
         colors.add(ColorTemplate.getHoloBlue());
+
+        PieDataSet pieDataSet = new PieDataSet(values, "");
+        pieDataSet.setSliceSpace(SLICE_SPACE);
         pieDataSet.setColors(colors);
 
         PieData pieData = new PieData(fieldNames, pieDataSet);
         pieData.setValueFormatter(new PercentFormatter());
-        pieData.setValueTextSize(14f);
-
+        pieData.setValueTextSize(VALUE_TEXT_SIZE);
         pieData.setValueTextColor(Color.WHITE);
 
         pieChart.setData(pieData);
         pieChart.highlightValues(null);
-
         pieChart.invalidate();
     }
 
-    private boolean isItemHasValue(int item) {
-        return item != 0;
-    }
-
+    /**
+     * Returns problem type title by id.
+     *
+     * @param id problem type id.
+     * @return problem type title.
+     */
     private String getTitleById(int id) {
-        switch(id) {
+        switch (id) {
             case 0:
                 return FOREST_DESTRUCTION;
             case 1:

@@ -300,7 +300,7 @@ public class LoadingClient {
             @Override
             public void onErrorResponse(VolleyError error) {
                 Log.e(TAG, "onErrorResponse in getStatisticsItem");
-                addStatisticsItem(statisticsItems, period, null);
+                addStatisticsItem(statisticsItems, period, new SparseIntArray());
                 if (isStatisticsObjectReady(statisticsItems)) {
                     Statistics statistics = new Statistics(statisticsItems);
                     dataResponseReceiver.setStatisticsResponse(statistics);

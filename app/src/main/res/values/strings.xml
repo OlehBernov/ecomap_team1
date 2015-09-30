@@ -162,5 +162,6 @@
     <string name="year">Year</string>
     <string name="all_time">All time</string>
     <string name="statistics">Statistics</string>
+    <string name="statistics_message">No data available</string>
 
 </resources>
