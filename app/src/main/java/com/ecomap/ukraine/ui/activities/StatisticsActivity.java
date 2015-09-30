@@ -1,11 +1,9 @@
 package com.ecomap.ukraine.ui.activities;
 
+import android.os.Bundle;
 import android.support.design.widget.TabLayout;
-import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
-import android.support.v7.app.ActionBarActivity;
-import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
@@ -29,6 +27,23 @@ public class StatisticsActivity extends AppCompatActivity {
      */
     private static final int NUMBER_OF_TUBS = 5;
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_statistics, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+
+        if (id == R.id.action_settings) {
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
     /**
      * Creates activity and sets necessary adapter and layout for displaying statistics.
      *
@@ -51,14 +66,13 @@ public class StatisticsActivity extends AppCompatActivity {
                 });
         DataManager.getInstance(this).getStatistics();
 
-
         setupToolbar();
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
 
-        if(pager.getAdapter() == null) {
-        StatisticsPagerAdapter adapter =
-                new StatisticsPagerAdapter(getSupportFragmentManager(), titles, NUMBER_OF_TUBS, null);
-        pager.setAdapter(adapter);
+        if (pager.getAdapter() == null) {
+            StatisticsPagerAdapter adapter =
+                    new StatisticsPagerAdapter(getSupportFragmentManager(), titles, NUMBER_OF_TUBS, null);
+            pager.setAdapter(adapter);
         }
 
         TabLayout tabs = (TabLayout) findViewById(R.id.statistic_tabs);
@@ -88,20 +102,4 @@ public class StatisticsActivity extends AppCompatActivity {
         });
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_statistics, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
-
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
 }
