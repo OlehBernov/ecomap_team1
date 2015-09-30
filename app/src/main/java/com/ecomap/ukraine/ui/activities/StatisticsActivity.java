@@ -1,6 +1,7 @@
 package com.ecomap.ukraine.ui.activities;
 
 import android.support.design.widget.TabLayout;
+import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
@@ -13,7 +14,10 @@ import android.view.View;
 import android.view.WindowManager;
 
 import com.ecomap.ukraine.R;
+import com.ecomap.ukraine.models.Statistics;
 import com.ecomap.ukraine.ui.adapters.StatisticsPagerAdapter;
+import com.ecomap.ukraine.update.manager.DataListenerAdapter;
+import com.ecomap.ukraine.update.manager.DataManager;
 
 /**
  * Activity for displaying statistics information about problem posting.
@@ -34,19 +38,28 @@ public class StatisticsActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_statistics);
-
+        final ViewPager pager = (ViewPager) findViewById(R.id.statistic_pager);
+        final String[] titles = getResources().getStringArray(R.array.tabs_in_statistic);
+        DataManager.getInstance(this).registerDataListener(
+                new DataListenerAdapter() {
+                    @Override
+                    public void onStatisticsUpdate(Statistics statistics) {
+                        pager.setAdapter(new StatisticsPagerAdapter(getSupportFragmentManager(),
+                                titles, NUMBER_OF_TUBS, statistics));
+                        DataManager.getInstance(getApplicationContext()).removeDataListener(this);
+                    }
+                });
+        DataManager.getInstance(this).getStatistics();
 
 
         setupToolbar();
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
 
-        String[] titles = getResources().getStringArray(R.array.tabs_in_statistic);
-
+        if(pager.getAdapter() == null) {
         StatisticsPagerAdapter adapter =
-                new StatisticsPagerAdapter(getSupportFragmentManager(), titles, NUMBER_OF_TUBS,
-                                           getApplicationContext());
-        ViewPager pager = (ViewPager) findViewById(R.id.statistic_pager);
+                new StatisticsPagerAdapter(getSupportFragmentManager(), titles, NUMBER_OF_TUBS, null);
         pager.setAdapter(adapter);
+        }
 
         TabLayout tabs = (TabLayout) findViewById(R.id.statistic_tabs);
 

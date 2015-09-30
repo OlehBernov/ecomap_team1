@@ -21,21 +21,11 @@ public class StatisticsPagerAdapter extends FragmentStatePagerAdapter {
     private Statistics statistics;
 
     public StatisticsPagerAdapter(FragmentManager fragmentManager, String[] titles, int numberOfTabs,
-                                  final Context context) {
+                                  Statistics statistics) {
         super(fragmentManager);
-
         this.titles = titles;
         this.numberOfTabs = numberOfTabs;
-
-        DataManager.getInstance(context).registerDataListener(
-                new DataListenerAdapter() {
-                    @Override
-                    public void onStatisticsUpdate(Statistics statistics) {
-                        StatisticsPagerAdapter.this.statistics = statistics;
-                        DataManager.getInstance(context).removeDataListener(this);
-                    }
-                });
-        DataManager.getInstance(context).getStatistics();
+        this.statistics = statistics;
     }
 
     /**
