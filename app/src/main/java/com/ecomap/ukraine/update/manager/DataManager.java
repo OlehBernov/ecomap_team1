@@ -12,6 +12,8 @@ import com.ecomap.ukraine.models.Details;
 import com.ecomap.ukraine.models.Problem;
 import com.ecomap.ukraine.models.Statistics;
 import com.ecomap.ukraine.update.LoadingClient;
+import com.ecomap.ukraine.update.StatisticsLoader;
+import com.ecomap.ukraine.update.StatisticsResponseReceiver;
 
 import java.util.Collection;
 import java.util.List;
@@ -51,6 +53,11 @@ public class DataManager implements DataResponseReceiver {
      * Holds the reference to LoadingClient used by DataManager.
      */
     private LoadingClient loadingClient;
+
+    /**
+     * Problem posting statistics loader.
+     */
+    private StatisticsResponseReceiver statisticsResponseReceiver;
 
     /**
      * Context of the application.
@@ -312,14 +319,16 @@ public class DataManager implements DataResponseReceiver {
      */
     public void getStatistics() {
         SharedPreferences settings = context.getSharedPreferences(STATISTICS_UPDATE_TIME,
-                Context.MODE_PRIVATE);
+                                                                  Context.MODE_PRIVATE);
         long lastUpdateTime = settings.getLong(STATISTICS_UPDATE_TIME, 0);
+
+        statisticsResponseReceiver = new StatisticsLoader(this);
         if (isUpdateTime(lastUpdateTime)) {
-            loadingClient.getStatistics();
+            statisticsResponseReceiver.loadStatistics(loadingClient);
         } else {
             Statistics statistics = dbHelper.getStatistics();
             if (statistics == null) {
-                loadingClient.getStatistics();
+                statisticsResponseReceiver.loadStatistics(loadingClient);
             } else {
                 sendStatistics(statistics);
             }

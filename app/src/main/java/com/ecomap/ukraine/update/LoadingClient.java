@@ -17,7 +17,6 @@ import com.ecomap.ukraine.authentication.manager.AccountManager;
 import com.ecomap.ukraine.models.AllTop10Items;
 import com.ecomap.ukraine.models.Details;
 import com.ecomap.ukraine.models.Problem;
-import com.ecomap.ukraine.models.Statistics;
 import com.ecomap.ukraine.update.manager.DataResponseReceiver;
 
 import org.json.JSONException;
@@ -47,8 +46,6 @@ public class LoadingClient {
     private static final String TOP_10_PROBLEMS_URL = "http://ecomap.org/api/getStats4/";
 
     private static final String STATISTICS_URL = "http://ecomap.org/api/getStats2/";
-
-    private static final int STATISTIC_ITEMS_COUNT = 5;
 
     protected final String TAG = getClass().getSimpleName();
 
@@ -250,26 +247,13 @@ public class LoadingClient {
     }
 
     /**
-     * Starts downloading information about statistics of problem posting for all
-     * available periods.
-     */
-    public void getStatistics() {
-        Map<String, SparseIntArray> statisticsItems = new HashMap<>();
-        getStatisticsItem(Statistics.DAILY, statisticsItems);
-        getStatisticsItem(Statistics.WEEKLY, statisticsItems);
-        getStatisticsItem(Statistics.MONTH, statisticsItems);
-        getStatisticsItem(Statistics.ANNUAL, statisticsItems);
-        getStatisticsItem(Statistics.FOR_ALL_TIME, statisticsItems);
-    }
-
-    /**
      * Sends a request to download statistics information
      * about problem posting for concrete period.
      *
-     * @param period          period for statistics and part of api address for downloading.
-     * @param statisticsItems map for response saving.
+     * @param period period for statistics and part of api address for downloading.
      */
-    private void getStatisticsItem(final String period, final Map<String, SparseIntArray> statisticsItems) {
+    public void getStatisticsItem(final String period,
+                                  final StatisticsResponseReceiver statisticsResponseReceiver) {
         StringRequest stringRequest = new StringRequest(
                 Request.Method.GET, STATISTICS_URL + period,
                 new Response.Listener<String>() {
@@ -286,13 +270,10 @@ public class LoadingClient {
                                 }
                                 return statisticsItem;
                             }
+
                             @Override
                             protected void onPostExecute(SparseIntArray result) {
-                                addStatisticsItem(statisticsItems, period, result);
-                                if (isStatisticsObjectReady(statisticsItems)) {
-                                    Statistics statistics = new Statistics(statisticsItems);
-                                    dataResponseReceiver.setStatisticsResponse(statistics);
-                                }
+                                statisticsResponseReceiver.onStatisticItemResponse(period, result);
                             }
                         }.execute();
                     }
@@ -300,38 +281,10 @@ public class LoadingClient {
             @Override
             public void onErrorResponse(VolleyError error) {
                 Log.e(TAG, "onErrorResponse in getStatisticsItem");
-                addStatisticsItem(statisticsItems, period, new SparseIntArray());
-                if (isStatisticsObjectReady(statisticsItems)) {
-                    Statistics statistics = new Statistics(statisticsItems);
-                    dataResponseReceiver.setStatisticsResponse(statistics);
-                }
+                statisticsResponseReceiver.onStatisticItemResponse(period, new SparseIntArray());
             }
         });
         RequestQueueWrapper.getInstance(context).addToRequestQueue(stringRequest);
-    }
-
-    /**
-     * Adds response with statistics information about problem posting for certain period to
-     * resulting map.
-     *
-     * @param statisticsItems resulting map.
-     * @param period          certain period.
-     * @param statisticsItem  server response.
-     */
-    private synchronized void addStatisticsItem(final Map<String, SparseIntArray> statisticsItems,
-                                                final String period,
-                                                final SparseIntArray statisticsItem) {
-        statisticsItems.put(period, statisticsItem);
-    }
-
-    /**
-     * Checks if all information about statistics is ready.
-     *
-     * @param statisticsItems all downloaded period for statistics.
-     * @return is information ready.
-     */
-    private synchronized boolean isStatisticsObjectReady(final Map<String, SparseIntArray> statisticsItems) {
-        return statisticsItems.size() == STATISTIC_ITEMS_COUNT;
     }
 
 }
