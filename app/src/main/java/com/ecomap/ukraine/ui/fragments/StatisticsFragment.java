@@ -69,7 +69,7 @@ public class StatisticsFragment extends Fragment {
             TextView noDataMessage = (TextView) v.findViewById(R.id.text_view_for_message);
             noDataMessage.setVisibility(View.VISIBLE);
         } else {
-            setData(pieChart);
+            setData(pieChart, loadColors());
         }
 
         return v;
@@ -82,6 +82,24 @@ public class StatisticsFragment extends Fragment {
      */
     public void setStatisticItem(SparseIntArray statisticItem) {
         this.statisticItem = statisticItem;
+    }
+
+    /**
+     * Loads colors for diagram slices from resources.
+     *
+     * @return list of colors for diagram slices.
+     */
+    private List<Integer> loadColors() {
+        List<Integer> itemColors = new ArrayList<>();
+        itemColors.add(getResources().getColor(R.color.forest_destruction));
+        itemColors.add(getResources().getColor(R.color.rubbish_dump));
+        itemColors.add(getResources().getColor(R.color.illegal_building));
+        itemColors.add(getResources().getColor(R.color.water_pollution));
+        itemColors.add(getResources().getColor(R.color.thread_to_biodiversity));
+        itemColors.add(getResources().getColor(R.color.poaching));
+        itemColors.add(getResources().getColor(R.color.other));
+
+        return itemColors;
     }
 
     /**
@@ -117,9 +135,10 @@ public class StatisticsFragment extends Fragment {
     /**
      * Sets data to the diagram.
      *
-     * @param pieChart diagram.
+     * @param pieChart   diagram.
+     * @param itemColors colors for diagram slices.
      */
-    private void setData(PieChart pieChart) {
+    private void setData(PieChart pieChart, List<Integer> itemColors) {
         List<Entry> values = new ArrayList<>();
         for (int i = 0; i < statisticItem.size(); i++) {
             if (statisticItem.get(i) != 0) {
@@ -135,8 +154,10 @@ public class StatisticsFragment extends Fragment {
         }
 
         List<Integer> colors = new ArrayList<>();
-        for (int color : ColorTemplate.COLORFUL_COLORS) {
-            colors.add(color);
+        for (int i = 0; i < statisticItem.size(); i++) {
+            if (statisticItem.get(i) != 0) {
+                colors.add(itemColors.get(i));
+            }
         }
         colors.add(ColorTemplate.getHoloBlue());
 

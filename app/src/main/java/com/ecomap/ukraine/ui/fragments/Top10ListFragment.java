@@ -25,6 +25,7 @@ import java.util.List;
 public class Top10ListFragment extends Fragment implements AdapterView.OnItemClickListener {
 
     public static final String PROBLEM_EXTRA = "Problem";
+    private static final String ERROR_MESSAGE = "Error of loading try again.";
 
     private int top10FragmentID;
     private Top10ListAdapter listAdapter;
@@ -111,7 +112,7 @@ public class Top10ListFragment extends Fragment implements AdapterView.OnItemCli
 
     public void showProblemInformation(int problemID) {
         if (problems == null) {
-            Toast.makeText(getActivity(), "Error of loading try again.", Toast.LENGTH_LONG)
+            Toast.makeText(getActivity(), ERROR_MESSAGE, Toast.LENGTH_LONG)
                     .show();
             DataManager.getInstance(getActivity()).getAllProblems();
         } else {

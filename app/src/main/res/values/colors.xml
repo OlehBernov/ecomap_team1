@@ -28,4 +28,12 @@
     <color name="settings_text">#ff5e635e</color>
     <color name="radio_button">#004D40</color>
 
+    <color name="forest_destruction">#ff3b6036</color>
+    <color name="rubbish_dump">#ff2f2f2f</color>
+    <color name="illegal_building">#ff7e4f30</color>
+    <color name="water_pollution">#dd4174ff</color>
+    <color name="thread_to_biodiversity">#ff7fc073</color>
+    <color name="poaching">#dde99020</color>
+    <color name="other">#dd6638dc</color>
+
 </resources>
