@@ -32,7 +32,7 @@
             app:backgroundTint="#ff004d40"
             app:elevation="6dp"
             app:pressedTranslationZ="12dp"
-            android:layout_marginBottom="69dp"
+            android:layout_marginBottom="80dp"
             android:layout_gravity="bottom|end"/>
 
         <android.support.design.widget.FloatingActionButton
