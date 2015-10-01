@@ -214,7 +214,7 @@ public class AddNewProblemDecriptionActivity extends AppCompatActivity {
 
         if (id == R.id.action_confirm_problem) {
             AddProblemDescriptionFragment.getInstance(getBitmapsPhoto(), descriptions)
-                    .postProblemValidation(this);
+                    .postProblemValidation();
             return true;
         }
 
