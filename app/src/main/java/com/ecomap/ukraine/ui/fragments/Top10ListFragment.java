@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.ecomap.ukraine.R;
@@ -19,6 +20,7 @@ import com.ecomap.ukraine.ui.adapters.Top10ListAdapter;
 import com.ecomap.ukraine.update.manager.DataListenerAdapter;
 import com.ecomap.ukraine.update.manager.DataManager;
 
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -35,6 +37,7 @@ public class Top10ListFragment extends Fragment implements AdapterView.OnItemCli
     private List<Problem> problems;
     private DataListenerAdapter dataListenerAdapter;
     private Top10ListFragment fragment = this;
+    private TextView noDataMessage;
 
     public void setTop10ItemList(List<Top10Item> top10ItemList) {
         this.top10ItemList = top10ItemList;
@@ -57,6 +60,7 @@ public class Top10ListFragment extends Fragment implements AdapterView.OnItemCli
                              Bundle savedInstanceState) {
 
         View v = inflater.inflate(R.layout.fragment_list_top_10, container, false);
+        noDataMessage = (TextView)v.findViewById(R.id.text_no_data_message);
         dataListenerAdapter = new DataListenerAdapter() {
 
             /**
@@ -74,20 +78,28 @@ public class Top10ListFragment extends Fragment implements AdapterView.OnItemCli
              */
             @Override
             public void onTop10Update(AllTop10Items allTop10Items) {
-                switch (top10FragmentID) {
-                    case Top10Item.TOP_LIKE_FRAGMENT_ID:
-                        top10ItemList = allTop10Items.getMostLikedProblems();
-                        break;
-                    case Top10Item.TOP_VOTE_FRAGMENT_ID:
-                        top10ItemList = allTop10Items.getMostPopularProblems();
-                        break;
-                    case Top10Item.TOP_SEVERITY_FRAGMENT_ID:
-                        top10ItemList = allTop10Items.getMostImportantProblems();
-                        break;
+                if (allTop10Items == null) {
+                    top10ItemList = new ArrayList<Top10Item>();
+                } else {
+                    noDataMessage.setVisibility(View.INVISIBLE);
+                    switch (top10FragmentID) {
+                        case Top10Item.TOP_LIKE_FRAGMENT_ID:
+                            top10ItemList = allTop10Items.getMostLikedProblems();
+                            break;
+                        case Top10Item.TOP_VOTE_FRAGMENT_ID:
+                            top10ItemList = allTop10Items.getMostPopularProblems();
+                            break;
+                        case Top10Item.TOP_SEVERITY_FRAGMENT_ID:
+                            top10ItemList = allTop10Items.getMostImportantProblems();
+                            break;
+                    }
                 }
                 listAdapter = new Top10ListAdapter(getActivity(), top10ItemList, iconID);
                 listView.setAdapter(listAdapter);
                 listView.setOnItemClickListener(fragment);
+                if((top10ItemList.isEmpty())) {
+                    noDataMessage.setVisibility(View.VISIBLE);
+                }
             }
         };
         DataManager.getInstance(getActivity()).registerDataListener(dataListenerAdapter);

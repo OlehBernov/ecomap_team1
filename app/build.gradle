@@ -5,7 +5,7 @@ android {
         config {
             keyAlias 'super_key'
             keyPassword 'MahKey'
-            storeFile file('D:/key.keystore')
+            storeFile file('C:/Users/Andriy/Desktop/ecomap_team1/app/src/release/res/values/key.keystore')
             storePassword 'Let2Set'
         }
     }
