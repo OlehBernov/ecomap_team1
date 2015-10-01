@@ -80,7 +80,7 @@ public class StatisticsFragment extends Fragment {
      *
      * @param statisticItem new statistic item.
      */
-    public void setStatisticItem(SparseIntArray statisticItem) {
+    public void setStatisticItem(final SparseIntArray statisticItem) {
         this.statisticItem = statisticItem;
     }
 
@@ -107,7 +107,7 @@ public class StatisticsFragment extends Fragment {
      *
      * @param legend diagram legend.
      */
-    private void customizeLegend(Legend legend) {
+    private void customizeLegend(final Legend legend) {
         legend.setPosition(Legend.LegendPosition.BELOW_CHART_LEFT);
         legend.setWordWrapEnabled(true);
         legend.setXEntrySpace(ENTRY_SPACE);
@@ -123,7 +123,7 @@ public class StatisticsFragment extends Fragment {
      * @param sparseIntArray statistics element.
      * @return is statistics element have data or not.
      */
-    private boolean isNotDataAvailable(SparseIntArray sparseIntArray) {
+    private boolean isNotDataAvailable(final SparseIntArray sparseIntArray) {
         for (int i = 0; i < sparseIntArray.size(); i++) {
             if (sparseIntArray.get(i) != 0) {
                 return false;
@@ -138,7 +138,7 @@ public class StatisticsFragment extends Fragment {
      * @param pieChart   diagram.
      * @param itemColors colors for diagram slices.
      */
-    private void setData(PieChart pieChart, List<Integer> itemColors) {
+    private void setData(final PieChart pieChart, final List<Integer> itemColors) {
         List<Entry> values = new ArrayList<>();
         for (int i = 0; i < statisticItem.size(); i++) {
             if (statisticItem.get(i) != 0) {
@@ -181,7 +181,7 @@ public class StatisticsFragment extends Fragment {
      * @param id problem type id.
      * @return problem type title.
      */
-    private String getTitleById(int id) {
+    private String getTitleById(final int id) {
         switch (id) {
             case 0:
                 return FOREST_DESTRUCTION;

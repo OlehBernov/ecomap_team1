@@ -83,24 +83,23 @@ public class DBContract {
         public static final String USER_NAME = "userName";
     }
 
-    public static abstract class TopByVotes implements BaseColumns {
-
-        public static final String TABLE_NAME = "Top_problems_by_votes";
+    public static abstract class Top implements BaseColumns {
 
         public static final String PROBLEM_ID = "Problem_ID";
 
         public static final String PROBLEM_TITLE = "Problem_Title";
+    }
 
-        public static final String PROBLEM_Votes = "Problem_Votes";
+    public static abstract class TopByVotes implements BaseColumns {
+
+        public static final String TABLE_NAME = "Top_problems_by_votes";
+
+        public static final String PROBLEM_VOTES = "Problem_Votes";
     }
 
     public static abstract class TopByComments implements BaseColumns {
 
         public static final String TABLE_NAME = "Top_problems_by_comments";
-
-        public static final String PROBLEM_ID = "Problem_ID";
-
-        public static final String PROBLEM_TITLE = "Problem_Title";
 
         public static final String PROBLEM_COMMENTS = "Problem_Comments";
     }
@@ -108,10 +107,6 @@ public class DBContract {
     public static abstract class TopBySeverity implements BaseColumns {
 
         public static final String TABLE_NAME = "Top_problems_by_severity";
-
-        public static final String PROBLEM_ID = "Problem_ID";
-
-        public static final String PROBLEM_TITLE = "Problem_Title";
 
         public static final String PROBLEM_SEVERITY = "Problem_Severity";
     }

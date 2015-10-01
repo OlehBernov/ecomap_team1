@@ -91,20 +91,20 @@ public class DBHelper extends SQLiteOpenHelper {
 
     private static final String CREATE_TOP_BY_VOTES_TABLE
             = "CREATE TABLE " + DBContract.TopByVotes.TABLE_NAME + " (" +
-            DBContract.TopByVotes.PROBLEM_ID + INT_TYPE + COMMA_SEP +
-            DBContract.TopByVotes.PROBLEM_TITLE + TEXT_TYPE + COMMA_SEP +
-            DBContract.TopByVotes.PROBLEM_Votes + INT_TYPE + ")";
+            DBContract.Top.PROBLEM_ID + INT_TYPE + COMMA_SEP +
+            DBContract.Top.PROBLEM_TITLE + TEXT_TYPE + COMMA_SEP +
+            DBContract.TopByVotes.PROBLEM_VOTES + INT_TYPE + ")";
 
     private static final String CREATE_TOP_BY_COMMENTS_TABLE
             = "CREATE TABLE " + DBContract.TopByComments.TABLE_NAME + " (" +
-            DBContract.TopByComments.PROBLEM_ID + INT_TYPE + COMMA_SEP +
-            DBContract.TopByComments.PROBLEM_TITLE + TEXT_TYPE + COMMA_SEP +
+            DBContract.Top.PROBLEM_ID + INT_TYPE + COMMA_SEP +
+            DBContract.Top.PROBLEM_TITLE + TEXT_TYPE + COMMA_SEP +
             DBContract.TopByComments.PROBLEM_COMMENTS + INT_TYPE + ")";
 
     private static final String CREATE_TOP_BY_SEVERITY_TABLE
             = "CREATE TABLE " + DBContract.TopBySeverity.TABLE_NAME + " (" +
-            DBContract.TopBySeverity.PROBLEM_ID + INT_TYPE + COMMA_SEP +
-            DBContract.TopBySeverity.PROBLEM_TITLE + TEXT_TYPE + COMMA_SEP +
+            DBContract.Top.PROBLEM_ID + INT_TYPE + COMMA_SEP +
+            DBContract.Top.PROBLEM_TITLE + TEXT_TYPE + COMMA_SEP +
             DBContract.TopBySeverity.PROBLEM_SEVERITY + INT_TYPE + ")";
 
     private static final String CREATE_STATISTICS
@@ -202,10 +202,12 @@ public class DBHelper extends SQLiteOpenHelper {
         db.execSQL(DBHelper.DELETE_FROM + DBContract.TopByComments.TABLE_NAME);
         db.execSQL(DBHelper.DELETE_FROM + DBContract.TopBySeverity.TABLE_NAME);
 
-        //TODO: code duplication. should pass table name in only one method.
-        setTop10ByVotes(allTop10Items.getMostLikedProblems());
-        setTop10ByComments(allTop10Items.getMostPopularProblems());
-        setTop10BySeverity(allTop10Items.getMostImportantProblems());
+        setTop10ByType(allTop10Items.getMostLikedProblems(), DBContract.TopByVotes.TABLE_NAME,
+                       DBContract.TopByVotes.PROBLEM_VOTES);
+        setTop10ByType(allTop10Items.getMostPopularProblems(),DBContract.TopByComments.TABLE_NAME,
+                       DBContract.TopByComments.PROBLEM_COMMENTS);
+        setTop10ByType(allTop10Items.getMostImportantProblems(), DBContract.TopBySeverity.TABLE_NAME,
+                       DBContract.TopBySeverity.PROBLEM_SEVERITY);
     }
 
     /**
@@ -388,17 +390,18 @@ public class DBHelper extends SQLiteOpenHelper {
         return top10ItemList;
     }
 
-    public void setTop10ByVotes(final List<Top10Item> top10ByVotes) {
+    public void setTop10ByType(final List<Top10Item> top10ByVotes, final String tableName,
+                               final String typeOfTop) {
         if (top10ByVotes == null) {
             return;
         }
         SQLiteDatabase db = getWritableDatabase();
         ContentValues contentValues = new ContentValues();
         for (int i = 0; i < top10ByVotes.size(); i++) {
-            contentValues.put(DBContract.TopByVotes.PROBLEM_ID, top10ByVotes.get(i).getProblemID());
-            contentValues.put(DBContract.TopByVotes.PROBLEM_TITLE, top10ByVotes.get(i).getTitle());
-            contentValues.put(DBContract.TopByVotes.PROBLEM_Votes, top10ByVotes.get(i).getValue());
-            db.insert(DBContract.TopByVotes.TABLE_NAME, null, contentValues);
+            contentValues.put(DBContract.Top.PROBLEM_ID, top10ByVotes.get(i).getProblemID());
+            contentValues.put(DBContract.Top.PROBLEM_TITLE, top10ByVotes.get(i).getTitle());
+            contentValues.put(typeOfTop, top10ByVotes.get(i).getValue());
+            db.insert(tableName, null, contentValues);
             contentValues.clear();
         }
     }
@@ -413,21 +416,6 @@ public class DBHelper extends SQLiteOpenHelper {
         return top10ItemList;
     }
 
-    public void setTop10ByComments(final List<Top10Item> top10ByComments) {
-        if (top10ByComments == null) {
-            return;
-        }
-        SQLiteDatabase db = getWritableDatabase();
-        ContentValues contentValues = new ContentValues();
-        for (int i = 0; i < top10ByComments.size(); i++) {
-            contentValues.put(DBContract.TopByComments.PROBLEM_ID, top10ByComments.get(i).getProblemID());
-            contentValues.put(DBContract.TopByComments.PROBLEM_TITLE, top10ByComments.get(i).getTitle());
-            contentValues.put(DBContract.TopByComments.PROBLEM_COMMENTS, top10ByComments.get(i).getValue());
-            db.insert(DBContract.TopByComments.TABLE_NAME, null, contentValues);
-            contentValues.clear();
-        }
-    }
-
     public List<Top10Item> getTop10BySeverity() {
         SQLiteDatabase db = getWritableDatabase();
         Cursor cursor = db.query(DBContract.TopBySeverity.TABLE_NAME, null, null, null, null, null, null);
@@ -436,21 +424,6 @@ public class DBHelper extends SQLiteOpenHelper {
             top10ItemList = buildTop10bySeverityList(cursor);
         }
         return top10ItemList;
-    }
-
-    public void setTop10BySeverity(final List<Top10Item> top10BySeverity) {
-        if (top10BySeverity == null) {
-            return;
-        }
-        SQLiteDatabase db = getWritableDatabase();
-        ContentValues contentValues = new ContentValues();
-        for (int i = 0; i < top10BySeverity.size(); i++) {
-            contentValues.put(DBContract.TopBySeverity.PROBLEM_ID, top10BySeverity.get(i).getProblemID());
-            contentValues.put(DBContract.TopBySeverity.PROBLEM_TITLE, top10BySeverity.get(i).getTitle());
-            contentValues.put(DBContract.TopBySeverity.PROBLEM_SEVERITY, top10BySeverity.get(i).getValue());
-            db.insert(DBContract.TopBySeverity.TABLE_NAME, null, contentValues);
-            contentValues.clear();
-        }
     }
 
     /**
@@ -617,12 +590,12 @@ public class DBHelper extends SQLiteOpenHelper {
     private List<Top10Item> buildTop10byVotesList(final Cursor cursor) {
         List<Top10Item> top10ItemList = new ArrayList<>();
         for (int i = 0; i < cursor.getCount(); i++) {
-            int problemID = cursor.getInt(cursor.getColumnIndex(DBContract.TopByVotes.
+            int problemID = cursor.getInt(cursor.getColumnIndex(DBContract.Top.
                     PROBLEM_ID));
-            String problemTitle = cursor.getString(cursor.getColumnIndex(DBContract.TopByVotes.
+            String problemTitle = cursor.getString(cursor.getColumnIndex(DBContract.Top.
                     PROBLEM_TITLE));
             int problemVotes = cursor.getInt(cursor.getColumnIndex(DBContract.TopByVotes.
-                    PROBLEM_Votes));
+                    PROBLEM_VOTES));
             Top10Item top10Item = new Top10Item(problemID, problemTitle, problemVotes);
             top10ItemList.add(top10Item);
             cursor.moveToNext();
@@ -633,9 +606,9 @@ public class DBHelper extends SQLiteOpenHelper {
     private List<Top10Item> buildTop10byCommentList(final Cursor cursor) {
         List<Top10Item> top10ItemList = new ArrayList<>();
         for (int i = 0; i < cursor.getCount(); i++) {
-            int problemID = cursor.getInt(cursor.getColumnIndex(DBContract.TopByComments.
+            int problemID = cursor.getInt(cursor.getColumnIndex(DBContract.Top.
                     PROBLEM_ID));
-            String problemTitle = cursor.getString(cursor.getColumnIndex(DBContract.TopByComments.
+            String problemTitle = cursor.getString(cursor.getColumnIndex(DBContract.Top.
                     PROBLEM_TITLE));
             int problemComments = cursor.getInt(cursor.getColumnIndex(DBContract.TopByComments.
                     PROBLEM_COMMENTS));
@@ -649,9 +622,9 @@ public class DBHelper extends SQLiteOpenHelper {
     private List<Top10Item> buildTop10bySeverityList(final Cursor cursor) {
         List<Top10Item> top10ItemList = new ArrayList<>();
         for (int i = 0; i < cursor.getCount(); i++) {
-            int problemID = cursor.getInt(cursor.getColumnIndex(DBContract.TopBySeverity.
+            int problemID = cursor.getInt(cursor.getColumnIndex(DBContract.Top.
                     PROBLEM_ID));
-            String problemTitle = cursor.getString(cursor.getColumnIndex(DBContract.TopBySeverity.
+            String problemTitle = cursor.getString(cursor.getColumnIndex(DBContract.Top.
                     PROBLEM_TITLE));
             int problemVotes = cursor.getInt(cursor.getColumnIndex(DBContract.TopBySeverity.
                     PROBLEM_SEVERITY));

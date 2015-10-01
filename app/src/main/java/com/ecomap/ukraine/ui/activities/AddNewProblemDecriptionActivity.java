@@ -407,7 +407,6 @@ public class AddNewProblemDecriptionActivity extends AppCompatActivity {
             activityRow.addView(buildPhotoDescription(i));
             photoDescriptionLayout.addView(activityRow);
         }
-
     }
 
     /**

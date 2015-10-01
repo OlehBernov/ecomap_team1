@@ -294,20 +294,20 @@ public final class JSONParser {
         return top10SeverityList;
     }
 
-    private static List<Top10Item> getTop10CommentList(final JSONArray top10ComentArray)
+    private static List<Top10Item> getTop10CommentList(final JSONArray top10CommentArray)
             throws JSONException {
-        List<Top10Item> top10ComentList = new ArrayList<>();
+        List<Top10Item> top10CommentList = new ArrayList<>();
         Top10Item currentTop10Item;
-        for (int i = 0; i < top10ComentArray.length(); i++) {
-            JSONObject currentItemObject = top10ComentArray.getJSONObject(i);
+        for (int i = 0; i < top10CommentArray.length(); i++) {
+            JSONObject currentItemObject = top10CommentArray.getJSONObject(i);
             int itemId = currentItemObject.optInt(JSONFields.TOP_10_ITEM_ID, -1);
             String title = currentItemObject.optString(JSONFields.TOP_10_TITLE, "");
             int value = currentItemObject.optInt(JSONFields.TOP_10_COMMENTS, -1);
             currentTop10Item = new Top10Item(itemId, title, value);
-            top10ComentList.add(currentTop10Item);
+            top10CommentList.add(currentTop10Item);
         }
 
-        return top10ComentList;
+        return top10CommentList;
     }
 
 }

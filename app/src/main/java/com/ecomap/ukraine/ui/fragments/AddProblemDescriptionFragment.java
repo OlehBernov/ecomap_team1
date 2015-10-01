@@ -84,6 +84,7 @@ public class AddProblemDescriptionFragment extends Fragment implements AddProble
     public void postProblemValidation(Activity activity) {
         boolean isProblemValid = Validator.addProblemValidation(problemTitle);
         if (!isProblemValid) {
+            //TODO: should return validation result. remove activity from argument list
             Toast.makeText(activity, INPUT_PROBLEM_DATA, Toast.LENGTH_LONG)
                     .show();
             return;

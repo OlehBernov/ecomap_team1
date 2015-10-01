@@ -36,7 +36,7 @@ public class StatisticsLoader implements StatisticsResponseReceiver {
      * @param loadingClient client which have relation to the server.
      */
     @Override
-    public void loadStatistics(LoadingClient loadingClient) {
+    public void loadStatistics(final LoadingClient loadingClient) {
         loadingClient.getStatisticsItem(Statistics.DAILY, this);
         loadingClient.getStatisticsItem(Statistics.WEEKLY, this);
         loadingClient.getStatisticsItem(Statistics.MONTH, this);

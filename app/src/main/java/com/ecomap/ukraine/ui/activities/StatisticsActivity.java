@@ -71,7 +71,8 @@ public class StatisticsActivity extends AppCompatActivity {
 
         if (pager.getAdapter() == null) {
             StatisticsPagerAdapter adapter =
-                    new StatisticsPagerAdapter(getSupportFragmentManager(), titles, NUMBER_OF_TUBS, null);
+                    new StatisticsPagerAdapter(getSupportFragmentManager(), titles,
+                                               NUMBER_OF_TUBS, null);
             pager.setAdapter(adapter);
         }
 
