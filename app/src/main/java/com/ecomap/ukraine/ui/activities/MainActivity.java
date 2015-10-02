@@ -284,8 +284,8 @@ public class MainActivity extends AppCompatActivity {
         } else if (isInformationalPanelCollapsed()) {
             slidingUpPanelLayout.setPanelState(SlidingUpPanelLayout
                     .PanelState.HIDDEN);
-            DataManager.getInstance(getApplicationContext()).removeAllListeners();
         } else {
+            DataManager.getInstance(getApplicationContext()).removeAllListeners();
             super.onBackPressed();
         }
     }
