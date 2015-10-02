@@ -314,6 +314,7 @@ public class DetailsController {
             public void onClick(View v) {
                 activity.startActivity(
                         new Intent(activity, ChooseProblemLocationActivity.class));
+                activity.finish();
             }
         });
         fab.setTranslationY(0);
