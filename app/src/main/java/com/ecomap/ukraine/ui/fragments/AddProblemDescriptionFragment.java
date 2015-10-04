@@ -81,10 +81,10 @@ public class AddProblemDescriptionFragment extends Fragment implements AddProble
     /**
      * Validation of data of new problem
      */
-    public void postProblemValidation() {
+    public void postProblemValidation(Activity activity) {
         boolean isProblemValid = Validator.addProblemValidation(problemTitle);
         if (!isProblemValid) {
-            Toast.makeText(getActivity(), INPUT_PROBLEM_DATA, Toast.LENGTH_LONG)
+            Toast.makeText(activity, INPUT_PROBLEM_DATA, Toast.LENGTH_LONG)
                     .show();
             return;
         }
