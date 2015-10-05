@@ -47,7 +47,7 @@ public class Statistics {
     public int size() {
         return (statisticsItems.size() == 0)
                 ? 0
-                : statisticsItems.get(FOR_ALL_TIME).size();
+                : 7;
     }
 
     public SparseIntArray getDailyStatistics() {

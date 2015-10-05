@@ -225,7 +225,7 @@ public class DBHelper extends SQLiteOpenHelper {
         db.execSQL(DBHelper.DELETE_FROM + DBContract.Statistics.TABLE_NAME);
 
         ContentValues contentValues = new ContentValues();
-        for (int i = 0; i < statistics.size(); i++) {
+        for (int i = 1; i < (statistics.size() + 1); i++) {
             contentValues.put(DBContract.Statistics.PROBLEM_TYPE_ID, i);
             contentValues.put(DBContract.Statistics.DAILY_VALUE, statistics.getDailyStatistics().get(i));
             contentValues.put(DBContract.Statistics.WEEKLY_VALUE, statistics.getWeeklyStatistics().get(i));
