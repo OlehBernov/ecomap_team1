@@ -237,7 +237,7 @@ public class AddProblemDescriptionFragment extends Fragment implements AddProble
                     @Override
                     public void onPositive(MaterialDialog dialog) {
                         super.onPositive(dialog);
-                        userName = "";
+                        userName = "(Анонім)";
                         userSurname = "";
                         dialog.cancel();
                         sendProblem();
